@@ -144,4 +144,24 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
+    public static class IntakeConstants {
+
+        // Motor IDs
+        public static final int INTAKE_ARM_MOTOR_ID = 7;
+        public static final int INTAKE_ROLLER_MOTOR_ID = 8;
+    
+    }
+
+    public static final class Climber
+    {
+  
+      public static final int tubeMotor_Left_ID = 1;
+      public static final int winchMotor_Left_ID = 2;
+      public static final int tubeMotor_Right_ID = 3;
+      public static final int winchMotor_Right_ID = 4;
+  
+    }
+
+
 }

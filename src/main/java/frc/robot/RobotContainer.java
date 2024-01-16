@@ -1,5 +1,8 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -70,4 +73,15 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
         return new exampleAuto(s_Swerve);
     }
+
+    // /**
+    //  * Get the path follower with events.
+    //  *
+    //  * @param pathName       PathPlanner path name.
+    //  * @param setOdomToStart Set the odometry position to the start of the path.
+    //  * @return {@link AutoBuilder#followPathWithEvents(PathPlannerPath)} path command.
+    //  */
+    // public void getAutonomousCommand(String pathName, boolean setOdomToStart) {
+    //     s_Swerve.getAutonomousCommand(pathName, setOdomToStart);
+    // }
 }

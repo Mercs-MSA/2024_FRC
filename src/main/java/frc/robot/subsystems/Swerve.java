@@ -16,12 +16,21 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 
 public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+    public boolean fieldRelative;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -39,6 +48,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+        this.fieldRelative = fieldRelative;
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -124,4 +134,62 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
     }
+ 
+    // /**
+    //  * Gets the current velocity (x, y and omega) of the robot
+    //  *
+    //  * @return A {@link ChassisSpeeds} object of the current velocity
+    //  */
+    // public ChassisSpeeds getRobotVelocity()
+    // {
+    // return swerveDrive.getRobotVelocity();
+    // }
+
+    // /**
+    //  * Set chassis speeds with closed-loop velocity control.
+    //  *
+    //  * @param chassisSpeeds Chassis Speeds to set.
+    //  */
+    // public void setChassisSpeeds(ChassisSpeeds chassisSpeeds)
+    // {
+    // swerveDrive.setChassisSpeeds(chassisSpeeds);
+    // }
+
+    // public void setupPathPlanner(){
+    // AutoBuilder.configureHolonomic(
+    //     this::getPose, // Robot pose supplier
+    //     this::setPose, // Method to reset odometry (will be called if your auto has a starting pose)
+    //     this::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+    //     this::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+    //     new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+    //                                      new PIDConstants(Constants.Swerve.driveKP, Constants.Swerve.driveKI, Constants.Swerve.driveKD),
+    //                                      // Translation PID constants
+    //                                      new PIDConstants(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKP),
+    //                                      // Rotation PID constants
+    //                                      4.5,
+    //                                      // Max module speed, in m/s
+    //                                      Constants.Swerve.trackWidth,
+    //                                      // Drive base radius in meters. Distance from robot center to furthest module.
+    //                                      new ReplanningConfig()
+    //                                      // Default path replanning config. See the API for the options here
+    //     ),
+    //     null, this // Reference to this subsystem to set requirements
+    //                               );
+    // }
+
+    // public Command getAutonomousCommand(String pathName, boolean setOdomToStart){
+
+    //     // Load the path you want to follow using its name in the GUI
+    //     PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+
+    //     if (setOdomToStart)
+    //     {
+    //         setPose(new Pose2d(path.getPoint(0).position, getHeading()));
+    //     }
+
+    //     // Create a path following command using AutoBuilder. This will also trigger event markers.
+    //     return AutoBuilder.followPath(path);
+
+    // }
+
 }

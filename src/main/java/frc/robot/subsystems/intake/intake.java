@@ -11,9 +11,17 @@ import edu.wpi.first.wpilibj.XboxController;
 // import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+/* Work In Progress
+ * Install library for REV 2m distance sensor
+ * Use sensors to connect intake and SAT
+ * Find out what motors we're using and how to program them
+ * Refactor when rollers begin spinning
+ * use/connect robotState to our code
+ */
+
 /* Q&A:
  * 1 Have you figured out what motors you want to use?
- *   Probbably falcons for motors
+ *   Using vortexes for motors for now
  * 
  * 2 How does the mechanism work?
  *   System drops to floor from bottom of robot and takes in notes
@@ -21,7 +29,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
  *   Holding button down keeps the system down and releasing button moves system back up
  * 
  * 3 Have you decided if there will be special sensors?
- *   No
+ *   Using the REV 2m distance senor
  * 
  * 4 How does the note get to the SAT system?
  *   An index that uses rollers to transport it into the SAT, not part of the intake
@@ -37,11 +45,12 @@ public class intake extends SubsystemBase {
 
   CANSparkMax intakeArmMotor = new CANSparkMax(IntakeConstants.INTAKE_ARM_MOTOR_ID, MotorType.kBrushless);
   CANSparkMax intakeRollerMotor = new CANSparkMax(IntakeConstants.INTAKE_ROLLER_MOTOR_ID, MotorType.kBrushless);
-
+// add definition for the sensor here
   XboxController controller = new XboxController(0);
 
   int intakeArmState;
   int intakeRollerState;
+  // add boolean for sensor state
   final int stateArmUp = 1;
   final int stateArmDown = 2;
   final int stateArmMoving = 3;
@@ -64,6 +73,15 @@ public class intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (getAngle() == 45) {
+      intakeArmState = stateArmDown;        
+    }
+    else if (getAngle() == 0) {
+      intakeArmState = stateArmUp;
+    }
+
+    // constantly check sensor for distance
+    // when the distance changes it means to note is present and it changes states
 
     // if button A is held,
     if (controller.getAButton()) {
@@ -93,7 +111,7 @@ public class intake extends SubsystemBase {
 
     // TODO: get 2 sensors to set boundries for the arm to reach
     
-    // TODO: When arm hits bottom, run noteIn
+    // TODO: When arm starts moving, run noteIn
   }
 
   // Release intake system opening
@@ -101,41 +119,42 @@ public class intake extends SubsystemBase {
     // if the arm is up,
     if (intakeArmState == stateArmUp) {
       // you should move the arm down
-      intakeArmMotor.set(speedArmDown);
+      setAngle(45);
       intakeArmState = stateArmMoving;
     }
     // If the arm is down,
-    else if (intakeArmState == stateArmDown) {
+    //else if (intakeArmState == stateArmDown) {
       // you shouldn't move it down
-      intakeArmMotor.set(0);
-    }
+      
+    //}
     // If the arm is moving,
-    else {
+    //else {
       // you should keep moving
-      intakeArmMotor.set(speedArmDown);
-    }
+      
+    //}
   }
-
+  
   // Picking the intake system opening back up
   public void intakeUp() {
     // If the arm is down,
     if (intakeArmState == stateArmDown) {
       // you should move it up
-      intakeArmMotor.set(speedArmUp);
+      setAngle(0);
       intakeArmState = stateArmMoving;
+
+
       // Stop roller motor
-      stopRoller();
     }
     // if the arm is up,
-    else if (intakeArmState == stateArmUp) {
+    //else if (intakeArmState == stateArmUp) {
       // you shouldn't move the arm up
-      intakeArmMotor.set(0);
-    }
+      
+    //}
     // If the arm is moving,
-    else {
+   // else {
       // you should keep moving
-      intakeArmMotor.set(speedArmUp);
-    }
+      
+    //}
   }
 
   // Activate the intake wheels
@@ -163,8 +182,12 @@ public class intake extends SubsystemBase {
 
 
   // THIS IS A PSEUDOCODE FUNCTION AND IS NOT REAL, EVENTUALLY THIS WILL BE IN SWERVEMODULE.JAVA
-  public void setAngle(double angle)
+  public void setAngle(int angle)
   {
     // PSEUDOCODE, DOES NOTHING
+  }
+
+  public int getAngle() {
+    return 1;
   }
 }

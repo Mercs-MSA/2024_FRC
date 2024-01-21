@@ -4,10 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.State.robotState;
+import frc.robot.subsystems.vision.GamePieceVision;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,6 +28,10 @@ public class Robot extends TimedRobot {
 
   robotState currentRobotState = robotState.IDLE;
 
+  GamePieceVision m_GamePieceVision = new GamePieceVision("GamePiece");
+
+  XboxController driverController = new XboxController(0);
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -33,6 +41,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    Constants.State.setState("IDLE");
   }
 
   /**
@@ -49,7 +58,11 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    SmartDashboard.putString("current robot state", currentRobotState.toString());
+    SmartDashboard.putString("Current Robot State", Constants.State.getState().toString());
+    SmartDashboard.putNumber("pose x", m_robotContainer.s_Swerve.swerveOdometry.getPoseMeters().getX());
+    SmartDashboard.putNumber("pose y", m_robotContainer.s_Swerve.swerveOdometry.getPoseMeters().getY());
+
+    m_GamePieceVision.periodic();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -87,7 +100,14 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+    SmartDashboard.putNumber("yaw note", m_GamePieceVision.getGamePieceYaw());
+    if (driverController.getRawButton(5)){
+        m_robotContainer.s_Swerve.drive(new Translation2d(0, 0), m_GamePieceVision.getGamePieceYaw()/20, false, true);
+    }
+      
+  }
 
   @Override
   public void testInit() {
@@ -98,17 +118,4 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
-
-  enum robotState{
-    INTAKE, //the intake must be at ground note pickup position, the SAT must be flat, the note is stored in intake (for now)
-    IDLE, //the intake must be up, the SAT must be flat, the note is stored in feeder (part of SAT)
-    PIVOT, //the intake must be up, the SAT will move to angled position based on kinematics calculations, the note is stored in feeder (part of SAT)
-    SCORING //the intake must be up, the SAT must be at thge angled position, the note must move from feeders to flywheels  
-  }
-
-  // if intake IR does not detect note, the intake must keep spining; else, intake does not spin
-  // flywheel must always be spinning 
-  // if robot state is SCORING, feeder must be spinning; else, feeder does not spin
-  // Big Question: can we combine IDLE and PIVOT??? (ans: yes, these will be done auto without driver from switching states)
-
 }

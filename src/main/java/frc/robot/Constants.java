@@ -163,5 +163,46 @@ public final class Constants {
   
     }
 
+    public static final class State {
+        public static robotState currentRobotState = robotState.IDLE;
+
+        enum robotState{
+            INTAKE, //the intake must be at ground note pickup position, the SAT must be flat, the note is stored in intake (for now)
+            IDLE, //the intake must be up, the SAT must be flat, the note is stored in feeder (part of SAT)
+            PIVOT, //the intake must be up, the SAT will move to angled position based on kinematics calculations, the note is stored in feeder (part of SAT)
+            SCORING //the intake must be up, the SAT must be at thge angled position, the note must move from feeders to flywheels  
+        }   
+    
+        // if intake IR does not detect note, the intake must keep spining; else, intake does not spin
+        // flywheel must always be spinning 
+        // if robot state is SCORING, feeder must be spinning; else, feeder does not spin
+        // Big Question: can we combine IDLE and PIVOT??? (ans: yes, these will be done auto without driver from switching states)
+
+        public static robotState getState(){
+            return currentRobotState;
+        }
+
+        public static void setState(String newState) {
+            switch (newState.toUpperCase()) {
+                case "INTAKE":
+                    currentRobotState = robotState.INTAKE;
+                    break;
+                case "IDLE":
+                    currentRobotState = robotState.IDLE;
+                    break;
+                case "PIVOT":
+                    currentRobotState = robotState.PIVOT;
+                    break;
+                case "SCORING":
+                    currentRobotState = robotState.SCORING;
+                    break;
+                default:
+                    currentRobotState = robotState.INTAKE; //do I want to do this?
+                    break;
+            }
+        }
+        
+    }
+
 
 }

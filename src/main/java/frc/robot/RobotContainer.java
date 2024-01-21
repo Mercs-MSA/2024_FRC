@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.climber.climber;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,9 +37,12 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-
+    private final JoystickButton climbUpCommand = new JoystickButton(driver, XboxController.Button.kStart.value);
+    private final JoystickButton climbDownCommand = new JoystickButton(driver, XboxController.Button.kBack.value);
+    
     /* Subsystems */
     public Swerve s_Swerve = new Swerve();
+    public climber m_Climber = new climber();
 
     /* Auto Chooser */
      private final SendableChooser<Command> autoChooser;
@@ -79,6 +83,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));  /// suggest commenting this out while we troubleshoot this
+        climbUpCommand.onTrue(new InstantCommand(() -> m_Climber.climbUpCommand()));
+        climbDownCommand.onTrue(new InstantCommand(() -> m_Climber.climbDownCommand()));
     }
 
     /**

@@ -9,6 +9,7 @@ import frc.robot.Constants;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class climber extends SubsystemBase {
   /** Creates a new climber. */
@@ -51,7 +52,7 @@ public class climber extends SubsystemBase {
   }
 
   // This moves the tube in tube up and down
-  public void move_tube() {
+  private void move_tube() {
     //check the leftside of the tube
   if (controller.getXButton()) {
     climbUp();
@@ -66,21 +67,39 @@ public class climber extends SubsystemBase {
   }
 }
 
-  public void climbUp() {
+  private void climbUp() {
     tubeMotorLeft.set(0.3);
     tubeMotorRight.set(0.3);
     SmartDashboard.putString("power input for robot", "0.3");
 }
 
-  public void climbDown() {
+  private void climbDown() {
     tubeMotorLeft.set(-0.3);
     tubeMotorRight.set(-0.3);
     SmartDashboard.putString("power input for robot", "-0.3");
 }
 
-  public void climbStop() {
+  private void climbStop() {
     tubeMotorLeft.set(0);
     tubeMotorRight.set(0);
     SmartDashboard.putString("power input for robot", "0"); 
   }
+
+
+
+// Block of all commands
+  public Command climbUpCommand() {
+    return this.runOnce(() -> climbUp());
+  }
+
+  public Command climbDownCommand() {
+    return this.runOnce(() -> climbDown());
+  }
+
+
+// State Enumeration
+  public enum climberStates {
+    START, MOVING_TO_CLIMB, IN_CLIMBING_POSITION, COMPLETED_CLIMB, ERROR;
+  }
+
 }

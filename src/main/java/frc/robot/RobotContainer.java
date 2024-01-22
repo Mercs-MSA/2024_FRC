@@ -63,7 +63,7 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
 
          // Register Named Commands
-        NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
+        // NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
 
         // Another option that allows you to specify the default auto by its name
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -101,14 +101,14 @@ public class RobotContainer {
         return autoChooser.getSelected();
     }
 
-    // /**
-    //  * Get the path follower with events.
-    //  *
-    //  * @param pathName       PathPlanner path name.
-    //  * @param setOdomToStart Set the odometry position to the start of the path.
-    //  * @return {@link AutoBuilder#followPathWithEvents(PathPlannerPath)} path command.
-    //  */
-    // public void getAutonomousCommand(String pathName, boolean setOdomToStart) {
-    //     s_Swerve.getAutonomousCommand(pathName, setOdomToStart);
-    // }
+    /**
+     * Get the path follower with events.
+     *
+     * @param pathName       PathPlanner path name.
+     * @param setOdomToStart Set the odometry position to the start of the path.
+     * @return {@link AutoBuilder#followPathWithEvents(PathPlannerPath)} path command.
+     */
+    public void getAutonomousCommand(String pathName, boolean setOdomToStart) {
+        s_Swerve.getAutonomousCommand(pathName, setOdomToStart);
+    }
 }

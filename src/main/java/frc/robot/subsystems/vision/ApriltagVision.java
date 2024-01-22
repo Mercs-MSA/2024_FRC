@@ -10,6 +10,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -29,13 +30,14 @@ public class ApriltagVision {
     private Transform3d robotToCam;
     private double aprilTagX, aprilTagY, aprilTagZAngle, aprilTagZ = -1;
     private Pose3d globalPoseEstimate;
+    private Transform3d fieldToCamera;
 
     public ApriltagVision(String cameraName, Transform3d robotToCam) throws IOException{
         this.cameraName = cameraName;
         camera = new PhotonCamera(cameraName);
         aprilTagResult = new PhotonPipelineResult();
         aprilTagHasTargets = false;
-        aprilTagFieldLayout = new AprilTagFieldLayout(Filesystem.getDeployDirectory().getName() + "/2024-crescendo.json");
+        aprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFields.k2024Crescendo.m_resourceFile);
         this.robotToCam = robotToCam; 
         poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCam);
     }
@@ -54,6 +56,7 @@ public class ApriltagVision {
             aprilTagY = aprilTagBestTarget.getBestCameraToTarget().getY();
             aprilTagZ = aprilTagBestTarget.getBestCameraToTarget().getZ();
             aprilTagZAngle = aprilTagBestTarget.getBestCameraToTarget().getRotation().getAngle();
+            fieldToCamera = aprilTagResult.getMultiTagResult().estimatedPose.best;
         } 
         else {
             fiducialID = -1;
@@ -69,6 +72,10 @@ public class ApriltagVision {
         SmartDashboard.putNumber(cameraName + " AprilTag Y (m)", aprilTagY);
         SmartDashboard.putNumber(cameraName + " AprilTag Z (m)", aprilTagZ);
         SmartDashboard.putNumber(cameraName + " AprilTag Z Angle", aprilTagZAngle);
+        SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate X", fieldToCamera.getX());
+        SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Y", fieldToCamera.getY());
+        SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Z", fieldToCamera.getZ());
+        SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Angle", fieldToCamera.getRotation().getAngle());
 
     }
 

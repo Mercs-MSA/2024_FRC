@@ -4,6 +4,9 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -59,6 +62,31 @@ public class RobotContainer {
             )
         );
         
+        AutoBuilder.configureHolonomic(
+        this::getPose, // Robot pose supplier
+        this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        this::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                                            new PIDConstants(5.0, 0.0, 0.0),
+                                            // Translation PID constants
+                                            new PIDConstants(swerveDrive.swerveController.config.headingPIDF.p,
+                                                            swerveDrive.swerveController.config.headingPIDF.i,
+                                                            swerveDrive.swerveController.config.headingPIDF.d),
+                                            // Rotation PID constants
+                                            4.5,
+                                            // Max module speed, in m/s
+                                            // Drive base radius in meters. Distance from robot center to furthest module.
+                                            0.3787, //meters
+                                            // DAN CHANGED THE ABOVE BECAUSE THIS METHOD DIDN'T EXIST; OLD VERSION IS IN COMMENT BELOW
+                                            //swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
+                                            new ReplanningConfig()
+                                            // Default path replanning config. See the API for the options here
+        ),
+        null,
+        this // Reference to this subsystem to set requirements
+        );
+
         // Build an auto chooser. This will use Commands.none() as the default option.
         autoChooser = AutoBuilder.buildAutoChooser();
 

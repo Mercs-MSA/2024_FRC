@@ -40,7 +40,7 @@ public class Swerve extends SubsystemBase {
     private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
 
     public SwerveDriveKinematics kinematics; 
-    public SwerveDriveOdometry swerveOdometry = new SwerveDriveOdometry(kinematics, getGyroYaw(), getModulePositions());
+    public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     public boolean fieldRelative;

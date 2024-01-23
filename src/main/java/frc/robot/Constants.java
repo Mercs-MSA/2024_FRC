@@ -18,7 +18,7 @@ public final class Constants {
     public static final class Swerve {
         public static final int pigeonID = 16;
 
-        public static final COTSTalonFXSwerveConstants chosenModule =  COTSTalonFXSwerveConstants.WCP.SwerveXFlipped.Falcon500(COTSTalonFXSwerveConstants.WCP.SwerveXFlipped.driveRatios.X1_11);
+        public static final COTSTalonFXSwerveConstants chosenModule =  COTSTalonFXSwerveConstants.WCP.SwerveXStandard.Falcon500(COTSTalonFXSwerveConstants.WCP.SwerveXStandard.driveRatios.X1_11);
         // COTSTalonFXSwerveConstants.SDS.MK4i.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2);
 
         /* Drivetrain Constants */

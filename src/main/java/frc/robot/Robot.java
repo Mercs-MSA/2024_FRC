@@ -28,7 +28,7 @@ public class Robot extends TimedRobot {
 
   robotState currentRobotState = robotState.IDLE;
 
-  GamePieceVision m_GamePieceVision = new GamePieceVision("GamePiece");
+  //GamePieceVision m_GamePieceVision = new GamePieceVision("GamePiece");
 
   XboxController driverController = new XboxController(0);
 
@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("pose x", m_robotContainer.s_Swerve.swerveOdometry.getPoseMeters().getX());
     SmartDashboard.putNumber("pose y", m_robotContainer.s_Swerve.swerveOdometry.getPoseMeters().getY());
 
-    m_GamePieceVision.periodic();
+    //m_GamePieceVision.periodic();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -102,10 +102,10 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    SmartDashboard.putNumber("yaw note", m_GamePieceVision.getGamePieceYaw());
-    if (driverController.getRawButton(5)){
-        m_robotContainer.s_Swerve.drive(new Translation2d(0, 0), m_GamePieceVision.getGamePieceYaw()/20, false, true);
-    }
+    //SmartDashboard.putNumber("yaw note", m_GamePieceVision.getGamePieceYaw());
+    //if (driverController.getRawButton(5)){
+    //    m_robotContainer.s_Swerve.drive(new Translation2d(0, 0), m_GamePieceVision.getGamePieceYaw()/20, false, true);
+    //}
       
   }
 

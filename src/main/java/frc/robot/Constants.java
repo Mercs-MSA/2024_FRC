@@ -153,6 +153,56 @@ public final class Constants {
     
     }
 
+
+    public static class SATConstants {
+
+        // Motor IDs
+        public static final int SAT_SHOOTER1_MOTOR_ID = 28;
+        public static final int SAT_SHOOTER2_MOTOR_ID = 29;
+
+        public static final int SAT_PIVOT_MOTOR_ID = 27;
+        public static final int SAT_BASE1_MOTOR_ID = 26;
+        public static final int SAT_BASE2_MOTOR_ID = 25;
+
+        public static final int SAT_OBJECTDETECTOR_SENSOR_ID = 1;
+
+        public static final int SAT_SERVO1_SERVO_ID = 9;
+        public static final int SAT_SERVO2_SERVO_ID = 8;
+        public static final int SAT_SERVO3_SERVO_ID = 7;
+        public static final int SAT_SERVO4_SERVO_ID = 6;
+        /*lift start positions */
+        public static final int BASE_START_POS = 0;
+        public static final int PIVOT_START_POS = 0;
+        /*podium scoring position */
+        public static final int BASE_PODIUM_POS = 45;
+        public static final int PIVOT_PODIUM_POS = 0;
+        /*SUBWOOFER scoring position */
+        public static final int BASE_SUB_POS = 0;
+        public static final int PIVOT_SUB_POS = 0;
+        /*AMP scoring position */
+        public static final int BASE_AMP_POS = 0;
+        public static final int PIVOT_AMP_POS = 0;
+        /*TRAP scoring position */
+        public static final int BASE_TRAP_POS = 0;
+        public static final int PIVOT_TRAP_POS = 0;
+
+        public static final int BASE_THROUGHBORE_ENCODER = 2;
+        public static final int PIVOT_THROUGHBORE_ENCODER = 3;
+        /*THIS NEEDS TO INCLUDE THE CONVERSION FROM DEGREES TO ENCODER COUNTS */
+        public static final int BASE_ENCODER_RATIO = 50;
+        public static final int PIVOT_ENCODER_RATIO = 20;
+
+      // PID coefficients
+        public static final double kP = 0.1; 
+        public static final double kI = 1e-4;
+        public static final double kD = 1; 
+        public static final double kIz = 0; 
+        public static final double kFF = 0; 
+        public static final double kMaxOutput = 1; 
+        public static final double kMinOutput = -1;
+
+        }
+        
     public static final class Climber
     {
   

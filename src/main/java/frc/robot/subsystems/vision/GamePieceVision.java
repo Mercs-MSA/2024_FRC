@@ -7,8 +7,9 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class GamePieceVision {
+public class GamePieceVision extends SubsystemBase{
     private String cameraName;
     private PhotonCamera camera;
     private PhotonPipelineResult gamePieceResult = new PhotonPipelineResult();
@@ -22,6 +23,7 @@ public class GamePieceVision {
         camera = new PhotonCamera(cameraName);
     }
 
+    @Override
     public void periodic(){
         gamePieceResult = camera.getLatestResult();
         

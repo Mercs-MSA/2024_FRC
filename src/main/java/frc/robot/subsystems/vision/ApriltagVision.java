@@ -15,8 +15,9 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ApriltagVision {
+public class ApriltagVision extends SubsystemBase {
 
     private String cameraName;
     private PhotonCamera camera;
@@ -42,6 +43,7 @@ public class ApriltagVision {
         poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCam);
     }
 
+    @Override
     public void periodic(){
         aprilTagResult = camera.getLatestResult();
         

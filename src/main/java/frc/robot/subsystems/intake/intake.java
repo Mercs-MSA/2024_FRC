@@ -5,9 +5,9 @@
 package frc.robot.subsystems.intake;
 
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.Controller;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -66,7 +66,6 @@ public class intake extends SubsystemBase {
 
   DutyCycleEncoder intakeRollerMotor = new DutyCycleEncoder(IntakeConstants.INTAKE_ROLLER_MOTOR_ID);
   DigitalInput intakeSensor = new DigitalInput(0);
-  XboxController controller = new XboxController(5);
   private final TalonFX m_fx = new TalonFX(1, "rio");
   private final PositionVoltage m_voltagePosition = new PositionVoltage(positionArmUp, 0, true, 0, 0, false, false, false);
   private final NeutralOut m_brake = new NeutralOut();
@@ -131,7 +130,7 @@ public class intake extends SubsystemBase {
     }
 
     // if button A is held,
-    if (controller.getAButton()) {
+    if (Controller.getAButton()) {
       // start intakeDown
       intakeDown();
     }
@@ -143,19 +142,19 @@ public class intake extends SubsystemBase {
     }
 
     // if button B is pressed and the rollers are not moving,
-    if (controller.getBButton() && intakeRollerState == stateRollerNotMoving) {
+    if (Controller.getBButton() && intakeRollerState == stateRollerNotMoving) {
       // start rolling out
       noteOut();
     }
 
     // if button B is released and the rollers are moving,
-    else if (controller.getBButton() == false && intakeRollerState == stateRollerMoving) {
+    else if (Controller.getBButton() == false && intakeRollerState == stateRollerMoving) {
       // stop rolling
       stopRoller();
     }    
     // TODO: When arm starts moving, run noteIn
 
-    SmartDashboard.putBoolean("IsButtonPressed", controller.getAButton());
+    SmartDashboard.putBoolean("IsButtonPressed", Controller.getAButton());
     SmartDashboard.putNumber("StateDetection", intakeArmState);
     SmartDashboard.putBoolean("Detecting Note", intakeSensorState);
     SmartDashboard.putNumber("MotorPosition", m_fx.getPosition().getValue());

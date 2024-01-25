@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.State.robotState;
+import frc.robot.Constants.Controller;
 import frc.robot.subsystems.vision.GamePieceVision;
 
 /**
@@ -107,6 +108,22 @@ public class Robot extends TimedRobot {
     //    m_robotContainer.s_Swerve.drive(new Translation2d(0, 0), m_GamePieceVision.getGamePieceYaw()/20, false, true);
     //}
       
+      // store the values of all buttons in constants
+      Controller.setAButton(driverController.getAButton());
+      Controller.setBButton(driverController.getBButton());
+      Controller.setYButton(driverController.getYButton());
+      Controller.setXButton(driverController.getXButton());
+      Controller.setLeftBumper(driverController.getLeftBumper());
+      Controller.setRightBumper(driverController.getRightBumper());
+      Controller.setStartButton(driverController.getStartButton());
+      Controller.setBackButton(driverController.getBackButton());
+      Controller.setLeftStickButton(driverController.getLeftStickButton());
+      Controller.setRightStickButton(driverController.getRightStickButton());
+      Controller.setLeftTriggerAxis(driverController.getLeftTriggerAxis());
+      Controller.setLeftX(driverController.getLeftX());
+      Controller.setLeftY(driverController.getLeftY());
+      Controller.setRightX(driverController.getRightX());
+      Controller.setRightY(driverController.getRightY());
   }
 
   @Override

@@ -92,19 +92,19 @@ public class RobotContainer {
     }
 
     public boolean goToPodiumInput() {
-        return (operator.getRawButton(5) && (operator.getRawAxis(1)> 0.5));
+        return (operator.getRawButton(5) && (operator.getRawAxis(1) > 0.85) && (Math.abs(operator.getRawAxis(0)) < 0.02));
     }
 
     public boolean goToSubInput() {
-        return (operator.getRawButton(5) && (operator.getRawAxis(1)> -0.5));
+        return (operator.getRawButton(5) && (operator.getRawAxis(1) < -0.85) && (Math.abs(operator.getRawAxis(0)) < 0.02));
     }
 
     public boolean goToAmpInput() {
-        return (operator.getRawButton(5) && (operator.getRawAxis(0)> -0.5));
+        return (operator.getRawButton(5) && (operator.getRawAxis(0) < -0.85) && (Math.abs(operator.getRawAxis(1)) < 0.02));
     }
 
     public boolean goToTrapInput() {
-        return (operator.getRawButton(5) && (operator.getRawAxis(0)> 0.5));
+        return (operator.getRawButton(5) && (operator.getRawAxis(0) > 0.85) && (Math.abs(operator.getRawAxis(1)) < 0.02));
     }
 
     // /**

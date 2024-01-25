@@ -10,10 +10,12 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.SAT.SAT;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,19 +26,27 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
+    private final Joystick operator = new Joystick(1);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
+
+    private final Trigger podium_trigger = new Trigger(() -> goToPodiumInput());
+    private final Trigger sub_trigger = new Trigger(() -> goToSubInput());
+    private final Trigger amp_trigger = new Trigger(() -> goToAmpInput());
+    private final Trigger trap_trigger = new Trigger(() -> goToTrapInput());
+
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-
+    private final JoystickButton goToZeroPosition = new JoystickButton(operator, XboxController.Button.kA.value);
+   
     /* Subsystems */
     public Swerve s_Swerve = new Swerve();
-
+    public SAT m_SAT = new SAT();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -63,6 +73,12 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));  /// suggest commenting this out while we troubleshoot this
+        goToZeroPosition.whileTrue(new InstantCommand(() -> m_SAT.goToZeroPosition()));
+
+        podium_trigger.onTrue(new InstantCommand(() -> m_SAT.goToPodiumPosition()));
+        sub_trigger.onTrue(new InstantCommand(() -> m_SAT.goToSubPosition()));
+        amp_trigger.onTrue(new InstantCommand(() -> m_SAT.goToAmpPosition()));
+        trap_trigger.onTrue(new InstantCommand(()-> m_SAT.goToTrapPosition()));
     }
 
     /**
@@ -73,6 +89,22 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         return new PathPlannerAuto("Example Auto");
+    }
+
+    public boolean goToPodiumInput() {
+        return (operator.getRawButton(5) && (operator.getRawAxis(1)> 0.5));
+    }
+
+    public boolean goToSubInput() {
+        return (operator.getRawButton(5) && (operator.getRawAxis(1)> -0.5));
+    }
+
+    public boolean goToAmpInput() {
+        return (operator.getRawButton(5) && (operator.getRawAxis(0)> -0.5));
+    }
+
+    public boolean goToTrapInput() {
+        return (operator.getRawButton(5) && (operator.getRawAxis(0)> 0.5));
     }
 
     // /**

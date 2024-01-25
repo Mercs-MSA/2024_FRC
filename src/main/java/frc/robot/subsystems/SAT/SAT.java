@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.Constants;
 import frc.robot.Constants.SATConstants;
+import frc.robot.Robot;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
@@ -21,60 +22,84 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.XboxController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import javax.swing.plaf.TreeUI;
+
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+import frc.robot.CTREConfigs;
+import edu.wpi.first.wpilibj2.command.Command;
+
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+
+
 public class SAT extends SubsystemBase {
   /** Creates a new SAT. */
-   CANSparkFlex satShooter1Motor = new CANSparkFlex(SATConstants.SAT_SHOOTER1_MOTOR_ID, MotorType.kBrushless);
-   CANSparkFlex satShooter2Motor = new CANSparkFlex(SATConstants.SAT_SHOOTER2_MOTOR_ID, MotorType.kBrushless);
+  private final TalonFX satPivotMotor = new TalonFX(SATConstants.SAT_PIVOT_MOTOR_ID);
+  private final TalonFX satBase1Motor = new TalonFX(SATConstants.SAT_BASE1_MOTOR_ID);
+  private final TalonFX satBase2Motor = new TalonFX(SATConstants.SAT_BASE2_MOTOR_ID);
+
+  private final Follower Base2_Follower = new Follower(SATConstants.SAT_BASE1_MOTOR_ID, true);
+  
+
+  CANSparkFlex satShooter1Motor = new CANSparkFlex(SATConstants.SAT_SHOOTER1_MOTOR_ID, MotorType.kBrushless);
+  CANSparkFlex satShooter2Motor = new CANSparkFlex(SATConstants.SAT_SHOOTER2_MOTOR_ID, MotorType.kBrushless);
    
-   CANSparkFlex satPivotMotor = new CANSparkFlex(SATConstants.SAT_PIVOT_MOTOR_ID, MotorType.kBrushless);
-   CANSparkFlex satBase1Motor = new CANSparkFlex(SATConstants.SAT_BASE1_MOTOR_ID, MotorType.kBrushless);
-
-   CANSparkFlex satBase2Motor = new CANSparkFlex(SATConstants.SAT_BASE2_MOTOR_ID, MotorType.kBrushless);
+  private final PositionVoltage satPivotMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
+  private final PositionVoltage satBase1_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
+  private final PositionVoltage satBase2_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
    
+  XboxController controller = new XboxController(3);
 
-   XboxController controller = new XboxController(3);
+   
+  SparkPIDController Shooter1_pidController = satShooter1Motor.getPIDController();
+  SparkPIDController Shooter2_pidController = satShooter2Motor.getPIDController();
+  /**this was named by gaurav*/
+  Servo SATTEamisDumb = new Servo(Constants.SATConstants.SAT_SERVO1_SERVO_ID);
+  Servo SATServo2 = new Servo(Constants.SATConstants.SAT_SERVO2_SERVO_ID);
+  Servo SATServo3 = new Servo(Constants.SATConstants.SAT_SERVO3_SERVO_ID);
+  Servo SATServo4 = new Servo(Constants.SATConstants.SAT_SERVO4_SERVO_ID);
 
-   SparkPIDController Base1_pidController = satBase1Motor.getPIDController();
-   SparkPIDController Base2_pidController = satBase2Motor.getPIDController();
-   SparkPIDController Pivot_pidController = satPivotMotor.getPIDController();
-   SparkPIDController Shooter1_pidController = satShooter1Motor.getPIDController();
-   SparkPIDController Shooter2_pidController = satShooter2Motor.getPIDController();
+  boolean B_Button_Value;
+  double Y_axis_Value;
 
-   /**this was named by gaurav*/
-   Servo SATTEamisDumb = new Servo(Constants.SATConstants.SAT_SERVO1_SERVO_ID);
-   Servo SATServo2 = new Servo(Constants.SATConstants.SAT_SERVO2_SERVO_ID);
-   Servo SATServo3 = new Servo(Constants.SATConstants.SAT_SERVO3_SERVO_ID);
-   Servo SATServo4 = new Servo(Constants.SATConstants.SAT_SERVO4_SERVO_ID);
 
-   private final DigitalInput satObjectDectecter = new DigitalInput(Constants.SATConstants.SAT_OBJECTDETECTOR_SENSOR_ID);
-   DutyCycleEncoder BaseThroughboreEncoder = new DutyCycleEncoder(Constants.SATConstants.BASE_THROUGHBORE_ENCODER);
-    DutyCycleEncoder PivotThroughboreEncoder = new DutyCycleEncoder(Constants.SATConstants.PIVOT_THROUGHBORE_ENCODER);
+  private final DigitalInput satObjectDectecter = new DigitalInput(Constants.SATConstants.SAT_OBJECTDETECTOR_SENSOR_ID);
+ 
+    
+
+  TalonFXConfiguration satBase1MotorConfigs = new TalonFXConfiguration();
+
+  
+
+  private static final double kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
+  private static final double kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+       // Peak output of 8 volts
+  private static final double PeakForwardVoltage = 8;
+  private static final double PeakReverseVoltage = -8;
+    // Peak output of 8 volts
 
   public SAT() {
   /**this stuff happens ONCE, when the code enables, NOT WHEN THE ROBOT ENABLES */
-    satBase1Motor.restoreFactoryDefaults();
-    satBase2Motor.restoreFactoryDefaults();
-    satShooter1Motor.restoreFactoryDefaults();
-    satShooter2Motor.restoreFactoryDefaults();
-    satPivotMotor.restoreFactoryDefaults();
-
-
-    satBase2Motor.follow(satBase1Motor, true);
-    satShooter2Motor.follow(satShooter1Motor, true);
-
-  /*JUST IN CASE THE ROBOT STARTS IN THE WRONG POSITION, THIS WILL FIX IT */
-  final double translatedBasePos = get_sat_base_throughbore_position()*Constants.SATConstants.BASE_ENCODER_RATIO;
-  final double translatedPivotPos = get_sat_pivot_throughbore_position()*Constants.SATConstants.PIVOT_ENCODER_RATIO;    
-  /*TRANSLATED POS IS THE POSITION THAT IT ACTUALLY IS, WHAT THE THROUGHBORE KNOWS IT IS */
-
-  satBase1Motor.getEncoder().setPosition(translatedBasePos);
-  satPivotMotor.getEncoder().setPosition(translatedPivotPos);
-
-
-
-
 
     
+    satShooter1Motor.restoreFactoryDefaults();
+    satShooter2Motor.restoreFactoryDefaults();
+    satBase1Motor.getConfigurator().apply(satBase1MotorConfigs);
+    satBase2Motor.getConfigurator();
+    satPivotMotor.getConfigurator();
+
+
+    /*PUT FOLLOW SYSTEMS HERE */
+    satBase2Motor.setControl(Base2_Follower);
+    satShooter2Motor.follow(satShooter1Motor, true);
+
+  
 
     
   }
@@ -83,79 +108,90 @@ public class SAT extends SubsystemBase {
  
   @Override
   public void periodic() {
-
+    B_Button_Value = controller.getBButton();
+    Y_axis_Value = controller.getRawAxis(1);
 
     // This method will be called once per scheduler run
 
 
-    if (controller.getBButton() && (controller.getRawAxis(1) < -0.5)) {
+    if (B_Button_Value && (Y_axis_Value < -0.5)) {
      /**pODIUM*/
-     Pivot_pidController.setReference(Constants.SATConstants.PIVOT_PODIUM_POS, CANSparkMax.ControlType.kPosition);
-   
+     
+      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(50));
+      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(50));
 
     }
-    else if (controller.getBButton() && (controller.getRawAxis(1) > 0.5)) {
+    if (B_Button_Value && (Y_axis_Value > 0.5)) {
      /** SUBWOOFER */
-     Pivot_pidController.setReference(Constants.SATConstants.PIVOT_AMP_POS, CANSparkMax.ControlType.kPosition);
-   
+     
+      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(150));
+      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(150));
 
     }
-    else if (controller.getBButton() && (controller.getRawAxis(0) < -0.5)) {
-     /** AMP */
-     Pivot_pidController.setReference(Constants.SATConstants.PIVOT_SUB_POS, CANSparkMax.ControlType.kPosition);}
+    if (B_Button_Value && (controller.getRawAxis(0) < -0.5)) {
+    /** AMP */
+      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(150));
+      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(150));
+      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(150));
+     
+}
     
-    else if (controller.getBButton() && (controller.getRawAxis(0) < -0.5)) {
-     /** AMP */
-     Pivot_pidController.setReference(Constants.SATConstants.PIVOT_SUB_POS, CANSparkMax.ControlType.kPosition);
-
-    }
     if (controller.getBButton() && (controller.getRawAxis(0) > 0.5)) {
      /** TRAP */
-     Pivot_pidController.setReference(40, CANSparkMax.ControlType.kPosition);
-   
+    
+      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(150));
+      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(150));
+      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(150));
 
     }
     if (controller.getBButton() && (controller.getRawAxis(0) < -0.5)) {
      /** ZERO */
-     Pivot_pidController.setReference(40, CANSparkMax.ControlType.kPosition);
-   
+     
+      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(0));
+      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(0));
+      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(0));
 
-    }
-
-    
-    
-  }
+    }    
+  }  
 
   
+    public void goToPodiumPosition() {
+
+      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
+      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
     
-     
-  
-
-    public double get_sat_base_throughbore_position() {
-       return BaseThroughboreEncoder.getAbsolutePosition();
-    }
-     
-    public double get_sat_base_motor_position(){
-        
-      return satBase1Motor.getEncoder().getPosition();
-
-    }
-    public double get_sat_pivot_throughbore_position() {
-      return PivotThroughboreEncoder.getAbsolutePosition();
     }
 
-    public double get_sat_pivot_motor_position(){
-        return satPivotMotor.getEncoder().getPosition();
+     public void goToSubPosition() {
+
+      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
+      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
+
+    }
+    public void goToAmpPosition() {
+
+      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
+      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
+      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_AMP_POS));
 
     }
 
+public void goToTrapPosition() {
 
-    
+      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
+      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
+      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_TRAP_POS));
+ 
 
-    
-      
+    }
 
+    public void goToZeroPosition() {
+
+      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(0));
+      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(0));
+      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(0));
+
+
+    }
    
-
-
 }

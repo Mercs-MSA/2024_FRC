@@ -20,13 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FourPiece"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Taxi"
+            "pathName": "Three-FourPiece"
           }
         }
       ]

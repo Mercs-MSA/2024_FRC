@@ -176,7 +176,7 @@ public class SAT extends SubsystemBase {
 
     }
 
-public void goToTrapPosition() {
+    public void goToTrapPosition() {
 
       satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
       satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));

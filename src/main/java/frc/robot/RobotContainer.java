@@ -4,21 +4,19 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.Commands;
-
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.vision.CustomGamePieceVision;
+import frc.robot.subsystems.intake.Intake;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -28,26 +26,13 @@ import frc.robot.subsystems.vision.CustomGamePieceVision;
  */
 public class RobotContainer {
     /* Controllers */
-    private final Joystick driver = new Joystick(0);
-    private final Joystick operator = new Joystick(1);
-
-    /* Drive Controls */
-    private final int translationAxis = XboxController.Axis.kLeftY.value;
-    private final int strafeAxis = XboxController.Axis.kLeftX.value;
-    private final int rotationAxis = XboxController.Axis.kRightX.value;
-
-    private final Trigger podium_trigger = new Trigger(() -> goToPodiumInput());
-    private final Trigger sub_trigger = new Trigger(() -> goToSubInput());
-    private final Trigger amp_trigger = new Trigger(() -> goToAmpInput());
-    private final Trigger trap_trigger = new Trigger(() -> goToTrapInput());
-
-    /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    public final CommandXboxController driver = new CommandXboxController(0);
+    public final CommandXboxController operator = new CommandXboxController(1);
 
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
     public SAT m_SAT = new SAT();
+    public Intake m_Intake = new Intake();
     public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
 
      /* AutoChooser */
@@ -58,10 +43,10 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
+                () -> -driver.getLeftY(), 
+                () -> -driver.getLeftX(), 
+                () -> -driver.getRightX(), 
+                () -> driver.leftBumper().getAsBoolean()
             )
         );
 
@@ -86,28 +71,51 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        driver.y()
+            .onTrue(new InstantCommand(() -> s_Swerve.zeroHeading(), s_Swerve));  /// suggest commenting this out while we troubleshoot this
+        
+        /* Operator Buttons */
+        operator.a()
+            .whileTrue(m_SAT.goToZeroPosition());
 
-        podium_trigger.onTrue(new InstantCommand(() -> m_SAT.goToPodiumPosition()));
-        sub_trigger.onTrue(new InstantCommand(() -> m_SAT.goToSubPosition()));
-        amp_trigger.onTrue(new InstantCommand(() -> m_SAT.goToAmpPosition()));
-        trap_trigger.onTrue(new InstantCommand(()-> m_SAT.goToTrapPosition()));
-    }
+        operator.leftBumper()
+            .and(operator.axisGreaterThan(1, 0.6))
+            .and(operator.axisLessThan(0, 0.4))
+            .and(operator.axisGreaterThan(0, -0.4))
+            .onTrue(m_SAT.goToPodiumPosition());
 
-    public boolean goToPodiumInput() {
-        return (operator.getRawButton(5) && (operator.getRawAxis(1) > 0.85) && (Math.abs(operator.getRawAxis(0)) < 0.02));
-    }
+        operator.leftBumper()
+            .and(operator.axisLessThan(1, -0.6))
+            .and(operator.axisLessThan(0, 0.4))
+            .and(operator.axisGreaterThan(0, -0.4))
+            .onTrue(m_SAT.goToSubPosition());
 
-    public boolean goToSubInput() {
-        return (operator.getRawButton(5) && (operator.getRawAxis(1) < -0.85) && (Math.abs(operator.getRawAxis(0)) < 0.02));
-    }
+        operator.leftBumper()
+            .and(operator.axisLessThan(0, -0.6))
+            .and(operator.axisLessThan(1, 0.4))
+            .and(operator.axisGreaterThan(1, -0.4))
+            .onTrue(m_SAT.goToAmpPosition());
 
-    public boolean goToAmpInput() {
-        return (operator.getRawButton(5) && (operator.getRawAxis(0) < -0.85) && (Math.abs(operator.getRawAxis(1)) < 0.02));
-    }
+        operator.leftBumper()
+            .and(operator.axisGreaterThan(0, 0.6))
+            .and(operator.axisLessThan(1, 0.4))
+            .and(operator.axisGreaterThan(1, -0.4))
+            .onTrue(m_SAT.goToTrapPosition());
 
-    public boolean goToTrapInput() {
-        return (operator.getRawButton(5) && (operator.getRawAxis(0) > 0.85) && (Math.abs(operator.getRawAxis(1)) < 0.02));
+        operator.b()
+            .onTrue(new IntakeMoveCommand(m_Intake.positionArmDown))
+            .onFalse(new IntakeMoveCommand(m_Intake.positionArmUp));
+
+        operator.x()
+            .onTrue(m_Intake.rollerSpeed(m_Intake.speedRollerInward));
+
+        operator.y()
+            .onTrue(m_Intake.rollerSpeed(m_Intake.speedRollerOutward));
+        
+        operator.y()
+            .and(operator.x())
+            .onTrue(m_Intake.rollerSpeed(m_Intake.speedRollerOff))
+            .onFalse(m_Intake.rollerSpeed(m_Intake.speedRollerOff));
     }
 
     /**

@@ -155,43 +155,41 @@ public class SAT extends SubsystemBase {
   }  
 
   
-    public void goToPodiumPosition() {
+    public Command goToPodiumPosition() {
+      return this.runOnce(() -> {
+        satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
+        satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
+      });
+    }
 
-      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
-      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
+    public Command goToSubPosition() {
+      return this.runOnce(() -> {
+        satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
+        satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
+      });
+    }
+
+    public Command goToAmpPosition() {
+      return this.runOnce(() -> {
+        satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
+        satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
+        satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_AMP_POS));
+      });
+    }
+
+    public Command goToTrapPosition() {
+      return this.runOnce(() -> {
+        satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
+        satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
+        satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_TRAP_POS));
+      });
+    }
     
+    public Command goToZeroPosition() {
+      return this.runOnce(() -> {
+        satBase1Motor.setControl(satBase1_voltagePosition.withPosition(0));
+        satBase2Motor.setControl(satBase2_voltagePosition.withPosition(0));
+        satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(0));
+      });
     }
-
-     public void goToSubPosition() {
-
-      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
-      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
-
-    }
-    public void goToAmpPosition() {
-
-      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
-      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
-      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_AMP_POS));
-
-    }
-
-    public void goToTrapPosition() {
-
-      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
-      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
-      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_TRAP_POS));
- 
-
-    }
-
-    public void goToZeroPosition() {
-
-      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(0));
-      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(0));
-      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(0));
-
-
-    }
-   
 }

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.vision;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
 
 import org.photonvision.PhotonCamera;
@@ -11,9 +12,12 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -26,24 +30,24 @@ public class ApriltagVision extends SubsystemBase {
     private List<PhotonTrackedTarget> aprilTagTargets;
     private PhotonTrackedTarget aprilTagBestTarget;
     private AprilTagFieldLayout aprilTagFieldLayout;
-    private PhotonPoseEstimator poseEstimator;
+    // private PhotonPoseEstimator poseEstimator;
     private int fiducialID;
     private Transform3d robotToCam;
     private double aprilTagX, aprilTagY, aprilTagZAngle, aprilTagZ = -1;
-    private Pose3d globalPoseEstimate;
+    private Pose2d globalPoseEstimate = new Pose2d();
     private Transform3d fieldToCamera;
+    private Field2d apriltaField2d = new Field2d();
 
-    public ApriltagVision(String cameraName, Transform3d robotToCam) throws IOException{
+    public ApriltagVision(String cameraName) {
         this.cameraName = cameraName;
         camera = new PhotonCamera(cameraName);
         aprilTagResult = new PhotonPipelineResult();
         aprilTagHasTargets = false;
-        aprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFields.k2024Crescendo.m_resourceFile);
-        this.robotToCam = robotToCam; 
-        poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCam);
+        // aprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFields.k2024Crescendo.m_resourceFile);
+        // this.robotToCam = robotToCam; 
+        // poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCam);
     }
 
-    @Override
     public void periodic(){
         aprilTagResult = camera.getLatestResult();
         
@@ -68,25 +72,37 @@ public class ApriltagVision extends SubsystemBase {
             aprilTagZAngle = -1.0;
         }
 
-        // Update SmartDashboard for AprilTag
-        SmartDashboard.putNumber(cameraName + " Fiducial ID", fiducialID);
-        SmartDashboard.putNumber(cameraName + " AprilTag X (m)", aprilTagX);
-        SmartDashboard.putNumber(cameraName + " AprilTag Y (m)", aprilTagY);
-        SmartDashboard.putNumber(cameraName + " AprilTag Z (m)", aprilTagZ);
-        SmartDashboard.putNumber(cameraName + " AprilTag Z Angle", aprilTagZAngle);
-        SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate X", fieldToCamera.getX());
-        SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Y", fieldToCamera.getY());
-        SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Z", fieldToCamera.getZ());
-        SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Angle", fieldToCamera.getRotation().getAngle());
+        if (aprilTagHasTargets){
+            // Update SmartDashboard for AprilTag
+            SmartDashboard.putNumber(cameraName + " Fiducial ID", fiducialID);
+            SmartDashboard.putNumber(cameraName + " AprilTag X (m)", aprilTagX);
+            SmartDashboard.putNumber(cameraName + " AprilTag Y (m)", aprilTagY);
+            SmartDashboard.putNumber(cameraName + " AprilTag Z (m)", aprilTagZ);
+            SmartDashboard.putNumber(cameraName + " AprilTag Z Angle", aprilTagZAngle);
+            SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate X", fieldToCamera.getX());
+            SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Y", fieldToCamera.getY());
+            SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Z", fieldToCamera.getZ());
+            SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Angle", fieldToCamera.getRotation().getAngle());
+            globalPoseEstimate = new Pose2d(fieldToCamera.getX(), fieldToCamera.getY(), new Rotation2d(fieldToCamera.getRotation().getX(), fieldToCamera.getRotation().getY()));
+            apriltaField2d.setRobotPose(globalPoseEstimate);
+        }
+
+        SmartDashboard.putData("estimated pose", apriltaField2d);
+
+
 
     }
 
-    public void updateEstimatedGlobalPose() {
-        poseEstimator.update();
-        globalPoseEstimate = poseEstimator.update().get().estimatedPose;
+    // public void updateEstimatedGlobalPose() {
+    //     poseEstimator.update();
+    //     globalPoseEstimate = poseEstimator.update().get().estimatedPose;
+    // }
+
+    public boolean hasTargets(){
+        return this.aprilTagHasTargets;
     }
 
-    public Pose3d getGlobalPoseEstimate() {
+    public Pose2d getGlobalPoseEstimate() {
         return this.globalPoseEstimate;
     }
 

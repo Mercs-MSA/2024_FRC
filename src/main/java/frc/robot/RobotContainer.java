@@ -16,7 +16,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.vision.CustomGamePieceVision;
-import frc.robot.subsystems.intake.intake;
+import frc.robot.subsystems.intake.Intake;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -32,7 +32,7 @@ public class RobotContainer {
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
     public SAT m_SAT = new SAT();
-    public intake m_Intake = new intake();
+    public Intake intake = new Intake();
     public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
 
      /* AutoChooser */
@@ -57,6 +57,24 @@ public class RobotContainer {
         NamedCommands.registerCommand("marker1", Commands.print("Passed marker 1"));
         NamedCommands.registerCommand("marker2", Commands.print("Passed marker 2"));
         NamedCommands.registerCommand("print hello", Commands.print("hello"));
+
+        NamedCommands.registerCommand("Start Intake", Commands.run(() -> intake.intake(), intake));
+        NamedCommands.registerCommand("Stop Intake", intake.runOnce(intake::stopIntakeMotor));
+
+
+        // NamedCommands.registerCommand(
+        //     "Arm to Pickup", arm.moveToPosition(ArmConstants.pickupAngle).withTimeout(3.0));
+        // NamedCommands.registerCommand(
+        //     "Arm to Subwoofer", arm.moveToPosition(ArmConstants.subwooferAngle).withTimeout(3.0));
+        // NamedCommands.registerCommand(
+        //     "Arm to Source Podium",
+        //     arm.moveToPosition(ArmConstants.autoSourcePodiumAngle).withTimeout(3.0));
+        // NamedCommands.registerCommand(
+        //     "Arm to Amp Podium", arm.moveToPosition(ArmConstants.autoAmpPodiumAngle).withTimeout(3.0));
+
+        // NamedCommands.registerCommand(
+        //     "Warm Up Shooter", Commands.run(() -> shooter.setMotorSpeed(1.0), shooter));
+        // NamedCommands.registerCommand("Shoot", Commands.run(() -> intake.feedToShooter(), intake));
          
         //Auto chooser
         autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`
@@ -102,20 +120,20 @@ public class RobotContainer {
             .and(operator.axisGreaterThan(1, -0.4))
             .onTrue(m_SAT.goToTrapPosition());
 
-        operator.b()
-            .onTrue(new IntakeMoveCommand(m_Intake.positionArmDown))
-            .onFalse(new IntakeMoveCommand(m_Intake.positionArmUp));
+        // operator.b()
+        //     .onTrue(new IntakeMoveCommand(intake.positionArmDown))
+        //     .onFalse(new IntakeMoveCommand(intake.positionArmUp));
 
-        operator.x()
-            .onTrue(m_Intake.rollerSpeed(m_Intake.speedRollerInward));
+        // operator.x()
+        //     .onTrue(intake.rollerSpeed(intake.speedRollerInward));
 
-        operator.y()
-            .onTrue(m_Intake.rollerSpeed(m_Intake.speedRollerOutward));
+        // operator.y()
+        //     .onTrue(intake.rollerSpeed(intake.speedRollerOutward));
         
-        operator.y()
-            .and(operator.x())
-            .onTrue(m_Intake.rollerSpeed(m_Intake.speedRollerOff))
-            .onFalse(m_Intake.rollerSpeed(m_Intake.speedRollerOff));
+        // operator.y()
+        //     .and(operator.x())
+        //     .onTrue(intake.rollerSpeed(intake.speedRollerOff))
+        //     .onFalse(intake.rollerSpeed(intake.speedRollerOff));
     }
 
     /**

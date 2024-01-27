@@ -1,10 +1,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.intake;
 
 public class IntakeMoveCommand extends Command {
-  public Intake m_intake;
+  public intake m_intake;
   public double intakeArmPositionTarget;
   
   public IntakeMoveCommand(double target) {

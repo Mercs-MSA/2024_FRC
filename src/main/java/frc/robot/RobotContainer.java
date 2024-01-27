@@ -16,7 +16,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.vision.CustomGamePieceVision;
-import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.intake;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -32,7 +32,7 @@ public class RobotContainer {
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
     public SAT m_SAT = new SAT();
-    public Intake m_Intake = new Intake();
+    public intake m_Intake = new intake();
     public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
 
      /* AutoChooser */

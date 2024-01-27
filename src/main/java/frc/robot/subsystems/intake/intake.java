@@ -51,7 +51,7 @@ import com.revrobotics.CANSparkLowLevel;
  * 
  */
 
-public class Intake extends SubsystemBase {
+public class intake extends SubsystemBase {
   boolean intakeSensorState;
   public final double speedRollerInward = 1.0;
   public final double speedRollerOff = 0.0;
@@ -66,7 +66,7 @@ public class Intake extends SubsystemBase {
   public final NeutralOut m_brake = new NeutralOut();
 
   /** Creates a new intake. */
-  public Intake() {
+  public intake() {
     // This method will be called once (at the beginning)
 
     TalonFXConfiguration configs = new TalonFXConfiguration();

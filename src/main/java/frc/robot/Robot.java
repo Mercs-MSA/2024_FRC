@@ -52,7 +52,10 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("Current Robot State", Constants.State.getState().toString());
-    SmartDashboard.putString("Pose", m_robotContainer.s_Swerve.getPose().toString());
+    SmartDashboard.putString("Pose", m_robotContainer.s_Swerve.getPose().toString());    m_ApriltagVision.periodic();
+    if (m_ApriltagVision.hasTargets()){
+      m_robotContainer.s_Swerve.resetOdometry(new Pose2d(m_ApriltagVision.getGlobalPoseEstimate().getTranslation(), m_robotContainer.s_Swerve.getPose().getRotation()));
+    }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

@@ -4,11 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.State.robotState;
+import frc.robot.subsystems.vision.ApriltagVision;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -25,6 +28,12 @@ public class Robot extends TimedRobot {
 
   robotState currentRobotState = robotState.IDLE;
 
+  ApriltagVision m_ApriltagVision = new ApriltagVision("apriltag2");
+
+  Field2d apriltaField2d = new Field2d();
+
+  Pose2d apiltagPlusGyro = new Pose2d();
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -35,6 +44,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     Constants.State.setState("IDLE");
+    m_ApriltagVision.periodic();
   }
 
   /**
@@ -53,9 +63,15 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("Current Robot State", Constants.State.getState().toString());
     SmartDashboard.putString("Pose", m_robotContainer.s_Swerve.getPose().toString());    m_ApriltagVision.periodic();
+    
     if (m_ApriltagVision.hasTargets()){
-      m_robotContainer.s_Swerve.resetOdometry(new Pose2d(m_ApriltagVision.getGlobalPoseEstimate().getTranslation(), m_robotContainer.s_Swerve.getPose().getRotation()));
+      apiltagPlusGyro = new Pose2d(m_ApriltagVision.getGlobalPoseEstimate().getTranslation(), m_robotContainer.s_Swerve.getPose().getRotation());
+      m_robotContainer.s_Swerve.resetOdometry(apiltagPlusGyro);
+      apriltaField2d.setRobotPose(apiltagPlusGyro);
+      
     }
+
+    SmartDashboard.putData(apriltaField2d);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

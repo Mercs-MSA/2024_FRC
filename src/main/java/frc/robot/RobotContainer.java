@@ -58,9 +58,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("marker2", Commands.print("Passed marker 2"));
         NamedCommands.registerCommand("print hello", Commands.print("hello"));
 
-        NamedCommands.registerCommand("Start Intake", Commands.run(() -> intake.Intake(), intake));
-        NamedCommands.registerCommand("Stop Intake", intake.runOnce(intake::stopIntakeMotor));
-
+        NamedCommands.registerCommand("Start Intake", Commands.run(() -> intake.intakeAction(), intake));
+        NamedCommands.registerCommand("Stop Intake", Commands.runOnce(()-> intake.stopIntakeMotor(), intake));
 
         // NamedCommands.registerCommand(
         //     "Arm to Pickup", arm.moveToPosition(ArmConstants.pickupAngle).withTimeout(3.0));
@@ -120,21 +119,17 @@ public class RobotContainer {
             .and(operator.axisGreaterThan(1, -0.4))
             .onTrue(m_SAT.goToTrapPosition());
 
-        // operator.b()
-        //     .onTrue(new IntakeMoveCommand(intake.positionArmDown))
-        //     .onFalse(new IntakeMoveCommand(intake.positionArmUp));
+        operator.x()
+            .onTrue(Commands.runOnce(()-> intake.feedToShooter(), intake));
 
-        // operator.x()
-        //     .onTrue(intake.rollerSpeed(intake.speedRollerInward));
-
-        // operator.y()
-        //     .onTrue(intake.rollerSpeed(intake.speedRollerOutward));
+        operator.y()
+            .onTrue(Commands.runOnce(()-> intake.outtakeNoteInIntake(), intake));
         
-        // operator.y()
-        //     .and(operator.x())
-        //     .onTrue(intake.rollerSpeed(intake.speedRollerOff))
-        //     .onFalse(intake.rollerSpeed(intake.speedRollerOff));
-    }
+        operator.y()
+            .and(operator.x())
+            .onTrue(Commands.runOnce(()-> intake.stopIntakeMotor(), intake))
+            .onFalse(Commands.runOnce(()-> intake.stopIntakeMotor(), intake));
+        }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

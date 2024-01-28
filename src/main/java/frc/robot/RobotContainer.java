@@ -58,7 +58,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("marker2", Commands.print("Passed marker 2"));
         NamedCommands.registerCommand("print hello", Commands.print("hello"));
 
-        NamedCommands.registerCommand("Start Intake", Commands.run(() -> intake.intake(), intake));
+        NamedCommands.registerCommand("Start Intake", Commands.run(() -> intake.Intake(), intake));
         NamedCommands.registerCommand("Stop Intake", intake.runOnce(intake::stopIntakeMotor));
 
 

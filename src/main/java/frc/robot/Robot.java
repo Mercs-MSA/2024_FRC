@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,7 +31,7 @@ public class Robot extends TimedRobot {
 
   ApriltagVision m_ApriltagVision = new ApriltagVision("apriltag2");
 
-  Field2d apriltaField2d = new Field2d();
+  Field2d poseEstimateField2d = new Field2d();
 
   Pose2d apiltagPlusGyro = new Pose2d();
 
@@ -66,12 +67,10 @@ public class Robot extends TimedRobot {
     
     if (m_ApriltagVision.hasTargets()){
       apiltagPlusGyro = new Pose2d(m_ApriltagVision.getGlobalPoseEstimate().getTranslation(), m_robotContainer.s_Swerve.getPose().getRotation());
-      m_robotContainer.s_Swerve.resetOdometry(apiltagPlusGyro);
-      apriltaField2d.setRobotPose(apiltagPlusGyro);
-      
+      m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(apiltagPlusGyro, Timer.getFPGATimestamp());
     }
-
-    SmartDashboard.putData(apriltaField2d);
+    poseEstimateField2d.setRobotPose(m_robotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
+    SmartDashboard.putData("estimated robot pose", poseEstimateField2d);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

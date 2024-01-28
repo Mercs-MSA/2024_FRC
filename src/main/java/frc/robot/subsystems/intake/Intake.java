@@ -60,7 +60,7 @@ public class intake extends SubsystemBase {
 
 
   /*The function below is a duplicate */
-  public void intake() {
+  public void Intake() {
     if (!isIRBeamBreakBroken()) {
       feedToShooter();
     } 

@@ -24,7 +24,7 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 
-public class Intake extends SubsystemBase {
+public class intake extends SubsystemBase {
   boolean intakeSensorState;
   
   private final TalonFX intakeMotor = new TalonFX(IntakeConstants.INTAKE_MOTOR_ID);

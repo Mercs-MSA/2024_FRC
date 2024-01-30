@@ -65,7 +65,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Current Robot State", Constants.State.getState().toString());
     SmartDashboard.putString("Pose", m_robotContainer.s_Swerve.getPose().toString());    m_ApriltagVision.periodic();
     
-    if (m_ApriltagVision.hasTargets()){
+    if (m_ApriltagVision.hasMultiTagEstimatedPose()){
       apiltagPlusGyro = new Pose2d(m_ApriltagVision.getGlobalPoseEstimate().getTranslation(), m_robotContainer.s_Swerve.getPose().getRotation());
       m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(apiltagPlusGyro, Timer.getFPGATimestamp());
     }

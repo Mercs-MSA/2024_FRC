@@ -62,7 +62,9 @@ public class ApriltagVision extends SubsystemBase {
             aprilTagY = aprilTagBestTarget.getBestCameraToTarget().getY();
             aprilTagZ = aprilTagBestTarget.getBestCameraToTarget().getZ();
             aprilTagZAngle = aprilTagBestTarget.getBestCameraToTarget().getRotation().getAngle();
-            fieldToCamera = aprilTagResult.getMultiTagResult().estimatedPose.best;
+            if (aprilTagResult.getMultiTagResult().estimatedPose.isPresent){
+                fieldToCamera = aprilTagResult.getMultiTagResult().estimatedPose.best;
+            }   
         } 
         else {
             fiducialID = -1;
@@ -100,6 +102,10 @@ public class ApriltagVision extends SubsystemBase {
 
     public boolean hasTargets(){
         return this.aprilTagHasTargets;
+    }
+
+    public boolean hasMultiTagEstimatedPose(){
+        return this.aprilTagResult.getMultiTagResult().estimatedPose.isPresent;
     }
 
     public Pose2d getGlobalPoseEstimate() {

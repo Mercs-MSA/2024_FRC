@@ -16,6 +16,12 @@
           "data": {
             "pathName": "rotation"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Start Intake"
+          }
         }
       ]
     }

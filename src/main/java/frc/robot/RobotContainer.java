@@ -61,6 +61,11 @@ public class RobotContainer {
         NamedCommands.registerCommand("Start Intake", Commands.run(() -> intake.intakeAction(), intake));
         NamedCommands.registerCommand("Stop Intake", Commands.runOnce(()-> intake.stopIntakeMotor(), intake));
 
+        NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToPodiumPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To AMP Positon", Commands.runOnce(() -> m_SAT.goToAmpPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goToSubPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To Trap Positon", Commands.runOnce(() -> m_SAT.goToTrapPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToZeroPosition(), m_SAT));
         // NamedCommands.registerCommand(
         //     "Arm to Pickup", arm.moveToPosition(ArmConstants.pickupAngle).withTimeout(3.0));
         // NamedCommands.registerCommand(
@@ -93,31 +98,31 @@ public class RobotContainer {
         
         /* Operator Buttons */
         operator.a()
-            .whileTrue(m_SAT.goToZeroPosition());
+            .onTrue(Commands.runOnce(() -> m_SAT.goToZeroPosition(), m_SAT));
 
-        operator.leftBumper()
+        operator.b()
             .and(operator.axisGreaterThan(1, 0.6))
             .and(operator.axisLessThan(0, 0.4))
             .and(operator.axisGreaterThan(0, -0.4))
-            .onTrue(m_SAT.goToPodiumPosition());
+            .onTrue(Commands.runOnce(() -> m_SAT.goToPodiumPosition(), m_SAT));
 
-        operator.leftBumper()
+        operator.b()
             .and(operator.axisLessThan(1, -0.6))
             .and(operator.axisLessThan(0, 0.4))
             .and(operator.axisGreaterThan(0, -0.4))
-            .onTrue(m_SAT.goToSubPosition());
+            .onTrue(Commands.runOnce(() -> m_SAT.goToSubPosition(), m_SAT));
 
-        operator.leftBumper()
+        operator.b()
             .and(operator.axisLessThan(0, -0.6))
             .and(operator.axisLessThan(1, 0.4))
             .and(operator.axisGreaterThan(1, -0.4))
-            .onTrue(m_SAT.goToAmpPosition());
+            .onTrue(Commands.runOnce(() -> m_SAT.goToTrapPosition(), m_SAT));
 
-        operator.leftBumper()
+        operator.b()
             .and(operator.axisGreaterThan(0, 0.6))
             .and(operator.axisLessThan(1, 0.4))
             .and(operator.axisGreaterThan(1, -0.4))
-            .onTrue(m_SAT.goToTrapPosition());
+            .onTrue(Commands.runOnce(() -> m_SAT.goToAmpPosition(), m_SAT));
 
         operator.x()
             .onTrue(Commands.runOnce(()-> intake.feedToShooter(), intake));

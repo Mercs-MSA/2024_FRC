@@ -108,88 +108,46 @@ public class SAT extends SubsystemBase {
  
   @Override
   public void periodic() {
-    B_Button_Value = controller.getBButton();
-    Y_axis_Value = controller.getRawAxis(1);
-
+    
     // This method will be called once per scheduler run
 
 
-    if (B_Button_Value && (Y_axis_Value < -0.5)) {
-     /**pODIUM*/
-     
-      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(50));
-      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(50));
-
-    }
-    if (B_Button_Value && (Y_axis_Value > 0.5)) {
-     /** SUBWOOFER */
-     
-      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(150));
-      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(150));
-
-    }
-    if (B_Button_Value && (controller.getRawAxis(0) < -0.5)) {
-    /** AMP */
-      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(150));
-      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(150));
-      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(150));
-     
-}
-    
-    if (controller.getBButton() && (controller.getRawAxis(0) > 0.5)) {
-     /** TRAP */
-    
-      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(150));
-      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(150));
-      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(150));
-
-    }
-    if (controller.getBButton() && (controller.getRawAxis(0) < -0.5)) {
-     /** ZERO */
-     
-      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(0));
-      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(0));
-      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(0));
-
-    }    
+   
   }  
 
-  
-    public Command goToPodiumPosition() {
-      return this.runOnce(() -> {
-        satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
+    public void goToPodiumPosition(){
+      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
         satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
-      });
     }
+    
 
-    public Command goToSubPosition() {
-      return this.runOnce(() -> {
+  
+    public void goToSubPosition() {
         satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
         satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
-      });
-    }
+      }
+    
 
-    public Command goToAmpPosition() {
-      return this.runOnce(() -> {
+    public void goToAmpPosition() {
+     
         satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
         satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
         satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_AMP_POS));
-      });
+
     }
 
-    public Command goToTrapPosition() {
-      return this.runOnce(() -> {
+    public void goToTrapPosition() {
+  
         satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
         satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
         satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_TRAP_POS));
-      });
     }
     
-    public Command goToZeroPosition() {
-      return this.runOnce(() -> {
+    public void goToZeroPosition() {
+     
         satBase1Motor.setControl(satBase1_voltagePosition.withPosition(0));
         satBase2Motor.setControl(satBase2_voltagePosition.withPosition(0));
         satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(0));
-      });
+
     }
 }

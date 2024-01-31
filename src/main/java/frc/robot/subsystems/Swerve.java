@@ -76,7 +76,6 @@ public class Swerve extends SubsystemBase {
            );
         // Set up custom logging to add the current path to a field 2d widget
         PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
-
         SmartDashboard.putData("Field", field);
         
     }

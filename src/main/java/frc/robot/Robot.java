@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -63,11 +64,12 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("Current Robot State", Constants.State.getState().toString());
-    SmartDashboard.putString("Pose", m_robotContainer.s_Swerve.getPose().toString());    m_ApriltagVision.periodic();
+    SmartDashboard.putString("Pose", m_robotContainer.s_Swerve.getPose().toString());   
+    m_ApriltagVision.periodic();
     
-    if (m_ApriltagVision.hasMultiTagEstimatedPose()){
-      apiltagPlusGyro = new Pose2d(m_ApriltagVision.getGlobalPoseEstimate().getTranslation(), m_robotContainer.s_Swerve.getPose().getRotation());
-      m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(apiltagPlusGyro, Timer.getFPGATimestamp());
+    if (m_ApriltagVision.hasMultiTagEstimatedPose()){ //replace with hasTargets()?
+      apiltagPlusGyro = new Pose2d(new Translation2d(m_ApriltagVision.getGlobalPoseEstimate().getTranslation().getX() - 0.29, m_ApriltagVision.getGlobalPoseEstimate().getTranslation().getY()), m_robotContainer.s_Swerve.getPose().getRotation());
+      m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(apiltagPlusGyro, m_ApriltagVision.getTimestampSeconds());
     }
     poseEstimateField2d.setRobotPose(m_robotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
     SmartDashboard.putData("estimated robot pose", poseEstimateField2d);

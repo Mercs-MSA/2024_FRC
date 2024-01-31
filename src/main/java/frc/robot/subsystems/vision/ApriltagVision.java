@@ -100,6 +100,10 @@ public class ApriltagVision extends SubsystemBase {
     //     globalPoseEstimate = poseEstimator.update().get().estimatedPose;
     // }
 
+    public double getTimestampSeconds(){
+        return this.aprilTagResult.getTimestampSeconds();
+    }
+
     public boolean hasTargets(){
         return this.aprilTagHasTargets;
     }

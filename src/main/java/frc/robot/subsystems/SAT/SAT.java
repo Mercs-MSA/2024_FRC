@@ -73,26 +73,67 @@ public class SAT extends SubsystemBase {
  
     
 
-  TalonFXConfiguration satBase1MotorConfigs = new TalonFXConfiguration();
-
   
-
-  private static final double kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
-  private static final double kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
-       // Peak output of 8 volts
-  private static final double PeakForwardVoltage = 8;
-  private static final double PeakReverseVoltage = -8;
+  
     // Peak output of 8 volts
 
   public SAT() {
   /**this stuff happens ONCE, when the code enables, NOT WHEN THE ROBOT ENABLES */
+  TalonFXConfiguration satBase1MotorConfigs = new TalonFXConfiguration();
+  satBase1MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
+  satBase1MotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+  // Peak output of 8 volts
+  satBase1MotorConfigs.Voltage.PeakForwardVoltage = 8;
+  satBase1MotorConfigs.Voltage.PeakReverseVoltage = -8;
 
+  TalonFXConfiguration satBase2MotorConfigs = new TalonFXConfiguration();
+  satBase2MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
+  satBase2MotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+  // Peak output of 8 volts
+  satBase2MotorConfigs.Voltage.PeakForwardVoltage = 8;
+  satBase2MotorConfigs.Voltage.PeakReverseVoltage = -8;
+
+  TalonFXConfiguration satPivotMotorConfigs = new TalonFXConfiguration();
+  satPivotMotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
+  satPivotMotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+  // Peak output of 8 volts
+  satPivotMotorConfigs.Voltage.PeakForwardVoltage = 8;
+  satPivotMotorConfigs.Voltage.PeakReverseVoltage = -8;
+
+
+//STATUS FOR BASE1
+  StatusCode status = StatusCode.StatusCodeNotInitialized;
+    for (int i = 0; i < 5; ++i) {
+      status = satBase1Motor.getConfigurator().apply(satBase1MotorConfigs);
+      if (status.isOK()) break;
+    }
+    if(!status.isOK()) {
+      System.out.println("Could not apply configs, error code: " + status.toString());
+    }
+
+//STATUS FOR BASE2
+    StatusCode status2 = StatusCode.StatusCodeNotInitialized;
+    for (int i = 0; i < 5; ++i) {
+      status = satBase2Motor.getConfigurator().apply(satBase2MotorConfigs);
+      if (status2.isOK()) break;
+    }
+    if(!status.isOK()) {
+      System.out.println("Could not apply configs, error code: " + status.toString());
+    }
+
+//STATUS FOR pIVOT
+    StatusCode status3 = StatusCode.StatusCodeNotInitialized;
+    for (int i = 0; i < 5; ++i) {
+      status = satPivotMotor.getConfigurator().apply(satPivotMotorConfigs);
+      if (status3.isOK()) break;
+    }
+    if(!status.isOK()) {
+      System.out.println("Could not apply configs, error code: " + status.toString());
+    }
     
     satShooter1Motor.restoreFactoryDefaults();
     satShooter2Motor.restoreFactoryDefaults();
-    satBase1Motor.getConfigurator().apply(satBase1MotorConfigs);
-    satBase2Motor.getConfigurator();
-    satPivotMotor.getConfigurator();
+    
 
 
     /*PUT FOLLOW SYSTEMS HERE */
@@ -100,7 +141,9 @@ public class SAT extends SubsystemBase {
     satShooter2Motor.follow(satShooter1Motor, true);
 
   
-
+    satBase1Motor.setPosition(0);
+    satBase2Motor.setPosition(0);
+    satPivotMotor.setPosition(0);
     
   }
 
@@ -114,6 +157,7 @@ public class SAT extends SubsystemBase {
 
    
   }  
+
 
     public void goToPodiumPosition(){
       satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));

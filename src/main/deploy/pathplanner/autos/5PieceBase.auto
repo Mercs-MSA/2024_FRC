@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3754032049697344,
-      "y": 5.543606856845236
+      "x": 1.38,
+      "y": 5.54
     },
-    "rotation": 0
+    "rotation": -0.45999999999997954
   },
   "command": {
     "type": "sequential",
@@ -14,25 +14,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TwoPiece"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "marker1"
+            "pathName": "Podium"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Three-FourPiece"
+            "pathName": "2PieceBase"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "marker2"
+            "pathName": "3PieceBase"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4PieceBase"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5PieceBase"
           }
         }
       ]

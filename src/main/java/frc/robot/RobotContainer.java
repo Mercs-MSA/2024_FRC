@@ -3,11 +3,9 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+// import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -20,6 +18,9 @@ import frc.robot.Constants.SATConstants;
 
 import frc.robot.subsystems.vision.CustomGamePieceVision;
 import frc.robot.subsystems.intake.Intake;
+// import frc.robot.subsystems.SAT.SAT;
+// import frc.robot.subsystems.vision.CustomGamePieceVision;
+// import frc.robot.subsystems.intake.Intake;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,6 +38,14 @@ public class RobotContainer {
      public SAT m_SAT = new SAT();
      public Intake intake = new Intake();
      //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
+    // public SAT m_SAT = new SAT();
+    // public Intake intake = new Intake();
+    // public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
+    
+    /* Commands */
+    // public CommandIntakeIn commandIntakeIn = new CommandIntakeIn();
+    // public CommandIntakeOut commandIntakeOut = new CommandIntakeOut();
+    // public CommandIntakeStop commandIntakeStop = new CommandIntakeStop();
 
      /* AutoChooser */
      private final SendableChooser<Command> autoChooser;
@@ -57,10 +66,12 @@ public class RobotContainer {
         // configureButtonBindings();
         
         //Pathplanner commands - templates
-        NamedCommands.registerCommand("marker1", Commands.print("Passed marker 1"));
-        NamedCommands.registerCommand("marker2", Commands.print("Passed marker 2"));
-        NamedCommands.registerCommand("print hello", Commands.print("hello"));
+        NamedCommands.registerCommand("marker1", Commands.print("Finished 2 Piece"));
+        NamedCommands.registerCommand("marker2", Commands.print("Finished 3-4 Piece"));
 
+        // NamedCommands.registerCommand("Start Intake", commandIntakeIn);
+        // NamedCommands.registerCommand("Stop Intake", commandIntakeStop);
+        // NamedCommands.registerCommand("Reverse Intake", commandIntakeOut);
          NamedCommands.registerCommand("Start Intake", Commands.run(() -> intake.intakeAction(), intake));
          NamedCommands.registerCommand("Stop Intake", Commands.runOnce(()-> intake.stopIntakeMotor(), intake));
 
@@ -71,6 +82,12 @@ public class RobotContainer {
          NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
          
          
+        // NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToPodiumPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To AMP Positon", Commands.runOnce(() -> m_SAT.goToAmpPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goToSubPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Trap Positon", Commands.runOnce(() -> m_SAT.goToTrapPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToZeroPosition(), m_SAT));
+
         //Auto chooser
         autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`
         SmartDashboard.putData("Auto Mode", autoChooser);
@@ -97,6 +114,17 @@ public class RobotContainer {
             .and(operator.axisGreaterThan(0, -0.4))
           .onTrue(Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
 
+    //     operator.b()
+    //         .and(operator.axisLessThan(1, -0.6))
+    //         .and(operator.axisLessThan(0, 0.4))
+    //         .and(operator.axisGreaterThan(0, -0.4))
+    //         .onTrue(Commands.runOnce(() -> m_SAT.goToSubPosition(), m_SAT));
+
+    //     operator.b()
+    //         .and(operator.axisLessThan(0, -0.6))
+    //         .and(operator.axisLessThan(1, 0.4))
+    //         .and(operator.axisGreaterThan(1, -0.4))
+    //         .onTrue(Commands.runOnce(() -> m_SAT.goToTrapPosition(), m_SAT));
         operator.b()
             .and(operator.axisLessThan(1, -0.6))
             .and(operator.axisLessThan(0, 0.4))
@@ -114,12 +142,21 @@ public class RobotContainer {
             .and(operator.axisLessThan(1, 0.4))
             .and(operator.axisGreaterThan(1, -0.4))
             .onTrue(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
+    //     operator.b()
+    //         .and(operator.axisGreaterThan(0, 0.6))
+    //         .and(operator.axisLessThan(1, 0.4))
+    //         .and(operator.axisGreaterThan(1, -0.4))
+    //         .onTrue(Commands.runOnce(() -> m_SAT.goToAmpPosition(), m_SAT));
 
          operator.x()
              .onTrue(Commands.runOnce(()-> intake.feedToShooter(), intake));
+    //     operator.start()
+    //         .onTrue(commandIntakeIn);
 
          operator.y()
              .onTrue(Commands.runOnce(()-> intake.outtakeNoteInIntake(), intake));
+    //     operator.back()
+    //         .onTrue(commandIntakeOut);
         
         operator.y()
             .and(operator.x())
@@ -129,6 +166,12 @@ public class RobotContainer {
         driver.leftTrigger()
             .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
          }
+    //     operator.back()
+    //         .and(operator.start())
+    //         .onTrue(commandIntakeStop)
+    //         .onFalse(commandIntakeStop);
+    //     }
+    // }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

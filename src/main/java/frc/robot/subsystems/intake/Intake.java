@@ -11,9 +11,11 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class Intake extends SubsystemBase {
-  private boolean isNotePresent;
+  public boolean isNotePresent;
   
   private final TalonFX intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorId);
+  // TODO : WRITE SPECIAL COMMANDS FOR JUST THE INDEX MOTOR
+  private final TalonFX indexMotor = new TalonFX(IntakeConstants.kIndexMotorId);
   private final DigitalInput intakeSensor = new DigitalInput(IntakeConstants.kIntakeSensorId);
 
   // private final double prematchDelay = 2.5;
@@ -22,6 +24,7 @@ public class Intake extends SubsystemBase {
   public Intake() {
     isNotePresent = false;
   }
+  
    // Make this a trigger
   public boolean detectNote() {
     return isNotePresent;
@@ -29,14 +32,21 @@ public class Intake extends SubsystemBase {
 
   public void feedToShooter() {
     intakeMotor.set(IntakeConstants.kIntakeMotorSpeed);
+    indexMotor.set(IntakeConstants.kIndexMotorSpeed);
   }
 
   public void outtakeNoteInIntake() {
     intakeMotor.set(-IntakeConstants.kIntakeMotorSpeed);
+    indexMotor.set(-IntakeConstants.kIndexMotorSpeed);
   }
 
   public void stopIntakeMotor() {
     intakeMotor.set(0.0);
+    indexMotor.set(0.0);
+  }
+
+  public double getIntakeMotor() {
+    return intakeMotor.get();
   }
 
   public void intakeAction() {

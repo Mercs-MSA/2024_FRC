@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.38,
+      "y": 5.54
+    },
+    "rotation": -0.45999999999997954
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Podium"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2PieceBase"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3PieceBase"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4PieceBase"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

@@ -43,13 +43,14 @@ public class SAT extends SubsystemBase {
   private final TalonFX satPivotMotor = new TalonFX(SATConstants.SAT_PIVOT_MOTOR_ID);
   private final TalonFX satBase1Motor = new TalonFX(SATConstants.SAT_BASE1_MOTOR_ID);
   private final TalonFX satBase2Motor = new TalonFX(SATConstants.SAT_BASE2_MOTOR_ID);
+  private final TalonFX satShooter1Motor = new TalonFX(SATConstants.SAT_SHOOTER1_MOTOR_ID);
+  private final TalonFX satShooter2Motor = new TalonFX(SATConstants.SAT_SHOOTER2_MOTOR_ID);
 
   private final Follower Base2_Follower = new Follower(SATConstants.SAT_BASE1_MOTOR_ID, true);
-  
+  private final Follower Shooter2_Follower = new Follower(SATConstants.SAT_SHOOTER1_MOTOR_ID, true);
 
-  CANSparkFlex satShooter1Motor = new CANSparkFlex(SATConstants.SAT_SHOOTER1_MOTOR_ID, MotorType.kBrushless);
-  CANSparkFlex satShooter2Motor = new CANSparkFlex(SATConstants.SAT_SHOOTER2_MOTOR_ID, MotorType.kBrushless);
-   
+  
+  
   private final PositionVoltage satPivotMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final PositionVoltage satBase1_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final PositionVoltage satBase2_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
@@ -57,8 +58,7 @@ public class SAT extends SubsystemBase {
   XboxController controller = new XboxController(3);
 
    
-  SparkPIDController Shooter1_pidController = satShooter1Motor.getPIDController();
-  SparkPIDController Shooter2_pidController = satShooter2Motor.getPIDController();
+
   /**this was named by gaurav*/
   Servo SATTEamisDumb = new Servo(Constants.SATConstants.SAT_SERVO1_SERVO_ID);
   Servo SATServo2 = new Servo(Constants.SATConstants.SAT_SERVO2_SERVO_ID);
@@ -101,10 +101,26 @@ public class SAT extends SubsystemBase {
   satPivotMotorConfigs.Voltage.PeakReverseVoltage = -8;
 
 
+  TalonFXConfiguration satShooter1MotorConfigs = new TalonFXConfiguration();
+  satShooter1MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
+  satShooter1MotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+  // Peak output of 8 volts
+  satShooter1MotorConfigs.Voltage.PeakForwardVoltage = 8;
+  satShooter1MotorConfigs.Voltage.PeakReverseVoltage = -8;
+
+  TalonFXConfiguration satShooter2MotorConfigs = new TalonFXConfiguration();
+  satShooter2MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
+  satShooter2MotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+  // Peak output of 8 volts
+  satShooter2MotorConfigs.Voltage.PeakForwardVoltage = 8;
+  satShooter2MotorConfigs.Voltage.PeakReverseVoltage = -8;
+
+
+
 //STATUS FOR BASE1
   StatusCode status = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
-      status = satBase1Motor.getConfigurator().apply(satBase1MotorConfigs);
+      status = satBase1Motor.getConfigurator().apply(satShooter1MotorConfigs);
       if (status.isOK()) break;
     }
     if(!status.isOK()) {
@@ -130,15 +146,34 @@ public class SAT extends SubsystemBase {
     if(!status.isOK()) {
       System.out.println("Could not apply configs, error code: " + status.toString());
     }
+
+    //STATUS FOR SHOOTER1
+    StatusCode status4 = StatusCode.StatusCodeNotInitialized;
+    for (int i = 0; i < 5; ++i) {
+      status4 = satShooter1Motor.getConfigurator().apply(satShooter1MotorConfigs);
+      if (status4.isOK()) break;
+    }
+    if(!status.isOK()) {
+      System.out.println("Could not apply configs, error code: " + status4.toString());
+    }
+
+    //STATUS FOR SHOOTER2
+    StatusCode status5 = StatusCode.StatusCodeNotInitialized;
+    for (int i = 0; i < 5; ++i) {
+      status5 = satShooter2Motor.getConfigurator().apply(satShooter2MotorConfigs);
+      if (status5.isOK()) break;
+    }
+    if(!status.isOK()) {
+      System.out.println("Could not apply configs, error code: " + status5.toString());
+    }
     
-    satShooter1Motor.restoreFactoryDefaults();
-    satShooter2Motor.restoreFactoryDefaults();
+    
     
 
 
     /*PUT FOLLOW SYSTEMS HERE */
     satBase2Motor.setControl(Base2_Follower);
-    satShooter2Motor.follow(satShooter1Motor, true);
+    satShooter2Motor.setControl(Shooter2_Follower);
 
   
     satBase1Motor.setPosition(0);

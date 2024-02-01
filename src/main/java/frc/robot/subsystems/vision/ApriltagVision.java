@@ -81,10 +81,12 @@ public class ApriltagVision extends SubsystemBase {
             SmartDashboard.putNumber(cameraName + " AprilTag Y (m)", aprilTagY);
             SmartDashboard.putNumber(cameraName + " AprilTag Z (m)", aprilTagZ);
             SmartDashboard.putNumber(cameraName + " AprilTag Z Angle", aprilTagZAngle);
-            SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate X", fieldToCamera.getX());
-            SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Y", fieldToCamera.getY());
-            SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Z", fieldToCamera.getZ());
-            SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Angle", fieldToCamera.getRotation().getAngle());
+            if (aprilTagResult.getMultiTagResult().estimatedPose.isPresent){
+                SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate X", fieldToCamera.getX());
+                SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Y", fieldToCamera.getY());
+                SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Z", fieldToCamera.getZ());
+                SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Angle", fieldToCamera.getRotation().getAngle());
+            }
             globalPoseEstimate = new Pose2d(fieldToCamera.getX(), fieldToCamera.getY(), new Rotation2d(fieldToCamera.getRotation().getX(), fieldToCamera.getRotation().getY()));
             // apriltaField2d.setRobotPose(globalPoseEstimate);
         }

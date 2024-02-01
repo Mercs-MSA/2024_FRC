@@ -194,39 +194,45 @@ public class SAT extends SubsystemBase {
   }  
 
 
-    public void goToPodiumPosition(){
+    public void goToBasePodiumPosition(){
       satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
         satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
     }
     
 
   
-    public void goToSubPosition() {
+    public void goBaseToSubPosition() {
         satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
         satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
       }
     
 
-    public void goToAmpPosition() {
+    public void goToBaseAmpPosition() {
      
         satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
         satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
-        satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_AMP_POS));
+        
 
     }
 
-    public void goToTrapPosition() {
+    public void goToBaseTrapPosition() {
   
         satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
         satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
-        satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_TRAP_POS));
     }
     
-    public void goToZeroPosition() {
+    public void goToBaseZeroPosition() {
      
         satBase1Motor.setControl(satBase1_voltagePosition.withPosition(0));
         satBase2Motor.setControl(satBase2_voltagePosition.withPosition(0));
-        satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(0));
+        
+
+    }
+
+    public void shootNote() {
+     
+        satShooter1Motor.set(Constants.SATConstants.SHOOTER_SPEED);
+        satShooter2Motor.set(Constants.SATConstants.SHOOTER_SPEED);
 
     }
 }

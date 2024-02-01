@@ -54,9 +54,8 @@ public class RobotContainer {
         // configureButtonBindings();
         
         //Pathplanner commands - templates
-        NamedCommands.registerCommand("marker1", Commands.print("Passed marker 1"));
-        NamedCommands.registerCommand("marker2", Commands.print("Passed marker 2"));
-        NamedCommands.registerCommand("print hello", Commands.print("hello"));
+        NamedCommands.registerCommand("marker1", Commands.print("Finished 2 Piece"));
+        NamedCommands.registerCommand("marker2", Commands.print("Finished 3-4 Piece"));
 
         // NamedCommands.registerCommand("Start Intake", Commands.run(() -> intake.intakeAction(), intake));
         // NamedCommands.registerCommand("Stop Intake", Commands.runOnce(()-> intake.stopIntakeMotor(), intake));
@@ -66,19 +65,6 @@ public class RobotContainer {
         // NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goToSubPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To Trap Positon", Commands.runOnce(() -> m_SAT.goToTrapPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToZeroPosition(), m_SAT));
-        // NamedCommands.registerCommand(
-        //     "Arm to Pickup", arm.moveToPosition(ArmConstants.pickupAngle).withTimeout(3.0));
-        // NamedCommands.registerCommand(
-        //     "Arm to Subwoofer", arm.moveToPosition(ArmConstants.subwooferAngle).withTimeout(3.0));
-        // NamedCommands.registerCommand(
-        //     "Arm to Source Podium",
-        //     arm.moveToPosition(ArmConstants.autoSourcePodiumAngle).withTimeout(3.0));
-        // NamedCommands.registerCommand(
-        //     "Arm to Amp Podium", arm.moveToPosition(ArmConstants.autoAmpPodiumAngle).withTimeout(3.0));
-
-        // NamedCommands.registerCommand(
-        //     "Warm Up Shooter", Commands.run(() -> shooter.setMotorSpeed(1.0), shooter));
-        // NamedCommands.registerCommand("Shoot", Commands.run(() -> intake.feedToShooter(), intake));
          
         //Auto chooser
         autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`
@@ -111,17 +97,17 @@ public class RobotContainer {
     //         .and(operator.axisLessThan(0, 0.4))
     //         .and(operator.axisGreaterThan(0, -0.4))
     //         .onTrue(Commands.runOnce(() -> m_SAT.goToSubPosition(), m_SAT));
-
+        
     //     operator.b()
     //         .and(operator.axisLessThan(0, -0.6))
-    //         .and(operator.axisLessThan(1, 0.4))
-    //         .and(operator.axisGreaterThan(1, -0.4))
+    //         .and(operator.axisGreaterThan(1, 0.4))
+    //         .and(operator.axisLessThan(1, -0.4))
     //         .onTrue(Commands.runOnce(() -> m_SAT.goToTrapPosition(), m_SAT));
 
     //     operator.b()
     //         .and(operator.axisGreaterThan(0, 0.6))
-    //         .and(operator.axisLessThan(1, 0.4))
-    //         .and(operator.axisGreaterThan(1, -0.4))
+    //         .and(operator.axisGreaterThan(1, 0.4))
+    //         .and(operator.axisLessThan(1, -0.4))
     //         .onTrue(Commands.runOnce(() -> m_SAT.goToAmpPosition(), m_SAT));
 
     //     operator.x()

@@ -97,17 +97,17 @@ public class RobotContainer {
     //         .and(operator.axisLessThan(0, 0.4))
     //         .and(operator.axisGreaterThan(0, -0.4))
     //         .onTrue(Commands.runOnce(() -> m_SAT.goToSubPosition(), m_SAT));
-        
+
     //     operator.b()
     //         .and(operator.axisLessThan(0, -0.6))
-    //         .and(operator.axisGreaterThan(1, 0.4))
-    //         .and(operator.axisLessThan(1, -0.4))
+    //         .and(operator.axisLessThan(1, 0.4))
+    //         .and(operator.axisGreaterThan(1, -0.4))
     //         .onTrue(Commands.runOnce(() -> m_SAT.goToTrapPosition(), m_SAT));
 
     //     operator.b()
     //         .and(operator.axisGreaterThan(0, 0.6))
-    //         .and(operator.axisGreaterThan(1, 0.4))
-    //         .and(operator.axisLessThan(1, -0.4))
+    //         .and(operator.axisLessThan(1, 0.4))
+    //         .and(operator.axisGreaterThan(1, -0.4))
     //         .onTrue(Commands.runOnce(() -> m_SAT.goToAmpPosition(), m_SAT));
 
     //     operator.x()

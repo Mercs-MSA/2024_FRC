@@ -101,8 +101,8 @@ public class RobotContainer {
     //  */
      private void configureButtonBindings() {
          /* Driver Buttons */
-        driver.y()
-            .onTrue(new InstantCommand(() -> s_Swerve.zeroHeading(), s_Swerve));  /// suggest commenting this out while we troubleshoot this
+         //driver.y()
+         //   .onTrue(new InstantCommand(() -> s_Swerve.zeroHeading(), s_Swerve));  /// suggest commenting this out while we troubleshoot this
         
          /* Operator Buttons */
          operator.a()

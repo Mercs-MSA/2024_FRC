@@ -178,13 +178,14 @@ public final class Constants {
 
 
         // Motor IDs
-        public static final int SAT_SHOOTER1_MOTOR_ID = 28;
-        public static final int SAT_SHOOTER2_MOTOR_ID = 29;
+        public static final int SAT_SHOOTER1_MOTOR_ID = 29;
+        public static final int SAT_SHOOTER2_MOTOR_ID = 27;
 
 
-        public static final int SAT_PIVOT_MOTOR_ID = 27;
+        public static final int SAT_PIVOT_MOTOR_ID = 28;
         public static final int SAT_BASE1_MOTOR_ID = 26;
         public static final int SAT_BASE2_MOTOR_ID = 25;
+        // INDEXER IS 24
 
 
         public static final int SAT_OBJECTDETECTOR_SENSOR_ID = 1;

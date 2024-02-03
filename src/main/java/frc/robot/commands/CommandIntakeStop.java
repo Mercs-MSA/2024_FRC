@@ -6,8 +6,9 @@ import frc.robot.subsystems.intake.Intake;
 public class CommandIntakeStop extends Command {
   public Intake m_intake;
 
-  public CommandIntakeStop() {
+  public CommandIntakeStop(Intake i) {
     setSubsystem("Intake");
+    m_intake = i;
   }
 
   @Override

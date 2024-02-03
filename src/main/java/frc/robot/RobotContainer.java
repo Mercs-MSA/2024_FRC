@@ -4,6 +4,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 // import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -37,18 +38,19 @@ public class RobotContainer {
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
      public SAT m_SAT = new SAT();
-     public Intake intake = new Intake();
+     public Intake m_intake = new Intake();
      public climber m_climber = new climber();
      //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
-    // public SAT m_SAT = new SAT();
-    // public Intake intake = new Intake();
-    // public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
     
     /* Commands */
-    // public CommandIntakeIn commandIntakeIn = new CommandIntakeIn();
-    // public CommandIntakeOut commandIntakeOut = new CommandIntakeOut();
-    // public CommandIntakeStop commandIntakeStop = new CommandIntakeStop();
-
+    public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
+    public CommandIntakeOut commandIntakeOut = new CommandIntakeOut(m_intake);
+    public CommandIntakeStop commandIntakeStop = new CommandIntakeStop(m_intake);
+    public CommandSwerveGoToHeading commandSwerveHeading0 = new CommandSwerveGoToHeading(0, s_Swerve);
+    public CommandSwerveGoToHeading commandSwerveHeading90 = new CommandSwerveGoToHeading(90, s_Swerve);
+    public CommandSwerveGoToHeading commandSwerveHeading180 = new CommandSwerveGoToHeading(180, s_Swerve);
+    public CommandSwerveGoToHeading commandSwerveHeading270 = new CommandSwerveGoToHeading(270, s_Swerve);
+    
      /* AutoChooser */
      private final SendableChooser<Command> autoChooser;
 
@@ -65,23 +67,21 @@ public class RobotContainer {
         );
 
         // Configure the button bindings
-        // configureButtonBindings();
+        configureButtonBindings();
         
         //Pathplanner commands - templates
         NamedCommands.registerCommand("marker1", Commands.print("Finished 2 Piece"));
         NamedCommands.registerCommand("marker2", Commands.print("Finished 3-4 Piece"));
 
-        // NamedCommands.registerCommand("Start Intake", commandIntakeIn);
-        // NamedCommands.registerCommand("Stop Intake", commandIntakeStop);
-        // NamedCommands.registerCommand("Reverse Intake", commandIntakeOut);
-         NamedCommands.registerCommand("Start Intake", Commands.run(() -> intake.intakeAction(), intake));
-         NamedCommands.registerCommand("Stop Intake", Commands.runOnce(()-> intake.stopIntakeMotor(), intake));
+        NamedCommands.registerCommand("Start Intake", commandIntakeIn);
+        NamedCommands.registerCommand("Stop Intake", commandIntakeStop);
+        NamedCommands.registerCommand("Reverse Intake", commandIntakeOut);
 
-         NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
-         NamedCommands.registerCommand("Go To AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
-         NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goBaseToSubPosition(), m_SAT));
-         NamedCommands.registerCommand("Go To Trap Positon", Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
-         NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goBaseToSubPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To Trap Positon", Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
          
          
         // NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToPodiumPosition(), m_SAT));
@@ -116,17 +116,6 @@ public class RobotContainer {
             .and(operator.axisGreaterThan(0, -0.4))
           .onTrue(Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
 
-    //     operator.b()
-    //         .and(operator.axisLessThan(1, -0.6))
-    //         .and(operator.axisLessThan(0, 0.4))
-    //         .and(operator.axisGreaterThan(0, -0.4))
-    //         .onTrue(Commands.runOnce(() -> m_SAT.goToSubPosition(), m_SAT));
-
-    //     operator.b()
-    //         .and(operator.axisLessThan(0, -0.6))
-    //         .and(operator.axisLessThan(1, 0.4))
-    //         .and(operator.axisGreaterThan(1, -0.4))
-    //         .onTrue(Commands.runOnce(() -> m_SAT.goToTrapPosition(), m_SAT));
         operator.b()
             .and(operator.axisLessThan(1, -0.6))
             .and(operator.axisLessThan(0, 0.4))
@@ -144,36 +133,30 @@ public class RobotContainer {
             .and(operator.axisLessThan(1, 0.4))
             .and(operator.axisGreaterThan(1, -0.4))
             .onTrue(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
-    //     operator.b()
-    //         .and(operator.axisGreaterThan(0, 0.6))
-    //         .and(operator.axisLessThan(1, 0.4))
-    //         .and(operator.axisGreaterThan(1, -0.4))
-    //         .onTrue(Commands.runOnce(() -> m_SAT.goToAmpPosition(), m_SAT));
 
-         operator.x()
-             .onTrue(Commands.runOnce(()-> intake.feedToShooter(), intake));
-    //     operator.start()
-    //         .onTrue(commandIntakeIn);
+         operator.start()
+             .onTrue(commandIntakeIn);
 
-         operator.y()
-             .onTrue(Commands.runOnce(()-> intake.outtakeNoteInIntake(), intake));
-    //     operator.back()
-    //         .onTrue(commandIntakeOut);
+         operator.back()
+             .onTrue(commandIntakeOut);
         
-        operator.y()
-            .and(operator.x())
-            .onTrue(Commands.runOnce(()-> intake.stopIntakeMotor(), intake))
-            .onFalse(Commands.runOnce(()-> intake.stopIntakeMotor(), intake));
+        operator.start()
+            .and(operator.back())
+            .onTrue(commandIntakeStop)
+            .onFalse(commandIntakeStop);
 
         driver.leftTrigger()
             .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
-         }
-    //     operator.back()
-    //         .and(operator.start())
-    //         .onTrue(commandIntakeStop)
-    //         .onFalse(commandIntakeStop);
-    //     }
-    // }
+         
+        driver.povUp()
+            .onTrue(commandSwerveHeading0);
+        driver.povLeft()
+            .onTrue(commandSwerveHeading90);
+        driver.povDown()
+            .onTrue(commandSwerveHeading180);
+        driver.povRight()
+            .onTrue(commandSwerveHeading270);
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

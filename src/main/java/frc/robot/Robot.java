@@ -73,12 +73,21 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Base1 Pos", m_robotContainer.m_SAT.outputBase1Data());
     SmartDashboard.putNumber("Base2 Pos", m_robotContainer.m_SAT.outputBase2Data());
     SmartDashboard.putNumber("Pivot Pos", m_robotContainer.m_SAT.outputPivotData());
+    // //m_ApriltagVision.periodic();
+
     // if (m_ApriltagVision.hasMultiTagEstimatedPose()){ //replace with hasTargets()?
     //   apiltagPlusGyro = new Pose2d(new Translation2d(m_ApriltagVision.getGlobalPoseEstimate().getTranslation().getX() - 0.29, m_ApriltagVision.getGlobalPoseEstimate().getTranslation().getY()), m_robotContainer.s_Swerve.getPose().getRotation());
     //   m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(apiltagPlusGyro, m_ApriltagVision.getTimestampSeconds());
     // }
-    // poseEstimateField2d.setRobotPose(m_robotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
-    // SmartDashboard.putData("estimated robot pose", poseEstimateField2d);
+    poseEstimateField2d.setRobotPose(m_robotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
+    SmartDashboard.putData("estimated robot pose", poseEstimateField2d);
+
+    SmartDashboard.putData(m_robotContainer.m_intake);
+    SmartDashboard.putData(m_robotContainer.m_SAT);
+    SmartDashboard.putData(m_robotContainer.s_Swerve);
+    SmartDashboard.putData(CommandScheduler.getInstance());
+
+    
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

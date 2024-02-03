@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
+import frc.robot.sim.PhysicsSim;
 import frc.robot.Constants;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -77,7 +78,7 @@ public class Swerve extends SubsystemBase {
         // Set up custom logging to add the current path to a field 2d widget
         PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
         SmartDashboard.putData("Field", field);
-        
+        SmartDashboard.putNumber("Heading", getHeading().getDegrees());
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -175,4 +176,10 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);  
         }
     }
+  
+  // USE FOR TESTING ALSO
+  @Override
+  public void simulationPeriodic() {
+    PhysicsSim.getInstance().run();
+  }
 }

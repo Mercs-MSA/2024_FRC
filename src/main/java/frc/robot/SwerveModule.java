@@ -13,6 +13,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.lib.math.Conversions;
 import frc.lib.util.SwerveModuleConstants;
 
+//  USE NEXT LINE FOR TESTING
+import frc.robot.sim.PhysicsSim;
+
 public class SwerveModule {
     public int moduleNumber;
     private Rotation2d angleOffset;
@@ -47,6 +50,10 @@ public class SwerveModule {
         mDriveMotor = new TalonFX(moduleConstants.driveMotorID);
         mDriveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
         mDriveMotor.getConfigurator().setPosition(0.0);
+
+        // USE NEXT LINE FOR TESTING
+        PhysicsSim.getInstance().addTalonFX(mAngleMotor, 0.001);
+        PhysicsSim.getInstance().addTalonFX(mDriveMotor, 0.001);
     }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){

@@ -8,7 +8,13 @@ import frc.robot.Constants.IntakeConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
+
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+
+//  USE NEXT LINE FOR TESTING
+import frc.robot.sim.PhysicsSim;
 
 public class Intake extends SubsystemBase {
   public boolean isNotePresent;
@@ -23,8 +29,36 @@ public class Intake extends SubsystemBase {
   /** Creates a new intake. */
   public Intake() {
     isNotePresent = false;
+
+    TalonFXConfiguration configs = new TalonFXConfiguration();
+    configs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
+    configs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+    // Peak output of 8 volts
+    configs.Voltage.PeakForwardVoltage = 8;
+    configs.Voltage.PeakReverseVoltage = -8;
+
+    /* Retry config apply up to 5 times, report if failure */
+    StatusCode status = StatusCode.StatusCodeNotInitialized;
+    for (int i = 0; i < 5; ++i) {
+      status = intakeMotor.getConfigurator().apply(configs);
+      status = indexMotor.getConfigurator().apply(configs);
+      if (status.isOK()) break;
+    }
+    if(!status.isOK()) {
+      System.out.println("Could not apply configs, error code: " + status.toString());
+    }
+
+    // USE NEXT LINE FOR TESTING
+    PhysicsSim.getInstance().addTalonFX(intakeMotor, 0.001);
+    PhysicsSim.getInstance().addTalonFX(indexMotor, 0.001);
   }
   
+  // USE FOR TESTING ALSO
+  @Override
+  public void simulationPeriodic() {
+    PhysicsSim.getInstance().run();
+  }
+
    // Make this a trigger
   public boolean detectNote() {
     return isNotePresent;
@@ -49,23 +83,11 @@ public class Intake extends SubsystemBase {
     return intakeMotor.get();
   }
 
-  public void intakeAction() {
-    // if there is no note
-    if (!detectNote()) {
-      // Take in the note
-      feedToShooter();
-    } 
-    else {
-      // Otherwise, stop the motors
-      stopIntakeMotor();
-    }
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    isNotePresent = !intakeSensor.get();
+
+    // TODO: isNotePresent = !intakeSensor.get();
     SmartDashboard.putBoolean("Intake Note?", detectNote());
-    //SmartDashboard.putNumber("Intake Motor Velocity", getVelocity());
   }
 }

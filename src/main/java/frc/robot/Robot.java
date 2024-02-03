@@ -30,7 +30,6 @@ public class Robot extends TimedRobot {
 
   robotState currentRobotState = robotState.IDLE;
 
-  //ApriltagVision m_ApriltagVision = new ApriltagVision("apriltag2");
   // ApriltagVision m_ApriltagVision = new ApriltagVision("apriltag2");
 
   Field2d poseEstimateField2d = new Field2d();
@@ -47,7 +46,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     Constants.State.setState("IDLE");
-    //// m_ApriltagVision.periodic();
+    // m_ApriltagVision.periodic();
   }
 
   /**
@@ -68,10 +67,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Pose", m_robotContainer.s_Swerve.getPose().toString());   
     // //m_ApriltagVision.periodic();
     
-/*     // if (m_ApriltagVision.hasMultiTagEstimatedPose()){ //replace with hasTargets()?
+    // if (m_ApriltagVision.hasMultiTagEstimatedPose()){ //replace with hasTargets()?
     //   apiltagPlusGyro = new Pose2d(new Translation2d(m_ApriltagVision.getGlobalPoseEstimate().getTranslation().getX() - 0.29, m_ApriltagVision.getGlobalPoseEstimate().getTranslation().getY()), m_robotContainer.s_Swerve.getPose().getRotation());
     //   m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(apiltagPlusGyro, m_ApriltagVision.getTimestampSeconds());
-    // } */
+    // }
     // poseEstimateField2d.setRobotPose(m_robotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
     // SmartDashboard.putData("estimated robot pose", poseEstimateField2d);
   }

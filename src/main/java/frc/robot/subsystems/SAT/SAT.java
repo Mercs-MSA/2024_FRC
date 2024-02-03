@@ -57,7 +57,9 @@ public class SAT extends SubsystemBase {
    
   XboxController controller = new XboxController(3);
 
-   
+  double base1MotorPos;
+  double base2MotorPos;
+  double pivotMotorPos;
 
   /**this was named by gaurav*/
   Servo SATTEamisDumb = new Servo(Constants.SATConstants.SAT_SERVO1_SERVO_ID);
@@ -182,15 +184,26 @@ public class SAT extends SubsystemBase {
     
   }
 
+  public double outputBase1Data() {
+    return base1MotorPos;
+  }
 
+  public double outputBase2Data() {
+    return base2MotorPos;
+  }
+
+  public double outputPivotData() {
+    return pivotMotorPos;
+  }
  
   @Override
   public void periodic() {
     
     // This method will be called once per scheduler run
 
-
-   
+    base1MotorPos = satBase1Motor.getPosition().getValue();
+    base2MotorPos = satBase2Motor.getPosition().getValue();
+    pivotMotorPos = satPivotMotor.getPosition().getValue();
   }  
 
 

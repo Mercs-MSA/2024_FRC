@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.SAT.SAT;
+import frc.robot.subsystems.climber.climber;
 import frc.robot.Constants;
 import frc.robot.Constants.SATConstants;
 
@@ -37,6 +38,7 @@ public class RobotContainer {
     public final Swerve s_Swerve = new Swerve();
      public SAT m_SAT = new SAT();
      public Intake intake = new Intake();
+     public climber m_climber = new climber();
      //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
     // public SAT m_SAT = new SAT();
     // public Intake intake = new Intake();

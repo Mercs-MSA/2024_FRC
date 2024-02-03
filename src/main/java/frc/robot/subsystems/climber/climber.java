@@ -47,6 +47,14 @@ public class climber extends SubsystemBase {
     tubeMotorLeft.getConfigurator();
     tubeMotorRight.getConfigurator();
   }
+  
+  public double outputRightData() {
+    return rightMotorPosition;
+  }
+
+    public double outputLeftData() {
+    return leftMotorPosition;
+  }
 
   @Override
   public void periodic() {

@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.State.robotState;
 import frc.robot.subsystems.vision.ApriltagVision;
+import frc.robot.subsystems.climber.climber;
+import frc.robot.subsystems.SAT.SAT;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -35,6 +37,7 @@ public class Robot extends TimedRobot {
   Field2d poseEstimateField2d = new Field2d();
 
   Pose2d apiltagPlusGyro = new Pose2d();
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -65,8 +68,11 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("Current Robot State", Constants.State.getState().toString());
     SmartDashboard.putString("Pose", m_robotContainer.s_Swerve.getPose().toString());   
-    // //m_ApriltagVision.periodic();
-    
+    SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());
+    SmartDashboard.putNumber("Climber Right motor Pos: ", m_robotContainer.m_climber.outputRightData());
+    SmartDashboard.putNumber("Base1 Pos", m_robotContainer.m_SAT.outputBase1Data());
+    SmartDashboard.putNumber("Base2 Pos", m_robotContainer.m_SAT.outputBase2Data());
+    SmartDashboard.putNumber("Pivot Pos", m_robotContainer.m_SAT.outputPivotData());
     // if (m_ApriltagVision.hasMultiTagEstimatedPose()){ //replace with hasTargets()?
     //   apiltagPlusGyro = new Pose2d(new Translation2d(m_ApriltagVision.getGlobalPoseEstimate().getTranslation().getX() - 0.29, m_ApriltagVision.getGlobalPoseEstimate().getTranslation().getY()), m_robotContainer.s_Swerve.getPose().getRotation());
     //   m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(apiltagPlusGyro, m_ApriltagVision.getTimestampSeconds());

@@ -17,12 +17,8 @@ import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.climber.climber;
 import frc.robot.Constants;
 import frc.robot.Constants.SATConstants;
-
 import frc.robot.subsystems.vision.CustomGamePieceVision;
 import frc.robot.subsystems.intake.Intake;
-// import frc.robot.subsystems.SAT.SAT;
-// import frc.robot.subsystems.vision.CustomGamePieceVision;
-// import frc.robot.subsystems.intake.Intake;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a

@@ -89,4 +89,13 @@ public class CustomGamePieceVision extends SubsystemBase{
         swerve.drive(new Translation2d(0, 0), gamePieceYaw/20, false, true);
     }
 
+     /**
+     * Generate yaw command based on Note position in camera view
+     * Output is a size 2 double array with the angle command 1st and the forward translation 2nd
+     */
+    public double[] alignNoteCommands() {
+        double[] yaw_and_translate = {gamePieceYaw/20, 0.1};
+        return yaw_and_translate;
+    }
+
 }

@@ -27,7 +27,9 @@ import edu.wpi.first.wpilibj.AnalogInput;
 public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
   private Command m_autonomousCommand;
-  private RobotContainer m_robotContainer;
+
+  private final RobotContainer m_robotContainer = new RobotContainer();
+
   robotState currentRobotState = robotState.IDLE;
   // ApriltagVision m_ApriltagVision = new ApriltagVision("apriltag2");
   Field2d poseEstimateField2d = new Field2d();
@@ -42,7 +44,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+    m_robotContainer.configureButtonBindings();
     Constants.State.setState("IDLE");
     // m_ApriltagVision.periodic();
   }
@@ -62,7 +64,7 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("Current Robot State", Constants.State.getState().toString());
-    SmartDashboard.putString("Pose", m_robotContainer.s_Swerve.getPose().toString());   
+    SmartDashboard.putString("Pose", m_robotContainer.s_Swerve.getPose().toString());
     SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());
     SmartDashboard.putNumber("Climber Right motor Pos: ", m_robotContainer.m_climber.outputRightData());
     SmartDashboard.putNumber("Base1 Pos", m_robotContainer.m_SAT.outputBase1Data());
@@ -77,13 +79,13 @@ public class Robot extends TimedRobot {
     // }
     poseEstimateField2d.setRobotPose(m_robotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
     SmartDashboard.putData("estimated robot pose", poseEstimateField2d);
+    SmartDashboard.putNumber("Current Heading", m_robotContainer.s_Swerve.getHeading().getRadians());
+    SmartDashboard.putData("Auto Mode", m_robotContainer.autoChooser);
 
     SmartDashboard.putData(m_robotContainer.m_intake);
     SmartDashboard.putData(m_robotContainer.m_SAT);
     SmartDashboard.putData(m_robotContainer.s_Swerve);
     SmartDashboard.putData(CommandScheduler.getInstance());
-
-    
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

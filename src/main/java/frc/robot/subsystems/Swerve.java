@@ -23,6 +23,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -37,6 +39,7 @@ public class Swerve extends SubsystemBase {
     public Pigeon2 gyro;
     private Field2d field = new Field2d();
     public SwerveDrivePoseEstimator poseEstimator;
+    private final StructArrayPublisher<SwerveModuleState> publisher;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -52,6 +55,8 @@ public class Swerve extends SubsystemBase {
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), getPose());
+
+        publisher = NetworkTableInstance.getDefault().getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
 
         // Configure the AutoBuilder last
         AutoBuilder.configureHolonomic(
@@ -143,6 +148,13 @@ public class Swerve extends SubsystemBase {
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), heading));
     }
 
+    // This worked in sim testing, but might be redundant and drive() should be used instead, further testing needed
+    public void faceHeading(Rotation2d heading){
+        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, Math.PI, heading);
+        SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds);
+        setModuleStates(swerveModuleStates);
+    }
+
     public void zeroHeading(){
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
     }
@@ -175,6 +187,7 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);  
         }
+        publisher.set(getModuleStates());
     }
   
   // USE FOR TESTING ALSO

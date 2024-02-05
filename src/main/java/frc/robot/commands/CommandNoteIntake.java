@@ -53,6 +53,6 @@ public class CommandNoteIntake extends Command {
   
     @Override
     public boolean isFinished() {
-      return m_intake.isNotePresent == false;
+      return m_intake.detectNote() == false;
     }
 }

@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.Intake;
 
 public class CommandIntakeOut extends Command {
-  public Intake m_intake;
+  private final Intake m_intake;
   
   public CommandIntakeOut(Intake i) {
-    setSubsystem("Intake");
     m_intake = i;
+    addRequirements(m_intake);
   }
 
   @Override
@@ -17,16 +17,18 @@ public class CommandIntakeOut extends Command {
   }
 
   @Override
-  public void end(boolean interrupted) {
-    // m_intake.stopIntakeMotor();
+  public void execute() {
+
   }
 
   @Override
-  public void execute() {}
+  public void end(boolean interrupted) {
+    m_intake.stopIntakeMotor();
+  }
 
   @Override
   public boolean isFinished() {
-    return m_intake.isNotePresent == false;
+    return m_intake.detectNote() == false;
   }
 }
 

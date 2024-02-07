@@ -89,18 +89,18 @@ public class RobotContainer {
         // NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goBaseToSubPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To Trap Positon", Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
-        NamedCommands.registerCommand("Go To Base Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
-        NamedCommands.registerCommand("Go To Base AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
-        NamedCommands.registerCommand("Go To Base Sub Positon", Commands.runOnce(() -> m_SAT.goToBaseSubPosition(), m_SAT));
-        NamedCommands.registerCommand("Go To Base Trap Positon", Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
-        NamedCommands.registerCommand("Go To Base Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Base Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Base AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Base Sub Positon", Commands.runOnce(() -> m_SAT.goToBaseSubPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Base Trap Positon", Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Base Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
         
 
-         NamedCommands.registerCommand("Go To Pivot Podium Positon", Commands.runOnce(() -> m_SAT.goToPivotPodiumPosition(), m_SAT));
-         NamedCommands.registerCommand("Go To Pivot AMP Positon", Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT));
-         NamedCommands.registerCommand("Go To Pivot Sub Positon", Commands.runOnce(() -> m_SAT.goToPivotSubPosition(), m_SAT));
-         NamedCommands.registerCommand("Go To Pivot Trap Positon", Commands.runOnce(() -> m_SAT.goToPivotTrapPosition(), m_SAT));
-         NamedCommands.registerCommand("Go To Pivot Zero Positon", Commands.runOnce(() -> m_SAT.goToPivotZeroPosition(), m_SAT));
+        //  NamedCommands.registerCommand("Go To Pivot Podium Positon", Commands.runOnce(() -> m_SAT.goToPivotPodiumPosition(), m_SAT));
+        //  NamedCommands.registerCommand("Go To Pivot AMP Positon", Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT));
+        //  NamedCommands.registerCommand("Go To Pivot Sub Positon", Commands.runOnce(() -> m_SAT.goToPivotSubPosition(), m_SAT));
+        //  NamedCommands.registerCommand("Go To Pivot Trap Positon", Commands.runOnce(() -> m_SAT.goToPivotTrapPosition(), m_SAT));
+        //  NamedCommands.registerCommand("Go To Pivot Zero Positon", Commands.runOnce(() -> m_SAT.goToPivotZeroPosition(), m_SAT));
     }
 
     /**
@@ -132,52 +132,52 @@ public class RobotContainer {
         /* Operator Buttons */
         // operator.a()
         //     .onTrue(Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
-        operator.a()
-            .onTrue(commandGoToBaseZeroPosition.andThen(commandGoToPivotZeroPosition));
+        // operator.a()
+        //     .onTrue(commandGoToBaseZeroPosition.andThen(commandGoToPivotZeroPosition));
         
         // operator.b()
         //     .and(operator.axisGreaterThan(1, 0.6))
         //     .and(operator.axisLessThan(0, 0.4))
         //     .and(operator.axisGreaterThan(0, -0.4))
         //     .onTrue(Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
-        operator.b()
-            .and(operator.axisGreaterThan(1, 0.6))
-            .and(operator.axisLessThan(0, 0.4))
-            .and(operator.axisGreaterThan(0, -0.4))
-            .onTrue(commandGoToBasePodiumPosition.andThen(commandGoToPivotPodiumPosition));
+        // operator.b()
+        //     .and(operator.axisGreaterThan(1, 0.6))
+        //     .and(operator.axisLessThan(0, 0.4))
+        //     .and(operator.axisGreaterThan(0, -0.4))
+        //     .onTrue(commandGoToBasePodiumPosition.andThen(commandGoToPivotPodiumPosition));
 
         // operator.b()
         //     .and(operator.axisLessThan(1, -0.6))
         //     .and(operator.axisLessThan(0, 0.4))
         //     .and(operator.axisGreaterThan(0, -0.4))
         //     .onTrue(Commands.runOnce(() -> m_SAT.goBaseToSubPosition(), m_SAT));
-        operator.b()
-            .and(operator.axisLessThan(1, -0.6))
-            .and(operator.axisLessThan(0, 0.4))
-            .and(operator.axisGreaterThan(0, -0.4))
-            .onTrue(commandGoToBaseSubPosition.andThen(commandGoToPivotSubPosition));
+        // operator.b()
+        //     .and(operator.axisLessThan(1, -0.6))
+        //     .and(operator.axisLessThan(0, 0.4))
+        //     .and(operator.axisGreaterThan(0, -0.4))
+        //     .onTrue(commandGoToBaseSubPosition.andThen(commandGoToPivotSubPosition));
         
         // operator.b()
         //     .and(operator.axisLessThan(0, -0.6))
         //     .and(operator.axisLessThan(1, 0.4))
         //     .and(operator.axisGreaterThan(1, -0.4))
         //     .onTrue(Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
-        operator.b()
-            .and(operator.axisLessThan(0, -0.6))
-            .and(operator.axisLessThan(1, 0.4))
-            .and(operator.axisGreaterThan(1, -0.4))
-            .onTrue(commandGoToBaseTrapPosition.andThen(commandGoToPivotTrapPosition));
+        // operator.b()
+        //     .and(operator.axisLessThan(0, -0.6))
+        //     .and(operator.axisLessThan(1, 0.4))
+        //     .and(operator.axisGreaterThan(1, -0.4))
+        //     .onTrue(commandGoToBaseTrapPosition.andThen(commandGoToPivotTrapPosition));
 
         // operator.b()
         //     .and(operator.axisGreaterThan(0, 0.6))
         //     .and(operator.axisLessThan(1, 0.4))
         //     .and(operator.axisGreaterThan(1, -0.4))
         //     .onTrue(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
-        operator.b()
-            .and(operator.axisGreaterThan(0, 0.6))
-            .and(operator.axisLessThan(1, 0.4))
-            .and(operator.axisGreaterThan(1, -0.4))
-            .onTrue(commandGoToBaseAmpPosition.andThen(commandGoToPivotAmpPosition));
+        // operator.b()
+        //     .and(operator.axisGreaterThan(0, 0.6))
+        //     .and(operator.axisLessThan(1, 0.4))
+        //     .and(operator.axisGreaterThan(1, -0.4))
+        //     .onTrue(commandGoToBaseAmpPosition.andThen(commandGoToPivotAmpPosition));
 
         operator.start()
             .onTrue(commandIntakeIn);

@@ -3,7 +3,21 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Auto Mode": "String Chooser",
-      "/SmartDashboard/Field": "Field2d"
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Intake": "Subsystem",
+      "/SmartDashboard/Scheduler": "Scheduler",
+      "/SmartDashboard/Swerve": "Subsystem",
+      "/SmartDashboard/estimated robot pose": "Field2d"
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "SmartDashboard": {
+        "Intake": {
+          "open": true
+        },
+        "open": true
+      }
     }
   },
   "NetworkTables Info": {

@@ -28,7 +28,7 @@ public class CommandIntakeStop extends Command {
 
   @Override
   public boolean isFinished() {
-    return m_intake.getIntakeMotor() == 0.0;
+    return m_intake.getIntakeMotorSpeed() == 0.0;
   }
 }
 

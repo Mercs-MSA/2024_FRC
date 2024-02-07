@@ -70,6 +70,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Base1 Pos", m_robotContainer.m_SAT.outputBase1Data());
     SmartDashboard.putNumber("Base2 Pos", m_robotContainer.m_SAT.outputBase2Data());
     SmartDashboard.putNumber("Pivot Pos", m_robotContainer.m_SAT.outputPivotData());
+    // SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());
+    // SmartDashboard.putNumber("Climber Right motor Pos: ", m_robotContainer.m_climber.outputRightData());
+    // SmartDashboard.putNumber("Base1 Pos", m_robotContainer.m_SAT.outputBase1Data());
+    // SmartDashboard.putNumber("Base2 Pos", m_robotContainer.m_SAT.outputBase2Data());
+    // SmartDashboard.putNumber("Pivot Pos", m_robotContainer.m_SAT.outputPivotData());
     SmartDashboard.putNumber("MiniPC Input Voltage (volts)", Constants.Misc.Conversion_Factor*PSU_Volt_Monitor.getAverageVoltage());
     // //m_ApriltagVision.periodic();
 
@@ -84,8 +89,12 @@ public class Robot extends TimedRobot {
 
     // SmartDashboard.putData(m_robotContainer.m_intake);
     SmartDashboard.putData(m_robotContainer.m_SAT);
+    SmartDashboard.putData(m_robotContainer.m_intake);
+    // SmartDashboard.putData(m_robotContainer.m_SAT);
     SmartDashboard.putData(m_robotContainer.s_Swerve);
     SmartDashboard.putData(CommandScheduler.getInstance());
+
+    SmartDashboard.putBoolean("intake ir bool", m_robotContainer.m_intake.detectNote());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

@@ -167,11 +167,11 @@ public final class Constants {
     }
     
     public static class IntakeConstants {
-        public static final int kIntakeMotorId = 8;
-        public static final double kIntakeMotorSpeed = 0.80;
+        public static final int kIntakeMotorId = 26;
+        public static final double kIntakeMotorSpeed = 0.30;
         public static final int kIndexMotorId = 24;
-        public static final double kIndexMotorSpeed = 0.40;
-        public static final int kIntakeSensorId = 0;
+        public static final double kIndexMotorSpeed = 0.10;
+        public static final int kIntakeSensorId = 1;
     }
 
     // This is for miscellaneous constants

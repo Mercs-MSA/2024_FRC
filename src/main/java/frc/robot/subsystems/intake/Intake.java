@@ -21,8 +21,8 @@ import frc.robot.sim.PhysicsSim;
 public class Intake extends SubsystemBase {
   private boolean isNotePresent;
   
-  private final TalonFX intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorId);
-  private final TalonFX indexMotor = new TalonFX(IntakeConstants.kIndexMotorId);
+  private final TalonFX intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorId); //carpet
+  private final TalonFX indexMotor = new TalonFX(IntakeConstants.kIndexMotorId); //sat (feeder)
   private final DigitalInput intakeSensor = new DigitalInput(IntakeConstants.kIntakeSensorId);
 
   // private final double prematchDelay = 2.5;
@@ -59,13 +59,13 @@ public class Intake extends SubsystemBase {
   }
 
   public void feedToShooter() {
-    intakeMotor.set(IntakeConstants.kIntakeMotorSpeed);
-    indexMotor.set(IntakeConstants.kIndexMotorSpeed);
+    intakeMotor.set(-IntakeConstants.kIntakeMotorSpeed);
+    indexMotor.set(-IntakeConstants.kIndexMotorSpeed);
   }
 
   public void outtakeNoteInIntake() {
-    intakeMotor.set(-IntakeConstants.kIntakeMotorSpeed);
-    indexMotor.set(-IntakeConstants.kIndexMotorSpeed);
+    intakeMotor.set(IntakeConstants.kIntakeMotorSpeed);
+    indexMotor.set(IntakeConstants.kIndexMotorSpeed);
   }
 
   public void stopIntakeMotor() {
@@ -73,7 +73,7 @@ public class Intake extends SubsystemBase {
     indexMotor.set(0.0);
   }
 
-  public double getIntakeMotor() {
+  public double getIntakeMotorSpeed() {
     return intakeMotor.get();
   }
 

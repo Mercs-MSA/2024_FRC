@@ -6,7 +6,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-// import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -17,12 +17,8 @@ import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.climber.climber;
 import frc.robot.Constants;
 import frc.robot.Constants.SATConstants;
-
 import frc.robot.subsystems.vision.CustomGamePieceVision;
 import frc.robot.subsystems.intake.Intake;
-// import frc.robot.subsystems.SAT.SAT;
-// import frc.robot.subsystems.vision.CustomGamePieceVision;
-// import frc.robot.subsystems.intake.Intake;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,10 +33,10 @@ public class RobotContainer {
 
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
-     public SAT m_SAT = new SAT();
-     public Intake m_intake = new Intake();
-     public climber m_climber = new climber();
-     //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
+    public final SAT m_SAT = new SAT();
+    public final Intake m_intake = new Intake();
+    public final climber m_climber = new climber();
+    public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
     
     /* Commands */
     public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
@@ -50,6 +46,7 @@ public class RobotContainer {
     public CommandSwerveGoToHeading commandSwerveHeading90 = new CommandSwerveGoToHeading(90, s_Swerve);
     public CommandSwerveGoToHeading commandSwerveHeading180 = new CommandSwerveGoToHeading(180, s_Swerve);
     public CommandSwerveGoToHeading commandSwerveHeading270 = new CommandSwerveGoToHeading(270, s_Swerve);
+    public CommandNoteIntake commandNoteIntake = new CommandNoteIntake(s_Swerve, m_intake, m_GamePieceVision);
     
     public CommandBasesPosition commandGoToBasePodiumPosition = new CommandBasesPosition("Podium", m_SAT);
     public CommandBasesPosition commandGoToBaseSubPosition = new CommandBasesPosition("Sub", m_SAT);
@@ -58,8 +55,8 @@ public class RobotContainer {
     public CommandBasesPosition commandGoToBaseAmpPosition = new CommandBasesPosition("Amp", m_SAT);
     public CommandBasesPosition commandGoToBaseWingPosition = new CommandBasesPosition("Wing", m_SAT);
 
-     /* AutoChooser */
-     private final SendableChooser<Command> autoChooser;
+    /* AutoChooser */
+    public final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -73,9 +70,6 @@ public class RobotContainer {
             )
         );
 
-        // Configure the button bindings
-        configureButtonBindings();
-        
         //Pathplanner commands - templates
         NamedCommands.registerCommand("marker1", Commands.print("Finished 2 Piece"));
         NamedCommands.registerCommand("marker2", Commands.print("Finished 3-4 Piece"));
@@ -89,39 +83,49 @@ public class RobotContainer {
         NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goToBaseSubPosition(), m_SAT));
         NamedCommands.registerCommand("Go To Trap Positon", Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
         NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
-         
-         
+
         // NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToPodiumPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To AMP Positon", Commands.runOnce(() -> m_SAT.goToAmpPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goToSubPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To Trap Positon", Commands.runOnce(() -> m_SAT.goToTrapPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToZeroPosition(), m_SAT));
-
-        //Auto chooser
-        autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`
-        SmartDashboard.putData("Auto Mode", autoChooser);
     }
 
-    // /**
-    //  * Use this method to define your button->command mappings. Buttons can be created by
-    //  * instantiating a {@link GenericHID} or one of its subclasses ({@link
-    //  * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-    //  * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-    //  */
-     private void configureButtonBindings() {
-         /* Driver Buttons */
-         //driver.y()
-         //   .onTrue(new InstantCommand(() -> s_Swerve.zeroHeading(), s_Swerve));  /// suggest commenting this out while we troubleshoot this
-        
-         /* Operator Buttons */
-         operator.a()
-            .onTrue(commandGoToBaseZeroPosition);
+    /**
+     * Use this method to define your button->command mappings. Buttons can be created by
+     * instantiating a {@link GenericHID} or one of its subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     */
+    public void configureButtonBindings() {
+        /* Driver Buttons */
+        driver.y()
+           .onTrue(new InstantCommand(() -> s_Swerve.zeroHeading(), s_Swerve));  /// suggest commenting this out while we troubleshoot this
+         
+        driver.povUp()
+            .onTrue(commandSwerveHeading0);
+        driver.povLeft()
+            .onTrue(commandSwerveHeading90);
+        driver.povDown()
+            .onTrue(commandSwerveHeading180);
+        driver.povRight()
+            .onTrue(commandSwerveHeading270);
 
-         operator.b()
-             .and(operator.axisGreaterThan(1, 0.6))
-             .and(operator.axisLessThan(0, 0.4))
+        driver.a()
+            .onTrue(commandNoteIntake);
+
+        driver.leftTrigger()
+            .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
+
+        /* Operator Buttons */
+        operator.a()
+            .onTrue(commandGoToBaseZeroPosition);
+        
+        operator.b()
+            .and(operator.axisGreaterThan(1, 0.6))
+            .and(operator.axisLessThan(0, 0.4))
             .and(operator.axisGreaterThan(0, -0.4))
-          .onTrue(commandGoToBasePodiumPosition);
+            .onTrue(commandGoToBasePodiumPosition);
 
         operator.b()
             .and(operator.axisLessThan(1, -0.6))
@@ -141,28 +145,15 @@ public class RobotContainer {
             .and(operator.axisGreaterThan(1, -0.4))
             .onTrue(commandGoToBaseAmpPosition);
 
-         operator.start()
-             .onTrue(commandIntakeIn);
-
-         operator.back()
-             .onTrue(commandIntakeOut);
+        operator.start()
+            .onTrue(commandIntakeIn);
+        
+        operator.back()
+            .onTrue(commandIntakeOut); // not reporting to SmartDashboard
         
         operator.start()
             .and(operator.back())
-            .onTrue(commandIntakeStop)
-            .onFalse(commandIntakeStop);
-
-        driver.leftTrigger()
-            .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
-         
-        driver.povUp()
-            .onTrue(commandSwerveHeading0);
-        driver.povLeft()
-            .onTrue(commandSwerveHeading90);
-        driver.povDown()
-            .onTrue(commandSwerveHeading180);
-        driver.povRight()
-            .onTrue(commandSwerveHeading270);
+            .onTrue(commandIntakeStop);
     }
 
     /**

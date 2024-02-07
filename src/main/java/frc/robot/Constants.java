@@ -174,6 +174,11 @@ public final class Constants {
         public static final int kIntakeSensorId = 0;
     }
 
+    // This is for miscellaneous constants
+    public static class Misc {
+        public static final double Conversion_Factor = 6.3648;    // this is the calculated conversion factor at 19.4 volts (nominal expected value)
+    }
+
     public static class SATConstants {
 
 

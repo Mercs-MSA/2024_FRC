@@ -6,7 +6,6 @@ package frc.robot.subsystems.intake;
 
 import frc.robot.Constants.IntakeConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.ctre.phoenix6.StatusCode;
@@ -16,11 +15,13 @@ import com.ctre.phoenix6.hardware.TalonFX;
 //  USE NEXT LINE FOR TESTING
 import frc.robot.sim.PhysicsSim;
 
+// TODO: WRITE SPECIAL COMMANDS FOR JUST THE INDEX MOTOR
+// TODO: Make detectNote() a trigger
+
 public class Intake extends SubsystemBase {
-  public boolean isNotePresent;
+  private boolean isNotePresent;
   
   private final TalonFX intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorId);
-  // TODO : WRITE SPECIAL COMMANDS FOR JUST THE INDEX MOTOR
   private final TalonFX indexMotor = new TalonFX(IntakeConstants.kIndexMotorId);
   private final DigitalInput intakeSensor = new DigitalInput(IntakeConstants.kIntakeSensorId);
 
@@ -52,14 +53,7 @@ public class Intake extends SubsystemBase {
     PhysicsSim.getInstance().addTalonFX(intakeMotor, 0.001);
     PhysicsSim.getInstance().addTalonFX(indexMotor, 0.001);
   }
-  
-  // USE FOR TESTING ALSO
-  @Override
-  public void simulationPeriodic() {
-    PhysicsSim.getInstance().run();
-  }
 
-   // Make this a trigger
   public boolean detectNote() {
     return isNotePresent;
   }
@@ -86,8 +80,12 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    // TODO: isNotePresent = !intakeSensor.get();
-    SmartDashboard.putBoolean("Intake Note?", detectNote());
+    isNotePresent = !intakeSensor.get();
+  }
+  
+  // USE FOR TESTING ALSO
+  @Override
+  public void simulationPeriodic() {
+    PhysicsSim.getInstance().run();
   }
 }

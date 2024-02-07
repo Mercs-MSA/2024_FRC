@@ -88,26 +88,26 @@ public class SAT extends SubsystemBase {
     satBase1MotorConfigs.Voltage.PeakReverseVoltage = -8;
 
     TalonFXConfiguration satBase2MotorConfigs = new TalonFXConfiguration();
-    satBase2MotorConfigs.Slot0.kP = 0.01; // An error of 0.5 rotations results in 1.2 volts output
+    satBase2MotorConfigs.Slot0.kP = 0.375; // An error of 0.5 rotations results in 1.2 volts output
     satBase2MotorConfigs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
     // Peak output of 8 volts
     satBase2MotorConfigs.Voltage.PeakForwardVoltage = 8;
     satBase2MotorConfigs.Voltage.PeakReverseVoltage = -8;
 
     TalonFXConfiguration satPivotMotorConfigs = new TalonFXConfiguration();
-    satPivotMotorConfigs.Slot0.kP = 0.01; // An error of 0.5 rotations results in 1.2 volts output
+    satPivotMotorConfigs.Slot0.kP = 0.375; // An error of 0.5 rotations results in 1.2 volts output
     satPivotMotorConfigs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
     // Peak output of 8 volts
     satPivotMotorConfigs.Voltage.PeakForwardVoltage = 8;
     satPivotMotorConfigs.Voltage.PeakReverseVoltage = -8;
 
     TalonFXConfiguration satShooter1MotorConfigs = new TalonFXConfiguration();
-    satShooter1MotorConfigs.Slot0.kP = 0.01; // An error of 0.5 rotations results in 1.2 volts output
+    satShooter1MotorConfigs.Slot0.kP = 0.375; // An error of 0.5 rotations results in 1.2 volts output
     satShooter1MotorConfigs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
 
 
     TalonFXConfiguration satShooter2MotorConfigs = new TalonFXConfiguration();
-    satShooter2MotorConfigs.Slot0.kP = 0.01; // An error of 0.5 rotations results in 1.2 volts output
+    satShooter2MotorConfigs.Slot0.kP = 0.375; // An error of 0.5 rotations results in 1.2 volts output
     satShooter2MotorConfigs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
 
 

@@ -34,19 +34,19 @@ public class RobotContainer {
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
     public final SAT m_SAT = new SAT();
-    public final Intake m_intake = new Intake();
-    public final climber m_climber = new climber();
-    public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
+    //public final Intake m_intake = new Intake();
+    //public final climber m_climber = new climber();
+    //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
     
     /* Commands */
-    public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
-    public CommandIntakeOut commandIntakeOut = new CommandIntakeOut(m_intake);
-    public CommandIntakeStop commandIntakeStop = new CommandIntakeStop(m_intake);
-    public CommandSwerveGoToHeading commandSwerveHeading0 = new CommandSwerveGoToHeading(0, s_Swerve);
-    public CommandSwerveGoToHeading commandSwerveHeading90 = new CommandSwerveGoToHeading(90, s_Swerve);
-    public CommandSwerveGoToHeading commandSwerveHeading180 = new CommandSwerveGoToHeading(180, s_Swerve);
-    public CommandSwerveGoToHeading commandSwerveHeading270 = new CommandSwerveGoToHeading(270, s_Swerve);
-    public CommandNoteIntake commandNoteIntake = new CommandNoteIntake(s_Swerve, m_intake, m_GamePieceVision);
+    //public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
+    // public CommandIntakeOut commandIntakeOut = new CommandIntakeOut(m_intake);
+    // public CommandIntakeStop commandIntakeStop = new CommandIntakeStop(m_intake);
+    // public CommandSwerveGoToHeading commandSwerveHeading0 = new CommandSwerveGoToHeading(0, s_Swerve);
+    // public CommandSwerveGoToHeading commandSwerveHeading90 = new CommandSwerveGoToHeading(90, s_Swerve);
+    // public CommandSwerveGoToHeading commandSwerveHeading180 = new CommandSwerveGoToHeading(180, s_Swerve);
+    // public CommandSwerveGoToHeading commandSwerveHeading270 = new CommandSwerveGoToHeading(270, s_Swerve);
+    // public CommandNoteIntake commandNoteIntake = new CommandNoteIntake(s_Swerve, m_intake, m_GamePieceVision);
     
     public CommandBasesPosition commandGoToBasePodiumPosition = new CommandBasesPosition("Podium", m_SAT);
     public CommandBasesPosition commandGoToBaseSubPosition = new CommandBasesPosition("Sub", m_SAT);
@@ -80,9 +80,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("marker1", Commands.print("Finished 2 Piece"));
         NamedCommands.registerCommand("marker2", Commands.print("Finished 3-4 Piece"));
 
-        NamedCommands.registerCommand("Start Intake", commandIntakeIn);
-        NamedCommands.registerCommand("Stop Intake", commandIntakeStop);
-        NamedCommands.registerCommand("Reverse Intake", commandIntakeOut);
+        // NamedCommands.registerCommand("Start Intake", commandIntakeIn);
+        // NamedCommands.registerCommand("Stop Intake", commandIntakeStop);
+        // NamedCommands.registerCommand("Reverse Intake", commandIntakeOut);
 
         NamedCommands.registerCommand("Go To Base Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
         NamedCommands.registerCommand("Go To Base AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
@@ -106,61 +106,64 @@ public class RobotContainer {
      */
     public void configureButtonBindings() {
         /* Driver Buttons */
-        driver.y()
-           .onTrue(new InstantCommand(() -> s_Swerve.zeroHeading(), s_Swerve));  /// suggest commenting this out while we troubleshoot this
+        // driver.y()
+        //    .onTrue(new InstantCommand(() -> s_Swerve.zeroHeading(), s_Swerve));  /// suggest commenting this out while we troubleshoot this
          
-        driver.povUp()
-            .onTrue(commandSwerveHeading0);
-        driver.povLeft()
-            .onTrue(commandSwerveHeading90);
-        driver.povDown()
-            .onTrue(commandSwerveHeading180);
-        driver.povRight()
-            .onTrue(commandSwerveHeading270);
+        // driver.povUp()
+        //     .onTrue(commandSwerveHeading0);
+        // driver.povLeft()
+        //     .onTrue(commandSwerveHeading90);
+        // driver.povDown()
+        //     .onTrue(commandSwerveHeading180);
+        // driver.povRight()
+        //     .onTrue(commandSwerveHeading270);
 
-        driver.a()
-            .onTrue(commandNoteIntake);
+        // driver.a()
+        //     .onTrue(commandNoteIntake);
 
-        driver.leftTrigger()
-            .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
+        // driver.leftTrigger()
+        //     .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
 
+
+            operator.x()
+            .onTrue(Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT));
         /* Operator Buttons */
-        operator.a()
-            .onTrue(commandGoToBaseZeroPosition.andThen(commandGoToPivotZeroPosition));
+        // operator.a()
+        //     .onTrue(commandGoToBaseZeroPosition.andThen(commandGoToPivotZeroPosition));
         
-        operator.b()
-            .and(operator.axisGreaterThan(1, 0.6))
-            .and(operator.axisLessThan(0, 0.4))
-            .and(operator.axisGreaterThan(0, -0.4))
-            .onTrue(commandGoToBasePodiumPosition.andThen(commandGoToPivotPodiumPosition));
+        // operator.b()
+        //     .and(operator.axisGreaterThan(1, 0.6))
+        //     .and(operator.axisLessThan(0, 0.4))
+        //     .and(operator.axisGreaterThan(0, -0.4))
+        //     .onTrue(commandGoToBasePodiumPosition.andThen(commandGoToPivotPodiumPosition));
 
-        operator.b()
-            .and(operator.axisLessThan(1, -0.6))
-            .and(operator.axisLessThan(0, 0.4))
-            .and(operator.axisGreaterThan(0, -0.4))
-            .onTrue(commandGoToBaseSubPosition.andThen(commandGoToPivotSubPosition));
+        // operator.b()
+        //     .and(operator.axisLessThan(1, -0.6))
+        //     .and(operator.axisLessThan(0, 0.4))
+        //     .and(operator.axisGreaterThan(0, -0.4))
+        //     .onTrue(commandGoToBaseSubPosition.andThen(commandGoToPivotSubPosition));
         
-        operator.b()
-            .and(operator.axisLessThan(0, -0.6))
-            .and(operator.axisLessThan(1, 0.4))
-            .and(operator.axisGreaterThan(1, -0.4))
-            .onTrue(commandGoToBaseTrapPosition.andThen(commandGoToPivotTrapPosition));
+        // operator.b()
+        //     .and(operator.axisLessThan(0, -0.6))
+        //     .and(operator.axisLessThan(1, 0.4))
+        //     .and(operator.axisGreaterThan(1, -0.4))
+        //     .onTrue(commandGoToBaseTrapPosition.andThen(commandGoToPivotTrapPosition));
 
-        operator.b()
-            .and(operator.axisGreaterThan(0, 0.6))
-            .and(operator.axisLessThan(1, 0.4))
-            .and(operator.axisGreaterThan(1, -0.4))
-            .onTrue(commandGoToBaseAmpPosition.andThen(commandGoToPivotAmpPosition));
+        // operator.b()
+        //     .and(operator.axisGreaterThan(0, 0.6))
+        //     .and(operator.axisLessThan(1, 0.4))
+        //     .and(operator.axisGreaterThan(1, -0.4))
+        //     .onTrue(commandGoToBaseAmpPosition.andThen(commandGoToPivotAmpPosition));
 
-        operator.start()
-            .onTrue(commandIntakeIn);
+        // operator.start()
+        //     .onTrue(commandIntakeIn);
         
-        operator.back()
-            .onTrue(commandIntakeOut); // not reporting to SmartDashboard
+        // operator.back()
+        //     .onTrue(commandIntakeOut); // not reporting to SmartDashboard
         
-        operator.start()
-            .and(operator.back())
-            .onTrue(commandIntakeStop);
+        // operator.start()
+        //     .and(operator.back())
+        //     .onTrue(commandIntakeStop);
     }
 
     /**

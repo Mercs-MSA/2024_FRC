@@ -21,6 +21,8 @@ import com.revrobotics.SparkFlexExternalEncoder;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import javax.swing.plaf.TreeUI;
@@ -79,39 +81,35 @@ public class SAT extends SubsystemBase {
      * this stuff happens ONCE, when the code enables, NOT WHEN THE ROBOT ENABLES
      */
     TalonFXConfiguration satBase1MotorConfigs = new TalonFXConfiguration();
-    satBase1MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
-    satBase1MotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+    satBase1MotorConfigs.Slot0.kP = 0.01; // An error of 0.5 rotations results in 1.2 volts output
+    satBase1MotorConfigs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
     // Peak output of 8 volts
     satBase1MotorConfigs.Voltage.PeakForwardVoltage = 8;
     satBase1MotorConfigs.Voltage.PeakReverseVoltage = -8;
 
     TalonFXConfiguration satBase2MotorConfigs = new TalonFXConfiguration();
-    satBase2MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
-    satBase2MotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+    satBase2MotorConfigs.Slot0.kP = 0.01; // An error of 0.5 rotations results in 1.2 volts output
+    satBase2MotorConfigs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
     // Peak output of 8 volts
     satBase2MotorConfigs.Voltage.PeakForwardVoltage = 8;
     satBase2MotorConfigs.Voltage.PeakReverseVoltage = -8;
 
     TalonFXConfiguration satPivotMotorConfigs = new TalonFXConfiguration();
-    satPivotMotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
-    satPivotMotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+    satPivotMotorConfigs.Slot0.kP = 0.01; // An error of 0.5 rotations results in 1.2 volts output
+    satPivotMotorConfigs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
     // Peak output of 8 volts
     satPivotMotorConfigs.Voltage.PeakForwardVoltage = 8;
     satPivotMotorConfigs.Voltage.PeakReverseVoltage = -8;
 
     TalonFXConfiguration satShooter1MotorConfigs = new TalonFXConfiguration();
-    satShooter1MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
-    satShooter1MotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
-    // Peak output of 8 volts
-    satShooter1MotorConfigs.Voltage.PeakForwardVoltage = 8;
-    satShooter1MotorConfigs.Voltage.PeakReverseVoltage = -8;
+    satShooter1MotorConfigs.Slot0.kP = 0.01; // An error of 0.5 rotations results in 1.2 volts output
+    satShooter1MotorConfigs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
+
 
     TalonFXConfiguration satShooter2MotorConfigs = new TalonFXConfiguration();
-    satShooter2MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
-    satShooter2MotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
-    // Peak output of 8 volts
-    satShooter2MotorConfigs.Voltage.PeakForwardVoltage = 8;
-    satShooter2MotorConfigs.Voltage.PeakReverseVoltage = -8;
+    satShooter2MotorConfigs.Slot0.kP = 0.01; // An error of 0.5 rotations results in 1.2 volts output
+    satShooter2MotorConfigs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
+
 
     // STATUS FOR BASE1
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -203,6 +201,10 @@ public class SAT extends SubsystemBase {
     base1MotorPos = satBase1Motor.getPosition().getValue();
     base2MotorPos = satBase2Motor.getPosition().getValue();
     pivotMotorPos = satPivotMotor.getPosition().getValue();
+
+    SmartDashboard.putNumber("base1MotorPos", base1MotorPos);
+    SmartDashboard.putNumber("base2MotorPos", base2MotorPos);
+    SmartDashboard.putNumber("pivotMotorPos", pivotMotorPos);
   }  
   
   // USE FOR TESTING ALSO

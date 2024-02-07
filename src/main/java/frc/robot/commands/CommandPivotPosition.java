@@ -1,5 +1,6 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.SAT.SAT;
 
 public class CommandPivotPosition extends Command{
@@ -56,8 +57,42 @@ public class CommandPivotPosition extends Command{
 
     @Override
     public boolean isFinished(){
-        return false;
+         if (target == "Podium"){
+            return isWithinTol(Constants.SATConstants.PIVOT_PODIUM_POS, m_SAT.outputPivotData(), 100);
+        }
+        else if (target == "Sub"){
+            return isWithinTol(Constants.SATConstants.PIVOT_SUB_POS, m_SAT.outputPivotData(), 100);
+
+        }
+        else if (target == "Amp"){
+            return isWithinTol(Constants.SATConstants.PIVOT_AMP_POS, m_SAT.outputPivotData(), 100);
+
+        }
+        else if (target == "Trap"){
+         return isWithinTol(Constants.SATConstants.PIVOT_TRAP_POS, m_SAT.outputPivotData(), 100);
+
+        }
+        else if (target == "Zero"){
+         return isWithinTol(0, m_SAT.outputPivotData(), 100);
+
+        }
+        else {
+            return false;
+
+        }
 
 
     }
+    public boolean isWithinTol(double targetPose, double currentPose, double tolerance){
+        if (Math.abs(targetPose - currentPose) <= tolerance){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
+
+
+
+

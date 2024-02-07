@@ -187,8 +187,8 @@ public final class Constants {
         public static final int SAT_SHOOTER2_MOTOR_ID = 27;
 
 
-        public static final int SAT_PIVOT_MOTOR_ID = 28;
-        public static final int SAT_BASE1_MOTOR_ID = 26;
+        public static final int SAT_PIVOT_MOTOR_ID = 19;
+        public static final int SAT_BASE1_MOTOR_ID = 55;
         public static final int SAT_BASE2_MOTOR_ID = 25;
         // INDEXER IS 24
 
@@ -201,20 +201,20 @@ public final class Constants {
         public static final int SAT_SERVO3_SERVO_ID = 7;
         public static final int SAT_SERVO4_SERVO_ID = 6;
         /*lift start positions */
-        public static final int BASE_START_POS = 0;
-        public static final int PIVOT_START_POS = 0;
+        public static final double BASE_START_POS = 0.0;
+        public static final double PIVOT_START_POS = 0.0;
         /*podium scoring position */
-        public static final int BASE_PODIUM_POS = 45;
-        public static final int PIVOT_PODIUM_POS = 0;
+        public static final double BASE_PODIUM_POS = 3.717;
+        public static final double PIVOT_PODIUM_POS = 0.0;
         /*SUBWOOFER scoring position */
-        public static final int BASE_SUB_POS = 0;
-        public static final int PIVOT_SUB_POS = 0;
+        public static final double BASE_SUB_POS = 7.026;
+        public static final double PIVOT_SUB_POS = 0.0;
         /*AMP scoring position */
-        public static final int BASE_AMP_POS = 0;
-        public static final int PIVOT_AMP_POS = 0;
+        public static final double BASE_AMP_POS = 11.018;
+        public static final double PIVOT_AMP_POS = 7;
         /*TRAP scoring position */
-        public static final int BASE_TRAP_POS = 0;
-        public static final int PIVOT_TRAP_POS = 0;
+        public static final double BASE_TRAP_POS = 13.803;
+        public static final double PIVOT_TRAP_POS = 41.665;
 
         public static final double SHOOTER_SPEED = 0.6;
 

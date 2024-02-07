@@ -33,10 +33,10 @@ public class RobotContainer {
 
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
-    public final SAT m_SAT = new SAT();
+    // public final SAT m_SAT = new SAT();
     public final Intake m_intake = new Intake();
-    public final climber m_climber = new climber();
-    public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
+    // public final climber m_climber = new climber();
+    // public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
     
     /* Commands */
     public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
@@ -46,7 +46,7 @@ public class RobotContainer {
     public CommandSwerveGoToHeading commandSwerveHeading90 = new CommandSwerveGoToHeading(90, s_Swerve);
     public CommandSwerveGoToHeading commandSwerveHeading180 = new CommandSwerveGoToHeading(180, s_Swerve);
     public CommandSwerveGoToHeading commandSwerveHeading270 = new CommandSwerveGoToHeading(270, s_Swerve);
-    public CommandNoteIntake commandNoteIntake = new CommandNoteIntake(s_Swerve, m_intake, m_GamePieceVision);
+    // public CommandNoteIntake commandNoteIntake = new CommandNoteIntake(s_Swerve, m_intake, m_GamePieceVision);
     
     /* AutoChooser */
     public final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`;
@@ -71,11 +71,11 @@ public class RobotContainer {
         NamedCommands.registerCommand("Stop Intake", commandIntakeStop);
         NamedCommands.registerCommand("Reverse Intake", commandIntakeOut);
 
-        NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
-        NamedCommands.registerCommand("Go To AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
-        NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goBaseToSubPosition(), m_SAT));
-        NamedCommands.registerCommand("Go To Trap Positon", Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
-        NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goBaseToSubPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Trap Positon", Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
 
         // NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToPodiumPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To AMP Positon", Commands.runOnce(() -> m_SAT.goToAmpPosition(), m_SAT));
@@ -104,39 +104,39 @@ public class RobotContainer {
         driver.povRight()
             .onTrue(commandSwerveHeading270);
 
-        driver.a()
-            .onTrue(commandNoteIntake);
+        // driver.a()
+        //     .onTrue(commandNoteIntake);
 
-        driver.leftTrigger()
-            .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
+        // driver.leftTrigger()
+        //     .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
 
         /* Operator Buttons */
-        operator.a()
-            .onTrue(Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
+        // operator.a()
+        //     .onTrue(Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
         
-        operator.b()
-            .and(operator.axisGreaterThan(1, 0.6))
-            .and(operator.axisLessThan(0, 0.4))
-            .and(operator.axisGreaterThan(0, -0.4))
-            .onTrue(Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
+        // operator.b()
+        //     .and(operator.axisGreaterThan(1, 0.6))
+        //     .and(operator.axisLessThan(0, 0.4))
+        //     .and(operator.axisGreaterThan(0, -0.4))
+        //     .onTrue(Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
 
-        operator.b()
-            .and(operator.axisLessThan(1, -0.6))
-            .and(operator.axisLessThan(0, 0.4))
-            .and(operator.axisGreaterThan(0, -0.4))
-            .onTrue(Commands.runOnce(() -> m_SAT.goBaseToSubPosition(), m_SAT));
+        // operator.b()
+        //     .and(operator.axisLessThan(1, -0.6))
+        //     .and(operator.axisLessThan(0, 0.4))
+        //     .and(operator.axisGreaterThan(0, -0.4))
+        //     .onTrue(Commands.runOnce(() -> m_SAT.goBaseToSubPosition(), m_SAT));
         
-        operator.b()
-            .and(operator.axisLessThan(0, -0.6))
-            .and(operator.axisLessThan(1, 0.4))
-            .and(operator.axisGreaterThan(1, -0.4))
-            .onTrue(Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
+        // operator.b()
+        //     .and(operator.axisLessThan(0, -0.6))
+        //     .and(operator.axisLessThan(1, 0.4))
+        //     .and(operator.axisGreaterThan(1, -0.4))
+        //     .onTrue(Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
 
-        operator.b()
-            .and(operator.axisGreaterThan(0, 0.6))
-            .and(operator.axisLessThan(1, 0.4))
-            .and(operator.axisGreaterThan(1, -0.4))
-            .onTrue(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
+        // operator.b()
+        //     .and(operator.axisGreaterThan(0, 0.6))
+        //     .and(operator.axisLessThan(1, 0.4))
+        //     .and(operator.axisGreaterThan(1, -0.4))
+        //     .onTrue(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
 
         operator.start()
             .onTrue(commandIntakeIn);

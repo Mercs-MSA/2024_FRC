@@ -216,9 +216,19 @@ public class SAT extends SubsystemBase {
     satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
   }
 
-  public void goBaseToSubPosition() {
+   public void goToPivotPodiumPosition() {
+    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_PODIUM_POS));
+    
+  }
+
+  public void goToBaseSubPosition() {
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
     satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
+  }
+  
+   public void goToPivotSubPosition() {
+    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_SUB_POS));
+    
   }
 
   public void goToBaseAmpPosition() {
@@ -227,6 +237,10 @@ public class SAT extends SubsystemBase {
     satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
 
   }
+   public void goToPivotAmpPosition() {
+    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_AMP_POS));
+    
+  }
 
   public void goToBaseTrapPosition() {
 
@@ -234,11 +248,21 @@ public class SAT extends SubsystemBase {
     satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
   }
 
+   public void goToPivotTrapPosition() {
+    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_TRAP_POS));
+    
+  }
+
   public void goToBaseZeroPosition() {
 
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(0));
     satBase2Motor.setControl(satBase2_voltagePosition.withPosition(0));
 
+  }
+
+   public void goToPivotZeroPosition() {
+    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(0));
+    
   }
 
   public void shootNote() {

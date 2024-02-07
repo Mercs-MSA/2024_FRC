@@ -89,12 +89,12 @@ public class Robot extends TimedRobot {
 
     // SmartDashboard.putData(m_robotContainer.m_intake);
     SmartDashboard.putData(m_robotContainer.m_SAT);
-    SmartDashboard.putData(m_robotContainer.m_intake);
+   // SmartDashboard.putData(m_robotContainer.m_intake);
     // SmartDashboard.putData(m_robotContainer.m_SAT);
     SmartDashboard.putData(m_robotContainer.s_Swerve);
     SmartDashboard.putData(CommandScheduler.getInstance());
 
-    SmartDashboard.putBoolean("intake ir bool", m_robotContainer.m_intake.detectNote());
+   // SmartDashboard.putBoolean("intake ir bool", m_robotContainer.m_intake.detectNote());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

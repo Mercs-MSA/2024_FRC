@@ -135,7 +135,7 @@ public class RobotContainer {
 
 
             operator.x()
-            .onTrue(Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT));
+            .onTrue(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
         /* Operator Buttons */
         // operator.a()
         //     .onTrue(commandGoToBaseZeroPosition.andThen(commandGoToPivotZeroPosition));

@@ -210,8 +210,8 @@ public final class Constants {
         public static final double BASE_SUB_POS = 7.026;
         public static final double PIVOT_SUB_POS = 0.0;
         /*AMP scoring position */
-        public static final double BASE_AMP_POS = 11.018;
-        public static final double PIVOT_AMP_POS = 7;
+        public static final double BASE_AMP_POS = 5.0;
+        public static final double PIVOT_AMP_POS = 22.0;
         /*TRAP scoring position */
         public static final double BASE_TRAP_POS = 13.803;
         public static final double PIVOT_TRAP_POS = 41.665;

@@ -15,6 +15,7 @@ public class CommandBasesPosition extends Command{
 
         target = t;
         m_SAT = s;
+        addRequirements(m_SAT);
 
 
     }

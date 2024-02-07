@@ -54,6 +54,12 @@ public class RobotContainer {
     public CommandBasesPosition commandGoToBaseZeroPosition = new CommandBasesPosition("Zero", m_SAT);
     public CommandBasesPosition commandGoToBaseAmpPosition = new CommandBasesPosition("Amp", m_SAT);
     public CommandBasesPosition commandGoToBaseWingPosition = new CommandBasesPosition("Wing", m_SAT);
+    public CommandPivotPosition commandGoToPivotPodiumPosition = new CommandPivotPosition("Podium", m_SAT);
+    public CommandPivotPosition commandGoToPivotSubPosition = new CommandPivotPosition("Sub", m_SAT);
+    public CommandPivotPosition commandGoToPivotTrapPosition = new CommandPivotPosition("Trap", m_SAT);
+    public CommandPivotPosition commandGoToPivotZeroPosition = new CommandPivotPosition("Zero", m_SAT);
+    public CommandPivotPosition commandGoToPivotAmpPosition = new CommandPivotPosition("Amp", m_SAT);
+    public CommandPivotPosition commandGoToPivotWingPosition = new CommandPivotPosition("Wing", m_SAT);
 
     /* AutoChooser */
     public final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`;
@@ -78,17 +84,18 @@ public class RobotContainer {
         NamedCommands.registerCommand("Stop Intake", commandIntakeStop);
         NamedCommands.registerCommand("Reverse Intake", commandIntakeOut);
 
-        NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
-        NamedCommands.registerCommand("Go To AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
-        NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goToBaseSubPosition(), m_SAT));
-        NamedCommands.registerCommand("Go To Trap Positon", Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
-        NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To Base Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To Base AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To Base Sub Positon", Commands.runOnce(() -> m_SAT.goToBaseSubPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To Base Trap Positon", Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To Base Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
+        
 
-        // NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToPodiumPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To AMP Positon", Commands.runOnce(() -> m_SAT.goToAmpPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goToSubPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To Trap Positon", Commands.runOnce(() -> m_SAT.goToTrapPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToZeroPosition(), m_SAT));
+         NamedCommands.registerCommand("Go To Pivot Podium Positon", Commands.runOnce(() -> m_SAT.goToPivotPodiumPosition(), m_SAT));
+         NamedCommands.registerCommand("Go To Pivot AMP Positon", Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT));
+         NamedCommands.registerCommand("Go To Pivot Sub Positon", Commands.runOnce(() -> m_SAT.goToPivotSubPosition(), m_SAT));
+         NamedCommands.registerCommand("Go To Pivot Trap Positon", Commands.runOnce(() -> m_SAT.goToPivotTrapPosition(), m_SAT));
+         NamedCommands.registerCommand("Go To Pivot Zero Positon", Commands.runOnce(() -> m_SAT.goToPivotZeroPosition(), m_SAT));
     }
 
     /**
@@ -119,31 +126,31 @@ public class RobotContainer {
 
         /* Operator Buttons */
         operator.a()
-            .onTrue(commandGoToBaseZeroPosition);
+            .onTrue(commandGoToBaseZeroPosition.andThen(commandGoToPivotZeroPosition));
         
         operator.b()
             .and(operator.axisGreaterThan(1, 0.6))
             .and(operator.axisLessThan(0, 0.4))
             .and(operator.axisGreaterThan(0, -0.4))
-            .onTrue(commandGoToBasePodiumPosition);
+            .onTrue(commandGoToBasePodiumPosition.andThen(commandGoToPivotPodiumPosition));
 
         operator.b()
             .and(operator.axisLessThan(1, -0.6))
             .and(operator.axisLessThan(0, 0.4))
             .and(operator.axisGreaterThan(0, -0.4))
-            .onTrue(commandGoToBaseSubPosition);
+            .onTrue(commandGoToBaseSubPosition.andThen(commandGoToPivotSubPosition));
         
         operator.b()
             .and(operator.axisLessThan(0, -0.6))
             .and(operator.axisLessThan(1, 0.4))
             .and(operator.axisGreaterThan(1, -0.4))
-            .onTrue(commandGoToBaseTrapPosition);
+            .onTrue(commandGoToBaseTrapPosition.andThen(commandGoToPivotTrapPosition));
 
         operator.b()
             .and(operator.axisGreaterThan(0, 0.6))
             .and(operator.axisLessThan(1, 0.4))
             .and(operator.axisGreaterThan(1, -0.4))
-            .onTrue(commandGoToBaseAmpPosition);
+            .onTrue(commandGoToBaseAmpPosition.andThen(commandGoToPivotAmpPosition));
 
         operator.start()
             .onTrue(commandIntakeIn);

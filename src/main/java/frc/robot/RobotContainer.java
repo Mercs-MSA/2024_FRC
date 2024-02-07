@@ -34,14 +34,14 @@ public class RobotContainer {
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
     public final SAT m_SAT = new SAT();
-    //public final Intake m_intake = new Intake();
+    public final Intake m_intake = new Intake();
     //public final climber m_climber = new climber();
     //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
     
     /* Commands */
-    //public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
-    // public CommandIntakeOut commandIntakeOut = new CommandIntakeOut(m_intake);
-    // public CommandIntakeStop commandIntakeStop = new CommandIntakeStop(m_intake);
+    public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
+    public CommandIntakeOut commandIntakeOut = new CommandIntakeOut(m_intake);
+    public CommandIntakeStop commandIntakeStop = new CommandIntakeStop(m_intake);
     // public CommandSwerveGoToHeading commandSwerveHeading0 = new CommandSwerveGoToHeading(0, s_Swerve);
     // public CommandSwerveGoToHeading commandSwerveHeading90 = new CommandSwerveGoToHeading(90, s_Swerve);
     // public CommandSwerveGoToHeading commandSwerveHeading180 = new CommandSwerveGoToHeading(180, s_Swerve);
@@ -135,7 +135,10 @@ public class RobotContainer {
 
 
             operator.x()
-            .onTrue(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
+            .onTrue(
+                Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT)
+            .andThen(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT))
+            );
         /* Operator Buttons */
         // operator.a()
         //     .onTrue(commandGoToBaseZeroPosition.andThen(commandGoToPivotZeroPosition));
@@ -164,11 +167,11 @@ public class RobotContainer {
         //     .and(operator.axisGreaterThan(1, -0.4))
         //     .onTrue(commandGoToBaseAmpPosition.andThen(commandGoToPivotAmpPosition));
 
-        // operator.start()
-        //     .onTrue(commandIntakeIn);
+        operator.start()
+            .onTrue(commandIntakeIn);
         
-        // operator.back()
-        //     .onTrue(commandIntakeOut); // not reporting to SmartDashboard
+        operator.back()
+            .onTrue(commandIntakeOut); // not reporting to SmartDashboard
         
         // operator.start()
         //     .and(operator.back())

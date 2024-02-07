@@ -170,7 +170,7 @@ public final class Constants {
         public static final int kIntakeMotorId = 26;
         public static final double kIntakeMotorSpeed = 0.30;
         public static final int kIndexMotorId = 24;
-        public static final double kIndexMotorSpeed = 0.10;
+        public static final double kIndexMotorSpeed = 0.40;
         public static final int kIntakeSensorId = 1;
     }
 
@@ -210,8 +210,8 @@ public final class Constants {
         public static final double BASE_SUB_POS = 7.026;
         public static final double PIVOT_SUB_POS = 0.0;
         /*AMP scoring position */
-        public static final double BASE_AMP_POS = 5.0;
-        public static final double PIVOT_AMP_POS = 22.0;
+        public static final double BASE_AMP_POS = 14.0;
+        public static final double PIVOT_AMP_POS = 7.0;
         /*TRAP scoring position */
         public static final double BASE_TRAP_POS = 13.803;
         public static final double PIVOT_TRAP_POS = 41.665;

@@ -57,7 +57,7 @@ public class SAT extends SubsystemBase {
   private final PositionVoltage satPivotMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false,
       false);
   private final PositionVoltage satBase1_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
-  private final PositionVoltage satBase2_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
+  // private final PositionVoltage satBase2_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
 
   double base1MotorPos;
   double base2MotorPos;
@@ -72,7 +72,7 @@ public class SAT extends SubsystemBase {
   boolean B_Button_Value;
   double Y_axis_Value;
 
-  private final DigitalInput satObjectDectecter = new DigitalInput(Constants.SATConstants.SAT_OBJECTDETECTOR_SENSOR_ID);
+  // private final DigitalInput satObjectDectecter = new DigitalInput(Constants.SATConstants.SAT_OBJECTDETECTOR_SENSOR_ID);
 
   // Peak output of 8 volts
 
@@ -81,14 +81,14 @@ public class SAT extends SubsystemBase {
      * this stuff happens ONCE, when the code enables, NOT WHEN THE ROBOT ENABLES
      */
     TalonFXConfiguration satBase1MotorConfigs = new TalonFXConfiguration();
-    satBase1MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
+    satBase1MotorConfigs.Slot0.kP = 5.0; // An error of 0.5 rotations results in 1.2 volts output
     satBase1MotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
     // Peak output of 8 volts
     satBase1MotorConfigs.Voltage.PeakForwardVoltage = 14;
     satBase1MotorConfigs.Voltage.PeakReverseVoltage = -14;
 
     TalonFXConfiguration satBase2MotorConfigs = new TalonFXConfiguration();
-    satBase2MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
+    satBase2MotorConfigs.Slot0.kP = 5.0; // An error of 0.5 rotations results in 1.2 volts output
     satBase2MotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
     // Peak output of 8 volts
     satBase2MotorConfigs.Voltage.PeakForwardVoltage = 14;
@@ -215,7 +215,7 @@ public class SAT extends SubsystemBase {
   
   public void goToBasePodiumPosition() {
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
+    
   }
 
    public void goToPivotPodiumPosition() {
@@ -225,9 +225,8 @@ public class SAT extends SubsystemBase {
 
   public void goToBaseSubPosition() {
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
+    
   }
-  
    public void goToPivotSubPosition() {
     satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_SUB_POS));
     
@@ -236,7 +235,7 @@ public class SAT extends SubsystemBase {
   public void goToBaseAmpPosition() {
 
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
+   
 
   }
    public void goToPivotAmpPosition() {
@@ -247,8 +246,8 @@ public class SAT extends SubsystemBase {
   public void goToBaseTrapPosition() {
 
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
   }
+   
 
    public void goToPivotTrapPosition() {
     satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_TRAP_POS));
@@ -258,7 +257,7 @@ public class SAT extends SubsystemBase {
   public void goToBaseZeroPosition() {
 
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(0));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(0));
+   
 
   }
 

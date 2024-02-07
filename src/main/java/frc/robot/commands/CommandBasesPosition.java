@@ -3,10 +3,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SAT.SAT;
 
-
-
-
-
 public class CommandBasesPosition extends Command{
 
     String target;
@@ -83,7 +79,7 @@ public class CommandBasesPosition extends Command{
 
         }
         else if (target == "Zero"){
-         return isWithinTol(0, m_SAT.outputBase1Data(), 100);
+         return isWithinTol(0, m_SAT.outputBase1Data(), 0.3);
 
         }
         else {

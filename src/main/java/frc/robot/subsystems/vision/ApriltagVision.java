@@ -57,11 +57,11 @@ public class ApriltagVision extends SubsystemBase {
             aprilTagTargets = aprilTagResult.getTargets();
             aprilTagBestTarget = aprilTagResult.getBestTarget();
 
-            fiducialID = aprilTagBestTarget.getFiducialId();
-            aprilTagX = aprilTagBestTarget.getBestCameraToTarget().getX();
-            aprilTagY = aprilTagBestTarget.getBestCameraToTarget().getY();
-            aprilTagZ = aprilTagBestTarget.getBestCameraToTarget().getZ();
-            aprilTagZAngle = aprilTagBestTarget.getBestCameraToTarget().getRotation().getAngle();
+            // fiducialID = aprilTagBestTarget.getFiducialId();
+            // aprilTagX = aprilTagBestTarget.getBestCameraToTarget().getX();
+            // aprilTagY = aprilTagBestTarget.getBestCameraToTarget().getY();
+            // aprilTagZ = aprilTagBestTarget.getBestCameraToTarget().getZ();
+            // aprilTagZAngle = aprilTagBestTarget.getBestCameraToTarget().getRotation().getAngle();
             if (aprilTagResult.getMultiTagResult().estimatedPose.isPresent){
                 fieldToCamera = aprilTagResult.getMultiTagResult().estimatedPose.best;
             }   
@@ -76,11 +76,11 @@ public class ApriltagVision extends SubsystemBase {
 
         if (aprilTagHasTargets){
             // Update SmartDashboard for AprilTag
-            SmartDashboard.putNumber(cameraName + " Fiducial ID", fiducialID);
-            SmartDashboard.putNumber(cameraName + " AprilTag X (m)", aprilTagX);
-            SmartDashboard.putNumber(cameraName + " AprilTag Y (m)", aprilTagY);
-            SmartDashboard.putNumber(cameraName + " AprilTag Z (m)", aprilTagZ);
-            SmartDashboard.putNumber(cameraName + " AprilTag Z Angle", aprilTagZAngle);
+            // SmartDashboard.putNumber(cameraName + " Fiducial ID", fiducialID);
+            // SmartDashboard.putNumber(cameraName + " AprilTag X (m)", aprilTagX);
+            // SmartDashboard.putNumber(cameraName + " AprilTag Y (m)", aprilTagY);
+            // SmartDashboard.putNumber(cameraName + " AprilTag Z (m)", aprilTagZ);
+            // SmartDashboard.putNumber(cameraName + " AprilTag Z Angle", aprilTagZAngle);
             if (aprilTagResult.getMultiTagResult().estimatedPose.isPresent){
                 SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate X", fieldToCamera.getX());
                 SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Y", fieldToCamera.getY());

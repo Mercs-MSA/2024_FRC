@@ -73,7 +73,7 @@ public class CommandPivotPosition extends Command{
 
         }
         else if (target == "Zero"){
-         return isWithinTol(0, m_SAT.outputPivotData(), 100);
+         return isWithinTol(0, m_SAT.outputPivotData(), 0.3);
 
         }
         else {

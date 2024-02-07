@@ -58,18 +58,18 @@ public class CommandPivotPosition extends Command{
     @Override
     public boolean isFinished(){
          if (target == "Podium"){
-            return isWithinTol(Constants.SATConstants.PIVOT_PODIUM_POS, m_SAT.outputPivotData(), 100);
+            return isWithinTol(Constants.SATConstants.PIVOT_PODIUM_POS, m_SAT.outputPivotData(), 0.3);
         }
         else if (target == "Sub"){
-            return isWithinTol(Constants.SATConstants.PIVOT_SUB_POS, m_SAT.outputPivotData(), 100);
+            return isWithinTol(Constants.SATConstants.PIVOT_SUB_POS, m_SAT.outputPivotData(), 0.3);
 
         }
         else if (target == "Amp"){
-            return isWithinTol(Constants.SATConstants.PIVOT_AMP_POS, m_SAT.outputPivotData(), 100);
+            return isWithinTol(Constants.SATConstants.PIVOT_AMP_POS, m_SAT.outputPivotData(), 0.3);
 
         }
         else if (target == "Trap"){
-         return isWithinTol(Constants.SATConstants.PIVOT_TRAP_POS, m_SAT.outputPivotData(), 100);
+         return isWithinTol(Constants.SATConstants.PIVOT_TRAP_POS, m_SAT.outputPivotData(), 0.3);
 
         }
         else if (target == "Zero"){

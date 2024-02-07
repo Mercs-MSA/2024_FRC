@@ -9,11 +9,12 @@ import frc.robot.subsystems.SAT.SAT;
 public class CommandBasesPosition extends Command{
 
     String target;
-    public SAT m_SAT = new SAT();
+    public SAT m_SAT;
 
-    public CommandBasesPosition(String t){
+    public CommandBasesPosition(String t, SAT s){
 
         target = t;
+        m_SAT = s;
 
 
     }
@@ -26,19 +27,19 @@ public class CommandBasesPosition extends Command{
 
         }
         else if (target == "Sub"){
-
+            m_SAT.goToBaseSubPosition();
 
         }
         else if (target == "Amp"){
-
+            m_SAT.goToBaseAmpPosition();
 
         }
         else if (target == "Trap"){
-
+            m_SAT.goToBaseTrapPosition();
 
         }
         else if (target == "Zero"){
-
+            m_SAT.goToBaseZeroPosition();
 
         }
         else if (target == "Wing"){

@@ -51,6 +51,13 @@ public class RobotContainer {
     public CommandSwerveGoToHeading commandSwerveHeading180 = new CommandSwerveGoToHeading(180, s_Swerve);
     public CommandSwerveGoToHeading commandSwerveHeading270 = new CommandSwerveGoToHeading(270, s_Swerve);
     
+    public CommandBasesPosition commandGoToBasePodiumPosition = new CommandBasesPosition("Podium", m_SAT);
+    public CommandBasesPosition commandGoToBaseSubPosition = new CommandBasesPosition("Sub", m_SAT);
+    public CommandBasesPosition commandGoToBaseTrapPosition = new CommandBasesPosition("Trap", m_SAT);
+    public CommandBasesPosition commandGoToBaseZeroPosition = new CommandBasesPosition("Zero", m_SAT);
+    public CommandBasesPosition commandGoToBaseAmpPosition = new CommandBasesPosition("Amp", m_SAT);
+    public CommandBasesPosition commandGoToBaseWingPosition = new CommandBasesPosition("Wing", m_SAT);
+
      /* AutoChooser */
      private final SendableChooser<Command> autoChooser;
 
@@ -79,7 +86,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
         NamedCommands.registerCommand("Go To AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
-        NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goBaseToSubPosition(), m_SAT));
+        NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goToBaseSubPosition(), m_SAT));
         NamedCommands.registerCommand("Go To Trap Positon", Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
         NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
          
@@ -108,31 +115,31 @@ public class RobotContainer {
         
          /* Operator Buttons */
          operator.a()
-            .onTrue(Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
+            .onTrue(commandGoToBaseZeroPosition);
 
          operator.b()
              .and(operator.axisGreaterThan(1, 0.6))
              .and(operator.axisLessThan(0, 0.4))
             .and(operator.axisGreaterThan(0, -0.4))
-          .onTrue(Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
+          .onTrue(commandGoToBasePodiumPosition);
 
         operator.b()
             .and(operator.axisLessThan(1, -0.6))
             .and(operator.axisLessThan(0, 0.4))
             .and(operator.axisGreaterThan(0, -0.4))
-            .onTrue(Commands.runOnce(() -> m_SAT.goBaseToSubPosition(), m_SAT));
+            .onTrue(commandGoToBaseSubPosition);
         
         operator.b()
             .and(operator.axisLessThan(0, -0.6))
             .and(operator.axisLessThan(1, 0.4))
             .and(operator.axisGreaterThan(1, -0.4))
-            .onTrue(Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
+            .onTrue(commandGoToBaseTrapPosition);
 
         operator.b()
             .and(operator.axisGreaterThan(0, 0.6))
             .and(operator.axisLessThan(1, 0.4))
             .and(operator.axisGreaterThan(1, -0.4))
-            .onTrue(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
+            .onTrue(commandGoToBaseAmpPosition);
 
          operator.start()
              .onTrue(commandIntakeIn);

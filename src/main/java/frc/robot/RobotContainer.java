@@ -46,20 +46,20 @@ public class RobotContainer {
     public CommandSwerveGoToHeading commandSwerveHeading90 = new CommandSwerveGoToHeading(90, s_Swerve);
     public CommandSwerveGoToHeading commandSwerveHeading180 = new CommandSwerveGoToHeading(180, s_Swerve);
     public CommandSwerveGoToHeading commandSwerveHeading270 = new CommandSwerveGoToHeading(270, s_Swerve);
-    public CommandNoteIntake commandNoteIntake = new CommandNoteIntake(s_Swerve, m_intake, m_GamePieceVision);
+    // public CommandNoteIntake commandNoteIntake = new CommandNoteIntake(s_Swerve, m_intake, m_GamePieceVision);
     
-    public CommandBasesPosition commandGoToBasePodiumPosition = new CommandBasesPosition("Podium", m_SAT);
-    public CommandBasesPosition commandGoToBaseSubPosition = new CommandBasesPosition("Sub", m_SAT);
-    public CommandBasesPosition commandGoToBaseTrapPosition = new CommandBasesPosition("Trap", m_SAT);
-    public CommandBasesPosition commandGoToBaseZeroPosition = new CommandBasesPosition("Zero", m_SAT);
-    public CommandBasesPosition commandGoToBaseAmpPosition = new CommandBasesPosition("Amp", m_SAT);
-    public CommandBasesPosition commandGoToBaseWingPosition = new CommandBasesPosition("Wing", m_SAT);
-    public CommandPivotPosition commandGoToPivotPodiumPosition = new CommandPivotPosition("Podium", m_SAT);
-    public CommandPivotPosition commandGoToPivotSubPosition = new CommandPivotPosition("Sub", m_SAT);
-    public CommandPivotPosition commandGoToPivotTrapPosition = new CommandPivotPosition("Trap", m_SAT);
-    public CommandPivotPosition commandGoToPivotZeroPosition = new CommandPivotPosition("Zero", m_SAT);
-    public CommandPivotPosition commandGoToPivotAmpPosition = new CommandPivotPosition("Amp", m_SAT);
-    public CommandPivotPosition commandGoToPivotWingPosition = new CommandPivotPosition("Wing", m_SAT);
+    // public CommandBasesPosition commandGoToBasePodiumPosition = new CommandBasesPosition("Podium", m_SAT);
+    // public CommandBasesPosition commandGoToBaseSubPosition = new CommandBasesPosition("Sub", m_SAT);
+    // public CommandBasesPosition commandGoToBaseTrapPosition = new CommandBasesPosition("Trap", m_SAT);
+    // public CommandBasesPosition commandGoToBaseZeroPosition = new CommandBasesPosition("Zero", m_SAT);
+    // public CommandBasesPosition commandGoToBaseAmpPosition = new CommandBasesPosition("Amp", m_SAT);
+    // public CommandBasesPosition commandGoToBaseWingPosition = new CommandBasesPosition("Wing", m_SAT);
+    // public CommandPivotPosition commandGoToPivotPodiumPosition = new CommandPivotPosition("Podium", m_SAT);
+    // public CommandPivotPosition commandGoToPivotSubPosition = new CommandPivotPosition("Sub", m_SAT);
+    // public CommandPivotPosition commandGoToPivotTrapPosition = new CommandPivotPosition("Trap", m_SAT);
+    // public CommandPivotPosition commandGoToPivotZeroPosition = new CommandPivotPosition("Zero", m_SAT);
+    // public CommandPivotPosition commandGoToPivotAmpPosition = new CommandPivotPosition("Amp", m_SAT);
+    // public CommandPivotPosition commandGoToPivotWingPosition = new CommandPivotPosition("Wing", m_SAT);
 
     /* AutoChooser */
     public final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`;

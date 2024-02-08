@@ -47,7 +47,7 @@ public class CommandNoteIntake extends Command {
             false, 
             true
         );
-        m_intake.feedToShooter();
+        m_intake.startIntakeMotor();
 
     }
   

@@ -55,7 +55,7 @@ public class SAT extends SubsystemBase {
 
   private final Follower Base2_Follower = new Follower(SATConstants.SAT_BASE1_MOTOR_ID, true);
   private final Follower Shooter2_Follower = new Follower(SATConstants.SAT_SHOOTER1_MOTOR_ID, true);
-  private final VelocityVoltage satShooter1_voltageVelocity = new VelocityVoltage(0);
+  private final VelocityVoltage satShooter1_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
   private final PositionVoltage satPivotMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false,
       false);
   private final PositionVoltage satBase1_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);

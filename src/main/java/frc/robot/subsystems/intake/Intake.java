@@ -16,6 +16,15 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.sim.PhysicsSim;
 
 // TODO: WRITE SPECIAL COMMANDS FOR JUST THE INDEX MOTOR
+/* 
+ * New command class X
+ * new function in subsystem for just index X
+ * named command in robot container 
+ * New command in robot container
+ */
+
+// TODO: Add second sensor
+// TODO: Stateful sensor logic
 // TODO: Make detectNote() a trigger
 
 public class Intake extends SubsystemBase {
@@ -23,7 +32,8 @@ public class Intake extends SubsystemBase {
   
   private final TalonFX intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorId); //carpet
   private final TalonFX indexMotor = new TalonFX(IntakeConstants.kIndexMotorId); //sat (feeder)
-  private final DigitalInput intakeSensor = new DigitalInput(IntakeConstants.kIntakeSensorId);
+  private final DigitalInput intakeUpperSensor = new DigitalInput(IntakeConstants.kIntakeUpperSensorId);
+  private final DigitalInput intakeLowerSensor = new DigitalInput(IntakeConstants.kIntakeLowerSensorId);
 
   // private final double prematchDelay = 2.5;
 
@@ -58,29 +68,38 @@ public class Intake extends SubsystemBase {
     return isNotePresent;
   }
 
-  public void feedToShooter() {
+  public void startIntakeMotor() {
     intakeMotor.set(-IntakeConstants.kIntakeMotorSpeed);
-    indexMotor.set(-IntakeConstants.kIndexMotorSpeed);
   }
 
-  public void outtakeNoteInIntake() {
+  public void reverseIntakeMotor() {
     intakeMotor.set(IntakeConstants.kIntakeMotorSpeed);
-    indexMotor.set(IntakeConstants.kIndexMotorSpeed);
   }
 
   public void stopIntakeMotor() {
     intakeMotor.set(0.0);
-    indexMotor.set(0.0);
+  }
+
+  public void startIndexMotor() {
+    indexMotor.set(-IntakeConstants.kIndexMotorSpeed);
+  }
+
+  public void stopIndexMotor() {
+    indexMotor.set(0);
   }
 
   public double getIntakeMotorSpeed() {
     return intakeMotor.get();
   }
+  public double getIndexMotorSpeed() {
+    return indexMotor.get();
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    isNotePresent = !intakeSensor.get();
+    isNotePresent = !intakeUpperSensor.get();
+    isNotePresent = !intakeLowerSensor.get();
   }
   
   // USE FOR TESTING ALSO

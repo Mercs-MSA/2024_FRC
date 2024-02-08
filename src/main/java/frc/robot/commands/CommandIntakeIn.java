@@ -13,7 +13,7 @@ public class CommandIntakeIn extends Command {
 
   @Override
   public void initialize() {
-    m_intake.feedToShooter();
+    m_intake.startIntakeMotor();
   }
 
   @Override

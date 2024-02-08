@@ -42,6 +42,8 @@ public class RobotContainer {
     public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
     public CommandIntakeOut commandIntakeOut = new CommandIntakeOut(m_intake);
     public CommandIntakeStop commandIntakeStop = new CommandIntakeStop(m_intake);
+    public CommandIndexStart commandIndexStart = new CommandIndexStart(m_intake);
+    public CommandIndexStop commandIndexStop = new CommandIndexStop(m_intake);
     // public CommandSwerveGoToHeading commandSwerveHeading0 = new CommandSwerveGoToHeading(0, s_Swerve);
     // public CommandSwerveGoToHeading commandSwerveHeading90 = new CommandSwerveGoToHeading(90, s_Swerve);
     // public CommandSwerveGoToHeading commandSwerveHeading180 = new CommandSwerveGoToHeading(180, s_Swerve);
@@ -83,6 +85,8 @@ public class RobotContainer {
         // NamedCommands.registerCommand("Start Intake", commandIntakeIn);
         // NamedCommands.registerCommand("Stop Intake", commandIntakeStop);
         // NamedCommands.registerCommand("Reverse Intake", commandIntakeOut);
+        // NamedCommands.registerCommand("Start Index", commandIndexStart);
+        // NamedCommands.registerCommand("Stop Index", commandIndexStop);
 
         // NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
@@ -200,14 +204,16 @@ public class RobotContainer {
         //     .onTrue(commandGoToBaseAmpPosition.andThen(commandGoToPivotAmpPosition));
 
         operator.start()
-            .onTrue(commandIntakeIn);
+            .onTrue(commandIntakeIn)
+            .onTrue(commandIndexStart);
         
         operator.back()
             .onTrue(commandIntakeOut); // not reporting to SmartDashboard
         
-        // operator.start()
-        //     .and(operator.back())
-        //     .onTrue(commandIntakeStop);
+        operator.start()
+            .and(operator.back())
+            .onTrue(commandIntakeStop)
+            .onTrue(commandIndexStop);
     }
 
     /**

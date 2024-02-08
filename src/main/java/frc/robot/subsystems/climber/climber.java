@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 
 public class climber extends SubsystemBase {
@@ -29,10 +30,10 @@ public class climber extends SubsystemBase {
       private final PositionVoltage tubeMotorLeft_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
       //int leftState = 0;
       //int rightState = 0;
-      //XboxController controller = new XboxController(0);
+      XboxController controller = new XboxController(0);
      
-      //double Left_Joystick;
-      //double Right_Joystick;
+      double Left_Joystick;
+      double Right_Joystick;
       double rightMotorPosition;
       double leftMotorPosition;
       climberStates my_climber_state = climberStates.START;
@@ -44,6 +45,22 @@ public class climber extends SubsystemBase {
        */
 
   public climber() {
+
+    TalonFXConfiguration climberRightMotorConfigs = new TalonFXConfiguration();
+    climberRightMotorConfigs.Slot0.kP = 5.0; // An error of 0.5 rotations results in 1.2 volts output
+    climberRightMotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+    // Peak output of 8 volts
+    climberRightMotorConfigs.Voltage.PeakForwardVoltage = 14;
+    climberRightMotorConfigs.Voltage.PeakReverseVoltage = -14;
+
+    TalonFXConfiguration climberLeftMotorConfigs = new TalonFXConfiguration();
+    climberLeftMotorConfigs.Slot0.kP = 5.0; // An error of 0.5 rotations results in 1.2 volts output
+    climberLeftMotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+    // Peak output of 8 volts
+    climberLeftMotorConfigs.Voltage.PeakForwardVoltage = 14;
+    climberLeftMotorConfigs.Voltage.PeakReverseVoltage = -14;
+
+
     tubeMotorLeft.getConfigurator();
     tubeMotorRight.getConfigurator();
   }
@@ -60,8 +77,8 @@ public class climber extends SubsystemBase {
   public void periodic() {
     //manualControl();
     //buttonControl();
-    //Left_Joystick = controller.getLeftY();
-    //Right_Joystick = controller.getRightY();
+    Left_Joystick = controller.getLeftY();
+    Right_Joystick = controller.getRightY();
 
     rightMotorPosition = tubeMotorRight.getPosition().getValue();
     leftMotorPosition = tubeMotorLeft.getPosition().getValue();
@@ -69,60 +86,33 @@ public class climber extends SubsystemBase {
   // This moves the tube in tube up and down
   }
 
-/*   private void buttonControl() {
-    if (controller.getYButton()) {
-      buttonClimbTest();
-    }
-    else if (controller.getBButton()) {
-      buttonClimbTest2();
-    }
-    else if (controller.getAButton()){
-      buttonBottomClimb();
-    }
-  }
 
-  private void manualControl() {
-    if (Left_Joystick < 0.5) {
-      climbLeftDown();
-    }
+  // private void manualControl() {
+  //   if (Left_Joystick < 0.5) {
+  //     climbDownLeftCommand();
+  //   }
  
-    else if (Left_Joystick < -0.5) {
-      climbRightUp();
-    }
+  //   else if (Left_Joystick < -0.5) {
+  //     climbUpRightCommand();
+  //   }
    
-    else if (Right_Joystick < -0.5) {
-      climbLeftUp();
-    }
+  //   else if (Right_Joystick < -0.5) {
+  //     climbUpLeftCommand();
+  //   }
  
-    else if (Right_Joystick < 0.5) {
-      climbLeftDown();
-    }
+  //   else if (Right_Joystick < 0.5) {
+  //     climbDownRightCommand();
+  //   }
  
-    else {
-      climbStop();
-    }
-  } */
+
+  // } 
 
     /**
    * This method prepares the robot for climbing in the middle of the chain
    */
-  private void buttonBottomClimb() {
-    tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.bottom_climber_position));
-    tubeMotorLeft.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.bottom_climber_position));
-  }
-
-  private void buttonClimbTest() {
-    tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.test_climber_position));
-    tubeMotorLeft.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.test_climber_position));
-  }
-
-  private void buttonClimbTest2() {
-    tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.test_climber_position));
-    tubeMotorLeft.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.test2_climber_position));
-  }
 
   private void climbRightUp() {
-    if (rightMotorPosition > -1000) {
+    if (rightMotorPosition < Constants.climberConstants.RIGHT_TOP_POSITION) {
       tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition + Constants.climberConstants.climber_Increment));
       //realPosition += Constants.climberConstants.climber_Increment;
       //tubeMotorRight.set(0.3);
@@ -130,14 +120,14 @@ public class climber extends SubsystemBase {
     }
 }
   private void climbRightDown() {
-    if (rightMotorPosition < 0) {
+    if (rightMotorPosition > Constants.climberConstants.RIGHT_BOTTOM_POSITION) {
       tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition - Constants.climberConstants.climber_Increment));
       //tubeMotorRight.set(-0.3);
       SmartDashboard.putString("power input for robot", "-0.3");
     }
   }
   private void climbLeftUp() {
-    if (leftMotorPosition > -1000) {
+    if (leftMotorPosition > Constants.climberConstants.LEFT_TOP_POSITION) {
       tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition + Constants.climberConstants.climber_Increment));
       //tubeMotorLeft.set(0.3);
       SmartDashboard.putString("power input for robot", "0.3");
@@ -145,18 +135,14 @@ public class climber extends SubsystemBase {
   }
 
   private void climbLeftDown() {
-    if (leftMotorPosition < 0) {
+    if (leftMotorPosition < Constants.climberConstants.LEFT_BOTTOM_POSITION) {
       tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition - Constants.climberConstants.climber_Increment));
       //tubeMotorLeft.set(-0.3);
       SmartDashboard.putString("power input for robot", "-0.3");
     }
 }
 
-  private void climbStop() {
-    tubeMotorLeft.set(0);
-    tubeMotorRight.set(0);
-    SmartDashboard.putString("power input for robot", "0");
-  }
+
 
 // Block of all commands
 public Command climbUpRightCommand() {
@@ -175,17 +161,6 @@ public Command climbUpLeftCommand() {
   return this.runOnce(() -> climbLeftUp());
 }
 
-public Command bottomButtonCommand() {
-  return this.runOnce(() -> bottomButtonCommand());
-}
-
-public Command buttonTestCommand() {
-  return this.runOnce(() -> buttonClimbTest());
-}
-
-public Command buttonTest2Command() {
-  return this.runOnce(() -> buttonClimbTest2());
-}
  
 // State Enumeration
   public enum climberStates {

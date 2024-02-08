@@ -35,7 +35,7 @@ public class RobotContainer {
     public final Swerve s_Swerve = new Swerve();
     public final SAT m_SAT = new SAT();
     public final Intake m_intake = new Intake();
-    //public final climber m_climber = new climber();
+    public final climber m_climber = new climber();
     //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
     
     /* Commands */
@@ -133,12 +133,44 @@ public class RobotContainer {
         // driver.leftTrigger()
         //     .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
 
+            operator.start()
+                .and(operator.axisGreaterThan(5, 0.5))
+                .whileTrue(
+                Commands.runOnce(() -> m_climber.climbUpRightCommand(), m_climber)
+                );
 
-            operator.x()
-            .onTrue(
-                Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT)
-            .andThen(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT))
-            );
+
+            operator.start()
+                .and(operator.axisGreaterThan(5, -0.5))
+                .whileTrue(
+                Commands.runOnce(() -> m_climber.climbDownRightCommand(), m_climber)
+                );
+               
+                
+            operator.start()
+                .and(operator.axisGreaterThan(1, 0.5))
+                .whileTrue(
+                Commands.runOnce(() -> m_climber.climbUpLeftCommand(), m_climber)
+                );
+
+
+            operator.start()
+                .and(operator.axisGreaterThan(1, -0.5))
+                .whileTrue(
+                Commands.runOnce(() -> m_climber.climbDownLeftCommand(), m_climber)
+                );
+
+            
+
+
+
+
+
+
+
+
+
+
         /* Operator Buttons */
         // operator.a()
         //     .onTrue(commandGoToBaseZeroPosition.andThen(commandGoToPivotZeroPosition));

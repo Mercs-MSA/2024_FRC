@@ -128,7 +128,7 @@ public class climber extends SubsystemBase {
   }
   private void climbLeftUp() {
     if (leftMotorPosition > Constants.climberConstants.LEFT_TOP_POSITION) {
-      tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition + Constants.climberConstants.climber_Increment));
+      tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition - Constants.climberConstants.climber_Increment));
       //tubeMotorLeft.set(0.3);
       SmartDashboard.putString("power input for robot", "0.3");
     }
@@ -136,7 +136,7 @@ public class climber extends SubsystemBase {
 
   private void climbLeftDown() {
     if (leftMotorPosition < Constants.climberConstants.LEFT_BOTTOM_POSITION) {
-      tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition - Constants.climberConstants.climber_Increment));
+      tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition + Constants.climberConstants.climber_Increment));
       //tubeMotorLeft.set(-0.3);
       SmartDashboard.putString("power input for robot", "-0.3");
     }

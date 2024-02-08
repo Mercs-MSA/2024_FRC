@@ -179,7 +179,7 @@ public class RobotContainer {
         operator.pov(180)
             .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.5), m_SAT));
         
-        operator.back()
+        operator.back() 
             .onTrue(commandIntakeOut); // not reporting to SmartDashboard
 
         operator.leftBumper()

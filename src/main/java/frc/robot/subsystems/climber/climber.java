@@ -14,8 +14,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
+//  USE NEXT LINE FOR TESTING
+import frc.robot.sim.PhysicsSim;
 
 public class climber extends SubsystemBase {
   /** Creates a new climber. */
@@ -29,10 +33,7 @@ public class climber extends SubsystemBase {
       private final PositionVoltage tubeMotorLeft_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
       //int leftState = 0;
       //int rightState = 0;
-      //XboxController controller = new XboxController(0);
      
-      //double Left_Joystick;
-      //double Right_Joystick;
       double rightMotorPosition;
       double leftMotorPosition;
       climberStates my_climber_state = climberStates.START;
@@ -45,8 +46,28 @@ public class climber extends SubsystemBase {
        */
 
   public climber() {
-    tubeMotorLeft.getConfigurator();
-    tubeMotorRight.getConfigurator();
+
+    TalonFXConfiguration climberRightMotorConfigs = new TalonFXConfiguration();
+    climberRightMotorConfigs.Slot0.kP = 5.0; // An error of 0.5 rotations results in 1.2 volts output
+    climberRightMotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+    // Peak output of 8 volts
+    climberRightMotorConfigs.Voltage.PeakForwardVoltage = 14;
+    climberRightMotorConfigs.Voltage.PeakReverseVoltage = -14;
+
+    TalonFXConfiguration climberLeftMotorConfigs = new TalonFXConfiguration();
+    climberLeftMotorConfigs.Slot0.kP = 5.0; // An error of 0.5 rotations results in 1.2 volts output
+    climberLeftMotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+    // Peak output of 8 volts
+    climberLeftMotorConfigs.Voltage.PeakForwardVoltage = 14;
+    climberLeftMotorConfigs.Voltage.PeakReverseVoltage = -14;
+
+
+    tubeMotorLeft.getConfigurator().apply(climberRightMotorConfigs);
+    tubeMotorRight.getConfigurator().apply(climberLeftMotorConfigs);
+
+    // USE NEXT LINE FOR TESTING
+    PhysicsSim.getInstance().addTalonFX(tubeMotorLeft, 0.001);
+    PhysicsSim.getInstance().addTalonFX(tubeMotorRight, 0.001);
   }
   
   public double outputRightData() {
@@ -61,69 +82,45 @@ public class climber extends SubsystemBase {
   public void periodic() {
     //manualControl();
     //buttonControl();
-    //Left_Joystick = controller.getLeftY();
-    //Right_Joystick = controller.getRightY();
 
     rightMotorPosition = tubeMotorRight.getPosition().getValue();
     leftMotorPosition = tubeMotorLeft.getPosition().getValue();
     // This method will be called once per scheduler run
   // This moves the tube in tube up and down
   }
-
-/*   private void buttonControl() {
-    if (controller.getYButton()) {
-      buttonClimbTest();
-    }
-    else if (controller.getBButton()) {
-      buttonClimbTest2();
-    }
-    else if (controller.getAButton()){
-      buttonBottomClimb();
-    }
+  
+  // USE FOR TESTING ALSO
+  @Override
+  public void simulationPeriodic() {
+    PhysicsSim.getInstance().run();
   }
 
-  private void manualControl() {
-    if (Left_Joystick < 0.5) {
-      climbLeftDown();
-    }
+  // private void manualControl() {
+  //   if (Left_Joystick < 0.5) {
+  //     climbDownLeftCommand();
+  //   }
  
-    else if (Left_Joystick < -0.5) {
-      climbRightUp();
-    }
+  //   else if (Left_Joystick < -0.5) {
+  //     climbUpRightCommand();
+  //   }
    
-    else if (Right_Joystick < -0.5) {
-      climbLeftUp();
-    }
+  //   else if (Right_Joystick < -0.5) {
+  //     climbUpLeftCommand();
+  //   }
  
-    else if (Right_Joystick < 0.5) {
-      climbLeftDown();
-    }
+  //   else if (Right_Joystick < 0.5) {
+  //     climbDownRightCommand();
+  //   }
  
-    else {
-      climbStop();
-    }
-  } */
+
+  // } 
 
     /**
    * This method prepares the robot for climbing in the middle of the chain
    */
-  private void buttonBottomClimb() {
-    tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.bottom_climber_position));
-    tubeMotorLeft.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.bottom_climber_position));
-  }
-
-  private void buttonClimbTest() {
-    tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.test_climber_position));
-    tubeMotorLeft.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.test_climber_position));
-  }
-
-  private void buttonClimbTest2() {
-    tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.test_climber_position));
-    tubeMotorLeft.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.test2_climber_position));
-  }
 
   private void climbRightUp() {
-    if (rightMotorPosition > -1000) {
+    if (rightMotorPosition < Constants.climberConstants.RIGHT_TOP_POSITION) {
       tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition + Constants.climberConstants.climber_Increment));
       //realPosition += Constants.climberConstants.climber_Increment;
       //tubeMotorRight.set(0.3);
@@ -131,33 +128,29 @@ public class climber extends SubsystemBase {
     }
 }
   private void climbRightDown() {
-    if (rightMotorPosition < 0) {
+    if (rightMotorPosition > Constants.climberConstants.RIGHT_BOTTOM_POSITION) {
       tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition - Constants.climberConstants.climber_Increment));
       //tubeMotorRight.set(-0.3);
       SmartDashboard.putString("power input for robot", "-0.3");
     }
   }
   private void climbLeftUp() {
-    if (leftMotorPosition > -1000) {
-      tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition + Constants.climberConstants.climber_Increment));
+    if (leftMotorPosition > Constants.climberConstants.LEFT_TOP_POSITION) {
+      tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition - Constants.climberConstants.climber_Increment));
       //tubeMotorLeft.set(0.3);
       SmartDashboard.putString("power input for robot", "0.3");
     }
   }
 
   private void climbLeftDown() {
-    if (leftMotorPosition < 0) {
-      tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition - Constants.climberConstants.climber_Increment));
+    if (leftMotorPosition < Constants.climberConstants.LEFT_BOTTOM_POSITION) {
+      tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition + Constants.climberConstants.climber_Increment));
       //tubeMotorLeft.set(-0.3);
       SmartDashboard.putString("power input for robot", "-0.3");
     }
 }
 
-  private void climbStop() {
-    tubeMotorLeft.set(0);
-    tubeMotorRight.set(0);
-    SmartDashboard.putString("power input for robot", "0");
-  }
+
 
   // public void leftGoToPosition(double joystick){
   //   targetPose = leftMotorPosition + (0.05*joystick);
@@ -175,32 +168,21 @@ public class climber extends SubsystemBase {
 
 // Block of all commands
 public Command climbUpRightCommand() {
-  return this.runOnce(() -> climbRightUp());
+  return new RunCommand(() -> climbRightUp(), this);
 }
 
 public Command climbDownRightCommand() {
-  return this.runOnce(() -> climbRightDown());
+  return new RunCommand(() -> climbRightDown(), this);
 }
 
 public Command climbDownLeftCommand() {
-  return this.runOnce(() -> climbLeftDown());
+  return new RunCommand(() -> climbLeftDown(), this);
 }
 
 public Command climbUpLeftCommand() {
-  return this.runOnce(() -> climbLeftUp());
+  return new RunCommand(() -> climbLeftUp(), this);
 }
 
-public Command bottomButtonCommand() {
-  return this.runOnce(() -> bottomButtonCommand());
-}
-
-public Command buttonTestCommand() {
-  return this.runOnce(() -> buttonClimbTest());
-}
-
-public Command buttonTest2Command() {
-  return this.runOnce(() -> buttonClimbTest2());
-}
  
 // State Enumeration
   public enum climberStates {

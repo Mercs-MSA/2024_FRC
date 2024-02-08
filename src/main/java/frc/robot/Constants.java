@@ -171,7 +171,8 @@ public final class Constants {
         public static final double kIntakeMotorSpeed = 0.30;
         public static final int kIndexMotorId = 24;
         public static final double kIndexMotorSpeed = 0.40;
-        public static final int kIntakeSensorId = 1;
+        public static final int kIntakeLowerSensorId = 1;
+        public static final int kIntakeUpperSensorId = 2;
     }
 
     // This is for miscellaneous constants
@@ -241,16 +242,22 @@ public final class Constants {
     public static final class climberConstants
     {
  
-      public static final int tubeMotor_Left_ID = 9;    ///  reassign this to something else...
-      public static final int tubeMotor_Right_ID = 3;
+      public static final int tubeMotor_Left_ID = 23;    ///  reassign this to something else...
+      public static final int tubeMotor_Right_ID = 38;
 
 
-      public static final int climber_Increment = -100;
+      public static final double climber_Increment = 0.5;
+
+      public static final double LEFT_BOTTOM_POSITION = -3;
+      public static final double RIGHT_BOTTOM_POSITION = 3;
+
+      public static final double LEFT_TOP_POSITION = -140.5166;
+      public static final double RIGHT_TOP_POSITION = 131.2017;
 
 
-      public static final int bottom_climber_position = 0;
-      public static final int test_climber_position = -1000;
-      public static final int test2_climber_position = -500;
+
+
+    
     }
 
     public static final class State {

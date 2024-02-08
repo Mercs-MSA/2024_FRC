@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -33,17 +34,17 @@ public class RobotContainer {
 
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
-    public final SAT m_SAT = new SAT();
-    public final Intake m_intake = new Intake();
+    // public final SAT m_SAT = new SAT();
+    // public final Intake m_intake = new Intake();
     public final climber m_climber = new climber();
     //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
     
     /* Commands */
-    public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
-    public CommandIntakeOut commandIntakeOut = new CommandIntakeOut(m_intake);
-    public CommandIntakeStop commandIntakeStop = new CommandIntakeStop(m_intake);
-    public CommandIndexStart commandIndexStart = new CommandIndexStart(m_intake);
-    public CommandIndexStop commandIndexStop = new CommandIndexStop(m_intake);
+    // public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
+    // public CommandIntakeOut commandIntakeOut = new CommandIntakeOut(m_intake);
+    // public CommandIntakeStop commandIntakeStop = new CommandIntakeStop(m_intake);
+    // public CommandIndexStart commandIndexStart = new CommandIndexStart(m_intake);
+    // public CommandIndexStop commandIndexStop = new CommandIndexStop(m_intake);
     // public CommandSwerveGoToHeading commandSwerveHeading0 = new CommandSwerveGoToHeading(0, s_Swerve);
     // public CommandSwerveGoToHeading commandSwerveHeading90 = new CommandSwerveGoToHeading(90, s_Swerve);
     // public CommandSwerveGoToHeading commandSwerveHeading180 = new CommandSwerveGoToHeading(180, s_Swerve);
@@ -141,25 +142,25 @@ public class RobotContainer {
 
             operator.axisGreaterThan(5, 0.5)
                 .whileTrue(
-                Commands.run(() -> m_climber.climbUpRightCommand(), m_climber)
+                    m_climber.climbDownRightCommand()
                 );
 
 
             operator.axisLessThan(5, -0.5)
                 .whileTrue(
-                Commands.run(() -> m_climber.climbDownRightCommand(), m_climber)
+                    m_climber.climbUpRightCommand()
                 );
                
                 
             operator.axisGreaterThan(1, 0.5)
                 .whileTrue(
-                Commands.run(() -> m_climber.climbUpLeftCommand(), m_climber)
+                    m_climber.climbDownLeftCommand()
                 );
 
 
             operator.axisLessThan(1, -0.5)
                 .whileTrue(
-                Commands.run(() -> m_climber.climbDownLeftCommand(), m_climber)
+                    m_climber.climbUpLeftCommand()
                 );
 
             

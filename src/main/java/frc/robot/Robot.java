@@ -67,9 +67,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Pose", m_robotContainer.s_Swerve.getPose().toString());
     SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());
     SmartDashboard.putNumber("Climber Right motor Pos: ", m_robotContainer.m_climber.outputRightData());
-    SmartDashboard.putNumber("Base1 Pos", m_robotContainer.m_SAT.outputBase1Data());
-    SmartDashboard.putNumber("Base2 Pos", m_robotContainer.m_SAT.outputBase2Data());
-    SmartDashboard.putNumber("Pivot Pos", m_robotContainer.m_SAT.outputPivotData());
+    // SmartDashboard.putNumber("Base1 Pos", m_robotContainer.m_SAT.outputBase1Data());
+    // SmartDashboard.putNumber("Base2 Pos", m_robotContainer.m_SAT.outputBase2Data());
+    // SmartDashboard.putNumber("Pivot Pos", m_robotContainer.m_SAT.outputPivotData());
     // SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());
     // SmartDashboard.putNumber("Climber Right motor Pos: ", m_robotContainer.m_climber.outputRightData());
     // SmartDashboard.putNumber("Base1 Pos", m_robotContainer.m_SAT.outputBase1Data());

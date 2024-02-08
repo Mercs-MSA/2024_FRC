@@ -14,9 +14,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
+//  USE NEXT LINE FOR TESTING
+import frc.robot.sim.PhysicsSim;
 
 public class climber extends SubsystemBase {
   /** Creates a new climber. */
@@ -30,10 +33,7 @@ public class climber extends SubsystemBase {
       private final PositionVoltage tubeMotorLeft_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
       //int leftState = 0;
       //int rightState = 0;
-      XboxController controller = new XboxController(0);
      
-      double Left_Joystick;
-      double Right_Joystick;
       double rightMotorPosition;
       double leftMotorPosition;
       climberStates my_climber_state = climberStates.START;
@@ -61,8 +61,12 @@ public class climber extends SubsystemBase {
     climberLeftMotorConfigs.Voltage.PeakReverseVoltage = -14;
 
 
-    tubeMotorLeft.getConfigurator();
-    tubeMotorRight.getConfigurator();
+    tubeMotorLeft.getConfigurator().apply(climberRightMotorConfigs);
+    tubeMotorRight.getConfigurator().apply(climberLeftMotorConfigs);
+
+    // USE NEXT LINE FOR TESTING
+    PhysicsSim.getInstance().addTalonFX(tubeMotorLeft, 0.001);
+    PhysicsSim.getInstance().addTalonFX(tubeMotorRight, 0.001);
   }
   
   public double outputRightData() {
@@ -77,15 +81,18 @@ public class climber extends SubsystemBase {
   public void periodic() {
     //manualControl();
     //buttonControl();
-    Left_Joystick = controller.getLeftY();
-    Right_Joystick = controller.getRightY();
 
     rightMotorPosition = tubeMotorRight.getPosition().getValue();
     leftMotorPosition = tubeMotorLeft.getPosition().getValue();
     // This method will be called once per scheduler run
   // This moves the tube in tube up and down
   }
-
+  
+  // USE FOR TESTING ALSO
+  @Override
+  public void simulationPeriodic() {
+    PhysicsSim.getInstance().run();
+  }
 
   // private void manualControl() {
   //   if (Left_Joystick < 0.5) {
@@ -146,19 +153,19 @@ public class climber extends SubsystemBase {
 
 // Block of all commands
 public Command climbUpRightCommand() {
-  return this.runOnce(() -> climbRightUp());
+  return new RunCommand(() -> climbRightUp(), this);
 }
 
 public Command climbDownRightCommand() {
-  return this.runOnce(() -> climbRightDown());
+  return new RunCommand(() -> climbRightDown(), this);
 }
 
 public Command climbDownLeftCommand() {
-  return this.runOnce(() -> climbLeftDown());
+  return new RunCommand(() -> climbLeftDown(), this);
 }
 
 public Command climbUpLeftCommand() {
-  return this.runOnce(() -> climbLeftUp());
+  return new RunCommand(() -> climbLeftUp(), this);
 }
 
  

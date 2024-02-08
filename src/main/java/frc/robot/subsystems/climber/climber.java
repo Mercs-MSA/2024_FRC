@@ -36,6 +36,7 @@ public class climber extends SubsystemBase {
       double rightMotorPosition;
       double leftMotorPosition;
       climberStates my_climber_state = climberStates.START;
+      double targetPose = leftMotorPosition;
           
       /* TODO:
         - setDirection() changes the variable depending on direction
@@ -157,6 +158,20 @@ public class climber extends SubsystemBase {
     tubeMotorRight.set(0);
     SmartDashboard.putString("power input for robot", "0");
   }
+
+  // public void leftGoToPosition(double joystick){
+  //   targetPose = leftMotorPosition + (0.05*joystick);
+  //   if (targetPose > 0 && targetPose < 14){
+  //     tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(targetPose));
+  //   }
+  // }
+
+  // public void leftGoToPosition(double joystick){
+  //   targetPose = leftMotorPosition + (0.05*joystick);
+  //   if (targetPose > 0 && targetPose < 14){
+  //     tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(targetPose));
+  //   }
+  // }
 
 // Block of all commands
 public Command climbUpRightCommand() {

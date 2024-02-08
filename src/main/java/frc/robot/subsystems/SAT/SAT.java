@@ -12,6 +12,7 @@ import frc.robot.Constants.SATConstants;
 import frc.robot.Robot;
 import frc.robot.sim.PhysicsSim;
 import frc.robot.subsystems.Swerve;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
 
@@ -33,6 +34,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.CTREConfigs;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -53,7 +55,7 @@ public class SAT extends SubsystemBase {
 
   private final Follower Base2_Follower = new Follower(SATConstants.SAT_BASE1_MOTOR_ID, true);
   private final Follower Shooter2_Follower = new Follower(SATConstants.SAT_SHOOTER1_MOTOR_ID, true);
-
+  private final VelocityVoltage satShooter1_voltageVelocity = new VelocityVoltage(0);
   private final PositionVoltage satPivotMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false,
       false);
   private final PositionVoltage satBase1_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
@@ -71,6 +73,7 @@ public class SAT extends SubsystemBase {
 
   boolean B_Button_Value;
   double Y_axis_Value;
+  double targetPose;
 
   // private final DigitalInput satObjectDectecter = new DigitalInput(Constants.SATConstants.SAT_OBJECTDETECTOR_SENSOR_ID);
 
@@ -83,9 +86,12 @@ public class SAT extends SubsystemBase {
     TalonFXConfiguration satBase1MotorConfigs = new TalonFXConfiguration();
     satBase1MotorConfigs.Slot0.kP = 5.0; // An error of 0.5 rotations results in 1.2 volts output
     satBase1MotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+    satBase1MotorConfigs.Slot0.kG = 8;
     // Peak output of 8 volts
     satBase1MotorConfigs.Voltage.PeakForwardVoltage = 14;
     satBase1MotorConfigs.Voltage.PeakReverseVoltage = -14;
+
+    satBase1MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.5;
 
     TalonFXConfiguration satBase2MotorConfigs = new TalonFXConfiguration();
     satBase2MotorConfigs.Slot0.kP = 5.0; // An error of 0.5 rotations results in 1.2 volts output
@@ -203,6 +209,7 @@ public class SAT extends SubsystemBase {
     pivotMotorPos = satPivotMotor.getPosition().getValue();
 
     SmartDashboard.putNumber("base1MotorPos", base1MotorPos);
+    SmartDashboard.putNumber("baseqMotorVoltage", satBase1Motor.getMotorVoltage().getValueAsDouble());
     SmartDashboard.putNumber("base2MotorPos", base2MotorPos);
     SmartDashboard.putNumber("pivotMotorPos", pivotMotorPos);
   }  
@@ -215,6 +222,14 @@ public class SAT extends SubsystemBase {
   
   public void goToBasePodiumPosition() {
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
+    
+  }
+
+  public void baseGoToPosition(double joystick){
+    targetPose = base1MotorPos + (0.05*joystick);
+    if (targetPose > 0 && targetPose < 14){
+      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(targetPose));
+    }
     
   }
 
@@ -266,10 +281,15 @@ public class SAT extends SubsystemBase {
     
   }
 
-  public void shootNote() {
+  public void shootNote(boolean isRunning) {
+    if (isRunning){
+      satShooter1Motor.setControl(satShooter1_voltageVelocity.withVelocity(Constants.SATConstants.SHOOTER_SPEED));
+    }
+    else {
+      satShooter1Motor.setControl(new NeutralOut());
+    }
 
-    satShooter1Motor.set(Constants.SATConstants.SHOOTER_SPEED);
-    satShooter2Motor.set(Constants.SATConstants.SHOOTER_SPEED);
+    // satShooter2Motor.set(Constants.SATConstants.SHOOTER_SPEED);
 
   }
 }

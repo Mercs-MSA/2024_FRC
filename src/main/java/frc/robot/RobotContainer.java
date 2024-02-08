@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -134,11 +137,11 @@ public class RobotContainer {
         //     .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
 
 
-            operator.x()
-            .onTrue(
-                Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT)
-            .andThen(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT))
-            );
+        operator.x()
+        .onTrue(
+            Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT)
+        .andThen(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT))
+        );
         /* Operator Buttons */
         // operator.a()
         //     .onTrue(commandGoToBaseZeroPosition.andThen(commandGoToPivotZeroPosition));
@@ -169,9 +172,21 @@ public class RobotContainer {
 
         operator.start()
             .onTrue(commandIntakeIn);
+
+        operator.pov(0)
+            .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(0.5), m_SAT));
+
+        operator.pov(180)
+            .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.5), m_SAT));
         
         operator.back()
             .onTrue(commandIntakeOut); // not reporting to SmartDashboard
+
+        operator.leftBumper()
+            .onTrue(new RunCommand(() -> m_SAT.shootNote(true), m_SAT));
+
+        operator.rightBumper()
+            .onTrue(new RunCommand(() -> m_SAT.shootNote(false), m_SAT));
         
         // operator.start()
         //     .and(operator.back())

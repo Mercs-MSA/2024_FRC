@@ -65,8 +65,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("Current Robot State", Constants.State.getState().toString());
     SmartDashboard.putString("Pose", m_robotContainer.s_Swerve.getPose().toString());
-    // SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());
-    // SmartDashboard.putNumber("Climber Right motor Pos: ", m_robotContainer.m_climber.outputRightData());
+    SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());
+    SmartDashboard.putNumber("Climber Right motor Pos: ", m_robotContainer.m_climber.outputRightData());
     SmartDashboard.putNumber("Base1 Pos", m_robotContainer.m_SAT.outputBase1Data());
     SmartDashboard.putNumber("Base2 Pos", m_robotContainer.m_SAT.outputBase2Data());
     SmartDashboard.putNumber("Pivot Pos", m_robotContainer.m_SAT.outputPivotData());
@@ -88,8 +88,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto Mode", m_robotContainer.autoChooser);
 
     // SmartDashboard.putData(m_robotContainer.m_intake);
-    SmartDashboard.putData(m_robotContainer.m_SAT);
-   // SmartDashboard.putData(m_robotContainer.m_intake);
+    // SmartDashboard.putData(m_robotContainer.m_SAT);
+   SmartDashboard.putData(m_robotContainer.m_climber);
     // SmartDashboard.putData(m_robotContainer.m_SAT);
     SmartDashboard.putData(m_robotContainer.s_Swerve);
     SmartDashboard.putData(CommandScheduler.getInstance());

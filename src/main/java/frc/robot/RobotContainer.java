@@ -137,31 +137,29 @@ public class RobotContainer {
         // driver.leftTrigger()
         //     .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
 
-            operator.start()
-                .and(operator.axisGreaterThan(5, 0.5))
+            
+
+            operator.axisGreaterThan(5, 0.5)
                 .whileTrue(
-                Commands.runOnce(() -> m_climber.climbUpRightCommand(), m_climber)
+                Commands.run(() -> m_climber.climbUpRightCommand(), m_climber)
                 );
 
 
-            operator.start()
-                .and(operator.axisGreaterThan(5, -0.5))
+            operator.axisLessThan(5, -0.5)
                 .whileTrue(
-                Commands.runOnce(() -> m_climber.climbDownRightCommand(), m_climber)
+                Commands.run(() -> m_climber.climbDownRightCommand(), m_climber)
                 );
                
                 
-            operator.start()
-                .and(operator.axisGreaterThan(1, 0.5))
+            operator.axisGreaterThan(1, 0.5)
                 .whileTrue(
-                Commands.runOnce(() -> m_climber.climbUpLeftCommand(), m_climber)
+                Commands.run(() -> m_climber.climbUpLeftCommand(), m_climber)
                 );
 
 
-            operator.start()
-                .and(operator.axisGreaterThan(1, -0.5))
+            operator.axisLessThan(1, -0.5)
                 .whileTrue(
-                Commands.runOnce(() -> m_climber.climbDownLeftCommand(), m_climber)
+                Commands.run(() -> m_climber.climbDownLeftCommand(), m_climber)
                 );
 
             
@@ -203,17 +201,17 @@ public class RobotContainer {
         //     .and(operator.axisGreaterThan(1, -0.4))
         //     .onTrue(commandGoToBaseAmpPosition.andThen(commandGoToPivotAmpPosition));
 
-        operator.start()
-            .onTrue(commandIntakeIn)
-            .onTrue(commandIndexStart);
+        // operator.start()
+        //     .onTrue(commandIntakeIn)
+        //     .onTrue(commandIndexStart);
         
-        operator.back()
-            .onTrue(commandIntakeOut); // not reporting to SmartDashboard
+        // operator.back()
+        //     .onTrue(commandIntakeOut); // not reporting to SmartDashboard
         
-        operator.start()
-            .and(operator.back())
-            .onTrue(commandIntakeStop)
-            .onTrue(commandIndexStop);
+        // operator.start()
+        //     .and(operator.back())
+        //     .onTrue(commandIntakeStop)
+        //     .onTrue(commandIndexStop);
     }
 
     /**

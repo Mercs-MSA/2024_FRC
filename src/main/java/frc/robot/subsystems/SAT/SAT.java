@@ -89,23 +89,25 @@ public class SAT extends SubsystemBase {
     satBase1MotorConfigs.Slot0.kG = 8;
     // Peak output of 8 volts
     satBase1MotorConfigs.Voltage.PeakForwardVoltage = 14;
-    satBase1MotorConfigs.Voltage.PeakReverseVoltage = -14;
+    satBase1MotorConfigs.Voltage.PeakReverseVoltage = -2;
 
     satBase1MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.5;
+    //satBase1MotorConfigs.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+    //satBase1MotorConfigs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.5;
 
     TalonFXConfiguration satBase2MotorConfigs = new TalonFXConfiguration();
     satBase2MotorConfigs.Slot0.kP = 5.0; // An error of 0.5 rotations results in 1.2 volts output
     satBase2MotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
     // Peak output of 8 volts
     satBase2MotorConfigs.Voltage.PeakForwardVoltage = 14;
-    satBase2MotorConfigs.Voltage.PeakReverseVoltage = -14;
+    satBase2MotorConfigs.Voltage.PeakReverseVoltage = -2;
 
     TalonFXConfiguration satPivotMotorConfigs = new TalonFXConfiguration();
     satPivotMotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
     satPivotMotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
     // Peak output of 8 volts
     satPivotMotorConfigs.Voltage.PeakForwardVoltage = 8;
-    satPivotMotorConfigs.Voltage.PeakReverseVoltage = -8;
+    satPivotMotorConfigs.Voltage.PeakReverseVoltage = -4;
 
     TalonFXConfiguration satShooter1MotorConfigs = new TalonFXConfiguration();
     satShooter1MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
@@ -113,6 +115,7 @@ public class SAT extends SubsystemBase {
 
     satShooter1MotorConfigs.Voltage.PeakForwardVoltage = 14;
     satShooter1MotorConfigs.Voltage.PeakReverseVoltage = -14;
+    satShooter1MotorConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.2;
 
     TalonFXConfiguration satShooter2MotorConfigs = new TalonFXConfiguration();
     //satShooter2MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
@@ -120,6 +123,7 @@ public class SAT extends SubsystemBase {
 
     satShooter2MotorConfigs.Voltage.PeakForwardVoltage = 14;
     satShooter2MotorConfigs.Voltage.PeakReverseVoltage = -14;
+    satShooter2MotorConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.2;
   
 
     // STATUS FOR BASE1

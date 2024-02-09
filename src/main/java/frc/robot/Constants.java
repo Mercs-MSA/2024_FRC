@@ -217,7 +217,7 @@ public final class Constants {
         public static final double BASE_TRAP_POS = -13.803;
         public static final double PIVOT_TRAP_POS = 41.665;
 
-        public static final double SHOOTER_SPEED = 0.6;
+        public static final double SHOOTER_SPEED = 70;
 
 
         public static final int BASE_THROUGHBORE_ENCODER = 2;

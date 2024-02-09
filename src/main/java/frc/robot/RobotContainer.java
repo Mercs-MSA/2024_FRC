@@ -137,10 +137,10 @@ public class RobotContainer {
         // driver.a()
         //     .onTrue(commandNoteIntake);
 
-        // driver.leftTrigger()
-        //     .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
-        // driver.leftTrigger()
-        //     .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
+        driver.leftTrigger()
+             .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
+        driver.rightTrigger()
+             .onTrue(Commands.runOnce(() -> m_SAT.stopShooter(), m_SAT));
 
 
         operator.x()

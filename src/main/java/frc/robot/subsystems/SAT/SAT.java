@@ -111,21 +111,16 @@ public class SAT extends SubsystemBase {
     satPivotMotorConfigs.Voltage.PeakReverseVoltage = -8;
 
     TalonFXConfiguration satShooter1MotorConfigs = new TalonFXConfiguration();
-    satShooter1MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
-    satShooter1MotorConfigs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
+    satShooter1MotorConfigs.Slot0.kP = 0.6; // An error of 0.5 rotations results in 1.2 volts output
+    satShooter1MotorConfigs.Slot0.kS = 0.05; // Add 0.05 V output to overcome static friction
+    satShooter1MotorConfigs.Slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
+    satShooter1MotorConfigs.Slot0.kI = 0; // no output for integrated error
+    satShooter1MotorConfigs.Slot0.kD = 0; // no output for error derivative
 
     satShooter1MotorConfigs.Voltage.PeakForwardVoltage = 14;
     satShooter1MotorConfigs.Voltage.PeakReverseVoltage = -14;
     satShooter1MotorConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.2;
-
-    TalonFXConfiguration satShooter2MotorConfigs = new TalonFXConfiguration();
-    //satShooter2MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
-    //satShooter2MotorConfigs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
-
-    satShooter2MotorConfigs.Voltage.PeakForwardVoltage = 14;
-    satShooter2MotorConfigs.Voltage.PeakReverseVoltage = -14;
-    satShooter2MotorConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.2;
-  
+    satShooter1MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.4;  
 
     // STATUS FOR BASE1
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -174,7 +169,7 @@ public class SAT extends SubsystemBase {
     // STATUS FOR SHOOTER2
     StatusCode status5 = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
-      status5 = satShooter2Motor.getConfigurator().apply(satShooter2MotorConfigs);
+      status5 = satShooter2Motor.getConfigurator().apply(satShooter1MotorConfigs);
       if (status5.isOK())
         break;
     }
@@ -222,6 +217,9 @@ public class SAT extends SubsystemBase {
     SmartDashboard.putNumber("baseqMotorVoltage", satBase1Motor.getMotorVoltage().getValueAsDouble());
     SmartDashboard.putNumber("base2MotorPos", base2MotorPos);
     SmartDashboard.putNumber("pivotMotorPos", pivotMotorPos);
+    SmartDashboard.putNumber("shooter speed", satShooter1Motor.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("shooter command", satShooter1Motor.getClosedLoopReference().getValueAsDouble());
+
   }  
   
   // USE FOR TESTING ALSO
@@ -293,7 +291,8 @@ public class SAT extends SubsystemBase {
 
   public void shootNote() {
    
-      satShooter1Motor.set(Constants.SATConstants.SHOOTER_SPEED);
+      //satShooter1Motor.set(Constants.SATConstants.SHOOTER_SPEED);
+      satShooter1Motor.setControl(satShooter1_voltageVelocity.withVelocity(Constants.SATConstants.SHOOTER_SPEED));
     }
 
   public void stopShooter() {

@@ -5,42 +5,18 @@
 package frc.robot.subsystems.SAT;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.Constants;
 import frc.robot.Constants.SATConstants;
-import frc.robot.Robot;
 import frc.robot.sim.PhysicsSim;
-import frc.robot.subsystems.Swerve;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Servo;
-
-import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkFlexExternalEncoder;
-import com.revrobotics.SparkPIDController;
-
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
-import javax.swing.plaf.TreeUI;
-
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.hardware.TalonFX;
-import frc.robot.CTREConfigs;
-import edu.wpi.first.wpilibj2.command.Command;
-
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
 
 //  USE NEXT LINE FOR TESTING
 import frc.robot.sim.PhysicsSim;
@@ -66,14 +42,14 @@ public class SAT extends SubsystemBase {
   double pivotMotorPos;
 
   /** this was named by gaurav */
-  Servo SATTEamisDumb = new Servo(Constants.SATConstants.SAT_SERVO1_SERVO_ID);
+/*   Servo SATTEamisDumb = new Servo(Constants.SATConstants.SAT_SERVO1_SERVO_ID);
   Servo SATServo2 = new Servo(Constants.SATConstants.SAT_SERVO2_SERVO_ID);
   Servo SATServo3 = new Servo(Constants.SATConstants.SAT_SERVO3_SERVO_ID);
-  Servo SATServo4 = new Servo(Constants.SATConstants.SAT_SERVO4_SERVO_ID);
+  Servo SATServo4 = new Servo(Constants.SATConstants.SAT_SERVO4_SERVO_ID); */
 
   boolean B_Button_Value;
   double Y_axis_Value;
-  double targetPose;
+  double targetPose = 0.0;
 
   // private final DigitalInput satObjectDectecter = new DigitalInput(Constants.SATConstants.SAT_OBJECTDETECTOR_SENSOR_ID);
 
@@ -84,21 +60,23 @@ public class SAT extends SubsystemBase {
      * this stuff happens ONCE, when the code enables, NOT WHEN THE ROBOT ENABLES
      */
     TalonFXConfiguration satBase1MotorConfigs = new TalonFXConfiguration();
-    satBase1MotorConfigs.Slot0.kP = 1; // An error of 0.5 rotations results in 1.2 volts output
+    satBase1MotorConfigs.Slot0.kP = 1.0; // An error of 0.5 rotations results in 1.2 volts output
     satBase1MotorConfigs.Slot0.kD = 0; // A change of 1 rotation per second results in 0 volts output
-    satBase1MotorConfigs.Slot0.kG = 0;
-    // Peak output of 8 volts
-    // satBase1MotorConfigs.Voltage.PeakForwardVoltage = 3;
-    // satBase1MotorConfigs.Voltage.PeakReverseVoltage = -11;
+    satBase1MotorConfigs.Slot0.kG = 0.0;
+    satBase1MotorConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-    satBase1MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.5;
+    // Peak output of 8 volts
+    satBase1MotorConfigs.Voltage.PeakForwardVoltage = 14;
+    satBase1MotorConfigs.Voltage.PeakReverseVoltage = -14;
+    satBase1MotorConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.2;
+    satBase1MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
     //satBase1MotorConfigs.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     //satBase1MotorConfigs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.5;
 
-    TalonFXConfiguration satBase2MotorConfigs = new TalonFXConfiguration();
+ /*    TalonFXConfiguration satBase2MotorConfigs = new TalonFXConfiguration();
     satBase2MotorConfigs.Slot0.kP = 1.0; // An error of 0.5 rotations results in 1.2 volts output
     satBase2MotorConfigs.Slot0.kD = 0; // A change of 1 rotation per second results in 0.1 volts output
-    satBase2MotorConfigs.Slot0.kG = 0;
+    satBase2MotorConfigs.Slot0.kG = 0; */
     // Peak output of 8 volts
     // satBase2MotorConfigs.Voltage.PeakForwardVoltage = 3;
     // satBase2MotorConfigs.Voltage.PeakReverseVoltage = -11;
@@ -136,7 +114,7 @@ public class SAT extends SubsystemBase {
     // STATUS FOR BASE2
     StatusCode status2 = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
-      status = satBase2Motor.getConfigurator().apply(satBase2MotorConfigs);
+      status = satBase2Motor.getConfigurator().apply(satBase1MotorConfigs);
       if (status2.isOK())
         break;
     }
@@ -185,6 +163,8 @@ public class SAT extends SubsystemBase {
     satBase2Motor.setPosition(0);
     satPivotMotor.setPosition(0);
 
+    targetPose = satBase1Motor.getPosition().getValueAsDouble();
+
     // USE NEXT LINE FOR TESTING
     PhysicsSim.getInstance().addTalonFX(satBase1Motor, 0.001);
     PhysicsSim.getInstance().addTalonFX(satBase2Motor, 0.001);
@@ -215,6 +195,7 @@ public class SAT extends SubsystemBase {
 
     SmartDashboard.putNumber("base1MotorPos", base1MotorPos);
     SmartDashboard.putNumber("baseqMotorVoltage", satBase1Motor.getMotorVoltage().getValueAsDouble());
+    SmartDashboard.putNumber("base1 command", targetPose);    
     SmartDashboard.putNumber("base2MotorPos", base2MotorPos);
     SmartDashboard.putNumber("pivotMotorPos", pivotMotorPos);
     SmartDashboard.putNumber("shooter speed", satShooter1Motor.getVelocity().getValueAsDouble());
@@ -234,10 +215,10 @@ public class SAT extends SubsystemBase {
   }
 
   public void baseGoToPosition(double joystick){
-    targetPose = base1MotorPos + (0.05*joystick);
-    if (targetPose > 0 && targetPose < 14){
-      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(targetPose));
-    }
+    targetPose = targetPose + (joystick);
+    //if (targetPose > -5 && targetPose < 20){
+    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(targetPose));
+    //}
     
   }
 

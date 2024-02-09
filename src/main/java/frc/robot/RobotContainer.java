@@ -137,10 +137,10 @@ public class RobotContainer {
         // driver.a()
         //     .onTrue(commandNoteIntake);
 
-        driver.leftTrigger()
-             .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
-        driver.rightTrigger()
-             .onTrue(Commands.runOnce(() -> m_SAT.stopShooter(), m_SAT));
+        //driver.leftTrigger()
+        //     .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
+        //driver.rightTrigger()
+        //     .onTrue(Commands.runOnce(() -> m_SAT.stopShooter(), m_SAT));
 
 
         operator.x()
@@ -179,11 +179,11 @@ public class RobotContainer {
         // operator.start()
         //     .whileTrue(new RunCommand(() -> m_intake.startIntakeIndexerMotors(), m_intake));
 
-        // operator.pov(0)
-        //     .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(0.5), m_SAT));
+        operator.pov(0)
+            .onTrue(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
 
         operator.pov(180)
-            .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.5), m_SAT));
+            .onTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.05), m_SAT));
         
         operator.back() 
             .onTrue(commandIntakeOut); // not reporting to SmartDashboard

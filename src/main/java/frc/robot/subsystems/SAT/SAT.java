@@ -286,15 +286,15 @@ public class SAT extends SubsystemBase {
     
   }
 
-  public void shootNote(boolean isRunning) {
-    if (isRunning){
+  public void shootNote() {
+   
       satShooter1Motor.set(Constants.SATConstants.SHOOTER_SPEED);
     }
-    else {
+
+  public void stopShooter() {
       satShooter1Motor.setControl(new NeutralOut());
     }
 
     // satShooter2Motor.set(Constants.SATConstants.SHOOTER_SPEED);
 
   }
-}

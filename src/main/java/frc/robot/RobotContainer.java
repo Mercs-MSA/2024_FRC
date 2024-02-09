@@ -183,10 +183,10 @@ public class RobotContainer {
             .onTrue(commandIntakeOut); // not reporting to SmartDashboard
 
         operator.leftBumper()
-            .onTrue(new RunCommand(() -> m_SAT.shootNote(true), m_SAT));
+            .onTrue(new RunCommand(() -> m_SAT.shootNote(), m_SAT));
 
         operator.rightBumper()
-            .onTrue(new RunCommand(() -> m_SAT.shootNote(false), m_SAT));
+            .onTrue(new RunCommand(() -> m_SAT.stopShooter(), m_SAT));
         
         // operator.start()
         //     .and(operator.back())

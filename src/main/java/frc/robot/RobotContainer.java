@@ -45,9 +45,9 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     /* Commands */
-    // public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
-    // public CommandIntakeOut commandIntakeOut = new CommandIntakeOut(m_intake);
-    // public CommandIntakeStop commandIntakeStop = new CommandIntakeStop(m_intake);
+    public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
+    public CommandIntakeOut commandIntakeOut = new CommandIntakeOut(m_intake);
+    public CommandIntakeStop commandIntakeStop = new CommandIntakeStop(m_intake);
     // public CommandSwerveGoToHeading commandSwerveHeading0 = new CommandSwerveGoToHeading(0, s_Swerve);
     // public CommandSwerveGoToHeading commandSwerveHeading90 = new CommandSwerveGoToHeading(90, s_Swerve);
     // public CommandSwerveGoToHeading commandSwerveHeading180 = new CommandSwerveGoToHeading(180, s_Swerve);
@@ -188,11 +188,11 @@ public class RobotContainer {
         operator.back() 
             .onTrue(commandIntakeOut); // not reporting to SmartDashboard
 
-        operator.leftBumper()
-            .onTrue(new RunCommand(() -> m_SAT.shootNote(true), m_SAT));
+        // operator.leftBumper()
+        //     .onTrue(new RunCommand(() -> m_SAT.shootNote(true), m_SAT));
 
-        operator.rightBumper()
-            .onTrue(new RunCommand(() -> m_SAT.shootNote(false), m_SAT));
+        // operator.rightBumper()
+        //     .onTrue(new RunCommand(() -> m_SAT.shootNote(false), m_SAT));
         
         operator.start()
             .and(operator.back())

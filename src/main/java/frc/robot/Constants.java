@@ -168,9 +168,9 @@ public final class Constants {
     
     public static class IntakeConstants {
         public static final int kIntakeMotorId = 26;
-        public static final double kIntakeMotorSpeed = 0.30;
+        public static final double kIntakeMotorSpeed = 0.70;
         public static final int kIndexMotorId = 24;
-        public static final double kIndexMotorSpeed = 0.40;
+        public static final double kIndexMotorSpeed = 0.70;
         public static final int kIntakeLowerSensorId = 1;
         public static final int kIntakeUpperSensorId = 2;
     }
@@ -202,19 +202,19 @@ public final class Constants {
         public static final int SAT_SERVO3_SERVO_ID = 7;
         public static final int SAT_SERVO4_SERVO_ID = 6;
         /*lift start positions */
-        public static final double BASE_START_POS = 0.4;
+        public static final double BASE_START_POS = -0.4;
         public static final double PIVOT_START_POS = 0.4;
         /*podium scoring position */
-        public static final double BASE_PODIUM_POS = 3.717;
+        public static final double BASE_PODIUM_POS = -3.717;
         public static final double PIVOT_PODIUM_POS = 0.4;
         /*SUBWOOFER scoring position */
-        public static final double BASE_SUB_POS = 7.026;
+        public static final double BASE_SUB_POS = -7.026;
         public static final double PIVOT_SUB_POS = 0.4;
         /*AMP scoring position */
-        public static final double BASE_AMP_POS = 14.0;
+        public static final double BASE_AMP_POS = -19.0;
         public static final double PIVOT_AMP_POS = 7.0;
         /*TRAP scoring position */
-        public static final double BASE_TRAP_POS = 13.803;
+        public static final double BASE_TRAP_POS = -13.803;
         public static final double PIVOT_TRAP_POS = 41.665;
 
         public static final double SHOOTER_SPEED = 0.6;

@@ -37,14 +37,14 @@ public class RobotContainer {
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
     public final SAT m_SAT = new SAT();
-    public final Intake m_intake = new Intake();
+    // public final Intake m_intake = new Intake();
     //public final climber m_climber = new climber();
     //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
     
     /* Commands */
-    public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
-    public CommandIntakeOut commandIntakeOut = new CommandIntakeOut(m_intake);
-    public CommandIntakeStop commandIntakeStop = new CommandIntakeStop(m_intake);
+    // public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
+    // public CommandIntakeOut commandIntakeOut = new CommandIntakeOut(m_intake);
+    // public CommandIntakeStop commandIntakeStop = new CommandIntakeStop(m_intake);
     // public CommandSwerveGoToHeading commandSwerveHeading0 = new CommandSwerveGoToHeading(0, s_Swerve);
     // public CommandSwerveGoToHeading commandSwerveHeading90 = new CommandSwerveGoToHeading(90, s_Swerve);
     // public CommandSwerveGoToHeading commandSwerveHeading180 = new CommandSwerveGoToHeading(180, s_Swerve);
@@ -137,11 +137,13 @@ public class RobotContainer {
         //     .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
 
 
-        operator.x()
-        .onTrue(
-            Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT)
-        .andThen(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT))
-        );
+        operator.leftBumper()
+        .onTrue(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
+
+        operator.rightBumper()
+        .onTrue(Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
+
+
         /* Operator Buttons */
         // operator.a()
         //     .onTrue(commandGoToBaseZeroPosition.andThen(commandGoToPivotZeroPosition));
@@ -170,23 +172,32 @@ public class RobotContainer {
         //     .and(operator.axisGreaterThan(1, -0.4))
         //     .onTrue(commandGoToBaseAmpPosition.andThen(commandGoToPivotAmpPosition));
 
-        operator.start()
-            .onTrue(commandIntakeIn);
+        // operator.start()
+        //     .whileTrue(new RunCommand(() -> m_intake.startIntakeIndexerMotors(), m_intake));
 
         operator.pov(0)
             .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(0.5), m_SAT));
 
         operator.pov(180)
             .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.5), m_SAT));
+
+        // operator.pov(90)
+        //     .whileTrue(new RunCommand(() -> m_SAT.goToBaseZeroPosition(), m_SAT)
+        //     .andThen(new RunCommand(() -> m_SAT.goToPivotZeroPosition(), m_SAT)));
+            
         
-        operator.back() 
-            .onTrue(commandIntakeOut); // not reporting to SmartDashboard
+        // operator.back() 
+        //     .onTrue(commandIntakeOut); // not reporting to SmartDashboard
 
-        operator.leftBumper()
-            .onTrue(new RunCommand(() -> m_SAT.shootNote(), m_SAT));
+        
+        // operator.back()
+        //     .onTrue(new RunCommand(() -> m_intake.stopIndexMotor(), m_intake).alongWith(new RunCommand(() -> m_intake.stopIntakeMotor(), m_intake)));
 
-        operator.rightBumper()
-            .onTrue(new RunCommand(() -> m_SAT.stopShooter(), m_SAT));
+        // operator.leftBumper()
+        //     .onTrue(new RunCommand(() -> m_SAT.shootNote(), m_SAT));
+
+        // operator.rightBumper()
+        //     .onTrue(new RunCommand(() -> m_SAT.stopShooter(), m_SAT));
         
         // operator.start()
         //     .and(operator.back())

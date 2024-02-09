@@ -36,11 +36,14 @@ public class RobotContainer {
 
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
-    public final SAT m_SAT = new SAT();
+    //public final SAT m_SAT = new SAT();
     public final Intake m_intake = new Intake();
     //public final climber m_climber = new climber();
     //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
-    
+
+    /* AutoChooser */
+    private final SendableChooser<Command> autoChooser;
+
     /* Commands */
     public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
     public CommandIntakeOut commandIntakeOut = new CommandIntakeOut(m_intake);
@@ -64,8 +67,6 @@ public class RobotContainer {
     // public CommandPivotPosition commandGoToPivotAmpPosition = new CommandPivotPosition("Amp", m_SAT);
     // public CommandPivotPosition commandGoToPivotWingPosition = new CommandPivotPosition("Wing", m_SAT);
 
-    /* AutoChooser */
-    public final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -80,12 +81,13 @@ public class RobotContainer {
         );
 
         //Pathplanner commands - templates
-        NamedCommands.registerCommand("marker1", Commands.print("Finished 2 Piece"));
+        NamedCommands.registerCommand("marker1", Commands.print("Finished 1 Piece"));
         NamedCommands.registerCommand("marker2", Commands.print("Finished 3-4 Piece"));
 
-        // NamedCommands.registerCommand("Start Intake", commandIntakeIn);
-        // NamedCommands.registerCommand("Stop Intake", commandIntakeStop);
-        // NamedCommands.registerCommand("Reverse Intake", commandIntakeOut);
+        NamedCommands.registerCommand("Start Intake", commandIntakeIn);
+        //NamedCommands.registerCommand("Start Intake", new RunCommand(() -> m_intake.startIndexMotor(), m_intake));
+        NamedCommands.registerCommand("Stop Intake", commandIntakeStop);
+        NamedCommands.registerCommand("Reverse Intake", commandIntakeOut);
 
         // NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
@@ -104,14 +106,18 @@ public class RobotContainer {
         //  NamedCommands.registerCommand("Go To Pivot Sub Positon", Commands.runOnce(() -> m_SAT.goToPivotSubPosition(), m_SAT));
         //  NamedCommands.registerCommand("Go To Pivot Trap Positon", Commands.runOnce(() -> m_SAT.goToPivotTrapPosition(), m_SAT));
         //  NamedCommands.registerCommand("Go To Pivot Zero Positon", Commands.runOnce(() -> m_SAT.goToPivotZeroPosition(), m_SAT));
+         
+        //Auto chooser
+        autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`
+        SmartDashboard.putData("Auto Mode", autoChooser);
     }
 
-    /**
-     * Use this method to define your button->command mappings. Buttons can be created by
-     * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
+    // /**
+    //  * Use this method to define your button->command mappings. Buttons can be created by
+    //  * instantiating a {@link GenericHID} or one of its subclasses ({@link
+    //  * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+    //  * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+    //  */
     public void configureButtonBindings() {
         /* Driver Buttons */
         // driver.y()
@@ -137,11 +143,11 @@ public class RobotContainer {
         //     .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
 
 
-        operator.x()
-        .onTrue(
-            Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT)
-        .andThen(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT))
-        );
+        // operator.x()
+        // .onTrue(
+        //     Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT)
+        // .andThen(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT))
+        // );
         /* Operator Buttons */
         // operator.a()
         //     .onTrue(commandGoToBaseZeroPosition.andThen(commandGoToPivotZeroPosition));
@@ -173,24 +179,24 @@ public class RobotContainer {
         operator.start()
             .onTrue(commandIntakeIn);
 
-        operator.pov(0)
-            .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(0.5), m_SAT));
+        // operator.pov(0)
+        //     .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(0.5), m_SAT));
 
-        operator.pov(180)
-            .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.5), m_SAT));
+        // operator.pov(180)
+        //     .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.5), m_SAT));
         
         operator.back() 
             .onTrue(commandIntakeOut); // not reporting to SmartDashboard
 
-        operator.leftBumper()
-            .onTrue(new RunCommand(() -> m_SAT.shootNote(true), m_SAT));
+        // operator.leftBumper()
+        //     .onTrue(new RunCommand(() -> m_SAT.shootNote(true), m_SAT));
 
-        operator.rightBumper()
-            .onTrue(new RunCommand(() -> m_SAT.shootNote(false), m_SAT));
+        // operator.rightBumper()
+        //     .onTrue(new RunCommand(() -> m_SAT.shootNote(false), m_SAT));
         
-        // operator.start()
-        //     .and(operator.back())
-        //     .onTrue(commandIntakeStop);
+        operator.start()
+            .and(operator.back())
+            .onTrue(commandIntakeStop);
     }
 
     /**

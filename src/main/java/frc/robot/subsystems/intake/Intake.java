@@ -7,6 +7,7 @@ package frc.robot.subsystems.intake;
 import frc.robot.Constants.IntakeConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -82,6 +83,7 @@ public class Intake extends SubsystemBase {
 
   public void startIndexMotor() {
     indexMotor.set(-IntakeConstants.kIndexMotorSpeed);
+    SmartDashboard.putString("iS intake running?", "yes");
   }
 
   public void stopIndexMotor() {

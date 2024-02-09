@@ -85,7 +85,7 @@ public class Robot extends TimedRobot {
     poseEstimateField2d.setRobotPose(m_robotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
     SmartDashboard.putData("estimated robot pose", poseEstimateField2d);
     SmartDashboard.putNumber("Current Heading", m_robotContainer.s_Swerve.getHeading().getRadians());
-    SmartDashboard.putData("Auto Mode", m_robotContainer.autoChooser);
+    //SmartDashboard.putData("Auto Mode", m_robotContainer.autoChooser);
 
     // SmartDashboard.putData(m_robotContainer.m_intake);
     // SmartDashboard.putData(m_robotContainer.m_SAT);

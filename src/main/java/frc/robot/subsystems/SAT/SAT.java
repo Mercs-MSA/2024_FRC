@@ -288,7 +288,7 @@ public class SAT extends SubsystemBase {
 
   public void shootNote(boolean isRunning) {
     if (isRunning){
-      satShooter1Motor.setControl(satShooter1_voltageVelocity.withVelocity(Constants.SATConstants.SHOOTER_SPEED));
+      satShooter1Motor.set(Constants.SATConstants.SHOOTER_SPEED);
     }
     else {
       satShooter1Motor.setControl(new NeutralOut());

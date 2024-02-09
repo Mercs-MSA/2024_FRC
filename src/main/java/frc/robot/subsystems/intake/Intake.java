@@ -86,6 +86,11 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putString("iS intake running?", "yes");
   }
 
+  public void startIntakeIndexerMotors(){
+    startIndexMotor();
+    startIntakeMotor();
+  }
+
   public void stopIndexMotor() {
     indexMotor.set(0);
   }
@@ -100,8 +105,8 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    isNotePresent = !intakeUpperSensor.get();
-    isNotePresent = !intakeLowerSensor.get();
+    // isNotePresent = !intakeUpperSensor.get();
+    // isNotePresent = !intakeLowerSensor.get();
   }
   
   // USE FOR TESTING ALSO

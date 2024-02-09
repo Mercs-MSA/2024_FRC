@@ -109,18 +109,23 @@ public class SAT extends SubsystemBase {
 
     TalonFXConfiguration satShooter1MotorConfigs = new TalonFXConfiguration();
     satShooter1MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
-    satShooter1MotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+    satShooter1MotorConfigs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
 
+    satShooter1MotorConfigs.Voltage.PeakForwardVoltage = 14;
+    satShooter1MotorConfigs.Voltage.PeakReverseVoltage = -14;
 
     TalonFXConfiguration satShooter2MotorConfigs = new TalonFXConfiguration();
-    satShooter2MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
-    satShooter2MotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+    //satShooter2MotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
+    //satShooter2MotorConfigs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
 
+    satShooter2MotorConfigs.Voltage.PeakForwardVoltage = 14;
+    satShooter2MotorConfigs.Voltage.PeakReverseVoltage = -14;
+  
 
     // STATUS FOR BASE1
     StatusCode status = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
-      status = satBase1Motor.getConfigurator().apply(satShooter1MotorConfigs);
+      status = satBase1Motor.getConfigurator().apply(satBase1MotorConfigs);
       if (status.isOK())
         break;
     }

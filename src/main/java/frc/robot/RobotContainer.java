@@ -36,7 +36,7 @@ public class RobotContainer {
 
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
-    public final SAT m_SAT = new SAT();
+    // public final SAT m_SAT = new SAT();
     public final Intake m_intake = new Intake();
     //public final climber m_climber = new climber();
     //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
@@ -143,11 +143,11 @@ public class RobotContainer {
         //     .onTrue(Commands.runOnce(() -> m_SAT.stopShooter(), m_SAT));
 
 
-        operator.x()
-        .onTrue(
-            Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT)
-        .andThen(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT))
-        );
+        // operator.x()
+        // .onTrue(
+        //     Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT)
+        // .andThen(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT))
+        // );
         /* Operator Buttons */
         // operator.a()
         //     .onTrue(commandGoToBaseZeroPosition.andThen(commandGoToPivotZeroPosition));
@@ -179,14 +179,14 @@ public class RobotContainer {
         // operator.start()
         //     .whileTrue(new RunCommand(() -> m_intake.startIntakeIndexerMotors(), m_intake));
 
-        operator.pov(0)
-            .onTrue(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
+        // operator.pov(0)
+        //     .onTrue(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
 
-        operator.pov(180)
-            .onTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.05), m_SAT));
+        // operator.pov(180)
+        //     .onTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.05), m_SAT));
         
-        operator.back() 
-            .onTrue(commandIntakeOut); // not reporting to SmartDashboard
+        // operator.back() 
+        //     .onTrue(commandIntakeOut); // not reporting to SmartDashboard
 
         // operator.leftBumper()
         //     .onTrue(new RunCommand(() -> m_SAT.shootNote(true), m_SAT));
@@ -195,8 +195,13 @@ public class RobotContainer {
         //     .onTrue(new RunCommand(() -> m_SAT.shootNote(false), m_SAT));
         
         operator.start()
-            .and(operator.back())
-            .onTrue(commandIntakeStop);
+            .whileTrue(new RunCommand(() -> m_intake.startIntakeIndexerMotors()));
+
+        operator.start()
+            .whileFalse(new RunCommand(() -> m_intake.stopIntakeIndexerMotors()));
+
+        // operator.back()
+        //     .onTrue(new RunCommand(() -> m_intake.stopIntakeIndexerMotors()));
     }
 
     /**

@@ -91,6 +91,11 @@ public class Intake extends SubsystemBase {
     startIntakeMotor();
   }
 
+  public void stopIntakeIndexerMotors(){
+    stopIntakeMotor();
+    stopIndexMotor();
+  }
+
   public void stopIndexMotor() {
     indexMotor.set(0);
   }

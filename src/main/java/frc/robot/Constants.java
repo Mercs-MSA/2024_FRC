@@ -167,8 +167,8 @@ public final class Constants {
     }
     
     public static class IntakeConstants {
-        public static final int kIntakeMotorId = 26;
-        public static final double kIntakeMotorSpeed = 0.70;
+        public static final int kIntakeMotorId = 25;
+        public static final double kIntakeMotorSpeed = 0.40;
         public static final int kIndexMotorId = 24;
         public static final double kIndexMotorSpeed = 0.70;
         public static final int kIntakeLowerSensorId = 1;

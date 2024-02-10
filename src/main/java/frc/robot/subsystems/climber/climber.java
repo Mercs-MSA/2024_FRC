@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
@@ -51,15 +53,15 @@ public class climber extends SubsystemBase {
     climberRightMotorConfigs.Slot0.kP = 5.0; // An error of 0.5 rotations results in 1.2 volts output
     climberRightMotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
     // Peak output of 8 volts
-    climberRightMotorConfigs.Voltage.PeakForwardVoltage = 14;
-    climberRightMotorConfigs.Voltage.PeakReverseVoltage = -14;
+    climberRightMotorConfigs.Voltage.PeakForwardVoltage = 2;
+    climberRightMotorConfigs.Voltage.PeakReverseVoltage = -2;
 
     TalonFXConfiguration climberLeftMotorConfigs = new TalonFXConfiguration();
     climberLeftMotorConfigs.Slot0.kP = 5.0; // An error of 0.5 rotations results in 1.2 volts output
     climberLeftMotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
     // Peak output of 8 volts
-    climberLeftMotorConfigs.Voltage.PeakForwardVoltage = 14;
-    climberLeftMotorConfigs.Voltage.PeakReverseVoltage = -14;
+    climberLeftMotorConfigs.Voltage.PeakForwardVoltage = 2;
+    climberLeftMotorConfigs.Voltage.PeakReverseVoltage = -2;
 
 
     tubeMotorLeft.getConfigurator().apply(climberRightMotorConfigs);
@@ -85,6 +87,10 @@ public class climber extends SubsystemBase {
 
     rightMotorPosition = tubeMotorRight.getPosition().getValue();
     leftMotorPosition = tubeMotorLeft.getPosition().getValue();
+
+
+    SmartDashboard.putNumber("Motor Right State", outputRightData());
+    SmartDashboard.putNumber("Motor Left State", outputLeftData());
     // This method will be called once per scheduler run
   // This moves the tube in tube up and down
   }
@@ -150,6 +156,41 @@ public class climber extends SubsystemBase {
     }
 }
 
+private void climbUp() {
+
+      tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.RIGHT_TOP_POSITION));
+      tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(Constants.climberConstants.LEFT_TOP_POSITION));
+      //realPosition += Constants.climberConstants.climber_Increment;
+      //tubeMotorRight.set(0.3);
+      SmartDashboard.putString("power input for robot", "0.3");
+}
+  private void climbDown() {
+
+      tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.RIGHT_BOTTOM_POSITION));
+      tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(Constants.climberConstants.LEFT_BOTTOM_POSITION));
+      //tubeMotorRight.set(-0.3);
+      SmartDashboard.putString("power input for robot", "-0.3");
+  }
+ 
+  private void climbMidRight() {
+    if (rightMotorPosition < Constants.climberConstants.RIGHT_TOP_POSITION) {
+      tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.RIGHT_MID_POSITION));
+      //realPosition += Constants.climberConstants.climber_Increment;
+      //tubeMotorRight.set(0.3);
+      SmartDashboard.putString("power input for robot", "0.3");
+    }
+}
+  private void climbMidLeft() {
+    
+      tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.LEFT_MID_POSITION));
+      //tubeMotorRight.set(-0.3);
+      SmartDashboard.putString("power input for robot", "-0.3");
+  }
+
+  private void climbStop() {
+    tubeMotorRight.setControl(new NeutralOut());
+    tubeMotorLeft.setControl(new NeutralOut());
+  }
 
 
   // public void leftGoToPosition(double joystick){
@@ -167,6 +208,23 @@ public class climber extends SubsystemBase {
   // }
 
 // Block of all commands
+public Command climbUpCommand() {
+  return new RunCommand(() -> climbUp(), this);
+}
+
+public Command climbDownCommand() {
+  return new RunCommand(() -> climbDown(), this);
+}
+
+public Command climbMidRightCommand() {
+  return new RunCommand(() -> climbMidRight(), this);
+}
+
+public Command climbMidLeftCommand()  {
+  return new RunCommand(() -> climbMidLeft(), this);
+}
+
+
 public Command climbUpRightCommand() {
   return new RunCommand(() -> climbRightUp(), this);
 }
@@ -175,12 +233,15 @@ public Command climbDownRightCommand() {
   return new RunCommand(() -> climbRightDown(), this);
 }
 
-public Command climbDownLeftCommand() {
-  return new RunCommand(() -> climbLeftDown(), this);
-}
-
 public Command climbUpLeftCommand() {
   return new RunCommand(() -> climbLeftUp(), this);
+}
+
+public Command climbDownLeftCommand()  {
+  return new RunCommand(() -> climbLeftDown(), this);
+}
+public Command climbMotorStop()  {
+  return new RunCommand(() -> climbStop(), this);
 }
 
  

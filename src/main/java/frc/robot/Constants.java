@@ -248,11 +248,15 @@ public final class Constants {
 
       public static final double climber_Increment = 0.5;
 
-      public static final double LEFT_BOTTOM_POSITION = -3;
-      public static final double RIGHT_BOTTOM_POSITION = 3;
+      public static final double LEFT_BOTTOM_POSITION = 4.33;
+      public static final double RIGHT_BOTTOM_POSITION = -10.71;
 
-      public static final double LEFT_TOP_POSITION = -140.5166;
-      public static final double RIGHT_TOP_POSITION = 131.2017;
+      public static final double LEFT_TOP_POSITION = -135;
+      public static final double RIGHT_TOP_POSITION = 126;
+
+
+      public static final double LEFT_MID_POSITION = -60;
+      public static final double RIGHT_MID_POSITION = 51;
 
 
 

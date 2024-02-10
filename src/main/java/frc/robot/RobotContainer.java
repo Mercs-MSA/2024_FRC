@@ -38,7 +38,7 @@ public class RobotContainer {
     public final Swerve s_Swerve = new Swerve();
     // public final SAT m_SAT = new SAT();
     public final Intake m_intake = new Intake();
-    //public final climber m_climber = new climber();
+    public final climber m_climber = new climber();
     //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
 
     /* AutoChooser */
@@ -119,6 +119,81 @@ public class RobotContainer {
     //  * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
     //  */
     public void configureButtonBindings() {
+
+
+
+
+    operator.axisGreaterThan(5, 0.5)
+        .whileTrue(
+            m_climber.climbDownCommand()
+
+        );
+
+
+    operator.axisLessThan(5, -0.5)
+        .whileTrue(
+            m_climber.climbUpCommand()
+
+        );
+
+    operator.axisLessThan(5, 0.5)
+        .whileTrue(
+            m_climber.climbMotorStop()
+        );
+
+
+    operator.axisGreaterThan(5, -0.5)
+        .whileTrue(
+            m_climber.climbMotorStop()
+        );
+       
+        
+    operator.axisGreaterThan(1, 0.5)
+        .whileTrue(
+            m_climber.climbMidLeftCommand()
+        );
+
+
+    operator.axisLessThan(1, -0.5)
+        .whileTrue(
+            m_climber.climbMidRightCommand()
+        );
+
+
+
+
+
+
+    operator.y()
+        .whileTrue(
+            m_climber.climbDownRightCommand()
+        );
+
+
+    operator.x()
+        .whileTrue(
+            m_climber.climbUpRightCommand()
+        );
+       
+        
+    operator.a()
+        .whileTrue(
+            m_climber.climbUpLeftCommand()
+        );
+
+
+    operator.b()
+        .whileTrue(
+            m_climber.climbDownLeftCommand()
+        );
+        
+    
+
+
+
+
+
+
         /* Driver Buttons */
         // driver.y()
         //    .onTrue(new InstantCommand(() -> s_Swerve.zeroHeading(), s_Swerve));  /// suggest commenting this out while we troubleshoot this

@@ -33,11 +33,8 @@ public class SAT extends SubsystemBase {
   private final PositionVoltage satBase1_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final PositionVoltage satBase2_voltagePosition = satBase1_voltagePosition.clone();
 
-  double base1MotorPos, base2MotorPos, pivotMotorPos;
-
-  boolean B_Button_Value;
-  double Y_axis_Value;
-  double targetPose = 0.0;
+  double base1MotorPos, base2MotorPos, pivotMotorPos, shooterMotorSpeed, Base1StartPosition, Base2StartPosition, PivotStartPosition;
+  double baseTargetPose, pivotTargetPose = 0.0;
 
   TalonFXConfiguration satBase1MotorConfigs, satBase2MotorConfigs;
 
@@ -94,36 +91,36 @@ public class SAT extends SubsystemBase {
     satShooter1MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.4;  
 
     // STATUS FOR BASE1
-    StatusCode status = StatusCode.StatusCodeNotInitialized;
+    StatusCode status1 = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
-      status = satBase1Motor.getConfigurator().apply(satBase1MotorConfigs);
-      if (status.isOK())
+      status1 = satBase1Motor.getConfigurator().apply(satBase1MotorConfigs);
+      if (status1.isOK())
         break;
     }
-    if (!status.isOK()) {
-      System.out.println("Could not apply configs, error code: " + status.toString());
+    if (!status1.isOK()) {
+      System.out.println("Could not apply configs, error code: " + status1.toString());
     }
 
     // STATUS FOR BASE2
     StatusCode status2 = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
-      status = satBase2Motor.getConfigurator().apply(satBase1MotorConfigs);
+      status2 = satBase2Motor.getConfigurator().apply(satBase1MotorConfigs);
       if (status2.isOK())
         break;
     }
-    if (!status.isOK()) {
-      System.out.println("Could not apply configs, error code: " + status.toString());
+    if (!status2.isOK()) {
+      System.out.println("Could not apply configs, error code: " + status2.toString());
     }
 
     // STATUS FOR PIVOT
     StatusCode status3 = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
-      status = satPivotMotor.getConfigurator().apply(satPivotMotorConfigs);
+      status3 = satPivotMotor.getConfigurator().apply(satPivotMotorConfigs);
       if (status3.isOK())
         break;
     }
-    if (!status.isOK()) {
-      System.out.println("Could not apply configs, error code: " + status.toString());
+    if (!status3.isOK()) {
+      System.out.println("Could not apply configs, error code: " + status3.toString());
     }
 
     // STATUS FOR SHOOTER1
@@ -133,7 +130,7 @@ public class SAT extends SubsystemBase {
       if (status4.isOK())
         break;
     }
-    if (!status.isOK()) {
+    if (!status4.isOK()) {
       System.out.println("Could not apply configs, error code: " + status4.toString());
     }
 
@@ -144,18 +141,20 @@ public class SAT extends SubsystemBase {
       if (status5.isOK())
         break;
     }
-    if (!status.isOK()) {
+    if (!status5.isOK()) {
       System.out.println("Could not apply configs, error code: " + status5.toString());
     }
 
     /* PUT FOLLOW SYSTEMS HERE */
     satShooter2Motor.setControl(Shooter2_Follower);
 
-    satBase1Motor.setPosition(0);
-    satBase2Motor.setPosition(0);
-    satPivotMotor.setPosition(0);
+    //satBase1Motor.setPosition(0);
+    //satBase2Motor.setPosition(0);
+    //satPivotMotor.setPosition(0);
 
-    targetPose = satBase1Motor.getPosition().getValueAsDouble();
+    Base1StartPosition = satBase1Motor.getPosition().getValueAsDouble();
+    Base2StartPosition = satBase2Motor.getPosition().getValueAsDouble();
+    PivotStartPosition = satPivotMotor.getPosition().getValueAsDouble();
 
     PhysicsSim.getInstance().addTalonFX(satBase1Motor, 0.001);
     PhysicsSim.getInstance().addTalonFX(satBase2Motor, 0.001);
@@ -168,18 +167,25 @@ public class SAT extends SubsystemBase {
   public void periodic() {
 
     // This method will be called once per scheduler run
-    base1MotorPos = satBase1Motor.getPosition().getValue();
-    base2MotorPos = satBase2Motor.getPosition().getValue();
-    pivotMotorPos = satPivotMotor.getPosition().getValue();
+    base1MotorPos = satBase1Motor.getPosition().getValueAsDouble();
+    base2MotorPos = satBase2Motor.getPosition().getValueAsDouble();
+    pivotMotorPos = satPivotMotor.getPosition().getValueAsDouble();
+    shooterMotorSpeed = satShooter1Motor.getVelocity().getValueAsDouble();
 
     SmartDashboard.putNumber("base1MotorPos", base1MotorPos);
     SmartDashboard.putNumber("base2MotorPos", base2MotorPos);
+
+    SmartDashboard.putNumber("base1PosRelativeToStart", base1MotorPos - Base1StartPosition);
+    SmartDashboard.putNumber("base2PosRelativeToStart", base2MotorPos - Base2StartPosition);
+
+    SmartDashboard.putNumber("base1 command", satBase1Motor.getClosedLoopReference().getValueAsDouble());
+    SmartDashboard.putNumber("base2 command", satBase2Motor.getClosedLoopReference().getValueAsDouble());
 
     SmartDashboard.putNumber("base1MotorVoltage", satBase1Motor.getMotorVoltage().getValueAsDouble());
     SmartDashboard.putNumber("base2MotorVoltage", satBase2Motor.getMotorVoltage().getValueAsDouble());
 
     SmartDashboard.putNumber("pivotMotorPos", pivotMotorPos);
-    SmartDashboard.putNumber("shooter speed", satShooter1Motor.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("shooter speed", shooterMotorSpeed);
     SmartDashboard.putNumber("shooter command", satShooter1Motor.getClosedLoopReference().getValueAsDouble());
 
   }
@@ -190,34 +196,41 @@ public class SAT extends SubsystemBase {
   }
   
   public void goToBasePodiumPosition() {
-    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
+    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.MOTOR1_BASE_PODIUM_POS));
+    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_PODIUM_POS));
   }
 
+  /// This is for test purposes only
   public void baseGoToPosition(double increment) {
-    targetPose = targetPose + (increment);
-    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(targetPose));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(targetPose));
+    baseTargetPose = baseTargetPose + (increment);
+    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Base1StartPosition + baseTargetPose));
+    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Base2StartPosition + baseTargetPose));
+  }
+
+  /// This is for test purposes only
+  public void pivotGoToPosition(double increment) {
+    pivotTargetPose = pivotTargetPose + (increment);
+    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(PivotStartPosition + pivotTargetPose));
   }
 
   public void goToBaseSubPosition() {
-    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));    
+    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.MOTOR1_BASE_SUB_POS));
+    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_SUB_POS));    
   }
 
   public void goToBaseAmpPosition() {
-    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
+    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.MOTOR1_BASE_AMP_POS));
+    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_AMP_POS));
   }
 
   public void goToBaseTrapPosition() {
-    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
+    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.MOTOR1_BASE_TRAP_POS));
+    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_TRAP_POS));
   }
 
   public void goToBaseZeroPosition() {
-    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_START_POS));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_START_POS));
+    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.MOTOR1_BASE_START_POS));
+    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_START_POS));
   }
 
    public void goToPivotPodiumPosition() {
@@ -269,13 +282,15 @@ public class SAT extends SubsystemBase {
     return pivotMotorPos;
   }
 
+  public double getShooterSpeed() {
+    return shooterMotorSpeed;
+  }
+
   public enum BaseMotorsPosition {
     BASE_PODIUM_POS,
     BASE_SUB_POS,
     BASE_AMP_POS,
     BASE_TRAP_POS,
     BASE_START_POS
-}
-
-
+  }
 }

@@ -193,14 +193,14 @@ public class RobotContainer {
         operator.pov(180)
             .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.05), m_SAT));
 
-        operator.pov(0).and(operator.pov(180))
-            .onFalse(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
+        //operator.pov(0).and(operator.pov(180))
+        //    .onFalse(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
 
-        operator.x()
-            .onTrue(new RunCommand(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
+        //operator.x()
+        //    .onTrue(new RunCommand(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
 
-        operator.b()
-            .onTrue(new RunCommand(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
+        //operator.b()
+        //    .onTrue(new RunCommand(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
         
         // operator.b()
         //     .and(operator.axisGreaterThan(1, 0.6))

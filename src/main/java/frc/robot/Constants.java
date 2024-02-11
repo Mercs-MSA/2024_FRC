@@ -226,47 +226,40 @@ public final class Constants {
     }
 
     public static class SATConstants {
-
-
         // Motor IDs
         public static final int SAT_SHOOTER1_MOTOR_ID = 29;
         public static final int SAT_SHOOTER2_MOTOR_ID = 27;
-
 
         public static final int SAT_PIVOT_MOTOR_ID = 19;
         public static final int SAT_BASE1_MOTOR_ID = 55;
         public static final int SAT_BASE2_MOTOR_ID = 25;
         // INDEXER IS 24
 
-
         public static final int SAT_OBJECTDETECTOR_SENSOR_ID = 1;
 
-
-        public static final int SAT_SERVO1_SERVO_ID = 9;
-        public static final int SAT_SERVO2_SERVO_ID = 8;
-        public static final int SAT_SERVO3_SERVO_ID = 7;
-        public static final int SAT_SERVO4_SERVO_ID = 6;
         /*lift start positions */
-        public static final double BASE_START_POS = -0.4;
+        public static final double MOTOR1_BASE_START_POS = -0.4;
+        public static final double MOTOR2_BASE_START_POS = -0.4;
         public static final double PIVOT_START_POS = 0.4;
         /*podium scoring position */
-        public static final double BASE_PODIUM_POS = -3.717;
+        public static final double MOTOR1_BASE_PODIUM_POS = -3.717;
+        public static final double MOTOR2_BASE_PODIUM_POS = -3.717;
         public static final double PIVOT_PODIUM_POS = 0.4;
         /*SUBWOOFER scoring position */
-        public static final double BASE_SUB_POS = -7.026;
+        public static final double MOTOR1_BASE_SUB_POS = -7.026;
+        public static final double MOTOR2_BASE_SUB_POS = -7.026;
         public static final double PIVOT_SUB_POS = 0.4;
         /*AMP scoring position */
-        public static final double BASE_AMP_POS = -19.0;
+        public static final double MOTOR1_BASE_AMP_POS = -19.0;
+        public static final double MOTOR2_BASE_AMP_POS = -19.0;
         public static final double PIVOT_AMP_POS = 7.0;
         /*TRAP scoring position */
-        public static final double BASE_TRAP_POS = -13.803;
+        public static final double MOTOR1_BASE_TRAP_POS = -13.803;
+        public static final double MOTOR2_BASE_TRAP_POS = -13.803;
         public static final double PIVOT_TRAP_POS = 41.665;
 
         public static final double SHOOTER_SPEED = 70;
 
-
-        public static final int BASE_THROUGHBORE_ENCODER = 2;
-        public static final int PIVOT_THROUGHBORE_ENCODER = 3;
         /*THIS NEEDS TO INCLUDE THE CONVERSION FROM DEGREES TO ENCODER COUNTS */
         public static final int BASE_ENCODER_RATIO = 50;
         public static final int PIVOT_ENCODER_RATIO = 20;

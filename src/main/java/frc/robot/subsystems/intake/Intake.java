@@ -27,6 +27,9 @@ public class Intake extends SubsystemBase {
 
   private boolean isUpperNotePresent;
   private boolean isLowerNotePresent;
+  private boolean isNEWSENSORPresent;
+  private boolean isNEWSENSOR2Present;
+
   
   private final TalonFX intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorId); //carpet
   private final TalonFX indexMotor = new TalonFX(IntakeConstants.kIndexMotorId); //sat (feeder)
@@ -34,6 +37,9 @@ public class Intake extends SubsystemBase {
   private final PositionVoltage indexMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final DigitalInput intakeUpperSensor = new DigitalInput(IntakeConstants.kIntakeUpperSensorId);
   private final DigitalInput intakeLowerSensor = new DigitalInput(IntakeConstants.kIntakeLowerSensorId);
+  private final DigitalInput intakeSensor2 = new DigitalInput(IntakeConstants.kIntakeLowerSensor2Id);
+  private final DigitalInput intakeSensor3 = new DigitalInput(IntakeConstants.kIntakeUpperSensor3Id);
+
   
   public CommandIntakeIdle commandIntakeIdle = new CommandIntakeIdle(this);
   public CommandIntakeStart commandIntakeStart = new CommandIntakeStart(this);
@@ -177,13 +183,23 @@ public class Intake extends SubsystemBase {
     if (!simulationDebugMode) {
       isUpperNotePresent = !intakeUpperSensor.get();
       isLowerNotePresent = !intakeLowerSensor.get();
+      isNEWSENSORPresent = !intakeSensor2.get();
+      isNEWSENSOR2Present = !intakeSensor3.get();
     }
   
     intakeMotorPos = intakeMotor.getPosition().getValue();
     indexMotorPos = indexMotor.getPosition().getValue();
 
+    SmartDashboard.putBoolean("intakeUpperSensor state", isUpperNotePresent);
+    SmartDashboard.putBoolean("intakeLowerSensor state", isLowerNotePresent);
+    SmartDashboard.putBoolean("NEWSENSOR2 state", isNEWSENSORPresent);
+    SmartDashboard.putBoolean("NEWSENSOR3 state", isNEWSENSOR2Present);
+
+
     SmartDashboard.putNumber("Intake Motor Temperature", intakeMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("Index Motor Temperature", indexMotor.getDeviceTemp().getValueAsDouble());
+
+
 
   }
   

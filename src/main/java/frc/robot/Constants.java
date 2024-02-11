@@ -174,7 +174,9 @@ public final class Constants {
         public static final int kIndexMotorId = 24;
         public static final double kIndexMotorSpeed = 0.70;
         public static final int kIntakeLowerSensorId = 1;
-        public static final int kIntakeUpperSensorId = 2;
+        public static final int kIntakeUpperSensorId = 0;
+        public static final int kIntakeLowerSensor2Id = 2;
+        public static final int kIntakeUpperSensor3Id = 3;       
         public static final double kIntakeMotorTolerance = 0.3;
         public static final double kIndexMotorTolerance = 0.3;
         /*

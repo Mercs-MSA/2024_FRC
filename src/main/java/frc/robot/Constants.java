@@ -169,10 +169,55 @@ public final class Constants {
     public static class IntakeConstants {
         public static final int kIntakeMotorId = 25;
         public static final double kIntakeMotorSpeed = 0.40;
+        public static final double kIntakeProcessRotations = 2.0;
+        public static final double kIndexProcessRotations = 2.0;
         public static final int kIndexMotorId = 24;
         public static final double kIndexMotorSpeed = 0.70;
         public static final int kIntakeLowerSensorId = 1;
         public static final int kIntakeUpperSensorId = 2;
+        public static final double kIntakeMotorTolerance = 0.3;
+        public static final double kIndexMotorTolerance = 0.3;
+        /*
+         * States for Intake:
+         * IDLE: the motor is off, sensor doesn't see anything, doesn't have a note in it
+         * START: the motor on, sensor doesn't see anything
+         * INTAKE: the motor is on, the sensor sees a note enter
+         * PROCESS: the motor is on but moving precisely, the sensor doesn't see anything
+         * HOLD: the motor is off, the sensor doesn't see anything, has a note in it
+         * INDEX: the motor is on, the sensor sees a note leave
+         */
+        public static intakeState currentIntakeState = intakeState.IDLE;
+        public enum intakeState{
+            IDLE, 
+            START, 
+            INTAKE,
+            PROCESS, 
+            HOLD,
+            INDEX,
+            OVERRIDE_MOTOR_ON,
+            OVERRIDE_MOTOR_OFF
+        }
+        /*
+         * States for Index:
+         * IDLE: the motor is off, sensor doesn't see anything, doesn't have a note in it
+         * START: the motor is on, sensor doesn't see anything
+         * INTAKE: the motor is on, the sensor sees a note enter
+         * PROCESS: the motor is on but moving precisely, the sensor doesn't see anything
+         * HOLD: the motor is off, the sensor doesn't see anything, has a note in it
+         * FIRE: the motor is on, the sensor sees the note leave
+         */
+        public static indexState currentIndexState = indexState.IDLE;
+        public enum indexState{
+            IDLE, 
+            START, 
+            INTAKE,
+            PROCESS, 
+            HOLD,
+            FIRE,
+            OVERRIDE_MOTOR_ON,
+            OVERRIDE_MOTOR_OFF
+        }    
+   
     }
 
     // This is for miscellaneous constants
@@ -237,7 +282,23 @@ public final class Constants {
         public static final double kMinOutput = -1;
 
 
-        }
+        public static baseState currentBaseState = baseState.START;
+        public enum baseState{
+            START, 
+            PODIUM, 
+            AMP,
+            SUB, 
+            TRAP
+        }  
+        public static pivotState currentPivotState = pivotState.START;
+        public enum pivotState{
+            START, 
+            PODIUM, 
+            AMP,
+            SUB, 
+            TRAP
+        } 
+    }
        
     public static final class climberConstants
     {

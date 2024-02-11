@@ -4,12 +4,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -18,8 +13,6 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.climber.climber;
-import frc.robot.Constants;
-import frc.robot.Constants.SATConstants;
 import frc.robot.subsystems.vision.CustomGamePieceVision;
 import frc.robot.subsystems.intake.Intake;
 
@@ -45,14 +38,17 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     /* Commands */
-    public CommandIntakeIn commandIntakeIn = new CommandIntakeIn(m_intake);
-    public CommandIntakeOut commandIntakeOut = new CommandIntakeOut(m_intake);
-    public CommandIntakeStop commandIntakeStop = new CommandIntakeStop(m_intake);
-    // public CommandSwerveGoToHeading commandSwerveHeading0 = new CommandSwerveGoToHeading(0, s_Swerve);
-    // public CommandSwerveGoToHeading commandSwerveHeading90 = new CommandSwerveGoToHeading(90, s_Swerve);
-    // public CommandSwerveGoToHeading commandSwerveHeading180 = new CommandSwerveGoToHeading(180, s_Swerve);
-    // public CommandSwerveGoToHeading commandSwerveHeading270 = new CommandSwerveGoToHeading(270, s_Swerve);
-    // public CommandNoteIntake commandNoteIntake = new CommandNoteIntake(s_Swerve, m_intake, m_GamePieceVision);
+    public CommandOverrideIntakeStart commandOverrideIntakeStart = new CommandOverrideIntakeStart(m_intake);
+    public CommandOverrideIndexStart commandOverrideIndexStart = new CommandOverrideIndexStart(m_intake);
+    public CommandOverrideIntakeStop commandOverrideIntakeStop = new CommandOverrideIntakeStop(m_intake);
+    public CommandOverrideIndexStop commandOverrideIndexStop = new CommandOverrideIndexStop(m_intake);
+
+    // public CommandSwerveToHeading commandSwerveToHeading0 = new CommandSwerveToHeading(0, s_Swerve);
+    // public CommandSwerveToHeading commandSwerveToHeading90 = new CommandSwerveToHeading(90, s_Swerve);
+    // public CommandSwerveToHeading commandSwerveToHeading180 = new CommandSwerveToHeading(180, s_Swerve);
+    // public CommandSwerveToHeading commandSwerveToHeading270 = new CommandSwerveToHeading(270, s_Swerve);
+
+    // public CommandSwerveToNote commandSwerveToNote = new CommandSwerveToNote(s_Swerve, m_GamePieceVision);
     
     // public CommandBasesPosition commandGoToBasePodiumPosition = new CommandBasesPosition("Podium", m_SAT);
     // public CommandBasesPosition commandGoToBaseSubPosition = new CommandBasesPosition("Sub", m_SAT);
@@ -80,150 +76,118 @@ public class RobotContainer {
             )
         );
 
-        //Pathplanner commands - templates
+        // Pathplanner commands - templates
         NamedCommands.registerCommand("marker1", Commands.print("Finished 1 Piece"));
         NamedCommands.registerCommand("marker2", Commands.print("Finished 3-4 Piece"));
 
-        NamedCommands.registerCommand("Start Intake", commandIntakeIn);
-        //NamedCommands.registerCommand("Start Intake", new RunCommand(() -> m_intake.startIndexMotor(), m_intake));
-        NamedCommands.registerCommand("Stop Intake", commandIntakeStop);
-        NamedCommands.registerCommand("Reverse Intake", commandIntakeOut);
+        NamedCommands.registerCommand("Start Intake", m_intake.collectNote());
+        NamedCommands.registerCommand("Intake To Index", m_intake.passNoteToIndex());
 
-        // NamedCommands.registerCommand("Go To Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To Sub Positon", Commands.runOnce(() -> m_SAT.goBaseToSubPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To Trap Positon", Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To Base Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To Base AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To Base Sub Positon", Commands.runOnce(() -> m_SAT.goToBaseSubPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To Base Trap Positon", Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To Base Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
-        
 
-        //  NamedCommands.registerCommand("Go To Pivot Podium Positon", Commands.runOnce(() -> m_SAT.goToPivotPodiumPosition(), m_SAT));
-        //  NamedCommands.registerCommand("Go To Pivot AMP Positon", Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT));
-        //  NamedCommands.registerCommand("Go To Pivot Sub Positon", Commands.runOnce(() -> m_SAT.goToPivotSubPosition(), m_SAT));
-        //  NamedCommands.registerCommand("Go To Pivot Trap Positon", Commands.runOnce(() -> m_SAT.goToPivotTrapPosition(), m_SAT));
-        //  NamedCommands.registerCommand("Go To Pivot Zero Positon", Commands.runOnce(() -> m_SAT.goToPivotZeroPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Pivot Podium Positon", Commands.runOnce(() -> m_SAT.goToPivotPodiumPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Pivot AMP Positon", Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Pivot Sub Positon", Commands.runOnce(() -> m_SAT.goToPivotSubPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Pivot Trap Positon", Commands.runOnce(() -> m_SAT.goToPivotTrapPosition(), m_SAT));
+        // NamedCommands.registerCommand("Go To Pivot Zero Positon", Commands.runOnce(() -> m_SAT.goToPivotZeroPosition(), m_SAT));
          
         //Auto chooser
         autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`
         SmartDashboard.putData("Auto Mode", autoChooser);
     }
 
-    // /**
-    //  * Use this method to define your button->command mappings. Buttons can be created by
-    //  * instantiating a {@link GenericHID} or one of its subclasses ({@link
-    //  * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-    //  * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-    //  */
     public void configureButtonBindings() {
-
-
-
-
-    operator.axisGreaterThan(5, 0.5)
-        .whileTrue(
-            m_climber.climbDownCommand()
-
-        );
-
-
-    operator.axisLessThan(5, -0.5)
-        .whileTrue(
-            m_climber.climbUpCommand()
-
-        );
-
-    operator.axisLessThan(5, 0.5)
-        .whileTrue(
-            m_climber.climbMotorStop()
-        );
-
-
-    operator.axisGreaterThan(5, -0.5)
-        .whileTrue(
-            m_climber.climbMotorStop()
-        );
-       
+        /************************/
+        /*                      */
+        /*    Driver Buttons    */
+        /*                      */
+        /************************/
         
-    operator.axisGreaterThan(1, 0.5)
-        .whileTrue(
-            m_climber.climbMidLeftCommand()
-        );
-
-
-    operator.axisLessThan(1, -0.5)
-        .whileTrue(
-            m_climber.climbMidRightCommand()
-        );
-
-
-
-
-
-
-    operator.y()
-        .whileTrue(
-            m_climber.climbDownRightCommand()
-        );
-
-
-    operator.x()
-        .whileTrue(
-            m_climber.climbUpRightCommand()
-        );
-       
-        
-    operator.a()
-        .whileTrue(
-            m_climber.climbUpLeftCommand()
-        );
-
-
-    operator.b()
-        .whileTrue(
-            m_climber.climbDownLeftCommand()
-        );
-        
-    
-
-
-
-
-
-
-        /* Driver Buttons */
         // driver.y()
-        //    .onTrue(new InstantCommand(() -> s_Swerve.zeroHeading(), s_Swerve));  /// suggest commenting this out while we troubleshoot this
+        //    .onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
          
         // driver.povUp()
-        //     .onTrue(commandSwerveHeading0);
+        //     .onTrue(commandSwerveToHeading0);
         // driver.povLeft()
-        //     .onTrue(commandSwerveHeading90);
+        //     .onTrue(commandSwerveToHeading90);
         // driver.povDown()
-        //     .onTrue(commandSwerveHeading180);
+        //     .onTrue(commandSwerveToHeading180);
         // driver.povRight()
-        //     .onTrue(commandSwerveHeading270);
+        //     .onTrue(commandSwerveToHeading270);
 
         // driver.a()
-        //     .onTrue(commandNoteIntake);
-        // driver.a()
-        //     .onTrue(commandNoteIntake);
+        //     .onTrue(commandSwerveToNote.alongWith(m_intake.collectNote()));
 
-        //driver.leftTrigger()
+        // driver.leftTrigger()
         //     .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
-        //driver.rightTrigger()
+        // driver.rightTrigger()
         //     .onTrue(Commands.runOnce(() -> m_SAT.stopShooter(), m_SAT));
 
 
+        /************************/
+        /*                      */
+        /*   Operator Buttons   */
+        /*                      */
+        /************************/
+
+        operator.axisGreaterThan(5, 0.5)
+            .whileTrue(
+                m_climber.climbDownCommand()
+            );
+
+        operator.axisLessThan(5, -0.5)
+            .whileTrue(
+                m_climber.climbUpCommand()
+            );
+
+        operator.axisLessThan(5, 0.5)
+            .whileTrue(
+                m_climber.climbMotorStop()
+            );
+
+        operator.axisGreaterThan(5, -0.5)
+            .whileTrue(
+                m_climber.climbMotorStop()
+            );
+            
+        operator.axisGreaterThan(1, 0.5)
+            .whileTrue(
+                m_climber.climbMidLeftCommand()
+            );
+
+        operator.axisLessThan(1, -0.5)
+            .whileTrue(
+                m_climber.climbMidRightCommand()
+            );
+
+        operator.y()
+            .whileTrue(
+                m_climber.climbDownRightCommand()
+            );
+    
+        operator.x()
+            .whileTrue(
+                m_climber.climbUpRightCommand()
+            );
+            
+        operator.a()
+            .whileTrue(
+                m_climber.climbUpLeftCommand()
+            );
+    
+        operator.b()
+            .whileTrue(
+                m_climber.climbDownLeftCommand()
+            );
         // operator.x()
-        // .onTrue(
-        //     Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT)
-        // .andThen(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT))
-        // );
-        /* Operator Buttons */
+        //     .onTrue(
+        //         Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT)
+        //         .andThen(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT))
+        //     );
         // operator.a()
         //     .onTrue(commandGoToBaseZeroPosition.andThen(commandGoToPivotZeroPosition));
         
@@ -252,31 +216,36 @@ public class RobotContainer {
         //     .onTrue(commandGoToBaseAmpPosition.andThen(commandGoToPivotAmpPosition));
 
         // operator.start()
-        //     .whileTrue(new RunCommand(() -> m_intake.startIntakeIndexerMotors(), m_intake));
+        //     .onTrue(m_intake.collectNote());
 
         // operator.pov(0)
-        //     .onTrue(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
+        //     .onTrue(Commands.run(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
 
         // operator.pov(180)
-        //     .onTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.05), m_SAT));
-        
-        // operator.back() 
-        //     .onTrue(commandIntakeOut); // not reporting to SmartDashboard
+        //     .onTrue(Commands.run(() -> m_SAT.baseGoToPosition(-0.05), m_SAT));
 
         // operator.leftBumper()
-        //     .onTrue(new RunCommand(() -> m_SAT.shootNote(true), m_SAT));
+        //     .onTrue(Commands.run(() -> m_SAT.shootNote(true), m_SAT));
 
         // operator.rightBumper()
-        //     .onTrue(new RunCommand(() -> m_SAT.shootNote(false), m_SAT));
+        //     .onTrue(Commands.run(() -> m_SAT.shootNote(false), m_SAT));
         
         operator.start()
-            .whileTrue(new RunCommand(() -> m_intake.startIntakeIndexerMotors()));
+            .whileTrue(commandOverrideIntakeStart.alongWith(commandOverrideIndexStart));
 
         operator.start()
-            .whileFalse(new RunCommand(() -> m_intake.stopIntakeIndexerMotors()));
-
-        // operator.back()
-        //     .onTrue(new RunCommand(() -> m_intake.stopIntakeIndexerMotors()));
+            .whileFalse(commandOverrideIntakeStop.alongWith(commandOverrideIndexStop));
+        
+        if (m_intake.simulationDebugMode) {
+            operator.a()
+                .onTrue(Commands.runOnce(() -> {m_intake.setLowerSensorDetectsNote(true);}));
+            operator.b()
+                .onTrue(Commands.runOnce(() -> {m_intake.setUpperSensorDetectsNote(true);}));
+            operator.x()
+                .onTrue(Commands.runOnce(() -> {m_intake.setLowerSensorDetectsNote(false);}));
+            operator.y()
+                .onTrue(Commands.runOnce(() -> {m_intake.setUpperSensorDetectsNote(false);}));
+        }
     }
 
     /**

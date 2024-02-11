@@ -2,24 +2,19 @@ package frc.robot.commands;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.vision.CustomGamePieceVision;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
-
-public class CommandNoteIntake extends Command {    
+public class CommandSwerveToNote extends Command {    
     private Swerve s_Swerve;
-    private Intake m_intake;
     private CustomGamePieceVision m_CustomGamePieceVision;
 
-    public CommandNoteIntake(Swerve s_Swerve, Intake m_intake, CustomGamePieceVision m_CustomGamePieceVision) {
+    public CommandSwerveToNote(Swerve s_Swerve, CustomGamePieceVision m_CustomGamePieceVision) {
         this.s_Swerve = s_Swerve;
-        this.m_intake = m_intake;
         this.m_CustomGamePieceVision = m_CustomGamePieceVision;
         addRequirements(s_Swerve);
-        addRequirements(m_intake);
         addRequirements(m_CustomGamePieceVision);
     }
 
@@ -35,7 +30,6 @@ public class CommandNoteIntake extends Command {
             false, 
             true
         );
-        m_intake.stopIntakeMotor();
     }
   
     @Override
@@ -47,12 +41,11 @@ public class CommandNoteIntake extends Command {
             false, 
             true
         );
-        m_intake.startIntakeMotor();
-
     }
   
     @Override
     public boolean isFinished() {
-      return m_intake.detectNote() == false;
+        // Should return true when no note is seen?
+        return false;
     }
 }

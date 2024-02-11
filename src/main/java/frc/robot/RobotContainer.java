@@ -3,17 +3,20 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import frc.robot.commands.CommandOverrideIndexStart;
+import frc.robot.commands.CommandOverrideIndexStop;
+import frc.robot.commands.CommandOverrideIntakeStart;
+import frc.robot.commands.CommandOverrideIntakeStop;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.climber.climber;
-import frc.robot.subsystems.vision.CustomGamePieceVision;
 import frc.robot.subsystems.intake.Intake;
 
 /**
@@ -29,7 +32,7 @@ public class RobotContainer {
 
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
-    // public final SAT m_SAT = new SAT();
+    public final SAT m_SAT = new SAT();
     public final Intake m_intake = new Intake();
     public final climber m_climber = new climber();
     //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
@@ -134,62 +137,70 @@ public class RobotContainer {
         /*                      */
         /************************/
 
-        operator.axisGreaterThan(5, 0.5)
-            .whileTrue(
-                m_climber.climbDownCommand()
-            );
-
-        operator.axisLessThan(5, -0.5)
-            .whileTrue(
-                m_climber.climbUpCommand()
-            );
-
-        operator.axisLessThan(5, 0.5)
-            .whileTrue(
-                m_climber.climbMotorStop()
-            );
-
-        operator.axisGreaterThan(5, -0.5)
-            .whileTrue(
-                m_climber.climbMotorStop()
-            );
-            
-        operator.axisGreaterThan(1, 0.5)
-            .whileTrue(
-                m_climber.climbMidLeftCommand()
-            );
-
-        operator.axisLessThan(1, -0.5)
-            .whileTrue(
-                m_climber.climbMidRightCommand()
-            );
-
-        operator.y()
-            .whileTrue(
-                m_climber.climbDownRightCommand()
-            );
-    
-        operator.x()
-            .whileTrue(
-                m_climber.climbUpRightCommand()
-            );
-            
-        operator.a()
-            .whileTrue(
-                m_climber.climbUpLeftCommand()
-            );
-    
-        operator.b()
-            .whileTrue(
-                m_climber.climbDownLeftCommand()
-            );
-        // operator.x()
-        //     .onTrue(
-        //         Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT)
-        //         .andThen(Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT))
+        // operator.axisGreaterThan(5, 0.5)
+        //     .whileTrue(
+        //         m_climber.climbDownCommand()
         //     );
+
+        // operator.axisLessThan(5, -0.5)
+        //     .whileTrue(
+        //         m_climber.climbUpCommand()
+        //     );
+
+        // operator.axisLessThan(5, 0.5)
+        //     .whileTrue(
+        //         m_climber.climbMotorStop()
+        //     );
+
+        // operator.axisGreaterThan(5, -0.5)
+        //     .whileTrue(
+        //         m_climber.climbMotorStop()
+        //     );
+            
+        // operator.axisGreaterThan(1, 0.5)
+        //     .whileTrue(
+        //         m_climber.climbMidLeftCommand()
+        //     );
+
+        // operator.axisLessThan(1, -0.5)
+        //     .whileTrue(
+        //         m_climber.climbMidRightCommand()
+        //     );
+
+        // operator.y()
+        //     .whileTrue(
+        //         m_climber.climbDownRightCommand()
+        //     );
+    
+        // operator.x()
+        //     .whileTrue(
+        //         m_climber.climbUpRightCommand()
+        //     );
+            
         // operator.a()
-        //     .onTrue(commandGoToBaseZeroPosition.andThen(commandGoToPivotZeroPosition));
+        //     .whileTrue(
+        //         m_climber.climbUpLeftCommand()
+        //     );
+    
+        // operator.b()
+        //     .whileTrue(
+        //         m_climber.climbDownLeftCommand()
+        //     );
+
+        operator.pov(0)
+            .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
+
+        operator.pov(180)
+            .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.05), m_SAT));
+
+        operator.pov(0).and(operator.pov(180))
+            .onFalse(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
+
+        operator.x()
+            .onTrue(new RunCommand(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
+
+        operator.b()
+            .onTrue(new RunCommand(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
         
         // operator.b()
         //     .and(operator.axisGreaterThan(1, 0.6))
@@ -217,12 +228,6 @@ public class RobotContainer {
 
         // operator.start()
         //     .onTrue(m_intake.collectNote());
-
-        // operator.pov(0)
-        //     .onTrue(Commands.run(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
-
-        // operator.pov(180)
-        //     .onTrue(Commands.run(() -> m_SAT.baseGoToPosition(-0.05), m_SAT));
 
         // operator.leftBumper()
         //     .onTrue(Commands.run(() -> m_SAT.shootNote(true), m_SAT));

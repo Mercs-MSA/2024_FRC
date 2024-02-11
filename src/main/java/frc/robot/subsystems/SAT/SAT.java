@@ -4,21 +4,19 @@
 
 package frc.robot.subsystems.SAT;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.SATConstants;
-import frc.robot.sim.PhysicsSim;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 
-//  USE NEXT LINE FOR TESTING
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.SATConstants;
 import frc.robot.sim.PhysicsSim;
 
 public class SAT extends SubsystemBase {
@@ -29,27 +27,19 @@ public class SAT extends SubsystemBase {
   private final TalonFX satShooter1Motor = new TalonFX(SATConstants.SAT_SHOOTER1_MOTOR_ID);
   private final TalonFX satShooter2Motor = new TalonFX(SATConstants.SAT_SHOOTER2_MOTOR_ID);
 
-  private final Follower Base2_Follower = new Follower(SATConstants.SAT_BASE1_MOTOR_ID, true);
   private final Follower Shooter2_Follower = new Follower(SATConstants.SAT_SHOOTER1_MOTOR_ID, true);
   private final VelocityVoltage satShooter1_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
-  private final PositionVoltage satPivotMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false,
-      false);
+  private final PositionVoltage satPivotMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final PositionVoltage satBase1_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
-  // private final PositionVoltage satBase2_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
+  private final PositionVoltage satBase2_voltagePosition = satBase1_voltagePosition.clone();
 
-  double base1MotorPos;
-  double base2MotorPos;
-  double pivotMotorPos;
-
-  /** this was named by gaurav */
-/*   Servo SATTEamisDumb = new Servo(Constants.SATConstants.SAT_SERVO1_SERVO_ID);
-  Servo SATServo2 = new Servo(Constants.SATConstants.SAT_SERVO2_SERVO_ID);
-  Servo SATServo3 = new Servo(Constants.SATConstants.SAT_SERVO3_SERVO_ID);
-  Servo SATServo4 = new Servo(Constants.SATConstants.SAT_SERVO4_SERVO_ID); */
+  double base1MotorPos, base2MotorPos, pivotMotorPos;
 
   boolean B_Button_Value;
   double Y_axis_Value;
   double targetPose = 0.0;
+
+  TalonFXConfiguration satBase1MotorConfigs, satBase2MotorConfigs;
 
   // private final DigitalInput satObjectDectecter = new DigitalInput(Constants.SATConstants.SAT_OBJECTDETECTOR_SENSOR_ID);
 
@@ -59,27 +49,30 @@ public class SAT extends SubsystemBase {
     /**
      * this stuff happens ONCE, when the code enables, NOT WHEN THE ROBOT ENABLES
      */
-    TalonFXConfiguration satBase1MotorConfigs = new TalonFXConfiguration();
+    satBase1MotorConfigs = new TalonFXConfiguration();
     satBase1MotorConfigs.Slot0.kP = 1.0; // An error of 0.5 rotations results in 1.2 volts output
     satBase1MotorConfigs.Slot0.kD = 0; // A change of 1 rotation per second results in 0 volts output
     satBase1MotorConfigs.Slot0.kG = 0.0;
-    satBase1MotorConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    satBase1MotorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
     // Peak output of 8 volts
     satBase1MotorConfigs.Voltage.PeakForwardVoltage = 14;
     satBase1MotorConfigs.Voltage.PeakReverseVoltage = -14;
     satBase1MotorConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.2;
     satBase1MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
-    //satBase1MotorConfigs.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-    //satBase1MotorConfigs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.5;
 
- /*    TalonFXConfiguration satBase2MotorConfigs = new TalonFXConfiguration();
+    satBase2MotorConfigs = new TalonFXConfiguration();
     satBase2MotorConfigs.Slot0.kP = 1.0; // An error of 0.5 rotations results in 1.2 volts output
-    satBase2MotorConfigs.Slot0.kD = 0; // A change of 1 rotation per second results in 0.1 volts output
-    satBase2MotorConfigs.Slot0.kG = 0; */
+    satBase2MotorConfigs.Slot0.kD = 0; // A change of 1 rotation per second results in 0 volts output
+    satBase2MotorConfigs.Slot0.kG = 0.0;
+    satBase2MotorConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
     // Peak output of 8 volts
-    // satBase2MotorConfigs.Voltage.PeakForwardVoltage = 3;
-    // satBase2MotorConfigs.Voltage.PeakReverseVoltage = -11;
+    satBase2MotorConfigs.Voltage.PeakForwardVoltage = 14;
+    satBase2MotorConfigs.Voltage.PeakReverseVoltage = -14;
+    satBase2MotorConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.2;
+    satBase2MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
+
 
     TalonFXConfiguration satPivotMotorConfigs = new TalonFXConfiguration();
     satPivotMotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
@@ -122,7 +115,7 @@ public class SAT extends SubsystemBase {
       System.out.println("Could not apply configs, error code: " + status.toString());
     }
 
-    // STATUS FOR pIVOT
+    // STATUS FOR PIVOT
     StatusCode status3 = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
       status = satPivotMotor.getConfigurator().apply(satPivotMotorConfigs);
@@ -156,7 +149,6 @@ public class SAT extends SubsystemBase {
     }
 
     /* PUT FOLLOW SYSTEMS HERE */
-    satBase2Motor.setControl(Base2_Follower);
     satShooter2Motor.setControl(Shooter2_Follower);
 
     satBase1Motor.setPosition(0);
@@ -165,24 +157,11 @@ public class SAT extends SubsystemBase {
 
     targetPose = satBase1Motor.getPosition().getValueAsDouble();
 
-    // USE NEXT LINE FOR TESTING
     PhysicsSim.getInstance().addTalonFX(satBase1Motor, 0.001);
     PhysicsSim.getInstance().addTalonFX(satBase2Motor, 0.001);
     PhysicsSim.getInstance().addTalonFX(satPivotMotor, 0.001);
     PhysicsSim.getInstance().addTalonFX(satShooter1Motor, 0.001);
     PhysicsSim.getInstance().addTalonFX(satShooter2Motor, 0.001);
-  }
-
-  public double outputBase1Data() {
-    return base1MotorPos;
-  }
-
-  public double outputBase2Data() {
-    return base2MotorPos;
-  }
-
-  public double outputPivotData() {
-    return pivotMotorPos;
   }
 
   @Override
@@ -194,16 +173,17 @@ public class SAT extends SubsystemBase {
     pivotMotorPos = satPivotMotor.getPosition().getValue();
 
     SmartDashboard.putNumber("base1MotorPos", base1MotorPos);
-    SmartDashboard.putNumber("baseqMotorVoltage", satBase1Motor.getMotorVoltage().getValueAsDouble());
-    SmartDashboard.putNumber("base1 command", targetPose);    
     SmartDashboard.putNumber("base2MotorPos", base2MotorPos);
+
+    SmartDashboard.putNumber("base1MotorVoltage", satBase1Motor.getMotorVoltage().getValueAsDouble());
+    SmartDashboard.putNumber("base2MotorVoltage", satBase2Motor.getMotorVoltage().getValueAsDouble());
+
     SmartDashboard.putNumber("pivotMotorPos", pivotMotorPos);
     SmartDashboard.putNumber("shooter speed", satShooter1Motor.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("shooter command", satShooter1Motor.getClosedLoopReference().getValueAsDouble());
 
-  }  
-  
-  // USE FOR TESTING ALSO
+  }
+
   @Override
   public void simulationPeriodic() {
     PhysicsSim.getInstance().run();
@@ -211,75 +191,91 @@ public class SAT extends SubsystemBase {
   
   public void goToBasePodiumPosition() {
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
-    
+    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_PODIUM_POS));
   }
 
-  public void baseGoToPosition(double joystick){
-    targetPose = targetPose + (joystick);
-    //if (targetPose > -5 && targetPose < 20){
+  public void baseGoToPosition(double increment) {
+    targetPose = targetPose + (increment);
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(targetPose));
-    //}
-    
-  }
-
-   public void goToPivotPodiumPosition() {
-    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_PODIUM_POS));
-    
+    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(targetPose));
   }
 
   public void goToBaseSubPosition() {
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));
-    
-  }
-   public void goToPivotSubPosition() {
-    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_SUB_POS));
-    
+    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_SUB_POS));    
   }
 
   public void goToBaseAmpPosition() {
-
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
-   
-
-  }
-   public void goToPivotAmpPosition() {
-    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_AMP_POS));
-    
+    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_AMP_POS));
   }
 
   public void goToBaseTrapPosition() {
-
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
-  }
-   
-
-   public void goToPivotTrapPosition() {
-    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_TRAP_POS));
-    
+    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_TRAP_POS));
   }
 
   public void goToBaseZeroPosition() {
-
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.BASE_START_POS));
-   
+    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.BASE_START_POS));
+  }
 
+   public void goToPivotPodiumPosition() {
+    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_PODIUM_POS));
+  }
+
+   public void goToPivotSubPosition() {
+    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_SUB_POS)); 
+  }
+
+   public void goToPivotAmpPosition() {
+    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_AMP_POS));    
+  }
+
+   public void goToPivotTrapPosition() {
+    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_TRAP_POS));    
   }
 
    public void goToPivotZeroPosition() {
-    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_START_POS));
-    
+    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_START_POS)); 
   }
 
-  public void shootNote() {
-   
-      //satShooter1Motor.set(Constants.SATConstants.SHOOTER_SPEED);
-      satShooter1Motor.setControl(satShooter1_voltageVelocity.withVelocity(Constants.SATConstants.SHOOTER_SPEED));
-    }
+  public void shootNote() { 
+    satShooter1Motor.setControl(satShooter1_voltageVelocity.withVelocity(Constants.SATConstants.SHOOTER_SPEED)); 
+  }
 
   public void stopShooter() {
-      satShooter1Motor.setControl(new NeutralOut());
-    }
-
-    // satShooter2Motor.set(Constants.SATConstants.SHOOTER_SPEED);
-
+    satShooter1Motor.setControl(new NeutralOut());
   }
+
+  public boolean isWithinTol(double targetPose, double currentPose, double tolerance){
+    if (Math.abs(targetPose - currentPose) <= tolerance){
+        return true;
+    }
+    else {
+        return false;
+    }
+  }
+
+  public double getBase1Pos() {
+    return base1MotorPos;
+  }
+
+  public double getBase2Pos() {
+    return base2MotorPos;
+  }
+
+  public double getPivotPos() {
+    return pivotMotorPos;
+  }
+
+  public enum BaseMotorsPosition {
+    BASE_PODIUM_POS,
+    BASE_SUB_POS,
+    BASE_AMP_POS,
+    BASE_TRAP_POS,
+    BASE_START_POS
+}
+
+
+}

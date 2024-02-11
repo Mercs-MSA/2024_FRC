@@ -188,6 +188,12 @@ public class SAT extends SubsystemBase {
     SmartDashboard.putNumber("shooter speed", shooterMotorSpeed);
     SmartDashboard.putNumber("shooter command", satShooter1Motor.getClosedLoopReference().getValueAsDouble());
 
+    SmartDashboard.putNumber("Base1 Motor Temperature", satBase1Motor.getDeviceTemp().getValueAsDouble());
+    SmartDashboard.putNumber("Base2 Motor Temperature", satBase2Motor.getDeviceTemp().getValueAsDouble());
+    SmartDashboard.putNumber("Pivot Motor Temperature", satPivotMotor.getDeviceTemp().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter Motor1 Temperature", satShooter1Motor.getDeviceTemp().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter Motor2 Temperature", satShooter2Motor.getDeviceTemp().getValueAsDouble());
+
   }
 
   @Override

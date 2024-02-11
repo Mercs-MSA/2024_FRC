@@ -231,10 +231,10 @@ public class RobotContainer {
         //     .onTrue(Commands.run(() -> m_SAT.shootNote(false), m_SAT));
         
         operator.start()
-            .whileTrue(commandOverrideIntakeStart.alongWith(commandOverrideIndexStart));
+            .whileTrue(commandOverrideIntakeStart.andThen(commandOverrideIndexStart));
 
         operator.start()
-            .whileFalse(commandOverrideIntakeStop.alongWith(commandOverrideIndexStop));
+            .whileFalse(commandOverrideIntakeStop.andThen(commandOverrideIndexStop));
         
         if (m_intake.simulationDebugMode) {
             operator.a()

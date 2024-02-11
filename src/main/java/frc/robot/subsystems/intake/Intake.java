@@ -245,33 +245,17 @@ public class Intake extends SubsystemBase {
         .andThen(commandIntakeProcess)
         .andThen(commandIntakeHold);
   }
-
+  
   /*
-   * This is a command chain for the intake side of handoff
-   */
-  private Command intakeNoteHandoff() {
-    return commandIntakeIndex
-        .andThen(commandIntakeIdle);
-  }
-
-  /*
-   * This is a command chain for the index side of handoff
-   */
-  private Command indexNoteHandoff() {
-    return commandIndexStart
-          .andThen(commandIndexIntake)
-          .andThen(commandIndexProcess)
-          .andThen(commandIndexHold);
-  }
-
-  /*
-   * This is a command chain that runs both sides if handoff at the same time
-   */
+  * This is a command chain that runs both sides if handoff at the same time
+  */
   private Command intakeAndIndexHandoff() {
-    return intakeNoteHandoff()
-        .alongWith(
-          indexNoteHandoff()
-        );
+    return commandIndexStart
+        .andThen(commandIntakeIndex)
+        .andThen(commandIndexIntake)
+        .andThen(commandIndexProcess)
+        .andThen(commandIntakeIdle)
+        .andThen(commandIndexHold);
   }
 
   /*

@@ -276,23 +276,15 @@ public final class Constants {
         public static final double kMaxOutput = 1;
         public static final double kMinOutput = -1;
 
-
-        public static baseState currentBaseState = baseState.START;
-        public enum baseState{
-            START, 
-            PODIUM, 
+        public static Position state = Position.START;
+        public static enum Position {
+            PODIUM,
+            SUB,
             AMP,
-            SUB, 
-            TRAP
-        }  
-        public static pivotState currentPivotState = pivotState.START;
-        public enum pivotState{
+            TRAP,
             START, 
-            PODIUM, 
-            AMP,
-            SUB, 
-            TRAP
-        } 
+            MOVING
+          }
     }
        
     public static final class climberConstants
@@ -313,11 +305,11 @@ public final class Constants {
 
       public static final double LEFT_MID_POSITION = -60;
       public static final double RIGHT_MID_POSITION = 51;
-
-
-
-
     
+    }
+
+    public static class Vision {
+        public static boolean isNoteDetected = false;
     }
 
     public static final class State {

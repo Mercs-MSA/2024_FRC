@@ -7,6 +7,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
 public class CustomGamePieceVision extends SubsystemBase{
@@ -29,9 +30,9 @@ public class CustomGamePieceVision extends SubsystemBase{
     @Override
     public void periodic(){
         gamePieceYaw = yawSubscriber.get();
-
-        // Update SmartDashboard for game piece
         SmartDashboard.putNumber("Game Piece Yaw", gamePieceYaw);
+        Constants.Vision.isNoteDetected = (gamePieceYaw != 999.0);
+        
     }
 
     /**

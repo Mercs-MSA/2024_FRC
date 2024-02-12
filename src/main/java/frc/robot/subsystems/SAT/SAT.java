@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.SAT;
 
+import javax.swing.text.Position;
+
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
@@ -37,6 +39,8 @@ public class SAT extends SubsystemBase {
   double baseTargetPose, pivotTargetPose = 0.0;
 
   TalonFXConfiguration satBase1MotorConfigs, satBase2MotorConfigs;
+
+  private Position globalPosition;
 
   // private final DigitalInput satObjectDectecter = new DigitalInput(Constants.SATConstants.SAT_OBJECTDETECTOR_SENSOR_ID);
 
@@ -279,26 +283,31 @@ public class SAT extends SubsystemBase {
 
     switch (position) {
       case "podium":
+        Constants.SATConstants.state = Constants.SATConstants.Position.PODIUM;
         baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_PODIUM_POS;
         baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_PODIUM_POS;
         pivotTargetPos = Constants.SATConstants.PIVOT_PODIUM_POS;
         break;
       case "sub":
+        Constants.SATConstants.state = Constants.SATConstants.Position.SUB;
         baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_SUB_POS;
         baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_SUB_POS;
         pivotTargetPos = Constants.SATConstants.PIVOT_SUB_POS;
         break;
       case "amp":
+        Constants.SATConstants.state = Constants.SATConstants.Position.AMP;
         baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_AMP_POS;
         baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_AMP_POS;
         pivotTargetPos = Constants.SATConstants.PIVOT_AMP_POS;
         break;
       case "trap":
+        Constants.SATConstants.state = Constants.SATConstants.Position.TRAP;
         baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_TRAP_POS;
         baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_TRAP_POS;
         pivotTargetPos = Constants.SATConstants.PIVOT_TRAP_POS;
         break;
       case "start":
+        Constants.SATConstants.state = Constants.SATConstants.Position.START;
         baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_START_POS;
         baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_START_POS;
         pivotTargetPos = Constants.SATConstants.PIVOT_START_POS;
@@ -344,21 +353,4 @@ public class SAT extends SubsystemBase {
   public double getShooterSpeed() {
     return shooterMotorSpeed;
   }
-
-  public enum BaseMotorsPosition {
-    BASE_PODIUM_POS,
-    BASE_SUB_POS,
-    BASE_AMP_POS,
-    BASE_TRAP_POS,
-    BASE_START_POS
-  }
-
-  public enum PivotMotorPosition {
-    PIVOT_PODIUM_POS,
-    PIVOT_SUB_POS,
-    PIVOT_AMP_POS,
-    PIVOT_TRAP_POS,
-    PIVOT_START_POS
-  }
-
 }

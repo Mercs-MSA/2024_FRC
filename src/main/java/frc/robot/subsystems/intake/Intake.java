@@ -282,9 +282,7 @@ public class Intake extends SubsystemBase {
    * This determines if we're allowed to run handoff
    */
   private boolean handoffAllowed() {
-    return IntakeConstants.currentIntakeState == IntakeConstants.intakeState.HOLD && 
-      SATConstants.currentBaseState == SATConstants.baseState.START &&
-      SATConstants.currentPivotState == SATConstants.pivotState.START;
+    return IntakeConstants.currentIntakeState == IntakeConstants.intakeState.HOLD && SATConstants.state == SATConstants.state.START;
   }
 
   /*

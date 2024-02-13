@@ -240,25 +240,25 @@ public final class Constants {
         public static final int SAT_OBJECTDETECTOR_SENSOR_ID = 1;
 
         /*lift start positions */
-        public static final double MOTOR1_BASE_START_POS = -0.4;
-        public static final double MOTOR2_BASE_START_POS = -0.4;
-        public static final double PIVOT_START_POS = 0.4;
+        public static final double MOTOR1_BASE_START_POS = 0.155;
+        public static final double MOTOR2_BASE_START_POS = 0.342;
+        public static final double PIVOT_START_POS = 0.1;
         /*podium scoring position */
-        public static final double MOTOR1_BASE_PODIUM_POS = -3.717;
-        public static final double MOTOR2_BASE_PODIUM_POS = -3.717;
+        public static final double MOTOR1_BASE_PODIUM_POS = -1.575;
+        public static final double MOTOR2_BASE_PODIUM_POS = -1.723;
         public static final double PIVOT_PODIUM_POS = 0.4;
         /*SUBWOOFER scoring position */
         public static final double MOTOR1_BASE_SUB_POS = -7.026;
         public static final double MOTOR2_BASE_SUB_POS = -7.026;
         public static final double PIVOT_SUB_POS = 0.4;
         /*AMP scoring position */
-        public static final double MOTOR1_BASE_AMP_POS = -19.0;
-        public static final double MOTOR2_BASE_AMP_POS = -19.0;
-        public static final double PIVOT_AMP_POS = 7.0;
+        public static final double MOTOR1_BASE_AMP_POS = -16.16;
+        public static final double MOTOR2_BASE_AMP_POS = -16.26;
+        public static final double PIVOT_AMP_POS = 33.8;
         /*TRAP scoring position */
-        public static final double MOTOR1_BASE_TRAP_POS = -13.803;
-        public static final double MOTOR2_BASE_TRAP_POS = -13.803;
-        public static final double PIVOT_TRAP_POS = 41.665;
+        public static final double MOTOR1_BASE_TRAP_POS = 0.2;
+        public static final double MOTOR2_BASE_TRAP_POS = 0.4;
+        public static final double PIVOT_TRAP_POS = 0.1;
 
         public static final double SHOOTER_SPEED = 70;
 

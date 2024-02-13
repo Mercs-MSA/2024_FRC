@@ -193,6 +193,12 @@ public class RobotContainer {
         operator.pov(180)
             .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.05), m_SAT));
 
+        operator.pov(90)
+            .whileTrue(new RunCommand(() -> m_SAT.pivotGoToPosition(0.05), m_SAT));
+
+        operator.pov(270)
+            .whileTrue(new RunCommand(() -> m_SAT.pivotGoToPosition(-0.05), m_SAT));
+
         //operator.pov(0).and(operator.pov(180))
         //    .onFalse(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
 
@@ -229,17 +235,23 @@ public class RobotContainer {
         // operator.start()
         //     .onTrue(m_intake.collectNote());
 
-        // operator.leftBumper()
-        //     .onTrue(Commands.run(() -> m_SAT.shootNote(true), m_SAT));
+        operator.leftBumper()
+             .onTrue(Commands.run(() -> m_SAT.shootNote(), m_SAT));
 
-        // operator.rightBumper()
-        //     .onTrue(Commands.run(() -> m_SAT.shootNote(false), m_SAT));
+        operator.rightBumper()
+             .onTrue(Commands.run(() -> m_SAT.stopShooter(), m_SAT));
+
+        operator.a()
+             .onTrue(Commands.run(() -> m_intake.startIndexMotor(), m_intake));
+
+        operator.b()
+             .onTrue(Commands.run(() -> m_intake.stopIndexMotor(), m_intake));
         
-        operator.start()
-            .whileTrue(commandOverrideIntakeStart.andThen(commandOverrideIndexStart));
+        //operator.start()
+         //   .whileTrue(commandOverrideIntakeStart.andThen(commandOverrideIndexStart));
 
-        operator.start()
-            .whileFalse(commandOverrideIntakeStop.andThen(commandOverrideIndexStop));
+        //operator.start()
+        //    .whileFalse(commandOverrideIntakeStop.andThen(commandOverrideIndexStop));
         
         if (m_intake.simulationDebugMode) {
             operator.a()

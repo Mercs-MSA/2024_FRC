@@ -274,10 +274,11 @@ public class SAT extends SubsystemBase {
  * @param position The position to move to. Valid values: "podium", "sub", "amp", "trap", "start".
  * @param movePivotFirst If true, moves the pivot motor first. If false, moves the base motors first.
  */
-  public void moveBothBaseAndPivot(String position, boolean movePivotFirst) {
+  public void moveBothBaseAndPivot(String position) {
     double baseMotor1TargetPos;
     double baseMotor2TargetPos;
     double pivotTargetPos;
+    boolean movePivotFirst = true; 
 
     position = position.toLowerCase();
 
@@ -318,13 +319,17 @@ public class SAT extends SubsystemBase {
     }
 
     if (movePivotFirst) {
-      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(pivotTargetPos));
-      if (isWithinTol(pivotTargetPos, getPivotPos(), 0.1)) {
+      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_MECHANICALLY_REQUIRED_POS));
+      if (isWithinTol(Constants.SATConstants.PIVOT_MECHANICALLY_REQUIRED_POS, getPivotPos(), 0.1)) {
         satBase1Motor.setControl(satBase1_voltagePosition.withPosition(baseMotor1TargetPos));
         satBase2Motor.setControl(satBase2_voltagePosition.withPosition(baseMotor2TargetPos));
+        if (isWithinTol(baseMotor1TargetPos, getBase1Pos(), 0.1) && isWithinTol(baseMotor2TargetPos, getBase2Pos(), 0.1)){
+          satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(pivotTargetPos));
+        }
       }
     }
 
+    //can delete, leaving for testing, if needed
     if (!movePivotFirst) {
       satBase1Motor.setControl(satBase1_voltagePosition.withPosition(baseMotor1TargetPos));
       satBase2Motor.setControl(satBase2_voltagePosition.withPosition(baseMotor2TargetPos));

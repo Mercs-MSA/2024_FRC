@@ -260,6 +260,8 @@ public final class Constants {
         public static final double MOTOR2_BASE_TRAP_POS = 0.4;
         public static final double PIVOT_TRAP_POS = 0.1;
 
+        public static final double PIVOT_MECHANICALLY_REQUIRED_POS = 7.8;
+
         public static final double SHOOTER_SPEED = 70;
 
         /*THIS NEEDS TO INCLUDE THE CONVERSION FROM DEGREES TO ENCODER COUNTS */

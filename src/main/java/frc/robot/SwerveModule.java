@@ -55,7 +55,7 @@ public class SwerveModule {
         mDriveMotor.getConfigurator().setPosition(0.0);
 
         // Test code for CAN bus optimization tricks; disabled for now
-        //optimization_for_CAN();
+        optimization_for_CAN();
 
         // USE NEXT LINE FOR TESTING
         PhysicsSim.getInstance().addTalonFX(mAngleMotor, 0.001);
@@ -109,6 +109,7 @@ public class SwerveModule {
         StatusSignal<Double> m_DriveMotor_canbus1signal3 = mDriveMotor.getPosition();
         m_AngleEncoder_canbus1signal1.setUpdateFrequency(1);
         BaseStatusSignal.setUpdateFrequencyForAll(60, m_AngleMotor_canbus1signal2, m_DriveMotor_canbus1signal3);
-        ParentDevice.optimizeBusUtilizationForAll(angleEncoder, mDriveMotor, mDriveMotor);
+        angleEncoder.optimizeBusUtilization();
+        ParentDevice.optimizeBusUtilizationForAll(mDriveMotor, mDriveMotor);
     }
 }

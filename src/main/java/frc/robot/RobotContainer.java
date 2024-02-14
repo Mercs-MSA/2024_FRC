@@ -249,10 +249,10 @@ public class RobotContainer {
         // operator.start()
         //     .onTrue(m_intake.collectNote());
 
-        operator.leftBumper()
+        driver.leftBumper()
              .onTrue(Commands.run(() -> m_SAT.shootNote(), m_SAT));
 
-        operator.rightBumper()
+        driver.rightBumper()
              .onTrue(Commands.run(() -> m_SAT.stopShooter(), m_SAT));
 
         // operator.a()

@@ -56,6 +56,7 @@ public class SAT extends SubsystemBase {
      * this stuff happens ONCE, when the code enables, NOT WHEN THE ROBOT ENABLES
      */
     satBase1MotorConfigs = new TalonFXConfiguration();
+    satBase1MotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     satBase1MotorConfigs.Slot0.kP = 1.0; // An error of 0.5 rotations results in 1.2 volts output
     satBase1MotorConfigs.Slot0.kD = 0; // A change of 1 rotation per second results in 0 volts output
     satBase1MotorConfigs.Slot0.kG = 0.0;
@@ -68,6 +69,7 @@ public class SAT extends SubsystemBase {
     satBase1MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
 
     satBase2MotorConfigs = new TalonFXConfiguration();
+    satBase2MotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     satBase2MotorConfigs.Slot0.kP = 1.0; // An error of 0.5 rotations results in 1.2 volts output
     satBase2MotorConfigs.Slot0.kD = 0; // A change of 1 rotation per second results in 0 volts output
     satBase2MotorConfigs.Slot0.kG = 0.0;

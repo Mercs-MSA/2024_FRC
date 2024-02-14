@@ -255,14 +255,19 @@ public class RobotContainer {
         driver.rightBumper()
              .onTrue(Commands.run(() -> m_SAT.stopShooter(), m_SAT));
 
+        driver.pov(0).onTrue(Commands.run(() -> m_intake.startIntakeMotor(), m_intake));
+        driver.pov(180).onTrue(Commands.run(() -> m_intake.stopIntakeMotor(), m_intake));
+        driver.pov(90).onTrue(Commands.run(() -> m_intake.startIndexMotor(), m_intake));
+        driver.pov(270).onTrue(Commands.run(() -> m_intake.stopIndexMotor(), m_intake));
+
         // operator.a()
         //      .onTrue(Commands.run(() -> m_intake.startIndexMotor(), m_intake));
 
-        driver.a()
-             .onTrue(Commands.run(() -> m_intake.stopIntakeIndexerMotors(), m_intake));
+        //driver.a()
+        //     .onTrue(Commands.run(() -> m_intake.stopIntakeIndexerMotors(), m_intake));
         
-        driver.start()
-           .whileTrue(commandOverrideIntakeStart.andThen(commandOverrideIndexStart));
+        //driver.start()
+        //     .onTrue(commandOverrideIntakeStart.andThen(commandOverrideIndexStart));
 
         //operator.start()
         //    .whileFalse(commandOverrideIntakeStop.andThen(commandOverrideIndexStop));

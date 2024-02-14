@@ -1,16 +1,19 @@
 package frc.robot.commands;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SAT.SAT;
 
 public class CommandBasesPosition extends Command{
 
-    String target;
+    double target1;
+    double target2;
     public SAT m_SAT;
 
-    public CommandBasesPosition(String t, SAT s){
+    public CommandBasesPosition(double t1, double t2, SAT s){
 
-        target = t;
+        target1 = t1;
+        target2 = t2;
         m_SAT = s;
         addRequirements(m_SAT);
 
@@ -19,34 +22,9 @@ public class CommandBasesPosition extends Command{
 
     @Override
     public void initialize(){
+        m_SAT.moveBaseMotors(target1, target2); 
+        SmartDashboard.putString("base, I'm trying to go here: ", target1 + " " + target2);
 
-        if (target == "Podium"){
-            m_SAT.goToBasePodiumPosition();
-
-        }
-        else if (target == "Sub"){
-            m_SAT.goToBaseSubPosition();
-
-        }
-        else if (target == "Amp"){
-            m_SAT.goToBaseAmpPosition();
-
-        }
-        else if (target == "Trap"){
-            m_SAT.goToBaseTrapPosition();
-
-        }
-        else if (target == "Zero"){
-            m_SAT.goToBaseZeroPosition();
-
-        }
-        else if (target == "Wing"){
-
-
-        }
-
-
-        
     }
 
     @Override
@@ -57,45 +35,17 @@ public class CommandBasesPosition extends Command{
 
     @Override
     public void end(boolean interupted){
-
+        SmartDashboard.putBoolean("is base done?", isWithinTol(target1, m_SAT.getBase1Pos(), 0.1) && isWithinTol(target2, m_SAT.getBase2Pos(), 0.1));
     }
 
 
     @Override
     public boolean isFinished(){
-        if (target == "Podium"){
-            return isWithinTol(Constants.SATConstants.MOTOR1_BASE_PODIUM_POS, m_SAT.getBase1Pos(), 0.3);
-        }
-        else if (target == "Sub"){
-            return isWithinTol(Constants.SATConstants.MOTOR1_BASE_SUB_POS, m_SAT.getBase1Pos(), 0.3);
-
-        }
-        else if (target == "Amp"){
-            return isWithinTol(Constants.SATConstants.MOTOR1_BASE_AMP_POS, m_SAT.getBase1Pos(), 0.3);
-
-        }
-        else if (target == "Trap"){
-         return isWithinTol(Constants.SATConstants.MOTOR1_BASE_TRAP_POS, m_SAT.getBase1Pos(), 0.3);
-
-        }
-        else if (target == "Zero"){
-         return isWithinTol(0, m_SAT.getBase1Pos(), 0.3);
-
-        }
-        else {
-            return false;
-
-        }
+        return (isWithinTol(target1, m_SAT.getBase1Pos(), 0.1) && isWithinTol(target2, m_SAT.getBase2Pos(), 0.1));
 
     }
-
     public boolean isWithinTol(double targetPose, double currentPose, double tolerance){
-        if (Math.abs(targetPose - currentPose) <= tolerance){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return (Math.abs(targetPose - currentPose) <= tolerance);
     }
 
     

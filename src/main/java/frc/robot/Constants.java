@@ -248,9 +248,9 @@ public final class Constants {
         public static final double MOTOR2_BASE_PODIUM_POS = -1.723;
         public static final double PIVOT_PODIUM_POS = 0.4;
         /*SUBWOOFER scoring position */
-        public static final double MOTOR1_BASE_SUB_POS = -7.026;
-        public static final double MOTOR2_BASE_SUB_POS = -7.026;
-        public static final double PIVOT_SUB_POS = 0.4;
+        public static final double MOTOR1_BASE_SUB_POS = -18.5268;
+        public static final double MOTOR2_BASE_SUB_POS = -18.76;
+        public static final double PIVOT_SUB_POS = 1.7;
         /*AMP scoring position */
         public static final double MOTOR1_BASE_AMP_POS = -16.16;
         public static final double MOTOR2_BASE_AMP_POS = -16.26;

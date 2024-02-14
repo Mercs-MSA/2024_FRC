@@ -46,6 +46,7 @@ public class Swerve extends SubsystemBase {
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
+        gyro.optimizeBusUtilization();
         gyro.setYaw(0);
 
         mSwerveMods = new SwerveModule[] {

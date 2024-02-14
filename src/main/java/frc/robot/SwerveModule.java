@@ -40,15 +40,18 @@ public class SwerveModule {
         /* Angle Encoder Config */
         angleEncoder = new CANcoder(moduleConstants.cancoderID);
         angleEncoder.getConfigurator().apply(Robot.ctreConfigs.swerveCANcoderConfig);
+        angleEncoder.optimizeBusUtilization();
 
         /* Angle Motor Config */
         mAngleMotor = new TalonFX(moduleConstants.angleMotorID);
         mAngleMotor.getConfigurator().apply(Robot.ctreConfigs.swerveAngleFXConfig);
+        mAngleMotor.optimizeBusUtilization();
         resetToAbsolute();
 
         /* Drive Motor Config */
         mDriveMotor = new TalonFX(moduleConstants.driveMotorID);
         mDriveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
+        mDriveMotor.optimizeBusUtilization();
         mDriveMotor.getConfigurator().setPosition(0.0);
 
         // USE NEXT LINE FOR TESTING

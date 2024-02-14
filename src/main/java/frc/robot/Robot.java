@@ -88,7 +88,7 @@ public class Robot extends TimedRobot {
     //SmartDashboard.putData("Auto Mode", m_robotContainer.autoChooser);
 
     // SmartDashboard.putData(m_robotContainer.m_intake);
-    // SmartDashboard.putData(m_robotContainer.m_SAT);
+    SmartDashboard.putData(m_robotContainer.m_SAT);
   //  SmartDashboard.putData(m_robotContainer.m_climber);
     // SmartDashboard.putData(m_robotContainer.m_SAT);
     SmartDashboard.putData(m_robotContainer.s_Swerve);

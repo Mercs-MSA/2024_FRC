@@ -1,13 +1,14 @@
 package frc.robot.commands;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SAT.SAT;
 
 public class CommandPivotPosition extends Command{
-    String target;
+    double target;
     public SAT m_SAT;
 
-    public CommandPivotPosition(String t, SAT s){
+    public CommandPivotPosition(double t, SAT s){
 
         target = t;
         m_SAT = s;
@@ -16,80 +17,28 @@ public class CommandPivotPosition extends Command{
     }
     @Override
     public void initialize(){
-
-        if (target == "Podium"){
-            m_SAT.goToPivotPodiumPosition();
-
-        }
-        else if (target == "Sub"){
-            m_SAT.goToPivotSubPosition();
-
-        }
-        else if (target == "Amp"){
-            m_SAT.goToPivotAmpPosition();
-
-        }
-        else if (target == "Trap"){
-            m_SAT.goToPivotTrapPosition();
-
-        }
-        else if (target == "Zero"){
-            m_SAT.goToPivotZeroPosition();
-
-        }
-        else if (target == "Wing"){
-
-
-        }
+        m_SAT.movePivotMotor(target);
+        SmartDashboard.putString("Pivot, I'm trying to go here: ", target + "");
     }
 
     @Override
     public void execute(){
-
     }
 
 
     @Override
     public void end(boolean interupted){
-
+        SmartDashboard.putBoolean("is pivot done?", isWithinTol(target, m_SAT.getPivotPos(), 0.1));
     }
 
 
     @Override
     public boolean isFinished(){
-         if (target == "Podium"){
-            return isWithinTol(Constants.SATConstants.PIVOT_PODIUM_POS, m_SAT.getPivotPos(), 0.3);
-        }
-        else if (target == "Sub"){
-            return isWithinTol(Constants.SATConstants.PIVOT_SUB_POS, m_SAT.getPivotPos(), 0.3);
-
-        }
-        else if (target == "Amp"){
-            return isWithinTol(Constants.SATConstants.PIVOT_AMP_POS, m_SAT.getPivotPos(), 0.3);
-
-        }
-        else if (target == "Trap"){
-         return isWithinTol(Constants.SATConstants.PIVOT_TRAP_POS, m_SAT.getPivotPos(), 0.3);
-
-        }
-        else if (target == "Zero"){
-         return isWithinTol(0, m_SAT.getPivotPos(), 0.3);
-
-        }
-        else {
-            return false;
-
-        }
-
+        return (isWithinTol(target, m_SAT.getPivotPos(), 0.1));
 
     }
     public boolean isWithinTol(double targetPose, double currentPose, double tolerance){
-        if (Math.abs(targetPose - currentPose) <= tolerance){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return (Math.abs(targetPose - currentPose) <= tolerance);
     }
 }
 

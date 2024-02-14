@@ -190,26 +190,32 @@ public class RobotContainer {
 
         
 
-        operator.pov(0)
-            .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
+        operator.pov(0).whileTrue(new RunCommand(() -> m_SAT.movePivotMotor(7.8), m_SAT));
+            // .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
 
-        operator.pov(180)
-            .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.05), m_SAT));
+        operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.movePivotMotor(-1), m_SAT));
 
-        operator.pov(90)
-            .whileTrue(new RunCommand(() -> m_SAT.pivotGoToPosition(0.05), m_SAT));
+        // operator.pov(180)
+        //     .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.05), m_SAT));
 
-        operator.pov(270)
-            .whileTrue(new RunCommand(() -> m_SAT.pivotGoToPosition(-0.05), m_SAT));
+        operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.moveBaseMotors(Constants.SATConstants.MOTOR1_BASE_AMP_POS, Constants.SATConstants.MOTOR2_BASE_AMP_POS), m_SAT));
+            // .whileTrue(new RunCommand(() -> m_SAT.pivotGoToPosition(0.05), m_SAT));
+
+        operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.moveBaseMotors(-2.7, -3.0), m_SAT));
+
+            // .whileTrue(new RunCommand(() -> m_SAT.pivotGoToPosition(-0.05), m_SAT));
 
         //operator.pov(0).and(operator.pov(180))
         //    .onFalse(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
 
-        //operator.x()
-        //    .onTrue(new RunCommand(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
+        operator.x()
+           .whileTrue(new RunCommand(() -> m_SAT.moveBothBaseAndPivot("sub"), m_SAT));
 
-        //operator.b()
-        //    .onTrue(new RunCommand(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
+        // operator.b()
+        //    .onTrue(m_SAT.moveBothBaseAndPivot("amp"));
+
+        // operator.a()
+        //    .onTrue(m_SAT.moveBothBaseAndPivot("start"));
         
         // operator.b()
         //     .and(operator.axisGreaterThan(1, 0.6))

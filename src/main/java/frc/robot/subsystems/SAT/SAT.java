@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.SAT;
 
-import javax.swing.text.Position;
-
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
@@ -16,7 +14,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -47,8 +44,6 @@ public class SAT extends SubsystemBase {
   private double baseTargetPose, pivotTargetPose = 0.0;
 
   private TalonFXConfiguration satBase1MotorConfigs, satBase2MotorConfigs;
-
-  private Position globalPosition;
 
   // private final DigitalInput satObjectDectecter = new DigitalInput(Constants.SATConstants.SAT_OBJECTDETECTOR_SENSOR_ID);
 

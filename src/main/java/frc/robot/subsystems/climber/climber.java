@@ -8,9 +8,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+
+import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 import frc.robot.Constants;
@@ -54,6 +58,9 @@ public class climber extends SubsystemBase {
 
     tubeMotorLeft.getConfigurator().apply(climberRightMotorConfigs);
     tubeMotorRight.getConfigurator().apply(climberLeftMotorConfigs);
+
+    // Test code for CAN bus optimization tricks; disabled for now
+    //optimization_for_CAN();
 
     // USE NEXT LINE FOR TESTING
     PhysicsSim.getInstance().addTalonFX(tubeMotorLeft, 0.001);
@@ -190,5 +197,12 @@ public class climber extends SubsystemBase {
   // State Enumeration
   public enum climberStates {
     START, MOVING_TO_CLIMB, IN_CLIMBING_POSITION, COMPLETED_CLIMB, ERROR;
+  }
+
+  public void optimization_for_CAN() {
+    StatusSignal<Double> m_TubeMotorL_canbus1signal1 = tubeMotorLeft.getPosition();
+    StatusSignal<Double> m_TubeMotorR_canbus1signal2 = tubeMotorRight.getPosition();
+    BaseStatusSignal.setUpdateFrequencyForAll(60, m_TubeMotorL_canbus1signal1, m_TubeMotorR_canbus1signal2);
+    ParentDevice.optimizeBusUtilizationForAll(tubeMotorLeft, tubeMotorRight);
   }
 }

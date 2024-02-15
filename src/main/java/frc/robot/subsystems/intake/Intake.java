@@ -13,8 +13,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.IntakeSubcommands.*;
 import frc.robot.commands.IndexSubcommands.*;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.controls.PositionVoltage;
 
@@ -83,6 +86,9 @@ public class Intake extends SubsystemBase {
     if(!status.isOK()) {
       System.out.println("Could not apply configs, error code: " + status.toString());
     }
+
+    // Test code for CAN bus optimization tricks; disabled for now
+    //optimization_for_CAN();
 
     // USE NEXT LINE FOR TESTING
     PhysicsSim.getInstance().addTalonFX(intakeMotor, 0.001);
@@ -291,5 +297,15 @@ public class Intake extends SubsystemBase {
   private Command indexFireNote() {
     return commandIndexFire
       .andThen(commandIndexIdle);
+  }
+
+  public void optimization_for_CAN() {
+    StatusSignal<Double> m_IntakeMotor_canbus1signal1 = intakeMotor.getPosition();
+    StatusSignal<Double> m_IndexMotor_canbus1signal2 = indexMotor.getPosition();
+    StatusSignal<Double> m_IntakeTemp_canbus1signal1 = intakeMotor.getDeviceTemp();
+    StatusSignal<Double> m_IndexTemp_canbus1signal2 = indexMotor.getDeviceTemp();
+    BaseStatusSignal.setUpdateFrequencyForAll(60, m_IntakeMotor_canbus1signal1, m_IndexMotor_canbus1signal2);
+    BaseStatusSignal.setUpdateFrequencyForAll(1, m_IntakeTemp_canbus1signal1, m_IndexTemp_canbus1signal2);
+    ParentDevice.optimizeBusUtilizationForAll(intakeMotor, indexMotor);
   }
 }

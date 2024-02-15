@@ -4,12 +4,15 @@
 
 package frc.robot.subsystems.SAT;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -161,6 +164,9 @@ public class SAT extends SubsystemBase {
     Base1StartPosition = satBase1Motor.getPosition().getValueAsDouble();
     Base2StartPosition = satBase2Motor.getPosition().getValueAsDouble();
     PivotStartPosition = satPivotMotor.getPosition().getValueAsDouble();
+
+    // Test code for CAN bus optimization tricks; disabled for now
+    //optimization_for_CAN();
 
     PhysicsSim.getInstance().addTalonFX(satBase1Motor, 0.001);
     PhysicsSim.getInstance().addTalonFX(satBase2Motor, 0.001);
@@ -432,5 +438,22 @@ public class SAT extends SubsystemBase {
    */
   public double getShooterSpeed() {
     return shooterMotorSpeed;
+  }
+
+  public void optimization_for_CAN() {
+    StatusSignal<Double> m_PivotMotor_canbus1signal1 = satPivotMotor.getPosition();
+    StatusSignal<Double> m_Base1Motor_canbus1signal2 = satBase1Motor.getPosition();
+    StatusSignal<Double> m_Base2Motor_canbus1signal3 = satBase2Motor.getPosition();
+    StatusSignal<Double> m_Shooter1Motor_canbus1signal4 = satShooter1Motor.getVelocity();
+    StatusSignal<Double> m_Shooter2Motor_canbus1signal5 = satShooter2Motor.getVelocity();
+    StatusSignal<Double> m_PivotTemp_canbus1signal6 = satPivotMotor.getDeviceTemp();
+    StatusSignal<Double> m_Base1Temp_canbus1signal7 = satBase1Motor.getDeviceTemp();
+    StatusSignal<Double> m_Base2Temp_canbus1signal8 = satBase2Motor.getDeviceTemp();
+    StatusSignal<Double> m_Shooter1Temp_canbus1signal9 = satShooter1Motor.getDeviceTemp();
+    StatusSignal<Double> m_Shooter2Temp_canbus1signal10 = satShooter2Motor.getDeviceTemp();
+    BaseStatusSignal.setUpdateFrequencyForAll(60, m_PivotMotor_canbus1signal1, m_Base1Motor_canbus1signal2, m_Base2Motor_canbus1signal3, m_Shooter1Motor_canbus1signal4, m_Shooter2Motor_canbus1signal5);
+    BaseStatusSignal.setUpdateFrequencyForAll(1, m_PivotTemp_canbus1signal6, m_Base1Temp_canbus1signal7, m_Base2Temp_canbus1signal8, m_Shooter1Temp_canbus1signal9, m_Shooter2Temp_canbus1signal10);
+    
+    ParentDevice.optimizeBusUtilizationForAll(satPivotMotor, satBase1Motor, satBase2Motor, satShooter1Motor, satShooter2Motor);
   }
 }

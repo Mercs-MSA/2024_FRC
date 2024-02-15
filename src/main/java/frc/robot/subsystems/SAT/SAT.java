@@ -305,22 +305,16 @@ public class SAT extends SubsystemBase {
 
     if (stepOne) {
       movement = movePivotToPosition(Constants.SATConstants.PIVOT_MECHANICALLY_REQUIRED_POS);
-      // if (stepOne && stepTwo && waitTimer != 0) {
-      //   movement.andThen(new WaitCommand(waitTimer));
-      // }
-    }
-
-
-    if (stepTwo) {
+    } else if (stepTwo) {
       movement = moveBasesToPosition(target.baseMotor1TargetPos, target.baseMotor2TargetPos);
-      // if (stepTwo && stepThree && waitTimer != 0) {
-      //   movement.andThen(new WaitCommand(waitTimer));
-      // }
-    }
-
-
-    if (stepThree) {
+    } else if (stepThree) {
       movement = movePivotToPosition(target.pivotTargetPos);
+    } else if (stepOne && stepTwo && stepThree) {
+      movement = movePivotToPosition(Constants.SATConstants.PIVOT_MECHANICALLY_REQUIRED_POS)
+        .andThen(new WaitCommand(waitTimer))
+        .andThen(moveBasesToPosition(target.baseMotor1TargetPos, target.baseMotor2TargetPos))
+        .andThen(new WaitCommand(waitTimer))
+        .andThen(movePivotToPosition(target.pivotTargetPos));
     }
 
     return movement;

@@ -20,6 +20,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
@@ -291,46 +292,52 @@ public class SAT extends SubsystemBase {
    * @param position The position to move to. Valid values: "podium", "sub", "amp", "trap", "start".
    * @param movePivotFirst If true, moves the pivot motor first. If false, moves the base motors first.
    */
-  public Command moveSATToPosition(Constants.SATConstants.Position position, double waitTimer) {
+  public SequentialCommandGroup moveSATToPosition(Constants.SATConstants.Position position, double waitTimer) {
     return moveSAT(position, true, true, true, waitTimer);
   }
 
-  public Command moveSAT(Constants.SATConstants.Position position, boolean stepOne, boolean stepTwo, boolean stepThree, double waitTimer) {
+  public SequentialCommandGroup moveSAT(Constants.SATConstants.Position position, boolean stepOne, boolean stepTwo, boolean stepThree, double waitTimer) {
     SATPosition target;
     
     try {
       target = new SATPosition(position);
     } catch (Exception e) {
       System.out.println("Invalid Position");
-      return new InstantCommand();
+      return new SequentialCommandGroup(new InstantCommand());
     }
 
     Constants.SATConstants.state = position;
 
-    Command movement = new InstantCommand();
+    SequentialCommandGroup movement = new SequentialCommandGroup();
 
     if (stepOne) {
-      movement = movePivotToPosition(Constants.SATConstants.PIVOT_MECHANICALLY_REQUIRED_POS);
-    } else if (stepTwo) {
-      movement = moveBasesToPosition(target.baseMotor1TargetPos, target.baseMotor2TargetPos);
-    } else if (stepThree) {
-      movement = movePivotToPosition(target.pivotTargetPos);
-    } else if (stepOne && stepTwo && stepThree) {
-      movement = movePivotToPosition(Constants.SATConstants.PIVOT_MECHANICALLY_REQUIRED_POS)
-        .andThen(new WaitCommand(waitTimer))
-        .andThen(moveBasesToPosition(target.baseMotor1TargetPos, target.baseMotor2TargetPos))
-        .andThen(new WaitCommand(waitTimer))
-        .andThen(movePivotToPosition(target.pivotTargetPos));
+      movement.addCommands(movePivotToPosition(Constants.SATConstants.PIVOT_MECHANICALLY_REQUIRED_POS));
+    }
+
+    if (waitTimer != 0) {
+      movement.addCommands(new WaitCommand(waitTimer));
+    }
+    
+    if (stepTwo) {
+      movement.addCommands(moveBasesToPosition(target.baseMotor1TargetPos, target.baseMotor2TargetPos));
+    }
+
+    if (waitTimer != 0) {
+      movement.addCommands(new WaitCommand(waitTimer));
+    }
+    
+    if (stepThree) {
+      movement.addCommands(movePivotToPosition(target.pivotTargetPos));
     }
 
     return movement;
   }
 
-  private Command moveBasesToPosition(double baseMotor1TargetPos, double baseMotor2TargetPos) {
+  private CommandBasesPosition moveBasesToPosition(double baseMotor1TargetPos, double baseMotor2TargetPos) {
     return new CommandBasesPosition(baseMotor1TargetPos, baseMotor2TargetPos, this);
   }
 
-  private Command movePivotToPosition(double pivotTargetPos) {
+  private CommandPivotPosition movePivotToPosition(double pivotTargetPos) {
     return new CommandPivotPosition(pivotTargetPos, this);
   }
 

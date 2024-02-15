@@ -7,6 +7,8 @@ package frc.robot.subsystems.intake;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.SATConstants;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -226,7 +228,7 @@ public class Intake extends SubsystemBase {
   /*
    * This is the public command that collects the note if allowed
    */
-  public Command collectNote() {
+  public ConditionalCommand collectNote() {
     return intakeNoteCollection()
       .onlyIf(
         () -> (IntakeConstants.currentIntakeState == IntakeConstants.intakeState.IDLE)
@@ -236,7 +238,7 @@ public class Intake extends SubsystemBase {
   /*
    * This is the public command that runs handoff if allowed
    */
-  public Command passNoteToIndex() {
+  public ConditionalCommand passNoteToIndex() {
     return intakeAndIndexHandoff()
       .onlyIf(
         () -> handoffAllowed()
@@ -246,7 +248,7 @@ public class Intake extends SubsystemBase {
   /*
    * This is the public command that runs the index side of note firing if allowed
    */
-  public Command fireNote() {
+  public ConditionalCommand fireNote() {
     return indexFireNote()
       .onlyIf(
         () -> (IntakeConstants.currentIndexState == IntakeConstants.indexState.HOLD)
@@ -265,7 +267,7 @@ public class Intake extends SubsystemBase {
   /*
    * This is a command chain for the intake side of handoff
    */
-  private Command intakeNoteCollection() {
+  private SequentialCommandGroup intakeNoteCollection() {
     return commandIntakeStart
         .andThen(commandIntakeIntake)
         .andThen(commandIntakeProcess)
@@ -275,7 +277,7 @@ public class Intake extends SubsystemBase {
   /*
   * This is a command chain that runs both sides if handoff at the same time
   */
-  private Command intakeAndIndexHandoff() {
+  private SequentialCommandGroup intakeAndIndexHandoff() {
     return commandIndexStart
         .andThen(commandIntakeIndex)
         .andThen(commandIndexIntake)
@@ -294,7 +296,7 @@ public class Intake extends SubsystemBase {
   /*
    * This is a command chain for the index side of note firing
    */
-  private Command indexFireNote() {
+  private SequentialCommandGroup indexFireNote() {
     return commandIndexFire
       .andThen(commandIndexIdle);
   }

@@ -217,7 +217,7 @@ public class RobotContainer {
         // RUN STEP 3 OF SUB
         operator.b().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, false, false, true, 0));
         // RUN ALL STEPS OF SUB
-        operator.b().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, true, true, true, 1));
+        operator.y().onTrue(m_SAT.moveSATToPosition(Constants.SATConstants.Position.SUB, 1));
 
         // RUN STEP 1 OF START
         operator.pov(270).onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, true, false, false, 0));
@@ -226,7 +226,7 @@ public class RobotContainer {
         // RUN STEP 3 OF START
         operator.pov(90).onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, false, false, true, 0));
         // RUN ALL STEPS OF START
-        operator.b().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, true, true, true, 1));
+        operator.pov(0).onTrue(m_SAT.moveSATToPosition(Constants.SATConstants.Position.START, 1));
 
 
         // operator.start()

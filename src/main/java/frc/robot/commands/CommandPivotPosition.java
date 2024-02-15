@@ -27,12 +27,12 @@ public class CommandPivotPosition extends Command {
 
     @Override
     public void end(boolean interupted){
-        SmartDashboard.putBoolean("is pivot done?", isWithinTol(target, m_SAT.getPivotPos(), 0.1));
+        SmartDashboard.putBoolean("is pivot done?", isWithinTol(target, m_SAT.getPivotPos(), Constants.SATConstants.MOTOR_TOLERANCE));
     }
 
     @Override
     public boolean isFinished(){
-        return (isWithinTol(target, m_SAT.getPivotPos(), 0.1));
+        return (isWithinTol(target, m_SAT.getPivotPos(), Constants.SATConstants.MOTOR_TOLERANCE));
     }
 
     public boolean isWithinTol(double targetPose, double currentPose, double tolerance){

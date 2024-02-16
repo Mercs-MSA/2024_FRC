@@ -33,15 +33,15 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.7,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "Start Intake"
+                "name": "Start Intake + Index"
               }
             }
           ]
@@ -58,7 +58,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Index To Shooter"
+                "name": "Stop Intake + Index"
               }
             }
           ]

@@ -94,6 +94,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(m_robotContainer.s_Swerve);
     SmartDashboard.putData(CommandScheduler.getInstance());
 
+    SmartDashboard.putNumber("Intake Speed", m_robotContainer.m_intake.getIntakeMotorSpeed());
+    SmartDashboard.putNumber("Indexer Speed", m_robotContainer.m_intake.getIndexMotorSpeed());
+
    // SmartDashboard.putBoolean("intake ir bool", m_robotContainer.m_intake.detectNote());
   }
 

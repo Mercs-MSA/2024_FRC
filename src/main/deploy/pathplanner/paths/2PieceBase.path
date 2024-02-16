@@ -41,13 +41,13 @@
       "name": "Intake",
       "waypointRelativePos": 0.5,
       "command": {
-        "type": "race",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "Start Intake"
+                "name": "Start Intake + Index"
               }
             }
           ]
@@ -64,20 +64,10 @@
             {
               "type": "named",
               "data": {
-                "name": "Index To Shooter"
+                "name": "Stop Intake + Index"
               }
             }
           ]
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.55,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
         }
       }
     }

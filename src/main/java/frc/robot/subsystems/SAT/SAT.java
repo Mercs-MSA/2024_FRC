@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.SATConstants;
-import frc.robot.commands.CommandBasesPosition;
+//import frc.robot.commands.CommandBasesPosition;
 import frc.robot.commands.CommandPivotPosition;
 import frc.robot.sim.PhysicsSim;
 import frc.lib.util.SATPosition;
@@ -317,9 +317,9 @@ public class SAT extends SubsystemBase {
       movement.addCommands(new WaitCommand(waitTimer));
     }
     
-    if (stepTwo) {
-      movement.addCommands(moveBasesToPosition(target.baseMotor1TargetPos, target.baseMotor2TargetPos));
-    }
+    // if (stepTwo) {
+    //   movement.addCommands(moveBasesToPosition(target.baseMotor1TargetPos, target.baseMotor2TargetPos));
+    // }
 
     if (waitTimer != 0) {
       movement.addCommands(new WaitCommand(waitTimer));
@@ -332,9 +332,9 @@ public class SAT extends SubsystemBase {
     return movement;
   }
 
-  private CommandBasesPosition moveBasesToPosition(double baseMotor1TargetPos, double baseMotor2TargetPos) {
-    return new CommandBasesPosition(baseMotor1TargetPos, baseMotor2TargetPos, this);
-  }
+  // private CommandBasesPosition moveBasesToPosition(double baseMotor1TargetPos, double baseMotor2TargetPos) {
+  //   return new CommandBasesPosition(baseMotor1TargetPos, baseMotor2TargetPos, this);
+  // }
 
   private CommandPivotPosition movePivotToPosition(double pivotTargetPos) {
     return new CommandPivotPosition(pivotTargetPos, this);

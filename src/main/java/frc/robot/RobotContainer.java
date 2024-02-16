@@ -19,6 +19,9 @@ import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.climber.climber;
 import frc.robot.subsystems.intake.Intake;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -67,6 +70,14 @@ public class RobotContainer {
     // public CommandPivotPosition commandGoToPivotAmpPosition = new CommandPivotPosition("Amp", m_SAT);
     // public CommandPivotPosition commandGoToPivotWingPosition = new CommandPivotPosition("Wing", m_SAT);
 
+    Map<String, Command> autonomousCommands = new HashMap<String,Command>() {
+        {
+            put("Start Intake", commandOverrideIntakeStart);
+            put("Start Index", commandOverrideIndexStart);
+            put("Stop Intake", commandOverrideIntakeStop);
+            put("Stop Index", commandOverrideIndexStop);
+        }  
+    };
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -84,14 +95,13 @@ public class RobotContainer {
         NamedCommands.registerCommand("marker1", Commands.print("Finished 1 Piece"));
         NamedCommands.registerCommand("marker2", Commands.print("Finished 3-4 Piece"));
 
+        NamedCommands.registerCommands(autonomousCommands);
+
         // NamedCommands.registerCommand("Start Intake", m_intake.collectNote());
         // NamedCommands.registerCommand("Intake To Index", m_intake.passNoteToIndex());
         // NamedCommands.registerCommand("Index To Shooter", m_intake.fireNote());
 
-        NamedCommands.registerCommand("Start Intake + Index", Commands.runOnce(() -> m_intake.startIntakeIndexerMotors(), m_intake));
-        NamedCommands.registerCommand("Stop Intake + Index", Commands.runOnce(() -> m_intake.stopIntakeIndexerMotors(), m_intake));
-
-        //NamedCommands.registerCommand("Warm Up Shooter", Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
+        // NamedCommands.registerCommand("Warm Up Shooter", Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
 
         // NamedCommands.registerCommand("Go To Base Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To Base AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));

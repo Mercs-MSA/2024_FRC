@@ -89,8 +89,7 @@ public class Intake extends SubsystemBase {
       System.out.println("Could not apply configs, error code: " + status.toString());
     }
 
-    // Test code for CAN bus optimization tricks; disabled for now
-    //optimization_for_CAN();
+    optimization_for_CAN();
 
     // USE NEXT LINE FOR TESTING
     PhysicsSim.getInstance().addTalonFX(intakeMotor, 0.001);

@@ -59,8 +59,7 @@ public class climber extends SubsystemBase {
     tubeMotorLeft.getConfigurator().apply(climberRightMotorConfigs);
     tubeMotorRight.getConfigurator().apply(climberLeftMotorConfigs);
 
-    // Test code for CAN bus optimization tricks; disabled for now
-    //optimization_for_CAN();
+    optimization_for_CAN();
 
     // USE NEXT LINE FOR TESTING
     PhysicsSim.getInstance().addTalonFX(tubeMotorLeft, 0.001);

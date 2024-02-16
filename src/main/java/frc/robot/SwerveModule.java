@@ -54,7 +54,8 @@ public class SwerveModule {
         mDriveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
         mDriveMotor.getConfigurator().setPosition(0.0);
 
-        // Test code for CAN bus optimization tricks; disabled for now
+        // expanded is there to support current data for troubleshooting
+        expanded_diagnostic_data();
         optimization_for_CAN();
 
         // USE NEXT LINE FOR TESTING
@@ -101,6 +102,20 @@ public class SwerveModule {
             Conversions.rotationsToMeters(mDriveMotor.getPosition().getValue(), Constants.Swerve.wheelCircumference), 
             Rotation2d.fromRotations(mAngleMotor.getPosition().getValue())
         );
+    }
+
+    public double getDriveCurrent(){
+        return (mDriveMotor.getStatorCurrent().getValue());
+    }
+
+    public double getAngleCurrent(){
+        return (mAngleMotor.getStatorCurrent().getValue());
+    }
+
+    public void expanded_diagnostic_data() {
+        StatusSignal<Double> m_AngleMotorCurrent_canbus1signal4 = mAngleMotor.getSupplyCurrent();
+        StatusSignal<Double> m_DriveMotorCurrent_canbus1signal5 = mDriveMotor.getSupplyCurrent();
+        BaseStatusSignal.setUpdateFrequencyForAll(60, m_AngleMotorCurrent_canbus1signal4, m_DriveMotorCurrent_canbus1signal5);
     }
 
     public void optimization_for_CAN() {

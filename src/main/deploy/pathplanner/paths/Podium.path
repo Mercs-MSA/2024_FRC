@@ -32,7 +32,7 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Start Intake",
+      "name": "Intake",
       "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",
@@ -49,7 +49,7 @@
       }
     },
     {
-      "name": "Stop Intake",
+      "name": "Shoot",
       "waypointRelativePos": 1.0,
       "command": {
         "type": "parallel",
@@ -58,7 +58,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Stop Intake"
+                "name": "Index To Shooter"
               }
             }
           ]
@@ -74,7 +74,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -30.0,
     "rotateFast": false
   },
   "reversed": false,

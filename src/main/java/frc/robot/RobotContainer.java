@@ -86,6 +86,9 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("Start Intake", m_intake.collectNote());
         NamedCommands.registerCommand("Intake To Index", m_intake.passNoteToIndex());
+        NamedCommands.registerCommand("Index To Shooter", m_intake.fireNote());
+
+        NamedCommands.registerCommand("Warm Up Shooter", Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
 
         // NamedCommands.registerCommand("Go To Base Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
         // NamedCommands.registerCommand("Go To Base AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));

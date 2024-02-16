@@ -38,10 +38,10 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Start Intake",
-      "waypointRelativePos": 0.35,
+      "name": "Intake",
+      "waypointRelativePos": 0.5,
       "command": {
-        "type": "parallel",
+        "type": "race",
         "data": {
           "commands": [
             {
@@ -55,7 +55,7 @@
       }
     },
     {
-      "name": "Stop Intake",
+      "name": "Shoot",
       "waypointRelativePos": 1.0,
       "command": {
         "type": "parallel",
@@ -64,10 +64,20 @@
             {
               "type": "named",
               "data": {
-                "name": "Stop Intake"
+                "name": "Index To Shooter"
               }
             }
           ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.55,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
         }
       }
     }

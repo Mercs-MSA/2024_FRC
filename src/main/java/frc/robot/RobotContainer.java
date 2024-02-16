@@ -131,6 +131,23 @@ public class RobotContainer {
         // driver.rightTrigger()
         //     .onTrue(Commands.runOnce(() -> m_SAT.stopShooter(), m_SAT));
 
+        // driver.a()
+        //      .onTrue(Commands.run(() -> m_intake.stopIntakeIndexerMotors(), m_intake));
+        
+        // driver.start()
+        //    .whileTrue(commandOverrideIntakeStart.andThen(commandOverrideIndexStart));
+
+        driver.leftBumper()
+             .onTrue(Commands.run(() -> m_SAT.shootNote(), m_SAT));
+
+        driver.rightBumper()
+             .onTrue(Commands.run(() -> m_SAT.stopShooter(), m_SAT));
+
+        driver.pov(0).onTrue(Commands.run(() -> m_intake.startIntakeMotor(), m_intake));
+        driver.pov(180).onTrue(Commands.run(() -> m_intake.stopIntakeMotor(), m_intake));
+        driver.pov(90).onTrue(Commands.run(() -> m_intake.startIndexMotor(), m_intake));
+        driver.pov(270).onTrue(Commands.run(() -> m_intake.stopIndexMotor(), m_intake));
+
 
         /************************/
         /*                      */
@@ -188,86 +205,35 @@ public class RobotContainer {
         //         m_climber.climbDownLeftCommand()
         //     );
 
-        
+        // operator.pov(0).whileTrue(new RunCommand(() -> m_SAT.movePivotMotor(7.8), m_SAT));
+        // operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.moveBaseMotors(Constants.SATConstants.MOTOR1_BASE_AMP_POS, Constants.SATConstants.MOTOR2_BASE_AMP_POS), m_SAT));
+        // operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.movePivotMotor(-1), m_SAT));
+        // operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.moveBaseMotors(-2.7, -3.0), m_SAT));
 
-        operator.pov(0).whileTrue(new RunCommand(() -> m_SAT.movePivotMotor(7.8), m_SAT));
-            // .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
+        // RUN STEP 1 OF SUB
+        operator.x().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, true, false, false, 0));
+        // RUN STEP 2 OF SUB
+        operator.a().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, false, true, false, 0));
+        // RUN STEP 3 OF SUB
+        operator.b().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, false, false, true, 0));
+        // RUN ALL STEPS OF SUB
+        operator.y().onTrue(m_SAT.moveSATToPosition(Constants.SATConstants.Position.SUB, 1));
 
-        operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.movePivotMotor(-1), m_SAT));
+        // RUN STEP 1 OF START
+        operator.pov(270).onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, true, false, false, 0));
+        // RUN STEP 2 OF START
+        operator.pov(180).onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, false, true, false, 0));
+        // RUN STEP 3 OF START
+        operator.pov(90).onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, false, false, true, 0));
+        // RUN ALL STEPS OF START
+        operator.pov(0).onTrue(m_SAT.moveSATToPosition(Constants.SATConstants.Position.START, 1));
 
-        operator.a().whileTrue(new RunCommand(() -> m_SAT.movePivotMotor(Constants.SATConstants.PIVOT_AMP_POS), m_SAT));
-            // .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
-
-        operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.movePivotMotor(-1), m_SAT));
-
-        // operator.pov(180)
-        //     .whileTrue(new RunCommand(() -> m_SAT.baseGoToPosition(-0.05), m_SAT));
-
-        operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.moveBaseMotors(Constants.SATConstants.MOTOR1_BASE_AMP_POS, Constants.SATConstants.MOTOR2_BASE_AMP_POS), m_SAT));
-            // .whileTrue(new RunCommand(() -> m_SAT.pivotGoToPosition(0.05), m_SAT));
-
-        operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.moveBaseMotors(-2.7, -3.0), m_SAT));
-
-            // .whileTrue(new RunCommand(() -> m_SAT.pivotGoToPosition(-0.05), m_SAT));
-
-        //operator.pov(0).and(operator.pov(180))
-        //    .onFalse(new RunCommand(() -> m_SAT.baseGoToPosition(0.05), m_SAT));
-
-        operator.x()
-           .whileTrue(new RunCommand(() -> m_SAT.moveBothBaseAndPivot("sub"), m_SAT));
-
-        // operator.b()
-        //    .onTrue(m_SAT.moveBothBaseAndPivot("amp"));
-
-        // operator.a()
-        //    .onTrue(m_SAT.moveBothBaseAndPivot("start"));
-        
-        // operator.b()
-        //     .and(operator.axisGreaterThan(1, 0.6))
-        //     .and(operator.axisLessThan(0, 0.4))
-        //     .and(operator.axisGreaterThan(0, -0.4))
-        //     .onTrue(commandGoToBasePodiumPosition.andThen(commandGoToPivotPodiumPosition));
-
-        // operator.b()
-        //     .and(operator.axisLessThan(1, -0.6))
-        //     .and(operator.axisLessThan(0, 0.4))
-        //     .and(operator.axisGreaterThan(0, -0.4))
-        //     .onTrue(commandGoToBaseSubPosition.andThen(commandGoToPivotSubPosition));
-        
-        // operator.b()
-        //     .and(operator.axisLessThan(0, -0.6))
-        //     .and(operator.axisLessThan(1, 0.4))
-        //     .and(operator.axisGreaterThan(1, -0.4))
-        //     .onTrue(commandGoToBaseTrapPosition.andThen(commandGoToPivotTrapPosition));
-
-        // operator.b()
-        //     .and(operator.axisGreaterThan(0, 0.6))
-        //     .and(operator.axisLessThan(1, 0.4))
-        //     .and(operator.axisGreaterThan(1, -0.4))
-        //     .onTrue(commandGoToBaseAmpPosition.andThen(commandGoToPivotAmpPosition));
 
         // operator.start()
         //     .onTrue(m_intake.collectNote());
 
-        driver.leftBumper()
-             .onTrue(Commands.run(() -> m_SAT.shootNote(), m_SAT));
-
-        driver.rightBumper()
-             .onTrue(Commands.run(() -> m_SAT.stopShooter(), m_SAT));
-
-        driver.pov(0).onTrue(Commands.run(() -> m_intake.startIntakeMotor(), m_intake));
-        driver.pov(180).onTrue(Commands.run(() -> m_intake.stopIntakeMotor(), m_intake));
-        driver.pov(90).onTrue(Commands.run(() -> m_intake.startIndexMotor(), m_intake));
-        driver.pov(270).onTrue(Commands.run(() -> m_intake.stopIndexMotor(), m_intake));
-
         // operator.a()
         //      .onTrue(Commands.run(() -> m_intake.startIndexMotor(), m_intake));
-
-        //driver.a()
-        //     .onTrue(Commands.run(() -> m_intake.stopIntakeIndexerMotors(), m_intake));
-        
-        //driver.start()
-        //     .onTrue(commandOverrideIntakeStart.andThen(commandOverrideIndexStart));
 
         //operator.start()
         //    .whileFalse(commandOverrideIntakeStop.andThen(commandOverrideIndexStop));

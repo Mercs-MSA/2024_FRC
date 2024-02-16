@@ -7,14 +7,19 @@ package frc.robot.subsystems.intake;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.SATConstants;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.IntakeSubcommands.*;
 import frc.robot.commands.IndexSubcommands.*;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.controls.PositionVoltage;
 
@@ -83,6 +88,9 @@ public class Intake extends SubsystemBase {
     if(!status.isOK()) {
       System.out.println("Could not apply configs, error code: " + status.toString());
     }
+
+    // Test code for CAN bus optimization tricks; disabled for now
+    //optimization_for_CAN();
 
     // USE NEXT LINE FOR TESTING
     PhysicsSim.getInstance().addTalonFX(intakeMotor, 0.001);
@@ -220,7 +228,7 @@ public class Intake extends SubsystemBase {
   /*
    * This is the public command that collects the note if allowed
    */
-  public Command collectNote() {
+  public ConditionalCommand collectNote() {
     return intakeNoteCollection()
       .onlyIf(
         () -> (IntakeConstants.currentIntakeState == IntakeConstants.intakeState.IDLE)
@@ -230,7 +238,7 @@ public class Intake extends SubsystemBase {
   /*
    * This is the public command that runs handoff if allowed
    */
-  public Command passNoteToIndex() {
+  public ConditionalCommand passNoteToIndex() {
     return intakeAndIndexHandoff()
       .onlyIf(
         () -> handoffAllowed()
@@ -240,7 +248,7 @@ public class Intake extends SubsystemBase {
   /*
    * This is the public command that runs the index side of note firing if allowed
    */
-  public Command fireNote() {
+  public ConditionalCommand fireNote() {
     return indexFireNote()
       .onlyIf(
         () -> (IntakeConstants.currentIndexState == IntakeConstants.indexState.HOLD)
@@ -259,7 +267,7 @@ public class Intake extends SubsystemBase {
   /*
    * This is a command chain for the intake side of handoff
    */
-  private Command intakeNoteCollection() {
+  private SequentialCommandGroup intakeNoteCollection() {
     return commandIntakeStart
         .andThen(commandIntakeIntake)
         .andThen(commandIntakeProcess)
@@ -269,7 +277,7 @@ public class Intake extends SubsystemBase {
   /*
   * This is a command chain that runs both sides if handoff at the same time
   */
-  private Command intakeAndIndexHandoff() {
+  private SequentialCommandGroup intakeAndIndexHandoff() {
     return commandIndexStart
         .andThen(commandIntakeIndex)
         .andThen(commandIndexIntake)
@@ -282,14 +290,24 @@ public class Intake extends SubsystemBase {
    * This determines if we're allowed to run handoff
    */
   private boolean handoffAllowed() {
-    return IntakeConstants.currentIntakeState == IntakeConstants.intakeState.HOLD && SATConstants.state == SATConstants.state.START;
+    return IntakeConstants.currentIntakeState == IntakeConstants.intakeState.HOLD && SATConstants.state == SATConstants.Position.START;
   }
 
   /*
    * This is a command chain for the index side of note firing
    */
-  private Command indexFireNote() {
+  private SequentialCommandGroup indexFireNote() {
     return commandIndexFire
       .andThen(commandIndexIdle);
+  }
+
+  public void optimization_for_CAN() {
+    StatusSignal<Double> m_IntakeMotor_canbus1signal1 = intakeMotor.getPosition();
+    StatusSignal<Double> m_IndexMotor_canbus1signal2 = indexMotor.getPosition();
+    StatusSignal<Double> m_IntakeTemp_canbus1signal1 = intakeMotor.getDeviceTemp();
+    StatusSignal<Double> m_IndexTemp_canbus1signal2 = indexMotor.getDeviceTemp();
+    BaseStatusSignal.setUpdateFrequencyForAll(60, m_IntakeMotor_canbus1signal1, m_IndexMotor_canbus1signal2);
+    BaseStatusSignal.setUpdateFrequencyForAll(1, m_IntakeTemp_canbus1signal1, m_IndexTemp_canbus1signal2);
+    ParentDevice.optimizeBusUtilizationForAll(intakeMotor, indexMotor);
   }
 }

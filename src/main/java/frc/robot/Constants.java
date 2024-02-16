@@ -261,6 +261,7 @@ public final class Constants {
         public static final double PIVOT_TRAP_POS = 0.1;
 
         public static final double PIVOT_MECHANICALLY_REQUIRED_POS = 7.8;
+        public static final double MOTOR_TOLERANCE = 0.5;
 
         public static final double SHOOTER_SPEED = 70;
 

@@ -4,14 +4,15 @@
 
 package frc.robot.subsystems.SAT;
 
-import javax.swing.text.Position;
-
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -19,12 +20,15 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.SATConstants;
 import frc.robot.commands.CommandBasesPosition;
 import frc.robot.commands.CommandPivotPosition;
 import frc.robot.sim.PhysicsSim;
+import frc.lib.util.SATPosition;
 
 public class SAT extends SubsystemBase {
   /** Creates a new SAT. */
@@ -40,12 +44,10 @@ public class SAT extends SubsystemBase {
   private final PositionVoltage satBase1_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final PositionVoltage satBase2_voltagePosition = satBase1_voltagePosition.clone();
 
-  double base1MotorPos, base2MotorPos, pivotMotorPos, shooterMotorSpeed, Base1StartPosition, Base2StartPosition, PivotStartPosition;
-  double baseTargetPose, pivotTargetPose = 0.0;
+  private double base1MotorPos, base2MotorPos, pivotMotorPos, shooterMotorSpeed, Base1StartPosition, Base2StartPosition, PivotStartPosition;
+  private double baseTargetPose, pivotTargetPose = 0.0;
 
-  TalonFXConfiguration satBase1MotorConfigs, satBase2MotorConfigs;
-
-  private Position globalPosition;
+  private TalonFXConfiguration satBase1MotorConfigs, satBase2MotorConfigs;
 
   // private final DigitalInput satObjectDectecter = new DigitalInput(Constants.SATConstants.SAT_OBJECTDETECTOR_SENSOR_ID);
 
@@ -160,13 +162,12 @@ public class SAT extends SubsystemBase {
     /* PUT FOLLOW SYSTEMS HERE */
     satShooter2Motor.setControl(Shooter2_Follower);
 
-    //satBase1Motor.setPosition(0);
-    //satBase2Motor.setPosition(0);
-    //satPivotMotor.setPosition(0);
-
     Base1StartPosition = satBase1Motor.getPosition().getValueAsDouble();
     Base2StartPosition = satBase2Motor.getPosition().getValueAsDouble();
     PivotStartPosition = satPivotMotor.getPosition().getValueAsDouble();
+
+    // Test code for CAN bus optimization tricks; disabled for now
+    //optimization_for_CAN();
 
     PhysicsSim.getInstance().addTalonFX(satBase1Motor, 0.001);
     PhysicsSim.getInstance().addTalonFX(satBase2Motor, 0.001);
@@ -286,168 +287,180 @@ public class SAT extends SubsystemBase {
     satBase2Motor.setControl(satBase2_voltagePosition.withPosition(base2pos));
   }
 
-// /**
-//  * Moves both the base and pivot motors to the specified position.
-//  * @param position The position to move to. Valid values: "podium", "sub", "amp", "trap", "start".
-//  * @param movePivotFirst If true, moves the pivot motor first. If false, moves the base motors first.
-//  */
-//   public Command moveBothBaseAndPivot(String position) {
-//     double baseMotor1TargetPos;
-//     double baseMotor2TargetPos;
-//     double pivotTargetPos;
-//     boolean movePivotFirst = true; 
+  /**
+   * Moves both the base and pivot motors to the specified position.
+   * @param position The position to move to. Valid values: "podium", "sub", "amp", "trap", "start".
+   * @param movePivotFirst If true, moves the pivot motor first. If false, moves the base motors first.
+   */
+  public SequentialCommandGroup moveSATToPosition(Constants.SATConstants.Position position, double waitTimer) {
+    return moveSAT(position, true, true, true, waitTimer);
+  }
 
-//     Command firstCommand;
-
-//     position = position.toLowerCase();
-
-//     switch (position) {
-//       case "podium":
-//         Constants.SATConstants.state = Constants.SATConstants.Position.PODIUM;
-//         baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_PODIUM_POS;
-//         baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_PODIUM_POS;
-//         pivotTargetPos = Constants.SATConstants.PIVOT_PODIUM_POS;
-//         break;
-//       case "sub":
-//         Constants.SATConstants.state = Constants.SATConstants.Position.SUB;
-//         baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_SUB_POS;
-//         baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_SUB_POS;
-//         pivotTargetPos = Constants.SATConstants.PIVOT_SUB_POS;
-//         break;
-//       case "amp":
-//         Constants.SATConstants.state = Constants.SATConstants.Position.AMP;
-//         baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_AMP_POS;
-//         baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_AMP_POS;
-//         pivotTargetPos = Constants.SATConstants.PIVOT_AMP_POS;
-//         break;
-//       case "trap":
-//         Constants.SATConstants.state = Constants.SATConstants.Position.TRAP;
-//         baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_TRAP_POS;
-//         baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_TRAP_POS;
-//         pivotTargetPos = Constants.SATConstants.PIVOT_TRAP_POS;
-//         break;
-//       case "start":
-//         Constants.SATConstants.state = Constants.SATConstants.Position.START;
-//         baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_START_POS;
-//         baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_START_POS;
-//         pivotTargetPos = Constants.SATConstants.PIVOT_START_POS;
-//         break;
-//       default:
-//         System.out.println("Invalid Position");
-//         return null; // Exit method if position is invalid
-//     }
-
-//     if (movePivotFirst) {
-//       // firstCommand = new CommandPivotPosition(Constants.SATConstants.PIVOT_MECHANICALLY_REQUIRED_POS, this)
-//       firstCommand = new CommandBasesPosition(baseMotor1TargetPos, baseMotor2TargetPos, this)
-//       .andThen(new CommandPivotPosition(pivotTargetPos, this));
-        
-//       return firstCommand;
-//     }
-//     return null;
-
+  public SequentialCommandGroup moveSAT(Constants.SATConstants.Position position, boolean stepOne, boolean stepTwo, boolean stepThree, double waitTimer) {
+    SATPosition target;
     
-
-//     //can delete, leaving for testing, if needed
-//     // if (!movePivotFirst) {
-//     //   satBase1Motor.setControl(satBase1_voltagePosition.withPosition(baseMotor1TargetPos));
-//     //   satBase2Motor.setControl(satBase2_voltagePosition.withPosition(baseMotor2TargetPos));
-//     //   if (isWithinTol(baseMotor1TargetPos, getBase1Pos(), 0.1) && isWithinTol(baseMotor2TargetPos, getBase2Pos(), 0.1)) {
-//     //     satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(pivotTargetPos));
-//     //   }
-//     // }
-//   }
-
-/**
- * Moves both the base and pivot motors to the specified position.
- * @param position The position to move to. Valid values: "podium", "sub", "amp", "trap", "start".
- * @param movePivotFirst If true, moves the pivot motor first. If false, moves the base motors first.
- */
-public void moveBothBaseAndPivot(String position) {
-  double baseMotor1TargetPos;
-  double baseMotor2TargetPos;
-  double pivotTargetPos;
-  boolean movePivotFirst = true; 
-
-  position = position.toLowerCase();
-
-  switch (position) {
-    case "podium":
-      Constants.SATConstants.state = Constants.SATConstants.Position.PODIUM;
-      baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_PODIUM_POS;
-      baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_PODIUM_POS;
-      pivotTargetPos = Constants.SATConstants.PIVOT_PODIUM_POS;
-      break;
-    case "sub":
-      Constants.SATConstants.state = Constants.SATConstants.Position.SUB;
-      baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_SUB_POS;
-      baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_SUB_POS;
-      pivotTargetPos = Constants.SATConstants.PIVOT_SUB_POS;
-      break;
-    case "amp":
-      Constants.SATConstants.state = Constants.SATConstants.Position.AMP;
-      baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_AMP_POS;
-      baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_AMP_POS;
-      pivotTargetPos = Constants.SATConstants.PIVOT_AMP_POS;
-      break;
-    case "trap":
-      Constants.SATConstants.state = Constants.SATConstants.Position.TRAP;
-      baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_TRAP_POS;
-      baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_TRAP_POS;
-      pivotTargetPos = Constants.SATConstants.PIVOT_TRAP_POS;
-      break;
-    case "start":
-      Constants.SATConstants.state = Constants.SATConstants.Position.START;
-      baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_START_POS;
-      baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_START_POS;
-      pivotTargetPos = Constants.SATConstants.PIVOT_START_POS;
-      break;
-    default:
+    try {
+      target = new SATPosition(position);
+    } catch (Exception e) {
       System.out.println("Invalid Position");
-      return; // Exit method if position is invalid
-  }
-
-  if (movePivotFirst) {
-    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_MECHANICALLY_REQUIRED_POS));
-    if (isWithinTol(Constants.SATConstants.PIVOT_MECHANICALLY_REQUIRED_POS, getPivotPos(), 0.1)) {
-      satBase1Motor.setControl(satBase1_voltagePosition.withPosition(baseMotor1TargetPos));
-      satBase2Motor.setControl(satBase2_voltagePosition.withPosition(baseMotor2TargetPos));
-      if (isWithinTol(baseMotor1TargetPos, getBase1Pos(), 0.5) && isWithinTol(baseMotor2TargetPos, getBase2Pos(), 0.5)){
-        satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(pivotTargetPos));
-      }
+      return new SequentialCommandGroup(new InstantCommand());
     }
-  }
 
-  SmartDashboard.putBoolean("tol check", isWithinTol(baseMotor1TargetPos, getBase1Pos(), 0.5) && isWithinTol(baseMotor2TargetPos, getBase2Pos(), 0.5));
+    Constants.SATConstants.state = position;
 
-  //can delete, leaving for testing, if needed
-  if (!movePivotFirst) {
-    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(baseMotor1TargetPos));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(baseMotor2TargetPos));
-    if (isWithinTol(baseMotor1TargetPos, getBase1Pos(), 0.1) && isWithinTol(baseMotor2TargetPos, getBase2Pos(), 0.1)) {
-      satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(pivotTargetPos));
+    SequentialCommandGroup movement = new SequentialCommandGroup();
+
+    if (stepOne) {
+      movement.addCommands(movePivotToPosition(Constants.SATConstants.PIVOT_MECHANICALLY_REQUIRED_POS));
     }
+
+    if (waitTimer != 0) {
+      movement.addCommands(new WaitCommand(waitTimer));
+    }
+    
+    if (stepTwo) {
+      movement.addCommands(moveBasesToPosition(target.baseMotor1TargetPos, target.baseMotor2TargetPos));
+    }
+
+    if (waitTimer != 0) {
+      movement.addCommands(new WaitCommand(waitTimer));
+    }
+    
+    if (stepThree) {
+      movement.addCommands(movePivotToPosition(target.pivotTargetPos));
+    }
+
+    return movement;
   }
-}
 
-
-  public boolean isWithinTol(double targetPose, double currentPose, double tolerance){
-    return (Math.abs(targetPose - currentPose) <= tolerance);
+  private CommandBasesPosition moveBasesToPosition(double baseMotor1TargetPos, double baseMotor2TargetPos) {
+    return new CommandBasesPosition(baseMotor1TargetPos, baseMotor2TargetPos, this);
   }
 
+  private CommandPivotPosition movePivotToPosition(double pivotTargetPos) {
+    return new CommandPivotPosition(pivotTargetPos, this);
+  }
+
+
+  /**
+   * Moves both the base and pivot motors to the specified position.
+   * @param position The position to move to. Valid values: "podium", "sub", "amp", "trap", "start".
+   * @param movePivotFirst If true, moves the pivot motor first. If false, moves the base motors first.
+   */
+  // public void moveBothBaseAndPivot(String position) {
+  //   double baseMotor1TargetPos;
+  //   double baseMotor2TargetPos;
+  //   double pivotTargetPos;
+  //   boolean movePivotFirst = true; 
+
+  //   position = position.toLowerCase();
+
+  //   switch (position) {
+  //     case "podium":
+  //       Constants.SATConstants.state = Constants.SATConstants.Position.PODIUM;
+  //       baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_PODIUM_POS;
+  //       baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_PODIUM_POS;
+  //       pivotTargetPos = Constants.SATConstants.PIVOT_PODIUM_POS;
+  //       break;
+  //     case "sub":
+  //       Constants.SATConstants.state = Constants.SATConstants.Position.SUB;
+  //       baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_SUB_POS;
+  //       baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_SUB_POS;
+  //       pivotTargetPos = Constants.SATConstants.PIVOT_SUB_POS;
+  //       break;
+  //     case "amp":
+  //       Constants.SATConstants.state = Constants.SATConstants.Position.AMP;
+  //       baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_AMP_POS;
+  //       baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_AMP_POS;
+  //       pivotTargetPos = Constants.SATConstants.PIVOT_AMP_POS;
+  //       break;
+  //     case "trap":
+  //       Constants.SATConstants.state = Constants.SATConstants.Position.TRAP;
+  //       baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_TRAP_POS;
+  //       baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_TRAP_POS;
+  //       pivotTargetPos = Constants.SATConstants.PIVOT_TRAP_POS;
+  //       break;
+  //     case "start":
+  //       Constants.SATConstants.state = Constants.SATConstants.Position.START;
+  //       baseMotor1TargetPos = Constants.SATConstants.MOTOR1_BASE_START_POS;
+  //       baseMotor2TargetPos = Constants.SATConstants.MOTOR2_BASE_START_POS;
+  //       pivotTargetPos = Constants.SATConstants.PIVOT_START_POS;
+  //       break;
+  //     default:
+  //       System.out.println("Invalid Position");
+  //       return; // Exit method if position is invalid
+  //   }
+
+  //   if (movePivotFirst) {
+  //     satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_MECHANICALLY_REQUIRED_POS));
+  //     if (isWithinTol(Constants.SATConstants.PIVOT_MECHANICALLY_REQUIRED_POS, getPivotPos(), 0.1)) {
+  //       satBase1Motor.setControl(satBase1_voltagePosition.withPosition(baseMotor1TargetPos));
+  //       satBase2Motor.setControl(satBase2_voltagePosition.withPosition(baseMotor2TargetPos));
+  //       if (isWithinTol(baseMotor1TargetPos, getBase1Pos(), 0.5) && isWithinTol(baseMotor2TargetPos, getBase2Pos(), 0.5)){
+  //         satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(pivotTargetPos));
+  //       }
+  //     }
+  //   }
+
+  //   SmartDashboard.putBoolean("tol check", isWithinTol(baseMotor1TargetPos, getBase1Pos(), 0.5) && isWithinTol(baseMotor2TargetPos, getBase2Pos(), 0.5));
+
+  //   //can delete, leaving for testing, if needed
+  //   if (!movePivotFirst) {
+  //     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(baseMotor1TargetPos));
+  //     satBase2Motor.setControl(satBase2_voltagePosition.withPosition(baseMotor2TargetPos));
+  //     if (isWithinTol(baseMotor1TargetPos, getBase1Pos(), 0.1) && isWithinTol(baseMotor2TargetPos, getBase2Pos(), 0.1)) {
+  //       satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(pivotTargetPos));
+  //     }
+  //   }
+  // }
+
+
+  // public boolean isWithinTol(double targetPose, double currentPose, double tolerance) {
+  //   return (Math.abs(targetPose - currentPose) <= tolerance);
+  // }
+
+  /**
+   * Returns the Base 1 Motor's position, as cached by the SAT subsystem.
+   */
   public double getBase1Pos() {
     return base1MotorPos;
   }
 
+  /**
+   * Returns the Base 2 Motor's position, as cached by the SAT subsystem.
+   */
   public double getBase2Pos() {
     return base2MotorPos;
   }
 
+  /**
+   * Returns the Pivot Motor's position, as cached by the SAT subsystem.
+   */
   public double getPivotPos() {
     return pivotMotorPos;
   }
 
+  /**
+   * Returns the Shooter Motor's position, as cached by the SAT subsystem.
+   */
   public double getShooterSpeed() {
     return shooterMotorSpeed;
+  }
+
+  public void optimization_for_CAN() {
+    StatusSignal<Double> m_PivotMotor_canbus1signal1 = satPivotMotor.getPosition();
+    StatusSignal<Double> m_Base1Motor_canbus1signal2 = satBase1Motor.getPosition();
+    StatusSignal<Double> m_Base2Motor_canbus1signal3 = satBase2Motor.getPosition();
+    StatusSignal<Double> m_Shooter1Motor_canbus1signal4 = satShooter1Motor.getVelocity();
+    StatusSignal<Double> m_Shooter2Motor_canbus1signal5 = satShooter2Motor.getVelocity();
+    StatusSignal<Double> m_PivotTemp_canbus1signal6 = satPivotMotor.getDeviceTemp();
+    StatusSignal<Double> m_Base1Temp_canbus1signal7 = satBase1Motor.getDeviceTemp();
+    StatusSignal<Double> m_Base2Temp_canbus1signal8 = satBase2Motor.getDeviceTemp();
+    StatusSignal<Double> m_Shooter1Temp_canbus1signal9 = satShooter1Motor.getDeviceTemp();
+    StatusSignal<Double> m_Shooter2Temp_canbus1signal10 = satShooter2Motor.getDeviceTemp();
+    BaseStatusSignal.setUpdateFrequencyForAll(60, m_PivotMotor_canbus1signal1, m_Base1Motor_canbus1signal2, m_Base2Motor_canbus1signal3, m_Shooter1Motor_canbus1signal4, m_Shooter2Motor_canbus1signal5);
+    BaseStatusSignal.setUpdateFrequencyForAll(1, m_PivotTemp_canbus1signal6, m_Base1Temp_canbus1signal7, m_Base2Temp_canbus1signal8, m_Shooter1Temp_canbus1signal9, m_Shooter2Temp_canbus1signal10);
+    
+    ParentDevice.optimizeBusUtilizationForAll(satPivotMotor, satBase1Motor, satBase2Motor, satShooter1Motor, satShooter2Motor);
   }
 }

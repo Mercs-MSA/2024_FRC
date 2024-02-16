@@ -36,7 +36,7 @@ public class RobotContainer {
 
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
-    public final SAT m_SAT = new SAT();
+    // public final SAT m_SAT = new SAT();
     public final Intake m_intake = new Intake();
     public final climber m_climber = new climber();
     //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
@@ -70,14 +70,14 @@ public class RobotContainer {
     // public CommandPivotPosition commandGoToPivotAmpPosition = new CommandPivotPosition("Amp", m_SAT);
     // public CommandPivotPosition commandGoToPivotWingPosition = new CommandPivotPosition("Wing", m_SAT);
 
-    Map<String, Command> autonomousCommands = new HashMap<String,Command>() {
-        {
-            put("Start Intake", commandOverrideIntakeStart);
-            put("Start Index", commandOverrideIndexStart);
-            put("Stop Intake", commandOverrideIntakeStop);
-            put("Stop Index", commandOverrideIndexStop);
-        }  
-    };
+    // Map<String, Command> autonomousCommands = new HashMap<String,Command>() {
+    //     {
+    //         put("Start Intake", commandOverrideIntakeStart);
+    //         put("Start Index", commandOverrideIndexStart);
+    //         put("Stop Intake", commandOverrideIntakeStop);
+    //         put("Stop Index", commandOverrideIndexStop);
+    //     }  
+    // };
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -95,7 +95,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("marker1", Commands.print("Finished 1 Piece"));
         NamedCommands.registerCommand("marker2", Commands.print("Finished 3-4 Piece"));
 
-        NamedCommands.registerCommands(autonomousCommands);
+        NamedCommands.registerCommand("Start Intake", Commands.runOnce(() -> m_intake.startIntakeMotor(), m_intake));
+
+        // NamedCommands.registerCommands(autonomousCommands);
 
         // NamedCommands.registerCommand("Start Intake", m_intake.collectNote());
         // NamedCommands.registerCommand("Intake To Index", m_intake.passNoteToIndex());
@@ -153,11 +155,11 @@ public class RobotContainer {
         // driver.start()
         //    .whileTrue(commandOverrideIntakeStart.andThen(commandOverrideIndexStart));
 
-        driver.leftBumper()
-             .onTrue(Commands.run(() -> m_SAT.shootNote(), m_SAT));
+        // driver.leftBumper()
+        //      .onTrue(Commands.run(() -> m_SAT.shootNote(), m_SAT));
 
-        driver.rightBumper()
-             .onTrue(Commands.run(() -> m_SAT.stopShooter(), m_SAT));
+        // driver.rightBumper()
+        //      .onTrue(Commands.run(() -> m_SAT.stopShooter(), m_SAT));
 
         driver.pov(0).onTrue(Commands.run(() -> m_intake.startIntakeMotor(), m_intake));
         driver.pov(180).onTrue(Commands.run(() -> m_intake.stopIntakeMotor(), m_intake));
@@ -226,23 +228,23 @@ public class RobotContainer {
         // operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.movePivotMotor(-1), m_SAT));
         // operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.moveBaseMotors(-2.7, -3.0), m_SAT));
 
-        // RUN STEP 1 OF SUB
-        operator.x().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, true, false, false, 0));
-        // RUN STEP 2 OF SUB
-        operator.a().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, false, true, false, 0));
-        // RUN STEP 3 OF SUB
-        operator.b().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, false, false, true, 0));
-        // RUN ALL STEPS OF SUB
-        operator.y().onTrue(m_SAT.moveSATToPosition(Constants.SATConstants.Position.SUB, 1));
+        // // RUN STEP 1 OF SUB
+        // operator.x().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, true, false, false, 0));
+        // // RUN STEP 2 OF SUB
+        // operator.a().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, false, true, false, 0));
+        // // RUN STEP 3 OF SUB
+        // operator.b().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, false, false, true, 0));
+        // // RUN ALL STEPS OF SUB
+        // operator.y().onTrue(m_SAT.moveSATToPosition(Constants.SATConstants.Position.SUB, 1));
 
-        // RUN STEP 1 OF START
-        operator.pov(270).onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, true, false, false, 0));
-        // RUN STEP 2 OF START
-        operator.pov(180).onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, false, true, false, 0));
-        // RUN STEP 3 OF START
-        operator.pov(90).onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, false, false, true, 0));
-        // RUN ALL STEPS OF START
-        operator.pov(0).onTrue(m_SAT.moveSATToPosition(Constants.SATConstants.Position.START, 1));
+        // // RUN STEP 1 OF START
+        // operator.pov(270).onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, true, false, false, 0));
+        // // RUN STEP 2 OF START
+        // operator.pov(180).onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, false, true, false, 0));
+        // // RUN STEP 3 OF START
+        // operator.pov(90).onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, false, false, true, 0));
+        // // RUN ALL STEPS OF START
+        // operator.pov(0).onTrue(m_SAT.moveSATToPosition(Constants.SATConstants.Position.START, 1));
 
 
         // operator.start()

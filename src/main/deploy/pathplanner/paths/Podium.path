@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3505702967352116,
-        "y": 4.008384276751193
+        "x": 1.9760125973521625,
+        "y": 4.375153330023095
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.7154473870579685,
-        "y": 4.109629074003519
+        "x": 2.6394316716584822,
+        "y": 4.283112183484205
       },
       "prevControl": {
-        "x": 2.7227521457793675,
-        "y": 4.112847044108142
+        "x": 2.6314495145833487,
+        "y": 4.283112183484205
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Intake",
-      "waypointRelativePos": 0.7,
+      "name": "Start Intake",
+      "waypointRelativePos": 0.6,
       "command": {
         "type": "sequential",
         "data": {
@@ -41,24 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Start Intake + Index"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Shoot",
-      "waypointRelativePos": 1.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Stop Intake + Index"
+                "name": "Start Intake"
               }
             }
           ]
@@ -67,8 +50,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

@@ -7,6 +7,8 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -313,6 +315,14 @@ public final class Constants {
 
     public static class Vision {
         public static boolean isNoteDetected = false;
+        public static class aprilTagBackLeft {
+            public static String camera = "AprilTagBackLeft";
+            public static Transform3d robotToCamera = new Transform3d(0, 0, 0, new Rotation3d(0, 0, 0));
+        }
+        public static class aprilTagFrontRight {
+            public static String camera = "AprilTagFrontRight";
+            public static Transform3d robotToCamera = new Transform3d(0, 0, 0, new Rotation3d(0, 0, 0));
+        }
     }
 
     public static final class State {
@@ -358,6 +368,7 @@ public final class Constants {
         }
        
     }
+
 }
 
 

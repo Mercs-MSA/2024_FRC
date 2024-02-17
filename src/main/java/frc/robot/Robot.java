@@ -4,7 +4,10 @@
 
 package frc.robot;
 
+import java.io.IOException;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -13,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.State.robotState;
+import frc.robot.Constants.Vision.aprilTagBackLeft;
 import frc.robot.subsystems.vision.ApriltagVision;
 import frc.robot.subsystems.climber.climber;
 import frc.robot.subsystems.SAT.SAT;
@@ -31,7 +35,10 @@ public class Robot extends TimedRobot {
   private final RobotContainer m_robotContainer = new RobotContainer();
 
   robotState currentRobotState = robotState.IDLE;
-  ApriltagVision m_ApriltagVision = new ApriltagVision("AprilTagBackLeft");
+
+  ApriltagVision m_AprilTagBackLeft = null;
+  ApriltagVision m_AprilTagFrontRight = null;
+
   Field2d poseEstimateField2d = new Field2d();
   Pose2d apiltagPlusGyro = new Pose2d();
   private AnalogInput PSU_Volt_Monitor = new AnalogInput(0);
@@ -46,6 +53,20 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer.configureButtonBindings();
     Constants.State.setState("IDLE");
+
+    try {
+      m_AprilTagBackLeft = new ApriltagVision(Constants.Vision.aprilTagBackLeft.camera, Constants.Vision.aprilTagBackLeft.robotToCamera);
+    }
+    catch(IOException e){
+      System.out.println("Something went wrong");
+    }
+
+    try {
+      m_AprilTagFrontRight = new ApriltagVision(Constants.Vision.aprilTagFrontRight.camera, Constants.Vision.aprilTagFrontRight.robotToCamera);
+    }
+    catch(IOException ea){
+      System.out.println("Something went wrong");
+    }
   }
 
   /**
@@ -77,9 +98,16 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Pivot Pos", m_robotContainer.m_SAT.outputPivotData());
     SmartDashboard.putNumber("MiniPC Input Voltage (volts)", Constants.Misc.Conversion_Factor*PSU_Volt_Monitor.getAverageVoltage());
 
-    if (m_ApriltagVision.hasMultiTagEstimatedPose()){ //replace with hasTargets()?
-      apiltagPlusGyro = new Pose2d(new Translation2d(m_ApriltagVision.getGlobalPoseEstimate().getTranslation().getX() + 0.2667, m_ApriltagVision.getGlobalPoseEstimate().getTranslation().getY() - 0.2667), m_robotContainer.s_Swerve.getPose().getRotation());
-      m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(apiltagPlusGyro, m_ApriltagVision.getTimestampSeconds());
+    // if (m_AprilTagBackLeft.hasMultiTagEstimatedPose()){ //replace with hasTargets()?
+    //   apiltagPlusGyro = new Pose2d(new Translation2d(m_AprilTagBackLeft.getGlobalPoseEstimate().getTranslation().getX() + 0.2667, m_AprilTagBackLeft.getGlobalPoseEstimate().getTranslation().getY() - 0.2667), m_robotContainer.s_Swerve.getPose().getRotation());
+    //   m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(apiltagPlusGyro, m_AprilTagBackLeft.getTimestampSeconds());
+    // }
+
+    if (m_AprilTagBackLeft.hasMultiTagEstimatedPose()){
+      m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(m_AprilTagBackLeft.getGlobalPoseEstimate(), m_AprilTagBackLeft.getTimestampSeconds());
+    }
+    if (m_AprilTagFrontRight.hasMultiTagEstimatedPose()){
+      m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(m_AprilTagBackLeft.getGlobalPoseEstimate(), m_AprilTagBackLeft.getTimestampSeconds());
     }
     poseEstimateField2d.setRobotPose(m_robotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
     SmartDashboard.putData("estimated robot pose", poseEstimateField2d);

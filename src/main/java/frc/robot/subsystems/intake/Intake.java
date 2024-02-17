@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.IntakeSubcommands.*;
@@ -215,6 +216,20 @@ public class Intake extends SubsystemBase {
   public void simulationPeriodic() {
     PhysicsSim.getInstance().run();
   }
+
+  /*
+   * ===============================
+   * 
+   *    TESTING COMMANDS
+   * 
+   * ===============================
+   */
+
+  // public SequentialCommandGroup resetState() {
+  //   return commandIntakeStart
+  //     .andThen(new WaitCommand(1))
+  //     .andThen(commandIntakeIdle);
+  // }
 
   /*
    * ===============================

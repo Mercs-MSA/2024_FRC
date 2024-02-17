@@ -222,6 +222,11 @@ public class RobotContainer {
 
         operator.rightBumper()
             .onTrue(m_intake.collectNote());
+        
+        operator.leftBumper()
+            .onTrue(commandOverrideIntakeStart);
+        operator.leftTrigger()
+            .onTrue(commandOverrideIntakeStop);
 
         //operator.start()
         //    .whileFalse(commandOverrideIntakeStop.andThen(commandOverrideIndexStop));

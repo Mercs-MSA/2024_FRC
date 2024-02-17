@@ -24,7 +24,7 @@ public class CommandOverrideIntakeStop extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    IntakeConstants.currentIntakeState = IntakeConstants.intakeState.OVERRIDE_MOTOR_OFF;
+    IntakeConstants.currentIntakeState = IntakeConstants.intakeState.IDLE;
   }
 
   @Override

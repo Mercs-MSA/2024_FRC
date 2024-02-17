@@ -50,11 +50,6 @@ public class RobotContainer {
     public CommandOverrideIntakeStop commandOverrideIntakeStop = new CommandOverrideIntakeStop(m_intake);
     public CommandOverrideIndexStop commandOverrideIndexStop = new CommandOverrideIndexStop(m_intake);
 
-    // public CommandSwerveToHeading commandSwerveToHeading0 = new CommandSwerveToHeading(0, s_Swerve);
-    // public CommandSwerveToHeading commandSwerveToHeading90 = new CommandSwerveToHeading(90, s_Swerve);
-    // public CommandSwerveToHeading commandSwerveToHeading180 = new CommandSwerveToHeading(180, s_Swerve);
-    // public CommandSwerveToHeading commandSwerveToHeading270 = new CommandSwerveToHeading(270, s_Swerve);
-
     // public CommandSwerveToNote commandSwerveToNote = new CommandSwerveToNote(s_Swerve, m_GamePieceVision);
     
     // public CommandBasesPosition commandGoToBasePodiumPosition = new CommandBasesPosition("Podium", m_SAT);
@@ -70,14 +65,14 @@ public class RobotContainer {
     // public CommandPivotPosition commandGoToPivotAmpPosition = new CommandPivotPosition("Amp", m_SAT);
     // public CommandPivotPosition commandGoToPivotWingPosition = new CommandPivotPosition("Wing", m_SAT);
 
-    // Map<String, Command> autonomousCommands = new HashMap<String,Command>() {
-    //     {
-    //         put("Start Intake", commandOverrideIntakeStart);
-    //         put("Start Index", commandOverrideIndexStart);
-    //         put("Stop Intake", commandOverrideIntakeStop);
-    //         put("Stop Index", commandOverrideIndexStop);
-    //     }  
-    // };
+    Map<String, Command> autonomousCommands = new HashMap<String,Command>() {
+        {
+            put("Start Intake", commandOverrideIntakeStart);
+            put("Start Index", commandOverrideIndexStart);
+            put("Stop Intake", commandOverrideIntakeStop);
+            put("Stop Index", commandOverrideIndexStop);
+        }  
+    };
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -95,13 +90,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("marker1", Commands.print("Finished 1 Piece"));
         NamedCommands.registerCommand("marker2", Commands.print("Finished 3-4 Piece"));
 
-        NamedCommands.registerCommand("Start Intake", Commands.runOnce(() -> m_intake.startIntakeMotor(), m_intake));
-
-        // NamedCommands.registerCommands(autonomousCommands);
-
-        // NamedCommands.registerCommand("Start Intake", m_intake.collectNote());
-        // NamedCommands.registerCommand("Intake To Index", m_intake.passNoteToIndex());
-        // NamedCommands.registerCommand("Index To Shooter", m_intake.fireNote());
+        NamedCommands.registerCommands(autonomousCommands);
 
         // NamedCommands.registerCommand("Warm Up Shooter", Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
 
@@ -131,15 +120,6 @@ public class RobotContainer {
         
         // driver.y()
         //    .onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
-         
-        // driver.povUp()
-        //     .onTrue(commandSwerveToHeading0);
-        // driver.povLeft()
-        //     .onTrue(commandSwerveToHeading90);
-        // driver.povDown()
-        //     .onTrue(commandSwerveToHeading180);
-        // driver.povRight()
-        //     .onTrue(commandSwerveToHeading270);
 
         // driver.a()
         //     .onTrue(commandSwerveToNote.alongWith(m_intake.collectNote()));
@@ -149,22 +129,16 @@ public class RobotContainer {
         // driver.rightTrigger()
         //     .onTrue(Commands.runOnce(() -> m_SAT.stopShooter(), m_SAT));
 
-        // driver.a()
-        //      .onTrue(Commands.run(() -> m_intake.stopIntakeIndexerMotors(), m_intake));
-        
-        // driver.start()
-        //    .whileTrue(commandOverrideIntakeStart.andThen(commandOverrideIndexStart));
-
         // driver.leftBumper()
         //      .onTrue(Commands.run(() -> m_SAT.shootNote(), m_SAT));
 
         // driver.rightBumper()
         //      .onTrue(Commands.run(() -> m_SAT.stopShooter(), m_SAT));
 
-        driver.pov(0).onTrue(Commands.run(() -> m_intake.startIntakeMotor(), m_intake));
-        driver.pov(180).onTrue(Commands.run(() -> m_intake.stopIntakeMotor(), m_intake));
-        driver.pov(90).onTrue(Commands.run(() -> m_intake.startIndexMotor(), m_intake));
-        driver.pov(270).onTrue(Commands.run(() -> m_intake.stopIndexMotor(), m_intake));
+        driver.pov(0).onTrue(commandOverrideIntakeStart);
+        driver.pov(180).onTrue(commandOverrideIntakeStop);
+        driver.pov(90).onTrue(commandOverrideIndexStart);
+        driver.pov(270).onTrue(commandOverrideIndexStop);
 
 
         /************************/
@@ -246,26 +220,22 @@ public class RobotContainer {
         // // RUN ALL STEPS OF START
         // operator.pov(0).onTrue(m_SAT.moveSATToPosition(Constants.SATConstants.Position.START, 1));
 
-
-        // operator.start()
-        //     .onTrue(m_intake.collectNote());
-
-        // operator.a()
-        //      .onTrue(Commands.run(() -> m_intake.startIndexMotor(), m_intake));
+        operator.rightBumper()
+            .onTrue(m_intake.collectNote());
 
         //operator.start()
         //    .whileFalse(commandOverrideIntakeStop.andThen(commandOverrideIndexStop));
         
-        if (m_intake.simulationDebugMode) {
-            operator.a()
-                .onTrue(Commands.runOnce(() -> {m_intake.setLowerSensorDetectsNote(true);}));
-            operator.b()
-                .onTrue(Commands.runOnce(() -> {m_intake.setUpperSensorDetectsNote(true);}));
-            operator.x()
-                .onTrue(Commands.runOnce(() -> {m_intake.setLowerSensorDetectsNote(false);}));
-            operator.y()
-                .onTrue(Commands.runOnce(() -> {m_intake.setUpperSensorDetectsNote(false);}));
-        }
+        // if (m_intake.simulationDebugMode) {
+        //     operator.a()
+        //         .onTrue(Commands.runOnce(() -> {m_intake.setLowerSensorDetectsNote(true);}));
+        //     operator.b()
+        //         .onTrue(Commands.runOnce(() -> {m_intake.setUpperSensorDetectsNote(true);}));
+        //     operator.x()
+        //         .onTrue(Commands.runOnce(() -> {m_intake.setLowerSensorDetectsNote(false);}));
+        //     operator.y()
+        //         .onTrue(Commands.runOnce(() -> {m_intake.setUpperSensorDetectsNote(false);}));
+        // }
     }
 
     /**

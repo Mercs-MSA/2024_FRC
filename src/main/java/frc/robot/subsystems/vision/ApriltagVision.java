@@ -48,6 +48,7 @@ public class ApriltagVision extends SubsystemBase {
         // poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCam);
     }
 
+    //@Override   // please do this instead... 
     public void periodic(){
         aprilTagResult = camera.getLatestResult();
         

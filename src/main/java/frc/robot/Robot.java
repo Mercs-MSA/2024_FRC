@@ -76,7 +76,6 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Base2 Pos", m_robotContainer.m_SAT.outputBase2Data());
     // SmartDashboard.putNumber("Pivot Pos", m_robotContainer.m_SAT.outputPivotData());
     SmartDashboard.putNumber("MiniPC Input Voltage (volts)", Constants.Misc.Conversion_Factor*PSU_Volt_Monitor.getAverageVoltage());
-    m_ApriltagVision.periodic(); // don't run this here, just use the subsystem's scheduled execution of periodic
 
     if (m_ApriltagVision.hasMultiTagEstimatedPose()){ //replace with hasTargets()?
       apiltagPlusGyro = new Pose2d(new Translation2d(m_ApriltagVision.getGlobalPoseEstimate().getTranslation().getX() + 0.2667, m_ApriltagVision.getGlobalPoseEstimate().getTranslation().getY() - 0.2667), m_robotContainer.s_Swerve.getPose().getRotation());

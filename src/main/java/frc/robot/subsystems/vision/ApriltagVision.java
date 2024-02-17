@@ -7,6 +7,7 @@ import java.util.List;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.estimation.TargetModel;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -30,25 +31,37 @@ public class ApriltagVision extends SubsystemBase {
     private List<PhotonTrackedTarget> aprilTagTargets;
     private PhotonTrackedTarget aprilTagBestTarget;
     private AprilTagFieldLayout aprilTagFieldLayout;
-    // private PhotonPoseEstimator poseEstimator;
+    private PhotonPoseEstimator poseEstimator;
     private int fiducialID;
-    private Transform3d robotToCam;
+    private Transform3d robotToCam = new Transform3d();
     private double aprilTagX, aprilTagY, aprilTagZAngle, aprilTagZ = -1;
     private Pose2d globalPoseEstimate = new Pose2d();
     private Transform3d fieldToCamera = new Transform3d();
     private Field2d apriltaField2d = new Field2d();
 
-    public ApriltagVision(String cameraName) {
+    public ApriltagVision(String cameraName, Transform3d robotToCam) throws IOException {
+        aprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFields.k2024Crescendo.m_resourceFile);
         this.cameraName = cameraName;
         camera = new PhotonCamera(cameraName);
         aprilTagResult = new PhotonPipelineResult();
         aprilTagHasTargets = false;
+        this.robotToCam = robotToCam; 
+        poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCam);
+        poseEstimator.setTagModel(TargetModel.kAprilTag36h11);
+        poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.AVERAGE_BEST_TARGETS);
+    }
+
+    public ApriltagVision(String cameraName) {
         // aprilTagFieldLayout = new AprilTagFieldLayout(AprilTagFields.k2024Crescendo.m_resourceFile);
-        // this.robotToCam = robotToCam; 
+        this.cameraName = cameraName;
+        camera = new PhotonCamera(cameraName);
+        aprilTagResult = new PhotonPipelineResult();
+        aprilTagHasTargets = false;
+        this.robotToCam = robotToCam; 
         // poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCam);
     }
 
-    //@Override   // please do this instead... 
+    @Override 
     public void periodic(){
         aprilTagResult = camera.getLatestResult();
         
@@ -89,10 +102,8 @@ public class ApriltagVision extends SubsystemBase {
                 SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Angle", fieldToCamera.getRotation().getAngle());
             }
             globalPoseEstimate = new Pose2d(fieldToCamera.getX(), fieldToCamera.getY(), new Rotation2d(fieldToCamera.getRotation().getX(), fieldToCamera.getRotation().getY()));
-            apriltaField2d.setRobotPose(globalPoseEstimate);
         }
 
-        SmartDashboard.putData("vision estimated robot pose", apriltaField2d);
 
 
 

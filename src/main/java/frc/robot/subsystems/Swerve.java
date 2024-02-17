@@ -194,6 +194,8 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Drive Current", mod.getDriveCurrent());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle Current", mod.getAngleCurrent());      
         }
+        // SmartDashboard.putNumber("gyro", gyro.magent)
+        
         publisher.set(getModuleStates());
     }
 

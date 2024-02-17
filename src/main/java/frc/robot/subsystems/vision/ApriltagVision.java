@@ -35,8 +35,8 @@ public class ApriltagVision extends SubsystemBase {
     private Transform3d robotToCam;
     private double aprilTagX, aprilTagY, aprilTagZAngle, aprilTagZ = -1;
     private Pose2d globalPoseEstimate = new Pose2d();
-    private Transform3d fieldToCamera;
-    // private Field2d apriltaField2d = new Field2d();
+    private Transform3d fieldToCamera = new Transform3d();
+    private Field2d apriltaField2d = new Field2d();
 
     public ApriltagVision(String cameraName) {
         this.cameraName = cameraName;
@@ -88,10 +88,10 @@ public class ApriltagVision extends SubsystemBase {
                 SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Angle", fieldToCamera.getRotation().getAngle());
             }
             globalPoseEstimate = new Pose2d(fieldToCamera.getX(), fieldToCamera.getY(), new Rotation2d(fieldToCamera.getRotation().getX(), fieldToCamera.getRotation().getY()));
-            // apriltaField2d.setRobotPose(globalPoseEstimate);
+            apriltaField2d.setRobotPose(globalPoseEstimate);
         }
 
-        // SmartDashboard.putData("estimated pose", apriltaField2d);
+        SmartDashboard.putData("vision estimated robot pose", apriltaField2d);
 
 
 

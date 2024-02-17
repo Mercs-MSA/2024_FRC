@@ -6,7 +6,8 @@ import frc.robot.subsystems.intake.Intake;
 
 public class CommandIndexProcess extends Command {
   private final Intake m_intake;
-  
+  private double targetPos;
+
   public CommandIndexProcess(Intake i) {
     m_intake = i;
     addRequirements(m_intake);
@@ -14,7 +15,8 @@ public class CommandIndexProcess extends Command {
 
   @Override
   public void initialize() {
-    m_intake.indexMotorToPosition(IntakeConstants.kIndexProcessRotations);
+    targetPos = m_intake.getIndexMotorPosition() - IntakeConstants.kIndexProcessRotations;
+    m_intake.indexMotorToPosition(targetPos);
     IntakeConstants.currentIndexState = IntakeConstants.indexState.PROCESS;
   }
 
@@ -26,7 +28,7 @@ public class CommandIndexProcess extends Command {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(IntakeConstants.kIndexProcessRotations - m_intake.getIndexMotorPosition()) <= IntakeConstants.kIndexMotorTolerance;
+    return Math.abs(targetPos - m_intake.getIndexMotorPosition()) <= IntakeConstants.kIndexMotorTolerance;
   }
 }
 

@@ -27,7 +27,7 @@ public class CommandIntakeStart extends Command {
 
   @Override
   public boolean isFinished() {
-    return m_intake.getIntakeMotorSpeed() == -IntakeConstants.kIntakeMotorSpeed;
+    return Math.abs(m_intake.getIntakeMotorSpeed() + IntakeConstants.kIntakeMotorSpeed) <= IntakeConstants.kIntakeMotorDCTolerance;
   }
 }
 

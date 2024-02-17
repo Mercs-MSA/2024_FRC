@@ -6,11 +6,10 @@ package frc.robot.subsystems.intake;
 
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.SATConstants;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.IntakeSubcommands.*;
@@ -22,7 +21,10 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.NeutralOut;
 
 //  USE NEXT LINE FOR TESTING
 import frc.robot.sim.PhysicsSim;
@@ -39,6 +41,8 @@ public class Intake extends SubsystemBase {
   
   private final TalonFX intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorId); //carpet
   private final TalonFX indexMotor = new TalonFX(IntakeConstants.kIndexMotorId); //sat (feeder)
+  private final DutyCycleOut intakeMotor_dutyCycleOut = new DutyCycleOut(0);
+  private final DutyCycleOut indexMotor_dutyCycleOut = new DutyCycleOut(0);
   private final PositionVoltage intakeMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final PositionVoltage indexMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final DigitalInput intakeUpperSensor = new DigitalInput(IntakeConstants.kIntakeUpperSensorId);
@@ -46,7 +50,7 @@ public class Intake extends SubsystemBase {
   private final DigitalInput intakeSensor2 = new DigitalInput(IntakeConstants.kIntakeLowerSensor2Id);
   private final DigitalInput intakeSensor3 = new DigitalInput(IntakeConstants.kIntakeUpperSensor3Id);
 
-  
+
   public CommandIntakeIdle commandIntakeIdle = new CommandIntakeIdle(this);
   public CommandIntakeStart commandIntakeStart = new CommandIntakeStart(this);
   public CommandIntakeIntake commandIntakeIntake = new CommandIntakeIntake(this);
@@ -65,6 +69,8 @@ public class Intake extends SubsystemBase {
 
   private double intakeMotorPos;
   private double indexMotorPos;
+  private double intakeMotorSpeed;
+  private double indexMotorSpeed;
 
   /** Creates a new intake. */
   public Intake() {
@@ -72,6 +78,7 @@ public class Intake extends SubsystemBase {
     isLowerNotePresent = false;
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
+    configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     configs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
     configs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
 
@@ -133,7 +140,7 @@ public class Intake extends SubsystemBase {
     // WARNING!! 
     // DO NOT USE THIS FUNCTION DIRECTLY!!
     // INSTEAD USE: CommandOverrideIntakeStart
-    intakeMotor.set(-IntakeConstants.kIntakeMotorSpeed);
+    intakeMotor.setControl(intakeMotor_dutyCycleOut.withOutput(-IntakeConstants.kIntakeMotorSpeed));
   }
 
   // public void reverseIntakeMotor() {
@@ -144,7 +151,7 @@ public class Intake extends SubsystemBase {
     // WARNING!! 
     // DO NOT USE THIS FUNCTION DIRECTLY!!
     // INSTEAD USE: CommandOverrideIndexStart
-    indexMotor.set(-IntakeConstants.kIndexMotorSpeed);
+    indexMotor.setControl(indexMotor_dutyCycleOut.withOutput(-IntakeConstants.kIndexMotorSpeed));
   }
 
   public void startIntakeIndexerMotors(){
@@ -167,22 +174,22 @@ public class Intake extends SubsystemBase {
     // WARNING!! 
     // DO NOT USE THIS FUNCTION DIRECTLY!!
     // INSTEAD USE: CommandOverrideIntakeStop
-    intakeMotor.set(0.0);
+    intakeMotor.setControl(new NeutralOut());
   }
 
   public void stopIndexMotor() {
     // WARNING!! 
     // DO NOT USE THIS FUNCTION DIRECTLY!!
     // INSTEAD USE: CommandOverrideIndexStop
-    indexMotor.set(0.0);
+    indexMotor.setControl(new NeutralOut());
   }
 
   public double getIntakeMotorSpeed() {
-    return intakeMotor.get();
+    return intakeMotorSpeed;
   }
 
   public double getIndexMotorSpeed() {
-    return indexMotor.get();
+    return indexMotorSpeed;
   }
 
   @Override
@@ -195,20 +202,17 @@ public class Intake extends SubsystemBase {
       isNEWSENSOR2Present = !intakeSensor3.get();
     }
   
-    intakeMotorPos = intakeMotor.getPosition().getValue();
-    indexMotorPos = indexMotor.getPosition().getValue();
+    intakeMotorPos = intakeMotor.getPosition().getValueAsDouble();
+    indexMotorPos = indexMotor.getPosition().getValueAsDouble();
+    intakeMotorSpeed = intakeMotor.getDutyCycle().getValueAsDouble();
+    indexMotorSpeed = indexMotor.getDutyCycle().getValueAsDouble();
 
     SmartDashboard.putBoolean("intakeUpperSensor state", isUpperNotePresent);
     SmartDashboard.putBoolean("intakeLowerSensor state", isLowerNotePresent);
     SmartDashboard.putBoolean("NEWSENSOR2 state", isNEWSENSORPresent);
     SmartDashboard.putBoolean("NEWSENSOR3 state", isNEWSENSOR2Present);
-
-
     SmartDashboard.putNumber("Intake Motor Temperature", intakeMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("Index Motor Temperature", indexMotor.getDeviceTemp().getValueAsDouble());
-
-
-
   }
   
   // USE FOR TESTING ALSO
@@ -216,20 +220,6 @@ public class Intake extends SubsystemBase {
   public void simulationPeriodic() {
     PhysicsSim.getInstance().run();
   }
-
-  /*
-   * ===============================
-   * 
-   *    TESTING COMMANDS
-   * 
-   * ===============================
-   */
-
-  // public SequentialCommandGroup resetState() {
-  //   return commandIntakeStart
-  //     .andThen(new WaitCommand(1))
-  //     .andThen(commandIntakeIdle);
-  // }
 
   /*
    * ===============================
@@ -243,6 +233,7 @@ public class Intake extends SubsystemBase {
    * This is the public command that collects the note if allowed
    */
   public ConditionalCommand collectNote() {
+    System.out.println("collectNote CONDITIONAL CHECK: " + IntakeConstants.currentIntakeState + " = " + IntakeConstants.intakeState.IDLE);
     return intakeNoteCollection()
       .onlyIf(
         () -> (IntakeConstants.currentIntakeState == IntakeConstants.intakeState.IDLE)
@@ -253,6 +244,7 @@ public class Intake extends SubsystemBase {
    * This is the public command that runs handoff if allowed
    */
   public ConditionalCommand passNoteToIndex() {
+    System.out.println("passNoteToIndex CONDITIONAL CHECK: " + handoffAllowed());
     return intakeAndIndexHandoff()
       .onlyIf(
         () -> handoffAllowed()
@@ -263,6 +255,7 @@ public class Intake extends SubsystemBase {
    * This is the public command that runs the index side of note firing if allowed
    */
   public ConditionalCommand fireNote() {
+    System.out.println("fireNote CONDITIONAL CHECK: " + IntakeConstants.currentIntakeState + " = " + IntakeConstants.intakeState.HOLD);
     return indexFireNote()
       .onlyIf(
         () -> (IntakeConstants.currentIndexState == IntakeConstants.indexState.HOLD)
@@ -282,22 +275,38 @@ public class Intake extends SubsystemBase {
    * This is a command chain for the intake side of handoff
    */
   private SequentialCommandGroup intakeNoteCollection() {
-    return commandIntakeStart
-        .andThen(commandIntakeIntake)
-        .andThen(commandIntakeProcess)
-        .andThen(commandIntakeHold);
+    return new SequentialCommandGroup(
+      new PrintCommand("intakeNoteCollection step1"),
+      commandIntakeStart,
+      new PrintCommand("intakeNoteCollection step2"),
+      commandIntakeIntake,
+      new PrintCommand("intakeNoteCollection step3"),
+      commandIntakeProcess,
+      new PrintCommand("intakeNoteCollection step4"),
+      commandIntakeHold,
+      new PrintCommand("intakeNoteCollection step5")
+    );
   }
   
   /*
   * This is a command chain that runs both sides if handoff at the same time
   */
   private SequentialCommandGroup intakeAndIndexHandoff() {
-    return commandIndexStart
-        .andThen(commandIntakeIndex)
-        .andThen(commandIndexIntake)
-        .andThen(commandIndexProcess)
-        .andThen(commandIntakeIdle)
-        .andThen(commandIndexHold);
+    return new SequentialCommandGroup(
+      new PrintCommand("intakeAndIndexHandoff step1"),
+      commandIndexStart,
+      new PrintCommand("intakeAndIndexHandoff step2"),
+      commandIntakeIndex,
+      new PrintCommand("intakeAndIndexHandoff step3"),
+      commandIndexIntake,
+      new PrintCommand("intakeAndIndexHandoff step4"),
+      commandIndexProcess,
+      new PrintCommand("intakeAndIndexHandoff step5"),
+      commandIntakeIdle,
+      new PrintCommand("intakeAndIndexHandoff step6"),
+      commandIndexHold,
+      new PrintCommand("intakeAndIndexHandoff step7")
+    );
   }
 
   /*
@@ -311,8 +320,13 @@ public class Intake extends SubsystemBase {
    * This is a command chain for the index side of note firing
    */
   private SequentialCommandGroup indexFireNote() {
-    return commandIndexFire
-      .andThen(commandIndexIdle);
+    return new SequentialCommandGroup(
+      new PrintCommand("indexFireNote step1"),
+      commandIndexFire,
+      new PrintCommand("indexFireNote step2"),
+      commandIndexIdle,
+      new PrintCommand("indexFireNote step3")
+    );
   }
 
   public void optimization_for_CAN() {
@@ -320,7 +334,9 @@ public class Intake extends SubsystemBase {
     StatusSignal<Double> m_IndexMotor_canbus1signal2 = indexMotor.getPosition();
     StatusSignal<Double> m_IntakeTemp_canbus1signal1 = intakeMotor.getDeviceTemp();
     StatusSignal<Double> m_IndexTemp_canbus1signal2 = indexMotor.getDeviceTemp();
-    BaseStatusSignal.setUpdateFrequencyForAll(60, m_IntakeMotor_canbus1signal1, m_IndexMotor_canbus1signal2);
+    StatusSignal<Double> m_IntakeDutyCycle_canbus1signal1 = intakeMotor.getDutyCycle();
+    StatusSignal<Double> m_IndexDutyCycle_canbus1signal2 = indexMotor.getDutyCycle();
+    BaseStatusSignal.setUpdateFrequencyForAll(60, m_IntakeMotor_canbus1signal1, m_IndexMotor_canbus1signal2, m_IntakeDutyCycle_canbus1signal1, m_IndexDutyCycle_canbus1signal2);
     BaseStatusSignal.setUpdateFrequencyForAll(1, m_IntakeTemp_canbus1signal1, m_IndexTemp_canbus1signal2);
     ParentDevice.optimizeBusUtilizationForAll(intakeMotor, indexMotor);
   }

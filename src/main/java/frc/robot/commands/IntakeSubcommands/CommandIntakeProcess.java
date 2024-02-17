@@ -6,6 +6,7 @@ import frc.robot.subsystems.intake.Intake;
 
 public class CommandIntakeProcess extends Command {
   private final Intake m_intake;
+  private double targetPos;
   
   public CommandIntakeProcess(Intake i) {
     m_intake = i;
@@ -14,7 +15,8 @@ public class CommandIntakeProcess extends Command {
 
   @Override
   public void initialize() {
-    m_intake.intakeMotorToPosition(IntakeConstants.kIntakeProcessRotations);
+    targetPos = m_intake.getIntakeMotorPosition() - IntakeConstants.kIntakeProcessRotations;
+    m_intake.intakeMotorToPosition(targetPos);
     IntakeConstants.currentIntakeState = IntakeConstants.intakeState.PROCESS;
   }
 
@@ -26,7 +28,7 @@ public class CommandIntakeProcess extends Command {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(IntakeConstants.kIntakeProcessRotations - m_intake.getIntakeMotorPosition()) <= IntakeConstants.kIntakeMotorTolerance;
+    return Math.abs(targetPos - m_intake.getIntakeMotorPosition()) <= IntakeConstants.kIntakeMotorTolerance;
   }
 }
 

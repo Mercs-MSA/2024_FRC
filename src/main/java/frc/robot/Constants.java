@@ -170,8 +170,8 @@ public final class Constants {
     
     public static class IntakeConstants {
         public static final int kIntakeMotorId = 26;
-        public static final double kIntakeMotorSpeed = 0.25;
-        public static final double kIntakeProcessRotations = 2.0;
+        public static final double kIntakeMotorSpeed = 0.4;
+        public static final double kIntakeProcessRotations = 1.9;
         public static final double kIndexProcessRotations = 2.0;
         public static final int kIndexMotorId = 24;
         public static final double kIndexMotorSpeed = 0.70;
@@ -181,6 +181,9 @@ public final class Constants {
         public static final int kIntakeUpperSensor3Id = 3;       
         public static final double kIntakeMotorTolerance = 0.3;
         public static final double kIndexMotorTolerance = 0.3;
+        public static final double kIntakeMotorDCTolerance = 0.1;
+        public static final double kIndexMotorDCTolerance = 0.1;
+        
         /*
          * States for Intake:
          * IDLE: the motor is off, sensor doesn't see anything, doesn't have a note in it

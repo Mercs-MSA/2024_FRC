@@ -8,11 +8,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.CommandOverrideIndexStart;
 import frc.robot.commands.CommandOverrideIndexStop;
 import frc.robot.commands.CommandOverrideIntakeStart;
 import frc.robot.commands.CommandOverrideIntakeStop;
+import frc.robot.commands.CommandShootNote;
+import frc.robot.commands.CommandStopShooter;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.SAT.SAT;
@@ -36,7 +39,7 @@ public class RobotContainer {
 
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
-    // public final SAT m_SAT = new SAT();
+    public final SAT m_SAT = new SAT();
     public final Intake m_intake = new Intake();
     public final climber m_climber = new climber();
     //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
@@ -49,6 +52,9 @@ public class RobotContainer {
     public CommandOverrideIndexStart commandOverrideIndexStart = new CommandOverrideIndexStart(m_intake);
     public CommandOverrideIntakeStop commandOverrideIntakeStop = new CommandOverrideIntakeStop(m_intake);
     public CommandOverrideIndexStop commandOverrideIndexStop = new CommandOverrideIndexStop(m_intake);
+
+    public CommandShootNote commandShootNote = new CommandShootNote(m_SAT);
+    public CommandStopShooter commandStopShooter = new CommandStopShooter(m_SAT);
 
     // public CommandSwerveToNote commandSwerveToNote = new CommandSwerveToNote(s_Swerve, m_GamePieceVision);
     
@@ -220,13 +226,32 @@ public class RobotContainer {
         // // RUN ALL STEPS OF START
         // operator.pov(0).onTrue(m_SAT.moveSATToPosition(Constants.SATConstants.Position.START, 1));
 
+        //operator.rightBumper()
+           // .onTrue(m_intake.collectNote());
+
+        //PHASE 2 TESTING, INTAKE TO INDEXER
         operator.rightBumper()
-            .onTrue(m_intake.collectNote());
-        
+            .onTrue(commandOverrideIndexStop);
+
         operator.leftBumper()
             .onTrue(commandOverrideIntakeStart);
+
         operator.leftTrigger()
             .onTrue(commandOverrideIntakeStop);
+
+        operator.a()
+            .onTrue(m_intake.passNoteToIndex());
+
+        //PHASE 3 TESTING, INDEXER TO SHOOTER
+            operator.b()
+            .onTrue(commandOverrideIndexStop);
+
+            operator.x()
+            .onTrue(commandStopShooter);
+
+            operator.y()
+            .onTrue(new SequentialCommandGroup(commandShootNote,m_intake.fireNote(), commandStopShooter));
+
 
         //operator.start()
         //    .whileFalse(commandOverrideIntakeStop.andThen(commandOverrideIndexStop));

@@ -265,17 +265,19 @@ public class SAT extends SubsystemBase {
     satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_TRAP_POS));    
   }
 
+  public void shootNote(){
+    satShooter1Motor.setControl(satShooter1_voltageVelocity.withVelocity(SATConstants.SHOOTER_SPEED)); 
+  }
+
+  public void stopShooter(){
+    satShooter1Motor.setControl(new NeutralOut());
+  }
+
    public void goToPivotZeroPosition() {
     satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.PIVOT_START_POS)); 
   }
 
-  public void shootNote() { 
-    satShooter1Motor.setControl(satShooter1_voltageVelocity.withVelocity(Constants.SATConstants.SHOOTER_SPEED)); 
-  }
-
-  public void stopShooter() {
-    satShooter1Motor.setControl(new NeutralOut());
-  }
+ 
 
   public void movePivotMotor(double pos){
     satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(pos));
@@ -294,6 +296,7 @@ public class SAT extends SubsystemBase {
   public SequentialCommandGroup moveSATToPosition(Constants.SATConstants.Position position, double waitTimer) {
     return moveSAT(position, true, true, true, waitTimer);
   }
+
 
   public SequentialCommandGroup moveSAT(Constants.SATConstants.Position position, boolean stepOne, boolean stepTwo, boolean stepThree, double waitTimer) {
     SATPosition target;

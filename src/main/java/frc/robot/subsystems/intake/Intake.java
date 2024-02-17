@@ -255,7 +255,7 @@ public class Intake extends SubsystemBase {
    * This is the public command that runs the index side of note firing if allowed
    */
   public ConditionalCommand fireNote() {
-    System.out.println("fireNote CONDITIONAL CHECK: " + IntakeConstants.currentIntakeState + " = " + IntakeConstants.intakeState.HOLD);
+    System.out.println("fireNote CONDITIONAL CHECK: " + IntakeConstants.currentIndexState + " = " + IntakeConstants.indexState.HOLD);
     return indexFireNote()
       .onlyIf(
         () -> (IntakeConstants.currentIndexState == IntakeConstants.indexState.HOLD)

@@ -269,6 +269,7 @@ public final class Constants {
         public static final double MOTOR_TOLERANCE = 0.5;
 
         public static final double SHOOTER_SPEED = 70;
+        public static final double kShooterSpeedTolerance = 1.0;
 
         /*THIS NEEDS TO INCLUDE THE CONVERSION FROM DEGREES TO ENCODER COUNTS */
         public static final int BASE_ENCODER_RATIO = 50;

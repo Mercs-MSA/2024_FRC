@@ -98,7 +98,7 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean lowerSensorDetectsNote() {
-    return isLowerNotePresent;
+    return isLowerNotePresent || isNEWSENSORPresent || isNEWSENSOR2Present;
   }
 
   public boolean upperSensorDetectsNote() {

@@ -135,16 +135,16 @@ public class RobotContainer {
         // driver.rightTrigger()
         //     .onTrue(Commands.runOnce(() -> m_SAT.stopShooter(), m_SAT));
 
-        // driver.leftBumper()
-        //      .onTrue(Commands.run(() -> m_SAT.shootNote(), m_SAT));
+        driver.leftBumper()
+             .onTrue(Commands.run(() -> m_SAT.shootNote(), m_SAT));
 
-        // driver.rightBumper()
-        //      .onTrue(Commands.run(() -> m_SAT.stopShooter(), m_SAT));
+        driver.rightBumper()
+             .onTrue(Commands.run(() -> m_SAT.stopShooter(), m_SAT));
 
         // driver.pov(0).onTrue(commandOverrideIntakeStart);
         // driver.pov(180).onTrue(commandOverrideIntakeStop);
-        // driver.pov(90).onTrue(commandOverrideIndexStart);
-        // driver.pov(270).onTrue(commandOverrideIndexStop);
+        driver.pov(90).onTrue(commandOverrideIndexStart);
+        driver.pov(270).onTrue(commandOverrideIndexStop);
 
 
         /************************/
@@ -203,8 +203,8 @@ public class RobotContainer {
         //         m_climber.climbDownLeftCommand()
         //     );
 
-        operator.pov(0).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(0.5), m_SAT));
-        operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(-0.5), m_SAT));
+        operator.pov(0).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(0.25), m_SAT));
+        operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(-0.25), m_SAT));
         operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
         operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
 

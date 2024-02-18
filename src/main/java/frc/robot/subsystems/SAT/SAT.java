@@ -46,7 +46,7 @@ public class SAT extends SubsystemBase {
   private final PositionVoltage satBase1_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final PositionVoltage satBase2_voltagePosition = satBase1_voltagePosition.clone();
 
-  private double base1MotorPos, base2MotorPos, pivotMotorPos, shooterMotorSpeed, Base1StartPosition, Base2StartPosition, PivotStartPosition;
+  private double base1MotorPos, base2MotorPos, pivotMotorPos, shooterMotor1Speed, shooterMotor2Speed, Base1StartPosition, Base2StartPosition, PivotStartPosition;
   private double baseTargetPose, pivotTargetPose = 0.0;
 
   private TalonFXConfiguration satBase1MotorConfigs, satBase2MotorConfigs;
@@ -95,6 +95,7 @@ public class SAT extends SubsystemBase {
     satPivotMotorConfigs.Voltage.PeakReverseVoltage = -8;
 
     TalonFXConfiguration satShooter1MotorConfigs = new TalonFXConfiguration();
+    satShooter1MotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     satShooter1MotorConfigs.Slot0.kP = 0.6; // An error of 0.5 rotations results in 1.2 volts output
     satShooter1MotorConfigs.Slot0.kS = 0.05; // Add 0.05 V output to overcome static friction
     satShooter1MotorConfigs.Slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
@@ -163,7 +164,7 @@ public class SAT extends SubsystemBase {
 
     /* PUT FOLLOW SYSTEMS HERE */
     satShooter2Motor.setControl(Shooter2_Follower);
-    satBase1Motor.setControl(Base2_Follower);
+    satBase2Motor.setControl(Base2_Follower);
 
     Base1StartPosition = satBase1Motor.getPosition().getValueAsDouble();
     Base2StartPosition = satBase2Motor.getPosition().getValueAsDouble();
@@ -184,7 +185,8 @@ public class SAT extends SubsystemBase {
     base1MotorPos = satBase1Motor.getPosition().getValueAsDouble();
     base2MotorPos = satBase2Motor.getPosition().getValueAsDouble();
     pivotMotorPos = satPivotMotor.getPosition().getValueAsDouble();
-    shooterMotorSpeed = satShooter1Motor.getVelocity().getValueAsDouble();
+    shooterMotor1Speed = satShooter1Motor.getVelocity().getValueAsDouble();
+    shooterMotor2Speed = satShooter2Motor.getVelocity().getValueAsDouble();
 
     SmartDashboard.putNumber("base1MotorPos", base1MotorPos);
     SmartDashboard.putNumber("base2MotorPos", base2MotorPos);
@@ -199,7 +201,6 @@ public class SAT extends SubsystemBase {
     SmartDashboard.putNumber("base2MotorVoltage", satBase2Motor.getMotorVoltage().getValueAsDouble());
 
     SmartDashboard.putNumber("pivotMotorPos", pivotMotorPos);
-    SmartDashboard.putNumber("shooter speed", shooterMotorSpeed);
     SmartDashboard.putNumber("shooter command", satShooter1Motor.getClosedLoopReference().getValueAsDouble());
 
     SmartDashboard.putNumber("Base1 Motor Temperature", satBase1Motor.getDeviceTemp().getValueAsDouble());
@@ -207,6 +208,13 @@ public class SAT extends SubsystemBase {
     SmartDashboard.putNumber("Pivot Motor Temperature", satPivotMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("Shooter Motor1 Temperature", satShooter1Motor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("Shooter Motor2 Temperature", satShooter2Motor.getDeviceTemp().getValueAsDouble());
+
+    SmartDashboard.putNumber("shooterMotor1Speed", shooterMotor1Speed);
+    SmartDashboard.putNumber("shooterMotor2Speed", shooterMotor2Speed);
+
+    SmartDashboard.putNumber("shooter1MotorVoltage", satShooter1Motor.getMotorVoltage().getValueAsDouble());
+    SmartDashboard.putNumber("shooter2MotorVoltage", satShooter2Motor.getMotorVoltage().getValueAsDouble());
+
   }
 
   @Override
@@ -454,7 +462,7 @@ public class SAT extends SubsystemBase {
    * Returns the Shooter Motor's position, as cached by the SAT subsystem.
    */
   public double getShooterSpeed() {
-    return shooterMotorSpeed;
+    return shooterMotor1Speed;
   }
 
   public void optimization_for_CAN() {
@@ -473,7 +481,9 @@ public class SAT extends SubsystemBase {
     StatusSignal<Double> m_Base1MotorClosed_canbus1signal13 = satBase1Motor.getClosedLoopReference();
     StatusSignal<Double> m_Base2MotorClosed_canbus1signal14 = satBase2Motor.getClosedLoopReference();
     StatusSignal<Double> m_Shooter1MotorClosed_canbus1signal15 = satShooter1Motor.getClosedLoopReference();   
-    BaseStatusSignal.setUpdateFrequencyForAll(60, m_PivotMotor_canbus1signal1, m_Base1Motor_canbus1signal2, m_Base2Motor_canbus1signal3, m_Shooter1Motor_canbus1signal4, m_Shooter2Motor_canbus1signal5, m_Base1MotorVolt_canbus1signal11, m_Base2MotorVolt_canbus1signal12, m_Base1MotorClosed_canbus1signal13, m_Base2MotorClosed_canbus1signal14, m_Shooter1MotorClosed_canbus1signal15);
+    StatusSignal<Double> m_Shooter1Volt_canbus1signal16 = satShooter1Motor.getMotorVoltage();
+    StatusSignal<Double> m_Shooter2Volt_canbus1signal17 = satShooter2Motor.getMotorVoltage();
+    BaseStatusSignal.setUpdateFrequencyForAll(60, m_PivotMotor_canbus1signal1, m_Base1Motor_canbus1signal2, m_Base2Motor_canbus1signal3, m_Shooter1Motor_canbus1signal4, m_Shooter2Motor_canbus1signal5, m_Base1MotorVolt_canbus1signal11, m_Base2MotorVolt_canbus1signal12, m_Base1MotorClosed_canbus1signal13, m_Base2MotorClosed_canbus1signal14, m_Shooter1MotorClosed_canbus1signal15, m_Shooter1Volt_canbus1signal16, m_Shooter2Volt_canbus1signal17);
     BaseStatusSignal.setUpdateFrequencyForAll(1, m_PivotTemp_canbus1signal6, m_Base1Temp_canbus1signal7, m_Base2Temp_canbus1signal8, m_Shooter1Temp_canbus1signal9, m_Shooter2Temp_canbus1signal10);
     ParentDevice.optimizeBusUtilizationForAll(satPivotMotor, satBase1Motor, satBase2Motor, satShooter1Motor, satShooter2Motor);
   }

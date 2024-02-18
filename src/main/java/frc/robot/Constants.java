@@ -248,7 +248,7 @@ public final class Constants {
         /*lift start positions */
         public static final double MOTOR1_BASE_START_POS = 0.155;
         public static final double MOTOR2_BASE_START_POS = 0.342;
-        public static final double PIVOT_START_POS = 0.1;
+        public static final double PIVOT_START_POS = 0.1; //9.288 is intake pos
         /*podium scoring position */
         public static final double MOTOR1_BASE_PODIUM_POS = -1.575;
         public static final double MOTOR2_BASE_PODIUM_POS = -1.723;

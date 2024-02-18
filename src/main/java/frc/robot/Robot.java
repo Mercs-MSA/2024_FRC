@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
       m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(m_AprilTagBackLeft.getGlobalPoseEstimate(), m_AprilTagBackLeft.getTimestampSeconds());
     }
     if (m_AprilTagFrontRight != null && m_AprilTagFrontRight.hasMultiTagEstimatedPose()){
-      m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(m_AprilTagBackLeft.getGlobalPoseEstimate(), m_AprilTagBackLeft.getTimestampSeconds());
+      m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(m_AprilTagFrontRight.getGlobalPoseEstimate(), m_AprilTagFrontRight.getTimestampSeconds());
     }
     poseEstimateField2d.setRobotPose(m_robotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
     SmartDashboard.putData("estimated robot pose", poseEstimateField2d);

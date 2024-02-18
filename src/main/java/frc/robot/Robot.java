@@ -36,8 +36,8 @@ public class Robot extends TimedRobot {
 
   robotState currentRobotState = robotState.IDLE;
 
-  ApriltagVision m_AprilTagBackLeft = null;
-  ApriltagVision m_AprilTagFrontRight = null;
+  // ApriltagVision m_AprilTagBackLeft = null;
+  // ApriltagVision m_AprilTagFrontRight = null;
 
   Field2d poseEstimateField2d = new Field2d();
   Pose2d apiltagPlusGyro = new Pose2d();
@@ -54,19 +54,19 @@ public class Robot extends TimedRobot {
     m_robotContainer.configureButtonBindings();
     Constants.State.setState("IDLE");
 
-    try {
-      m_AprilTagBackLeft = new ApriltagVision(Constants.Vision.aprilTagBackLeft.camera, Constants.Vision.aprilTagBackLeft.robotToCamera);
-    }
-    catch(IOException e){
-      System.out.println("Something went wrong");
-    }
+    // try {
+    //   m_AprilTagBackLeft = new ApriltagVision(Constants.Vision.aprilTagBackLeft.camera, Constants.Vision.aprilTagBackLeft.robotToCamera);
+    // }
+    // catch(IOException e){
+    //   System.out.println("Something went wrong");
+    // }
 
-    try {
-      m_AprilTagFrontRight = new ApriltagVision(Constants.Vision.aprilTagFrontRight.camera, Constants.Vision.aprilTagFrontRight.robotToCamera);
-    }
-    catch(IOException ea){
-      System.out.println("Something went wrong");
-    }
+    // try {
+    //   m_AprilTagFrontRight = new ApriltagVision(Constants.Vision.aprilTagFrontRight.camera, Constants.Vision.aprilTagFrontRight.robotToCamera);
+    // }
+    // catch(IOException ea){
+    //   System.out.println("Something went wrong");
+    // }
 
   }
 
@@ -104,12 +104,12 @@ public class Robot extends TimedRobot {
     //   m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(apiltagPlusGyro, m_AprilTagBackLeft.getTimestampSeconds());
     // }
 
-    if (m_AprilTagBackLeft != null && m_AprilTagBackLeft.hasMultiTagEstimatedPose()){
-      m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(m_AprilTagBackLeft.getGlobalPoseEstimate(), m_AprilTagBackLeft.getTimestampSeconds());
-    }
-    if (m_AprilTagFrontRight != null && m_AprilTagFrontRight.hasMultiTagEstimatedPose()){
-      m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(m_AprilTagFrontRight.getGlobalPoseEstimate(), m_AprilTagFrontRight.getTimestampSeconds());
-    }
+    // if (m_AprilTagBackLeft != null && m_AprilTagBackLeft.hasMultiTagEstimatedPose()){
+    //   m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(m_AprilTagBackLeft.getGlobalPoseEstimate(), m_AprilTagBackLeft.getTimestampSeconds());
+    // }
+    // if (m_AprilTagFrontRight != null && m_AprilTagFrontRight.hasMultiTagEstimatedPose()){
+    //   m_robotContainer.s_Swerve.poseEstimator.addVisionMeasurement(m_AprilTagFrontRight.getGlobalPoseEstimate(), m_AprilTagFrontRight.getTimestampSeconds());
+    // }
     poseEstimateField2d.setRobotPose(m_robotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
     SmartDashboard.putData("estimated robot pose", poseEstimateField2d);
     SmartDashboard.putNumber("Current Heading", m_robotContainer.s_Swerve.getHeading().getRadians());

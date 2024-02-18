@@ -39,6 +39,8 @@ public class SAT extends SubsystemBase {
   private final TalonFX satShooter2Motor = new TalonFX(SATConstants.SAT_SHOOTER2_MOTOR_ID);
 
   private final Follower Shooter2_Follower = new Follower(SATConstants.SAT_SHOOTER1_MOTOR_ID, true);
+  private final Follower Base2_Follower = new Follower(SATConstants.SAT_BASE1_MOTOR_ID, true);
+
   private final VelocityVoltage satShooter1_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
   private final PositionVoltage satPivotMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final PositionVoltage satBase1_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
@@ -70,18 +72,18 @@ public class SAT extends SubsystemBase {
     satBase1MotorConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.2;
     satBase1MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
 
-    satBase2MotorConfigs = new TalonFXConfiguration();
-    satBase2MotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    satBase2MotorConfigs.Slot0.kP = 1.0; // An error of 0.5 rotations results in 1.2 volts output
-    satBase2MotorConfigs.Slot0.kD = 0; // A change of 1 rotation per second results in 0 volts output
-    satBase2MotorConfigs.Slot0.kG = 0.0;
-    satBase2MotorConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    // satBase2MotorConfigs = new TalonFXConfiguration();
+    // satBase2MotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    // satBase2MotorConfigs.Slot0.kP = 1.0; // An error of 0.5 rotations results in 1.2 volts output
+    // satBase2MotorConfigs.Slot0.kD = 0; // A change of 1 rotation per second results in 0 volts output
+    // satBase2MotorConfigs.Slot0.kG = 0.0;
+    // satBase2MotorConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-    // Peak output of 8 volts
-    satBase2MotorConfigs.Voltage.PeakForwardVoltage = 14;
-    satBase2MotorConfigs.Voltage.PeakReverseVoltage = -14;
-    satBase2MotorConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.2;
-    satBase2MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
+    // // Peak output of 8 volts
+    // satBase2MotorConfigs.Voltage.PeakForwardVoltage = 14;
+    // satBase2MotorConfigs.Voltage.PeakReverseVoltage = -14;
+    // satBase2MotorConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.2;
+    // satBase2MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
 
 
     TalonFXConfiguration satPivotMotorConfigs = new TalonFXConfiguration();
@@ -161,6 +163,7 @@ public class SAT extends SubsystemBase {
 
     /* PUT FOLLOW SYSTEMS HERE */
     satShooter2Motor.setControl(Shooter2_Follower);
+    satBase1Motor.setControl(Base2_Follower);
 
     Base1StartPosition = satBase1Motor.getPosition().getValueAsDouble();
     Base2StartPosition = satBase2Motor.getPosition().getValueAsDouble();
@@ -213,40 +216,40 @@ public class SAT extends SubsystemBase {
   
   public void goToBasePodiumPosition() {
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.MOTOR1_BASE_PODIUM_POS));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_PODIUM_POS));
+    // satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_PODIUM_POS));
   }
 
   // This is for test purposes only
-  public void baseGoToPosition(double increment) {
+  public void baseGoToPositionIncrement(double increment) {
     baseTargetPose = baseTargetPose + (increment);
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Base1StartPosition + baseTargetPose));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Base2StartPosition + baseTargetPose));
+    // satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Base2StartPosition + baseTargetPose));
   }
 
   // This is for test purposes only
-  public void pivotGoToPosition(double increment) {
+  public void pivotGoToPositionIncrement(double increment) {
     pivotTargetPose = pivotTargetPose + (increment);
     satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(PivotStartPosition + pivotTargetPose));
   }
 
   public void goToBaseSubPosition() {
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.MOTOR1_BASE_SUB_POS));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_SUB_POS));    
+    // satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_SUB_POS));    
   }
 
   public void goToBaseAmpPosition() {
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.MOTOR1_BASE_AMP_POS));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_AMP_POS));
+    // satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_AMP_POS));
   }
 
   public void goToBaseTrapPosition() {
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.MOTOR1_BASE_TRAP_POS));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_TRAP_POS));
+    // satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_TRAP_POS));
   }
 
   public void goToBaseZeroPosition() {
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.MOTOR1_BASE_START_POS));
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_START_POS));
+    // satBase2Motor.setControl(satBase2_voltagePosition.withPosition(Constants.SATConstants.MOTOR2_BASE_START_POS));
   }
 
    public void goToPivotPodiumPosition() {
@@ -285,8 +288,13 @@ public class SAT extends SubsystemBase {
 
   public void moveBaseMotors(double base1Pos, double base2pos){
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(base1Pos)); 
-    satBase2Motor.setControl(satBase2_voltagePosition.withPosition(base2pos));
+    // satBase2Motor.setControl(satBase2_voltagePosition.withPosition(base2pos));
   }
+
+  public void moveBaseMotors(double base1Pos){
+    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(base1Pos)); 
+  }
+
 
   /**
    * Moves both the base and pivot motors to the specified position.

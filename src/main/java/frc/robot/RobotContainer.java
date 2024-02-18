@@ -141,10 +141,10 @@ public class RobotContainer {
         // driver.rightBumper()
         //      .onTrue(Commands.run(() -> m_SAT.stopShooter(), m_SAT));
 
-        driver.pov(0).onTrue(commandOverrideIntakeStart);
-        driver.pov(180).onTrue(commandOverrideIntakeStop);
-        driver.pov(90).onTrue(commandOverrideIndexStart);
-        driver.pov(270).onTrue(commandOverrideIndexStop);
+        // driver.pov(0).onTrue(commandOverrideIntakeStart);
+        // driver.pov(180).onTrue(commandOverrideIntakeStop);
+        // driver.pov(90).onTrue(commandOverrideIndexStart);
+        // driver.pov(270).onTrue(commandOverrideIndexStop);
 
 
         /************************/
@@ -203,14 +203,14 @@ public class RobotContainer {
         //         m_climber.climbDownLeftCommand()
         //     );
 
-        // operator.pov(0).whileTrue(new RunCommand(() -> m_SAT.movePivotMotor(7.8), m_SAT));
-        // operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.moveBaseMotors(Constants.SATConstants.MOTOR1_BASE_AMP_POS, Constants.SATConstants.MOTOR2_BASE_AMP_POS), m_SAT));
-        // operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.movePivotMotor(-1), m_SAT));
-        // operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.moveBaseMotors(-2.7, -3.0), m_SAT));
+        operator.pov(0).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(0.5), m_SAT));
+        operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(-0.5), m_SAT));
+        operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
+        operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
 
         // // RUN STEP 1 OF SUB
         // operator.x().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, true, false, false, 0));
-        // // RUN STEP 2 OF SUB
+        // // RUN STEP 2 OF SUB`
         // operator.a().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, false, true, false, 0));
         // // RUN STEP 3 OF SUB
         // operator.b().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, false, false, true, 0));
@@ -243,14 +243,15 @@ public class RobotContainer {
             .onTrue(m_intake.passNoteToIndex());
 
         //PHASE 3 TESTING, INDEXER TO SHOOTER
-            operator.b()
-            .onTrue(commandOverrideIndexStop);
+        operator.b()
+        .onTrue(commandOverrideIndexStop);
 
-            operator.x()
-            .onTrue(commandStopShooter);
+        operator.x()
+        .onTrue(commandStopShooter);
 
-            operator.y()
-            .onTrue(new SequentialCommandGroup(commandShootNote,m_intake.fireNote(), commandStopShooter));
+        operator.y()
+        .onTrue(new SequentialCommandGroup(commandShootNote,m_intake.fireNote(), commandStopShooter));
+
 
 
         //operator.start()

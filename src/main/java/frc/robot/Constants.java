@@ -246,6 +246,7 @@ public final class Constants {
         public static final int SAT_OBJECTDETECTOR_SENSOR_ID = 1;
 
         /*lift start positions */
+        //same as SUBWOOFER?
         public static final double MOTOR1_BASE_START_POS = 0.155;
         public static final double MOTOR2_BASE_START_POS = 0.342;
         public static final double PIVOT_START_POS = 0.1; //9.288 is intake pos
@@ -254,6 +255,7 @@ public final class Constants {
         public static final double MOTOR2_BASE_PODIUM_POS = -1.723;
         public static final double PIVOT_PODIUM_POS = 0.4;
         /*SUBWOOFER scoring position */
+        //this is robot's initial position (basing this on the assumtion that we can shoot SUBWOOFER without moving lift or pivot)
         public static final double MOTOR1_BASE_SUB_POS = -18.5268;
         public static final double MOTOR2_BASE_SUB_POS = -18.76;
         public static final double PIVOT_SUB_POS = 1.7;

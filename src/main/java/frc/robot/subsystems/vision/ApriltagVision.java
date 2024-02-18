@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ApriltagVision extends SubsystemBase {
 
-    private String cameraName;
+    private String cameraName = "";
     private PhotonCamera camera;
     private PhotonPipelineResult aprilTagResult;
     private boolean aprilTagHasTargets;
@@ -63,50 +63,48 @@ public class ApriltagVision extends SubsystemBase {
 
     @Override 
     public void periodic(){
-        aprilTagResult = camera.getLatestResult();
-        
-        aprilTagHasTargets = aprilTagResult.hasTargets();
+        if (this.camera != null){
+            aprilTagResult = camera.getLatestResult();
+            
+            aprilTagHasTargets = aprilTagResult.hasTargets();
 
-        if (aprilTagHasTargets) {
-            aprilTagTargets = aprilTagResult.getTargets();
-            aprilTagBestTarget = aprilTagResult.getBestTarget();
+            if (aprilTagHasTargets) {
+                aprilTagTargets = aprilTagResult.getTargets();
+                aprilTagBestTarget = aprilTagResult.getBestTarget();
 
-            // fiducialID = aprilTagBestTarget.getFiducialId();
-            // aprilTagX = aprilTagBestTarget.getBestCameraToTarget().getX();
-            // aprilTagY = aprilTagBestTarget.getBestCameraToTarget().getY();
-            // aprilTagZ = aprilTagBestTarget.getBestCameraToTarget().getZ();
-            // aprilTagZAngle = aprilTagBestTarget.getBestCameraToTarget().getRotation().getAngle();
-            if (aprilTagResult.getMultiTagResult().estimatedPose.isPresent){
-                fieldToCamera = aprilTagResult.getMultiTagResult().estimatedPose.best;
-            }   
-        } 
-        else {
-            fiducialID = -1;
-            aprilTagX = -1.0;
-            aprilTagY = -1.0;
-            aprilTagZ = -1.0;
-            aprilTagZAngle = -1.0;
-        }
-
-        if (aprilTagHasTargets){
-            // Update SmartDashboard for AprilTag
-            // SmartDashboard.putNumber(cameraName + " Fiducial ID", fiducialID);
-            // SmartDashboard.putNumber(cameraName + " AprilTag X (m)", aprilTagX);
-            // SmartDashboard.putNumber(cameraName + " AprilTag Y (m)", aprilTagY);
-            // SmartDashboard.putNumber(cameraName + " AprilTag Z (m)", aprilTagZ);
-            // SmartDashboard.putNumber(cameraName + " AprilTag Z Angle", aprilTagZAngle);
-            if (aprilTagResult.getMultiTagResult().estimatedPose.isPresent){
-                SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate X", fieldToCamera.getX());
-                SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Y", fieldToCamera.getY());
-                SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Z", fieldToCamera.getZ());
-                SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Angle", fieldToCamera.getRotation().getAngle());
+                // fiducialID = aprilTagBestTarget.getFiducialId();
+                // aprilTagX = aprilTagBestTarget.getBestCameraToTarget().getX();
+                // aprilTagY = aprilTagBestTarget.getBestCameraToTarget().getY();
+                // aprilTagZ = aprilTagBestTarget.getBestCameraToTarget().getZ();
+                // aprilTagZAngle = aprilTagBestTarget.getBestCameraToTarget().getRotation().getAngle();
+                if (aprilTagResult.getMultiTagResult().estimatedPose.isPresent){
+                    fieldToCamera = aprilTagResult.getMultiTagResult().estimatedPose.best;
+                }   
+            } 
+            else {
+                fiducialID = -1;
+                aprilTagX = -1.0;
+                aprilTagY = -1.0;
+                aprilTagZ = -1.0;
+                aprilTagZAngle = -1.0;
             }
-            globalPoseEstimate = new Pose2d(fieldToCamera.getX(), fieldToCamera.getY(), new Rotation2d(fieldToCamera.getRotation().getX(), fieldToCamera.getRotation().getY()));
+
+            if (aprilTagHasTargets){
+                // Update SmartDashboard for AprilTag
+                // SmartDashboard.putNumber(cameraName + " Fiducial ID", fiducialID);
+                // SmartDashboard.putNumber(cameraName + " AprilTag X (m)", aprilTagX);
+                // SmartDashboard.putNumber(cameraName + " AprilTag Y (m)", aprilTagY);
+                // SmartDashboard.putNumber(cameraName + " AprilTag Z (m)", aprilTagZ);
+                // SmartDashboard.putNumber(cameraName + " AprilTag Z Angle", aprilTagZAngle);
+                if (aprilTagResult.getMultiTagResult().estimatedPose.isPresent){
+                    SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate X", fieldToCamera.getX());
+                    SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Y", fieldToCamera.getY());
+                    SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Z", fieldToCamera.getZ());
+                    SmartDashboard.putNumber(cameraName + " Field To Camera Pose Estimate Angle", fieldToCamera.getRotation().getAngle());
+                }
+                globalPoseEstimate = new Pose2d(fieldToCamera.getX(), fieldToCamera.getY(), new Rotation2d(fieldToCamera.getRotation().getX(), fieldToCamera.getRotation().getY()));
+            }
         }
-
-
-
-
     }
 
     // public void updateEstimatedGlobalPose() {
@@ -123,7 +121,10 @@ public class ApriltagVision extends SubsystemBase {
     }
 
     public boolean hasMultiTagEstimatedPose(){
-        return this.aprilTagResult.getMultiTagResult().estimatedPose.isPresent;
+        if (this.aprilTagResult != null){
+            return this.aprilTagResult.getMultiTagResult().estimatedPose.isPresent;
+        }
+        return false;
     }
 
     public Pose2d getGlobalPoseEstimate() {

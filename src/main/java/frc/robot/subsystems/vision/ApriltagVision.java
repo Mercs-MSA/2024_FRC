@@ -34,10 +34,10 @@ public class ApriltagVision extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putData(this);
 
-        if(mFrontRightEstimator.update().isPresent()){
+        if(mFrontRightCam != null && mFrontRightEstimator.update().isPresent()){
             RobotContainer.s_Swerve.poseEstimator.addVisionMeasurement(mFrontRightEstimator.update().get().estimatedPose.toPose2d(), mFrontRightEstimator.update().get().timestampSeconds);
         }
-        if(mBackLeftEstimator.update().isPresent()){
+        if(mBackLeftCam != null && mBackLeftEstimator.update().isPresent()){
             RobotContainer.s_Swerve.poseEstimator.addVisionMeasurement(mBackLeftEstimator.update().get().estimatedPose.toPose2d(), mBackLeftEstimator.update().get().timestampSeconds);
         }
 

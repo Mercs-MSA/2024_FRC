@@ -38,7 +38,7 @@ public class RobotContainer {
     
 
     /* Subsystems */
-    public final Swerve s_Swerve = new Swerve();
+    public static final Swerve s_Swerve = new Swerve();
     public final SAT m_SAT = new SAT();
     public final Intake m_intake = new Intake();
     public final climber m_climber = new climber();

@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.intake;
 
+import java.util.function.BiConsumer;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
@@ -15,12 +17,14 @@ import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.AsynchronousInterrupt;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.SATConstants;
 import frc.robot.commands.IndexSubcommands.CommandIndexFire;
@@ -40,7 +44,7 @@ import frc.robot.sim.PhysicsSim;
 
 public class Intake extends SubsystemBase {
   // USE NEXT LINE FOR TESTING
-  public boolean simulationDebugMode = false;
+  public boolean simulationDebugMode = Robot.isSimulation();
 
   private boolean isUpperNotePresent;
   private boolean isLowerNotePresent;
@@ -58,6 +62,34 @@ public class Intake extends SubsystemBase {
   private final DigitalInput intakeSensor1 = new DigitalInput(IntakeConstants.kIntakeSensor1Id);
   private final DigitalInput intakeSensor2 = new DigitalInput(IntakeConstants.kIntakeLowerSensor2Id);
   private final DigitalInput intakeSensor3 = new DigitalInput(IntakeConstants.kIntakeUpperSensor3Id);
+
+  // Define the intakeUpperSensorCallback
+  private BiConsumer<Boolean, Boolean> intakeUpperSensorCallback = (risingEdge, fallingEdge) -> {
+    if (risingEdge) {
+    }
+    if (fallingEdge) {
+      setUpperSensorDetectsNote(true);
+      setLowerSensorDetectsNote(false);
+    }
+  };
+
+    // Define the intakeUpperSensorCallback
+  private BiConsumer<Boolean, Boolean> intakeLowerSensorCallback = (risingEdge, fallingEdge) -> {
+    if (risingEdge) {
+    }
+    if (fallingEdge) {
+      setLowerSensorDetectsNote(true);
+    }
+  };
+
+  AsynchronousInterrupt intakeUpperSensorInterrupt = new AsynchronousInterrupt(intakeUpperSensor, intakeUpperSensorCallback); 
+  
+
+  AsynchronousInterrupt intakeSensor1Interrupt = new AsynchronousInterrupt(intakeSensor1, intakeLowerSensorCallback); 
+
+  AsynchronousInterrupt intakeSensor2Interrupt = new AsynchronousInterrupt(intakeSensor2, intakeLowerSensorCallback); 
+
+  AsynchronousInterrupt intakeSensor3Interrupt = new AsynchronousInterrupt(intakeSensor3, intakeLowerSensorCallback); 
 
 
   public CommandIntakeIdle commandIntakeIdle = new CommandIntakeIdle(this);
@@ -83,6 +115,9 @@ public class Intake extends SubsystemBase {
 
   /** Creates a new intake. */
   public Intake() {
+    disableIntakeUpperSensorInterrupt();
+    disableIntakeLowerSensorInterrupt();
+
     isUpperNotePresent = false;
     isLowerNotePresent = false;
 
@@ -123,6 +158,26 @@ public class Intake extends SubsystemBase {
 
   public void setLowerSensorDetectsNote(boolean value) {
     isLowerNotePresent = value;
+  }
+
+  public void enableIntakeUpperSensorInterrupt(){
+    intakeUpperSensorInterrupt.enable();
+  }
+
+  public void disableIntakeUpperSensorInterrupt(){
+    intakeUpperSensorInterrupt.disable();
+  }
+
+  public void enableIntakeLowerSensorInterrupt(){
+    intakeSensor1Interrupt.enable();
+    intakeSensor2Interrupt.enable();
+    intakeSensor3Interrupt.enable();
+  }
+
+  public void disableIntakeLowerSensorInterrupt(){
+    intakeSensor1Interrupt.disable();
+    intakeSensor2Interrupt.disable();
+    intakeSensor3Interrupt.disable();
   }
 
   public void setUpperSensorDetectsNote(boolean value) {
@@ -220,6 +275,7 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putBoolean("intakeSensor1 state", isLowerNotePresent);
     SmartDashboard.putBoolean("NEWSENSOR2 state", isNEWSENSORPresent);
     SmartDashboard.putBoolean("NEWSENSOR3 state", isNEWSENSOR2Present);
+    SmartDashboard.putBoolean("intakeUpperSensor.get()", intakeUpperSensor.get());
     SmartDashboard.putNumber("Intake Motor Temperature", intakeMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("Index Motor Temperature", indexMotor.getDeviceTemp().getValueAsDouble());
   }

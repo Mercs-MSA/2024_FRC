@@ -252,16 +252,12 @@ public final class Constants {
         }
 
         public static class SUBWOOFER{
-            public static final double motor1_base = 0.656;
-            public static final double motor2_base = -1.832;
             public static final double pivot = 7.2;
             public static final double shooterSpeed = -50;
         }
 
         //amp and trap are same 
         public static class AMP{
-            public static final double motor1_base = 0.656;
-            public static final double motor2_base = -1.832;
             public static final double pivot = 46.939;
             public static final double shooterSpeed = -20;
         }
@@ -281,8 +277,6 @@ public final class Constants {
         }
 
         public static class WING{
-            public static final double motor1_base = -41.573;
-            public static final double motor2_base = -43.117;
             public static final double pivot = 15.2;
             public static final double shooterSpeed = -70;
         }

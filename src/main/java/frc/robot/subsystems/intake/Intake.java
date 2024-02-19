@@ -4,28 +4,37 @@
 
 package frc.robot.subsystems.intake;
 
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.SATConstants;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.IntakeSubcommands.*;
-import frc.robot.commands.IndexSubcommands.*;
-
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.NeutralOut;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.SATConstants;
+import frc.robot.commands.IndexSubcommands.CommandIndexFire;
+import frc.robot.commands.IndexSubcommands.CommandIndexHold;
+import frc.robot.commands.IndexSubcommands.CommandIndexIdle;
+import frc.robot.commands.IndexSubcommands.CommandIndexIntake;
+import frc.robot.commands.IndexSubcommands.CommandIndexProcess;
+import frc.robot.commands.IndexSubcommands.CommandIndexStart;
+import frc.robot.commands.IntakeSubcommands.CommandIntakeHold;
+import frc.robot.commands.IntakeSubcommands.CommandIntakeIdle;
+import frc.robot.commands.IntakeSubcommands.CommandIntakeIndex;
+import frc.robot.commands.IntakeSubcommands.CommandIntakeIntake;
+import frc.robot.commands.IntakeSubcommands.CommandIntakeProcess;
+import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
 //  USE NEXT LINE FOR TESTING
 import frc.robot.sim.PhysicsSim;
 
@@ -46,7 +55,7 @@ public class Intake extends SubsystemBase {
   private final PositionVoltage intakeMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final PositionVoltage indexMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final DigitalInput intakeUpperSensor = new DigitalInput(IntakeConstants.kIntakeUpperSensorId);
-  private final DigitalInput intakeLowerSensor = new DigitalInput(IntakeConstants.kIntakeLowerSensorId);
+  private final DigitalInput intakeSensor1 = new DigitalInput(IntakeConstants.kIntakeSensor1Id);
   private final DigitalInput intakeSensor2 = new DigitalInput(IntakeConstants.kIntakeLowerSensor2Id);
   private final DigitalInput intakeSensor3 = new DigitalInput(IntakeConstants.kIntakeUpperSensor3Id);
 
@@ -197,7 +206,7 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
     if (!simulationDebugMode) {
       isUpperNotePresent = !intakeUpperSensor.get();
-      isLowerNotePresent = !intakeLowerSensor.get();
+      isLowerNotePresent = !intakeSensor1.get();
       isNEWSENSORPresent = !intakeSensor2.get();
       isNEWSENSOR2Present = !intakeSensor3.get();
     }
@@ -208,7 +217,7 @@ public class Intake extends SubsystemBase {
     indexMotorSpeed = indexMotor.getDutyCycle().getValueAsDouble();
 
     SmartDashboard.putBoolean("intakeUpperSensor state", isUpperNotePresent);
-    SmartDashboard.putBoolean("intakeLowerSensor state", isLowerNotePresent);
+    SmartDashboard.putBoolean("intakeSensor1 state", isLowerNotePresent);
     SmartDashboard.putBoolean("NEWSENSOR2 state", isNEWSENSORPresent);
     SmartDashboard.putBoolean("NEWSENSOR3 state", isNEWSENSOR2Present);
     SmartDashboard.putNumber("Intake Motor Temperature", intakeMotor.getDeviceTemp().getValueAsDouble());
@@ -336,7 +345,9 @@ public class Intake extends SubsystemBase {
     StatusSignal<Double> m_IndexTemp_canbus1signal2 = indexMotor.getDeviceTemp();
     StatusSignal<Double> m_IntakeDutyCycle_canbus1signal1 = intakeMotor.getDutyCycle();
     StatusSignal<Double> m_IndexDutyCycle_canbus1signal2 = indexMotor.getDutyCycle();
-    BaseStatusSignal.setUpdateFrequencyForAll(60, m_IntakeMotor_canbus1signal1, m_IndexMotor_canbus1signal2, m_IntakeDutyCycle_canbus1signal1, m_IndexDutyCycle_canbus1signal2);
+    StatusSignal<Double> m_Shooter1Volt_canbus1signal3 = intakeMotor.getMotorVoltage();
+    StatusSignal<Double> m_Shooter2Volt_canbus1signal4 = indexMotor.getMotorVoltage();
+    BaseStatusSignal.setUpdateFrequencyForAll(60, m_IntakeMotor_canbus1signal1, m_IndexMotor_canbus1signal2, m_IntakeDutyCycle_canbus1signal1, m_IndexDutyCycle_canbus1signal2, m_Shooter1Volt_canbus1signal3, m_Shooter2Volt_canbus1signal4);
     BaseStatusSignal.setUpdateFrequencyForAll(1, m_IntakeTemp_canbus1signal1, m_IndexTemp_canbus1signal2);
     ParentDevice.optimizeBusUtilizationForAll(intakeMotor, indexMotor);
   }

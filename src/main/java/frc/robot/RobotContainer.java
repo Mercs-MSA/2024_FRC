@@ -1,5 +1,8 @@
 package frc.robot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -21,9 +24,6 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.climber.climber;
 import frc.robot.subsystems.intake.Intake;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -118,35 +118,31 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        /************************/
-        /*                      */
-        /*    Driver Buttons    */
-        /*                      */
-        /************************/
-        
-        // driver.y()
-        //    .onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
+        driverControls();
+        operatorControls();
+    }
 
-        // driver.a()
-        //     .onTrue(commandSwerveToNote.alongWith(m_intake.collectNote()));
+    public void driverControls(){
+        driver.start().and(driver.back()).onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
 
-        // driver.leftTrigger()
-        //     .onTrue(Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
-        // driver.rightTrigger()
-        //     .onTrue(Commands.runOnce(() -> m_SAT.stopShooter(), m_SAT));
+        driver.leftBumper().onTrue(Commands.run(() -> m_SAT.shootNote(), m_SAT));
+        driver.rightBumper().onTrue(Commands.run(() -> m_SAT.stopShooter(), m_SAT));
 
-        driver.leftBumper()
-             .onTrue(Commands.run(() -> m_SAT.shootNote(), m_SAT));
+        driver.pov(0).onTrue(commandOverrideIndexStart);
+        driver.pov(180).onTrue(commandOverrideIndexStop);
 
-        driver.rightBumper()
-             .onTrue(Commands.run(() -> m_SAT.stopShooter(), m_SAT));
+        driver.pov(90).onTrue(commandOverrideIntakeStart);
+        driver.pov(270).onTrue(commandOverrideIntakeStop);
+    }
 
-        // driver.pov(0).onTrue(commandOverrideIntakeStart);
-        // driver.pov(180).onTrue(commandOverrideIntakeStop);
-        driver.pov(90).onTrue(commandOverrideIndexStart);
-        driver.pov(270).onTrue(commandOverrideIndexStop);
+    public void operatorControls(){
+        operator.pov(0).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(0.25), m_SAT));
+        operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(-0.25), m_SAT));
+        operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
+        operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
+    }
 
-
+    public void operatorTesting(){
         /************************/
         /*                      */
         /*   Operator Buttons   */
@@ -203,11 +199,6 @@ public class RobotContainer {
         //         m_climber.climbDownLeftCommand()
         //     );
 
-        operator.pov(0).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(0.25), m_SAT));
-        operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(-0.25), m_SAT));
-        operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
-        operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
-
         // // RUN STEP 1 OF SUB
         // operator.x().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, true, false, false, 0));
         // // RUN STEP 2 OF SUB`
@@ -252,10 +243,6 @@ public class RobotContainer {
         operator.y()
         .onTrue(new SequentialCommandGroup(commandShootNote,m_intake.fireNote(), commandStopShooter));
 
-
-
-        //operator.start()
-        //    .whileFalse(commandOverrideIntakeStop.andThen(commandOverrideIndexStop));
         
         // if (m_intake.simulationDebugMode) {
         //     operator.a()

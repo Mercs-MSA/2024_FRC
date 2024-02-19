@@ -114,7 +114,7 @@ public final class Constants {
             public static final int driveMotorID = 39;
             public static final int angleMotorID = 40;
             public static final int canCoderID = 11;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-88.5);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(61.523);
             public static final SwerveModuleConstants constants =
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -176,7 +176,7 @@ public final class Constants {
         public static final double kIndexProcessRotations = 2.0;
         public static final int kIndexMotorId = 24;
         public static final double kIndexMotorSpeed = 0.70;
-        public static final int kIntakeLowerSensorId = 1;
+        public static final int kIntakeSensor1Id = 1;
         public static final int kIntakeUpperSensorId = 0;
         public static final int kIntakeLowerSensor2Id = 2;
         public static final int kIntakeUpperSensor3Id = 3;       
@@ -245,20 +245,68 @@ public final class Constants {
 
         public static final int SAT_OBJECTDETECTOR_SENSOR_ID = 1;
 
+        public static class START{
+            public static final double motor1_base = -0.656;
+            public static final double motor2_base = -1.831;
+            public static final double pivot = 1.381;
+        }
+
+        public static class SUBWOOFER{
+            public static final double motor1_base = 0.656;
+            public static final double motor2_base = -1.832;
+            public static final double pivot = 7.2;
+            public static final double shooterSpeed = -50;
+        }
+
+        //amp and trap are same 
+        public static class AMP{
+            public static final double motor1_base = 0.656;
+            public static final double motor2_base = -1.832;
+            public static final double pivot = 46.939;
+            public static final double shooterSpeed = -20;
+        }
+
+        public static class TRAP{
+            public static final double motor1_base = -41.573;
+            public static final double motor2_base = -43.117;
+            public static final double pivot = 46.939;
+            public static final double shooterSpeed = -20;
+        }
+
+        public static class PODIUM{
+            public static final double motor1_base = -41.573;
+            public static final double motor2_base = -43.117;
+            public static final double pivot = 9.318;
+            public static final double shooterSpeed = -70;
+        }
+
+        public static class WING{
+            public static final double motor1_base = -41.573;
+            public static final double motor2_base = -43.117;
+            public static final double pivot = 15.2;
+            public static final double shooterSpeed = -70;
+        }
+
         /*lift start positions */
-        //same as SUBWOOFER?
-        public static final double MOTOR1_BASE_START_POS = 0.155;
-        public static final double MOTOR2_BASE_START_POS = 0.342;
-        public static final double PIVOT_START_POS = 0.1; //9.288 is intake pos
+        public static final double MOTOR1_BASE_START_POS = -0.656;
+        public static final double MOTOR2_BASE_START_POS = -1.831;
+        public static final double PIVOT_START_POS = 1.381; //9.288 is intake pos
+
+        /*lift HANDOFF positions */
+        public static final double MOTOR1_BASE_HANDOFF_POS = 0.656;
+        public static final double MOTOR2_BASE_HANDOFF_POS = -1.832;
+        public static final double PIVOT_HANDOFF_POS = 7.2; //9.288 is intake pos
         /*podium scoring position */
         public static final double MOTOR1_BASE_PODIUM_POS = -1.575;
         public static final double MOTOR2_BASE_PODIUM_POS = -1.723;
         public static final double PIVOT_PODIUM_POS = 0.4;
         /*SUBWOOFER scoring position */
         //this is robot's initial position (basing this on the assumtion that we can shoot SUBWOOFER without moving lift or pivot)
-        public static final double MOTOR1_BASE_SUB_POS = -18.5268;
-        public static final double MOTOR2_BASE_SUB_POS = -18.76;
-        public static final double PIVOT_SUB_POS = 1.7;
+        public static final double MOTOR1_BASE_SUB_POS = 0.419;
+        public static final double MOTOR2_BASE_SUB_POS = -0.418;
+        public static final double PIVOT_SUB_POS = 1.330;
+        public static final double SHOOTER_SUB_SPEED = -50;
+
         /*AMP scoring position */
         public static final double MOTOR1_BASE_AMP_POS = -16.16;
         public static final double MOTOR2_BASE_AMP_POS = -16.26;
@@ -271,7 +319,7 @@ public final class Constants {
         public static final double PIVOT_MECHANICALLY_REQUIRED_POS = 7.8;
         public static final double MOTOR_TOLERANCE = 0.5;
 
-        public static final double SHOOTER_SPEED = 70;
+        public static final double SHOOTER_SPEED = -70;
         public static final double kShooterSpeedTolerance = 1.0;
 
         /*THIS NEEDS TO INCLUDE THE CONVERSION FROM DEGREES TO ENCODER COUNTS */

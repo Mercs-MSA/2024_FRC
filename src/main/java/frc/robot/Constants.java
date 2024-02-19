@@ -325,12 +325,12 @@ public final class Constants {
 
         public static class aprilTagBackLeft {
             public static String camera = "AprilTagBackLeft";
-            public static Transform3d robotToCamera = new Transform3d(-0.1820926, -0.2952496, 0.3039618, new Rotation3d(0, 0.785398, -0.785398));
+            public static Transform3d robotToCamera = new Transform3d(-0.1820926, 0.2952496, 0.3039618, new Rotation3d(0, 0.785398, -0.785398));
         }
         
         public static class aprilTagFrontRight {
             public static String camera = "AprilTagFrontRight";
-            public static Transform3d robotToCamera = new Transform3d(-0.2269744, -0.2446782, 0.3039618, new Rotation3d(0, -0.785398, -0.785398));
+            public static Transform3d robotToCamera = new Transform3d(0.2269744, -0.2446782, 0.3039618, new Rotation3d(0, -0.785398, -0.785398));
         }
     }
 

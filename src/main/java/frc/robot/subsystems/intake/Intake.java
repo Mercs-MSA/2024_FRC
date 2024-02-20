@@ -19,7 +19,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.AsynchronousInterrupt;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -78,10 +77,7 @@ public class Intake extends SubsystemBase {
 
     // Define the intakeUpperSensorCallback
   private BiConsumer<Boolean, Boolean> intakeLowerSensorCallback = (risingEdge, fallingEdge) -> {
-    if (risingEdge) {
-      SmartDashboard.putString("something works ", "it works and I don't suck, rising edge");
-    }
-    if (fallingEdge) {
+    if (risingEdge || fallingEdge) {
       setLowerSensorDetectsNote(true);
       SmartDashboard.putString("something works ", "it works and I don't suck, falling Edge");
     }

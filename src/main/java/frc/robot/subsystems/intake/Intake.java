@@ -19,6 +19,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.AsynchronousInterrupt;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -60,25 +61,29 @@ public class Intake extends SubsystemBase {
   private final PositionVoltage indexMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final DigitalInput intakeUpperSensor = new DigitalInput(IntakeConstants.kIntakeUpperSensorId);
   private final DigitalInput intakeSensor1 = new DigitalInput(IntakeConstants.kIntakeSensor1Id);
-  private final DigitalInput intakeSensor2 = new DigitalInput(IntakeConstants.kIntakeLowerSensor2Id);
-  private final DigitalInput intakeSensor3 = new DigitalInput(IntakeConstants.kIntakeUpperSensor3Id);
+  // private final DigitalInput intakeSensor2 = new DigitalInput(IntakeConstants.kIntakeLowerSensor2Id);
+  // private final DigitalInput intakeSensor3 = new DigitalInput(IntakeConstants.kIntakeUpperSensor3Id);
 
   // Define the intakeUpperSensorCallback
   private BiConsumer<Boolean, Boolean> intakeUpperSensorCallback = (risingEdge, fallingEdge) -> {
     if (risingEdge) {
-    }
-    if (fallingEdge) {
+      SmartDashboard.putString("something works ", "it works and I don't suck, rising edge");
       setUpperSensorDetectsNote(true);
       setLowerSensorDetectsNote(false);
+    }
+    if (fallingEdge) {
+      SmartDashboard.putString("something", "it works and I don't suck, falling Edge");
     }
   };
 
     // Define the intakeUpperSensorCallback
   private BiConsumer<Boolean, Boolean> intakeLowerSensorCallback = (risingEdge, fallingEdge) -> {
     if (risingEdge) {
+      SmartDashboard.putString("something works ", "it works and I don't suck, rising edge");
     }
     if (fallingEdge) {
       setLowerSensorDetectsNote(true);
+      SmartDashboard.putString("something works ", "it works and I don't suck, falling Edge");
     }
   };
 
@@ -87,9 +92,9 @@ public class Intake extends SubsystemBase {
 
   AsynchronousInterrupt intakeSensor1Interrupt = new AsynchronousInterrupt(intakeSensor1, intakeLowerSensorCallback); 
 
-  AsynchronousInterrupt intakeSensor2Interrupt = new AsynchronousInterrupt(intakeSensor2, intakeLowerSensorCallback); 
+  // AsynchronousInterrupt intakeSensor2Interrupt = new AsynchronousInterrupt(intakeSensor2, intakeLowerSensorCallback); 
 
-  AsynchronousInterrupt intakeSensor3Interrupt = new AsynchronousInterrupt(intakeSensor3, intakeLowerSensorCallback); 
+  // AsynchronousInterrupt intakeSensor3Interrupt = new AsynchronousInterrupt(intakeSensor3, intakeLowerSensorCallback); 
 
 
   public CommandIntakeIdle commandIntakeIdle = new CommandIntakeIdle(this);
@@ -115,8 +120,10 @@ public class Intake extends SubsystemBase {
 
   /** Creates a new intake. */
   public Intake() {
-    disableIntakeUpperSensorInterrupt();
-    disableIntakeLowerSensorInterrupt();
+    // disableIntakeUpperSensorInterrupt();
+    // disableIntakeLowerSensorInterrupt();
+    enableIntakeLowerSensorInterrupt();
+    enableIntakeUpperSensorInterrupt();
 
     isUpperNotePresent = false;
     isLowerNotePresent = false;
@@ -170,14 +177,14 @@ public class Intake extends SubsystemBase {
 
   public void enableIntakeLowerSensorInterrupt(){
     intakeSensor1Interrupt.enable();
-    intakeSensor2Interrupt.enable();
-    intakeSensor3Interrupt.enable();
+    // intakeSensor2Interrupt.enable();
+    // intakeSensor3Interrupt.enable();
   }
 
   public void disableIntakeLowerSensorInterrupt(){
     intakeSensor1Interrupt.disable();
-    intakeSensor2Interrupt.disable();
-    intakeSensor3Interrupt.disable();
+    // intakeSensor2Interrupt.disable();
+    // intakeSensor3Interrupt.disable();
   }
 
   public void setUpperSensorDetectsNote(boolean value) {
@@ -258,12 +265,13 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    // This method will be called once per scheduler run 
+    SmartDashboard.putNumber("intakeSensor1Interrupt", intakeSensor1Interrupt.getFallingTimestamp());
     if (!simulationDebugMode) {
-      isUpperNotePresent = !intakeUpperSensor.get();
-      isLowerNotePresent = !intakeSensor1.get();
-      isNEWSENSORPresent = !intakeSensor2.get();
-      isNEWSENSOR2Present = !intakeSensor3.get();
+      // isUpperNotePresent = !intakeUpperSensor.get();
+      // isLowerNotePresent = !intakeSensor1.get();
+      // isNEWSENSORPresent = !intakeSensor2.get();
+      // isNEWSENSOR2Present = !intakeSensor3.get();
     }
   
     intakeMotorPos = intakeMotor.getPosition().getValueAsDouble();

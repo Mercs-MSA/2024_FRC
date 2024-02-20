@@ -136,10 +136,23 @@ public class RobotContainer {
     }
 
     public void operatorControls(){
-        operator.pov(0).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(0.25), m_SAT));
-        operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(-0.25), m_SAT));
-        operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
-        operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
+        // operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(0.25), m_SAT));
+        // operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(-0.25), m_SAT));
+        // operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
+        // operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
+
+        operator.pov(0).onTrue(new RunCommand(() -> m_SAT.movePivotMotor("podium"), m_SAT));
+        operator.pov(90).onTrue(new RunCommand(() -> m_SAT.movePivotMotor("start"), m_SAT));
+        operator.pov(270).onTrue(new RunCommand(() -> m_SAT.movePivotMotor("wing"), m_SAT));
+        operator.a().onTrue(new RunCommand(() -> m_SAT.movePivotMotor("handoff"), m_SAT));
+        operator.pov(180).onTrue(new RunCommand(() -> m_SAT.movePivotMotor("start"), m_SAT));
+
+        // operator.pov(0).onTrue(new RunCommand(() -> m_SAT.moveBaseMotors(Constants.SATConstants.AMP.motor1_base), m_SAT));
+        // operator.pov(90).onTrue(new RunCommand(() -> m_SAT.movePivotMotor(Constants.SATConstants.AMP.pivot), m_SAT));
+
+        // operator.pov(180).onTrue(new RunCommand(() -> m_SAT.moveBaseMotors(Constants.SATConstants.START.motor1_base), m_SAT));
+        // operator.pov(270).onTrue(new RunCommand(() -> m_SAT.movePivotMotor(Constants.SATConstants.START.pivot), m_SAT));
+
     }
 
     public void operatorTesting(){

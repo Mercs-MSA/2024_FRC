@@ -248,16 +248,17 @@ public final class Constants {
         public static class START{
             public static final double motor1_base = -0.656;
             public static final double motor2_base = -1.831;
-            public static final double pivot = 1.381;
+            public static final double pivot = 1.474;
         }
 
         public static class SUBWOOFER{
-            public static final double pivot = 7.2;
+            public static final double pivot = 1.474;
             public static final double shooterSpeed = -50;
         }
 
-        //amp and trap are same 
         public static class AMP{
+            public static final double motor1_base = -41.573;
+            public static final double motor2_base = -43.117;
             public static final double pivot = 46.939;
             public static final double shooterSpeed = -20;
         }
@@ -270,8 +271,6 @@ public final class Constants {
         }
 
         public static class PODIUM{
-            public static final double motor1_base = -41.573;
-            public static final double motor2_base = -43.117;
             public static final double pivot = 9.318;
             public static final double shooterSpeed = -70;
         }
@@ -281,34 +280,9 @@ public final class Constants {
             public static final double shooterSpeed = -70;
         }
 
-        /*lift start positions */
-        public static final double MOTOR1_BASE_START_POS = -0.656;
-        public static final double MOTOR2_BASE_START_POS = -1.831;
-        public static final double PIVOT_START_POS = 1.381; //9.288 is intake pos
-
-        /*lift HANDOFF positions */
-        public static final double MOTOR1_BASE_HANDOFF_POS = 0.656;
-        public static final double MOTOR2_BASE_HANDOFF_POS = -1.832;
-        public static final double PIVOT_HANDOFF_POS = 7.2; //9.288 is intake pos
-        /*podium scoring position */
-        public static final double MOTOR1_BASE_PODIUM_POS = -1.575;
-        public static final double MOTOR2_BASE_PODIUM_POS = -1.723;
-        public static final double PIVOT_PODIUM_POS = 0.4;
-        /*SUBWOOFER scoring position */
-        //this is robot's initial position (basing this on the assumtion that we can shoot SUBWOOFER without moving lift or pivot)
-        public static final double MOTOR1_BASE_SUB_POS = 0.419;
-        public static final double MOTOR2_BASE_SUB_POS = -0.418;
-        public static final double PIVOT_SUB_POS = 1.330;
-        public static final double SHOOTER_SUB_SPEED = -50;
-
-        /*AMP scoring position */
-        public static final double MOTOR1_BASE_AMP_POS = -16.16;
-        public static final double MOTOR2_BASE_AMP_POS = -16.26;
-        public static final double PIVOT_AMP_POS = 33.8;
-        /*TRAP scoring position */
-        public static final double MOTOR1_BASE_TRAP_POS = 0.2;
-        public static final double MOTOR2_BASE_TRAP_POS = 0.4;
-        public static final double PIVOT_TRAP_POS = 0.1;
+        public static class HANDOFF{
+            public static final double pivot = 7.2;
+        }
 
         public static final double PIVOT_MECHANICALLY_REQUIRED_POS = 7.8;
         public static final double MOTOR_TOLERANCE = 0.5;

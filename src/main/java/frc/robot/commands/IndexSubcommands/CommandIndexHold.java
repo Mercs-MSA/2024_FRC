@@ -15,6 +15,7 @@ public class CommandIndexHold extends Command {
   @Override
   public void initialize() {
     m_intake.stopIndexMotor();
+    m_intake.disableIntakeUpperSensorInterrupt();
   }
 
   @Override

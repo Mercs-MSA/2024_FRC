@@ -59,36 +59,32 @@ public class Intake extends SubsystemBase {
   private final PositionVoltage intakeMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final PositionVoltage indexMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final DigitalInput intakeUpperSensor = new DigitalInput(IntakeConstants.kIntakeUpperSensorId);
-  private final DigitalInput intakeSensor1 = new DigitalInput(IntakeConstants.kIntakeSensor1Id);
-  // private final DigitalInput intakeSensor2 = new DigitalInput(IntakeConstants.kIntakeLowerSensor2Id);
-  // private final DigitalInput intakeSensor3 = new DigitalInput(IntakeConstants.kIntakeUpperSensor3Id);
+  private final DigitalInput intakeSensor1 = new DigitalInput(IntakeConstants.kIntakeLowerSensor1Id);
+  private final DigitalInput intakeSensor2 = new DigitalInput(IntakeConstants.kIntakeLowerSensor2Id);
+  private final DigitalInput intakeSensor3 = new DigitalInput(IntakeConstants.kIntakeLowerSensor3Id);
 
   // Define the intakeUpperSensorCallback
   private BiConsumer<Boolean, Boolean> intakeUpperSensorCallback = (risingEdge, fallingEdge) -> {
     if (risingEdge) {
-      SmartDashboard.putString("something works ", "it works and I don't suck, rising edge");
+      SmartDashboard.putString("sensor debug", "upper - rising");
       setUpperSensorDetectsNote(true);
-      setLowerSensorDetectsNote(false);
+      // setLowerSensorDetectsNote(false);
     }
     if (fallingEdge) {
-      SmartDashboard.putString("something", "it works and I don't suck, falling Edge");
+      SmartDashboard.putString("sensor debug", "upper - falling");
     }
   };
 
-    // Define the intakeUpperSensorCallback
-  private BiConsumer<Boolean, Boolean> intakeLowerSensorCallback = (risingEdge, fallingEdge) -> {
-    if (risingEdge || fallingEdge) {
-      setLowerSensorDetectsNote(true);
-      SmartDashboard.putString("something works ", "it works and I don't suck, falling Edge");
-    }
-  };
-
-  AsynchronousInterrupt intakeUpperSensorInterrupt = new AsynchronousInterrupt(intakeUpperSensor, intakeUpperSensorCallback); 
-  
-
-  AsynchronousInterrupt intakeSensor1Interrupt = new AsynchronousInterrupt(intakeSensor1, intakeLowerSensorCallback); 
-
-  // AsynchronousInterrupt intakeSensor2Interrupt = new AsynchronousInterrupt(intakeSensor2, intakeLowerSensorCallback); 
+  // Define the intakeUpperSensorCallback
+  // private BiConsumer<Boolean, Boolean> intakeLowerSensorCallback = (risingEdge, fallingEdge) -> {
+  //   if (risingEdge) {
+  //     SmartDashboard.putString("sensor debug", "lower - rising");
+  //   }
+  //   if (fallingEdge) {
+  //     // setLowerSensorDetectsNote(true);
+  //     SmartDashboard.putString("sensor debug", "lower - falling");
+  //   }
+  // };
 
   // AsynchronousInterrupt intakeSensor3Interrupt = new AsynchronousInterrupt(intakeSensor3, intakeLowerSensorCallback); 
 
@@ -106,6 +102,9 @@ public class Intake extends SubsystemBase {
   public CommandIndexProcess commandIndexProcess = new CommandIndexProcess(this);
   public CommandIndexHold commandIndexHold = new CommandIndexHold(this);
   public CommandIndexFire commandIndexFire = new CommandIndexFire(this);
+  // AsynchronousInterrupt intakeSensor1Interrupt = new AsynchronousInterrupt(intakeSensor1, intakeLowerSensorCallback); 
+  // AsynchronousInterrupt intakeSensor2Interrupt = new AsynchronousInterrupt(intakeSensor2, intakeLowerSensorCallback); 
+  AsynchronousInterrupt intakeUpperSensorInterrupt = new AsynchronousInterrupt(intakeUpperSensor, intakeUpperSensorCallback); 
 
   // private final double prematchDelay = 2.5;
 
@@ -116,10 +115,12 @@ public class Intake extends SubsystemBase {
 
   /** Creates a new intake. */
   public Intake() {
-    // disableIntakeUpperSensorInterrupt();
+    SmartDashboard.putString("sensor debug", "init");
+
+    disableIntakeUpperSensorInterrupt();
     // disableIntakeLowerSensorInterrupt();
-    enableIntakeLowerSensorInterrupt();
-    enableIntakeUpperSensorInterrupt();
+    // enableIntakeLowerSensorInterrupt();
+    // enableIntakeUpperSensorInterrupt();
 
     isUpperNotePresent = false;
     isLowerNotePresent = false;
@@ -164,6 +165,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void enableIntakeUpperSensorInterrupt(){
+    intakeUpperSensorInterrupt.setInterruptEdges(true, true);
     intakeUpperSensorInterrupt.enable();
   }
 
@@ -171,22 +173,21 @@ public class Intake extends SubsystemBase {
     intakeUpperSensorInterrupt.disable();
   }
 
-  public void enableIntakeLowerSensorInterrupt(){
-    intakeSensor1Interrupt.enable();
-    // intakeSensor2Interrupt.enable();
-    // intakeSensor3Interrupt.enable();
-  }
+  // public void enableIntakeLowerSensorInterrupt(){
+  //   intakeSensor1Interrupt.setInterruptEdges(true, true);
+  //   intakeSensor2Interrupt.setInterruptEdges(true, true);
+  //   intakeSensor3Interrupt.setInterruptEdges(true, true);
+  //   intakeSensor1Interrupt.enable();
+  //   intakeSensor2Interrupt.enable();
+  //   intakeSensor3Interrupt.enable();
+  // }
 
-  public void disableIntakeLowerSensorInterrupt(){
-    intakeSensor1Interrupt.disable();
-    // intakeSensor2Interrupt.disable();
-    // intakeSensor3Interrupt.disable();
-  }
-
-  public void setUpperSensorDetectsNote(boolean value) {
-    isUpperNotePresent = value;
-  }
-
+  // public void disableIntakeLowerSensorInterrupt(){
+  //   intakeSensor1Interrupt.disable();
+  //   intakeSensor2Interrupt.disable();
+  //   intakeSensor3Interrupt.disable();
+  // }
+  
   public void intakeMotorToPosition(double rotations) {
     intakeMotor.setControl(intakeMotor_voltagePosition.withPosition(rotations));
   }

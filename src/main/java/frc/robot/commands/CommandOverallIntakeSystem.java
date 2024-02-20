@@ -18,7 +18,9 @@ public class CommandOverallIntakeSystem extends Command{
     @Override
     public void initialize() {
         if (!(m_intake.upperSensorDetectsNote() || m_intake.lowerSensorDetectsNote())){ //if no note
-            m_intake.enableIntakeLowerSensorInterrupt();
+            // This line is commentted out because only one interrupt can exist,
+            // and we've decided to use the upper sensor interrupt
+            // m_intake.enableIntakeLowerSensorInterrupt();
             m_intake.startIntakeMotor();
         }
     }
@@ -26,9 +28,11 @@ public class CommandOverallIntakeSystem extends Command{
     @Override
     public void execute() {
         if (m_intake.lowerSensorDetectsNote()){
-            m_intake.disableIntakeLowerSensorInterrupt();
+            // This line is commentted out because only one interrupt can exist,
+            // and we've decided to use the upper sensor interrupt
+            // m_intake.disableIntakeLowerSensorInterrupt();
             m_intake.enableIntakeUpperSensorInterrupt();
-            m_SAT.movePivotMotor("handoff");
+            m_SAT.movePivotMotor(Constants.SATConstants.HANDOFF.pivot);
             if (m_SAT.isWithinTol(Constants.SATConstants.HANDOFF.pivot, m_SAT.getPivotPos(), 0.01)){
                 m_intake.startIndexMotor();
             }
@@ -40,11 +44,13 @@ public class CommandOverallIntakeSystem extends Command{
             m_intake.disableIntakeUpperSensorInterrupt();
             m_intake.stopIntakeIndexerMotors();
             m_intake.indexMotorToPosition(0); //move index a specific amount forward 
-            m_SAT.movePivotMotor("start");      
+            m_SAT.movePivotMotor(Constants.SATConstants.START.pivot);
         }
         else {
             if (!(m_intake.upperSensorDetectsNote() || m_intake.lowerSensorDetectsNote())){ //if no note
-                m_intake.enableIntakeLowerSensorInterrupt();
+                // This line is commentted out because only one interrupt can exist,
+                // and we've decided to use the upper sensor interrupt
+                // m_intake.enableIntakeLowerSensorInterrupt();
                 m_intake.startIntakeMotor();
             }
         }

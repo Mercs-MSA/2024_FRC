@@ -47,10 +47,9 @@ public class Intake extends SubsystemBase {
   public boolean simulationDebugMode = Robot.isSimulation();
 
   private boolean isUpperNotePresent;
-  private boolean isLowerNotePresent;
-  private boolean isNEWSENSORPresent;
-  private boolean isNEWSENSOR2Present;
-
+  private boolean isLowerNotePresent1;
+  private boolean isLowerNotePresent2;
+  private boolean isLowerNotePresent3;
   
   private final TalonFX intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorId); //carpet
   private final TalonFX indexMotor = new TalonFX(IntakeConstants.kIndexMotorId); //sat (feeder)
@@ -123,7 +122,9 @@ public class Intake extends SubsystemBase {
     // enableIntakeUpperSensorInterrupt();
 
     isUpperNotePresent = false;
-    isLowerNotePresent = false;
+    isLowerNotePresent1 = false;
+    isLowerNotePresent2 = false;
+    isLowerNotePresent3 = false;
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
     configs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -153,7 +154,7 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean lowerSensorDetectsNote() {
-    return isLowerNotePresent || isNEWSENSORPresent || isNEWSENSOR2Present;
+    return isLowerNotePresent1 || isLowerNotePresent2 || isLowerNotePresent3;
   }
 
   public boolean upperSensorDetectsNote() {
@@ -161,7 +162,13 @@ public class Intake extends SubsystemBase {
   }
 
   public void setLowerSensorDetectsNote(boolean value) {
-    isLowerNotePresent = value;
+    isLowerNotePresent1 = value;
+    isLowerNotePresent2 = value;
+    isLowerNotePresent3 = value;
+  }
+  
+  public void setUpperSensorDetectsNote(boolean value) {
+    isUpperNotePresent = value;
   }
 
   public void enableIntakeUpperSensorInterrupt(){
@@ -263,12 +270,14 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run 
-    SmartDashboard.putNumber("intakeSensor1Interrupt", intakeSensor1Interrupt.getFallingTimestamp());
+
     if (!simulationDebugMode) {
+      // We don't want to update the upper sensor in periodic because it's being
+      // controlled by the AsynchronousInterrupt now.
       // isUpperNotePresent = !intakeUpperSensor.get();
-      // isLowerNotePresent = !intakeSensor1.get();
-      // isNEWSENSORPresent = !intakeSensor2.get();
-      // isNEWSENSOR2Present = !intakeSensor3.get();
+      isLowerNotePresent1 = !intakeSensor1.get();
+      isLowerNotePresent2 = !intakeSensor2.get();
+      isLowerNotePresent3 = !intakeSensor3.get();
     }
   
     intakeMotorPos = intakeMotor.getPosition().getValueAsDouble();
@@ -276,11 +285,10 @@ public class Intake extends SubsystemBase {
     intakeMotorSpeed = intakeMotor.getDutyCycle().getValueAsDouble();
     indexMotorSpeed = indexMotor.getDutyCycle().getValueAsDouble();
 
-    SmartDashboard.putBoolean("intakeUpperSensor state", isUpperNotePresent);
-    SmartDashboard.putBoolean("intakeSensor1 state", isLowerNotePresent);
-    SmartDashboard.putBoolean("NEWSENSOR2 state", isNEWSENSORPresent);
-    SmartDashboard.putBoolean("NEWSENSOR3 state", isNEWSENSOR2Present);
-    SmartDashboard.putBoolean("intakeUpperSensor.get()", intakeUpperSensor.get());
+    SmartDashboard.putBoolean("Upper Sensor state", isUpperNotePresent);
+    SmartDashboard.putBoolean("Lower Sensor1 state", isLowerNotePresent1);
+    SmartDashboard.putBoolean("Lower Sensor2 state", isLowerNotePresent2);
+    SmartDashboard.putBoolean("Lower Sensor3 state", isLowerNotePresent3);
     SmartDashboard.putNumber("Intake Motor Temperature", intakeMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("Index Motor Temperature", indexMotor.getDeviceTemp().getValueAsDouble());
   }

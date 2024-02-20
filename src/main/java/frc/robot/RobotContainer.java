@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -79,7 +80,12 @@ public class RobotContainer {
 
         NamedCommands.registerCommands(autonomousCommands);
 
-        // NamedCommands.registerCommand("Warm Up Shooter", Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
+        NamedCommands.registerCommand("Intake Note", Commands.runOnce(() -> new SequentialCommandGroup(
+            new CommandPivotPosition("handoff", m_SAT),
+            m_intake.collectNote(),
+            m_intake.passNoteToIndex(),
+            new CommandPivotPosition("start", m_SAT)
+            )));
          
         //Auto chooser
         autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`
@@ -122,6 +128,11 @@ public class RobotContainer {
         // operator.a().onTrue(new CommandPivotPosition("handoff", m_SAT));
         // operator.pov(180).onTrue(new CommandPivotPosition("start", m_SAT));
 
+        operator.pov(0).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("wing")));
+        operator.pov(90).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("podium")));
+        operator.pov(180).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("sub")));
+        operator.pov(270).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("amp")));
+
         operator.x()
            .onTrue(
                new SequentialCommandGroup(
@@ -130,7 +141,7 @@ public class RobotContainer {
                     m_intake.passNoteToIndex(),
                     new CommandPivotPosition("start", m_SAT)
                 )
-           );
+        );
     }
 
     public void operatorTesting(){

@@ -311,9 +311,43 @@ public final class Constants {
             AMP,
             TRAP,
             START,
-            HANDOFF,
-            MOVING
-          }
+            WING,
+            HANDOFF
+        }
+
+        public static void setState(String pos){
+            pos = pos.toLowerCase();
+            switch (pos) {
+                case "podium":
+                    state = Position.PODIUM;
+                    break;
+                case "sub":
+                    state = Position.SUB;
+                    break;
+                case "amp":
+                    state = Position.AMP;
+                    break;
+                case "trap":
+                    state = Position.TRAP;
+                    break;
+                case "wing":
+                    state = Position.WING;
+                    break;
+                case "handoff":
+                    state = Position.HANDOFF;
+                    break;
+                case "start":
+                    state = Position.START;
+                    break;
+                default:
+                    state = Position.START;
+                    break;
+            }
+        }
+
+        public String getState(){
+            return state.toString().toLowerCase();
+        }
     }
        
     public static final class climberConstants

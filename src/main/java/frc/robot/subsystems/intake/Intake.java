@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.SATConstants;
@@ -285,26 +286,48 @@ public class Intake extends SubsystemBase {
   }
 
   /*
-   * ===============================
+   * ====================================================================
    * 
    *    PUBLIC COMPOSED COMMANDS
    * 
-   * ===============================
+   * ====================================================================
    */
 
   /*
-   * This is the public command that collects the note if allowed
+   * This is the public command that collects the note if allowed.
+   * This function really should not need to be changed.
+   * The collection can only occur if the collectionAllowed() method returns true.
+   * This gives us the ability to change the conditions for when collection is
+   * allowed by changing the logic in that method, without affecting what
+   * commands are needed to collect a note. There is a debug print statement that outputs
+   * the current state in case things are not working.
    */
   public ConditionalCommand collectNote() {
     System.out.println("collectNote CONDITIONAL CHECK: " + IntakeConstants.currentIntakeState + " = " + IntakeConstants.intakeState.IDLE);
     return intakeNoteCollection()
       .onlyIf(
-        () -> (IntakeConstants.currentIntakeState == IntakeConstants.intakeState.IDLE)
+        () -> collectionAllowed()
       );
   }
 
   /*
-   * This is the public command that runs handoff if allowed
+   * This logic determines if we're allowed to run handoff.
+   * The Intake must be holding a note and the SAT must be in the handoff position.
+   */
+  private boolean collectionAllowed() {
+    return (
+      IntakeConstants.currentIntakeState == IntakeConstants.intakeState.IDLE
+    );
+  }
+
+  /*
+   * This is the public command that runs handoff if allowed.
+   * This function really should not need to be changed.
+   * The handoff can only occur if the handoffAllowed() method returns true.
+   * This gives us the ability to change the conditions for when a handoff is
+   * allowed by changing the logic in that method, without affecting what
+   * commands are needed to perform the handoff. There is a debug print statement
+   * that outputs whether a handoff was allowed in case things are not working.
    */
   public ConditionalCommand passNoteToIndex() {
     System.out.println("passNoteToIndex CONDITIONAL CHECK: " + handoffAllowed());
@@ -315,79 +338,150 @@ public class Intake extends SubsystemBase {
   }
 
   /*
-   * This is the public command that runs the index side of note firing if allowed
+   * This logic determines if we're allowed to run handoff.
+   * The Intake must be holding a note and the SAT must be in the handoff position.
+   */
+  private boolean handoffAllowed() {
+    return (
+      IntakeConstants.currentIntakeState == IntakeConstants.intakeState.HOLD && 
+      SATConstants.state == SATConstants.Position.HANDOFF
+    );
+  }
+
+  /*
+   * This is the public command that runs the index side of note firing if allowed.
+   * This function really should not need to be changed.
+   * Firing can only occur if the shootingAllowed() method returns true.
+   * This gives us the ability to change the conditions for when shooting is
+   * allowed by changing the logic in that method, without affecting what
+   * commands are needed to perform the shot. There is a debug print statement
+   * that outputs the current state in case things are not working.
    */
   public ConditionalCommand fireNote() {
     System.out.println("fireNote CONDITIONAL CHECK: " + IntakeConstants.currentIndexState + " = " + IntakeConstants.indexState.HOLD);
     return indexFireNote()
       .onlyIf(
-        () -> (IntakeConstants.currentIndexState == IntakeConstants.indexState.HOLD)
+        () -> shootingAllowed()
       );
   }
 
   /*
-   * =====================================
+   * This logic determines if we're allowed to shoot a note.
+   * The Intake must be holding a note in the indexer.
+   */
+  private boolean shootingAllowed() {
+    return (
+      IntakeConstants.currentIndexState == IntakeConstants.indexState.HOLD
+    );
+  }
+
+
+  /*
+   * ==========================================================================
    * 
    *    PRIVATE COMPOSED COMMAND PIECES
    * 
-   * =====================================
+   * ==========================================================================
    */
 
 
   /*
-   * This is a command chain for the intake side of handoff
+   * This is a command chain for the intake side of handoff. This can be edited to
+   * change the sequence of what happens when a note is collected. Here's what it's
+   * composed of:
+   * 
+   * 1. debug message
+   * 2. start spinning intake rollers
+   * 3. debug message
+   * 4. watch for note to pass lower sensors
+   * 5. debug message
+   * 6. change intake motor movement to specific rotations and jog
+   *    note inward a small amount to lift it off floor
+   * 7. debug message
+   * 8. stop intake rollers
+   * 9. debug message
+   * 
+   * If this sequence fails in any way, use the debug messages to determine how far
+   * into the sequence things worked. This helps you not incorrectly assume something
+   * else was going wrong.
    */
   private SequentialCommandGroup intakeNoteCollection() {
     return new SequentialCommandGroup(
       new PrintCommand("intakeNoteCollection step1"),
-      commandIntakeStart,
+      new CommandIntakeStart(this),
       new PrintCommand("intakeNoteCollection step2"),
-      commandIntakeIntake,
+      new CommandIntakeIntake(this),
       new PrintCommand("intakeNoteCollection step3"),
-      commandIntakeProcess,
+      new CommandIntakeProcess(this),
       new PrintCommand("intakeNoteCollection step4"),
-      commandIntakeHold,
+      new CommandIntakeHold(this),
       new PrintCommand("intakeNoteCollection step5")
     );
   }
   
   /*
-  * This is a command chain that runs both sides if handoff at the same time
-  */
+   * This is a command chain that runs both sides if handoff at the same time. 
+   * This can be edited to change the sequence of what happens when a note is collected.
+   * Here's what it's composed of:
+   * 
+   * 1. debug message
+   * 2. start spinning indexer roller and enable interrupt
+   * 3. debug message
+   * 4. start spinning intake roller and wait for note to leave lower sensor
+   * 5. debug message
+   * 6. watch for note to pass upper sensor
+   * 7. debug message
+   * 8. change indexer motor movement to specific rotations and jog
+   *    note inward a small amount to pull it all the way into SAT
+   * 9. debug message
+   * 10. stop intake rollers
+   * 11. debug message
+   * 12. stop indexer roller and disable interrupt
+   * 13. debug message
+   * 
+   * If this sequence fails in any way, use the debug messages to determine how far
+   * into the sequence things worked. This helps you not incorrectly assume something
+   * else was going wrong.
+   */
   private SequentialCommandGroup intakeAndIndexHandoff() {
     return new SequentialCommandGroup(
       new PrintCommand("intakeAndIndexHandoff step1"),
-      commandIndexStart,
+      new CommandIndexStart(this),
       new PrintCommand("intakeAndIndexHandoff step2"),
-      commandIntakeIndex,
+      new CommandIntakeIndex(this),
       new PrintCommand("intakeAndIndexHandoff step3"),
-      commandIndexIntake,
+      new CommandIndexIntake(this),
       new PrintCommand("intakeAndIndexHandoff step4"),
-      commandIndexProcess,
+      new CommandIndexProcess(this),
       new PrintCommand("intakeAndIndexHandoff step5"),
-      commandIntakeIdle,
+      new CommandIntakeIdle(this),
       new PrintCommand("intakeAndIndexHandoff step6"),
-      commandIndexHold,
+      new CommandIndexHold(this),
       new PrintCommand("intakeAndIndexHandoff step7")
     );
   }
 
   /*
-   * This determines if we're allowed to run handoff
-   */
-  private boolean handoffAllowed() {
-    return IntakeConstants.currentIntakeState == IntakeConstants.intakeState.HOLD && SATConstants.state == SATConstants.Position.START;
-  }
-
-  /*
-   * This is a command chain for the index side of note firing
+   * This is a command chain for the indexer side of note firing
+   * This can be edited to change the sequence of what happens when a note is fired.
+   * Here's what it's composed of:
+   * 
+   * 1. debug message
+   * 2. start spinning indexer roller and wait for note to leave upper sensor
+   * 3. debug message
+   * 4. stop indexer roller
+   * 5. debug message
+   * 
+   * If this sequence fails in any way, use the debug messages to determine how far
+   * into the sequence things worked. This helps you not incorrectly assume something
+   * else was going wrong.
    */
   private SequentialCommandGroup indexFireNote() {
     return new SequentialCommandGroup(
       new PrintCommand("indexFireNote step1"),
-      commandIndexFire,
+      new CommandIndexFire(this),
       new PrintCommand("indexFireNote step2"),
-      commandIndexIdle,
+      new CommandIndexIdle(this),
       new PrintCommand("indexFireNote step3")
     );
   }

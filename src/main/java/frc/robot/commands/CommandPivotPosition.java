@@ -5,19 +5,48 @@ import frc.robot.Constants;
 import frc.robot.subsystems.SAT.SAT;
 
 public class CommandPivotPosition extends Command {
-    double target;
+    String target;
+    double pivotPos;
     public SAT m_SAT;
 
-    public CommandPivotPosition(double t, SAT s){
-        target = t;
+    public CommandPivotPosition(String t, SAT s){
+        target = t.toLowerCase();
         m_SAT = s;
         addRequirements(m_SAT);
+
+        switch (target) {
+            case "podium":
+                pivotPos = Constants.SATConstants.PODIUM.pivot;
+                break;
+            case "sub":
+                pivotPos = Constants.SATConstants.START.pivot;
+                break;
+            case "amp":
+                pivotPos = Constants.SATConstants.AMP.pivot;
+                break;
+            case "trap":
+                pivotPos = Constants.SATConstants.TRAP.pivot;
+                break;
+            case "wing":
+                pivotPos = Constants.SATConstants.WING.pivot;
+                break;
+            case "handoff":
+                pivotPos = Constants.SATConstants.HANDOFF.pivot;
+                break;
+            case "start":
+                pivotPos = Constants.SATConstants.START.pivot;
+                break;
+            default:
+                System.out.println("Invalid Position");
+                pivotPos = Constants.SATConstants.START.pivot;
+                break;
+        }
     }
 
     @Override
     public void initialize(){
-        m_SAT.movePivotMotor(target);
-        SmartDashboard.putString("Pivot, I'm trying to go here: ", target + "");
+        m_SAT.movePivotMotor(pivotPos);
+        SmartDashboard.putString("Pivot, I'm trying to go here: ", pivotPos + "");
     }
 
     @Override
@@ -27,12 +56,12 @@ public class CommandPivotPosition extends Command {
 
     @Override
     public void end(boolean interupted){
-        SmartDashboard.putBoolean("is pivot done?", isWithinTol(target, m_SAT.getPivotPos(), Constants.SATConstants.MOTOR_TOLERANCE));
+        SmartDashboard.putBoolean("is pivot done?", isWithinTol(pivotPos, m_SAT.getPivotPos(), Constants.SATConstants.MOTOR_TOLERANCE));
     }
 
     @Override
     public boolean isFinished(){
-        return (isWithinTol(target, m_SAT.getPivotPos(), Constants.SATConstants.MOTOR_TOLERANCE));
+        return (isWithinTol(pivotPos, m_SAT.getPivotPos(), Constants.SATConstants.MOTOR_TOLERANCE));
     }
 
     public boolean isWithinTol(double targetPose, double currentPose, double tolerance){

@@ -86,21 +86,6 @@ public class Intake extends SubsystemBase {
   // };
 
   // AsynchronousInterrupt intakeSensor3Interrupt = new AsynchronousInterrupt(intakeSensor3, intakeLowerSensorCallback); 
-
-
-  public CommandIntakeIdle commandIntakeIdle = new CommandIntakeIdle(this);
-  public CommandIntakeStart commandIntakeStart = new CommandIntakeStart(this);
-  public CommandIntakeIntake commandIntakeIntake = new CommandIntakeIntake(this);
-  public CommandIntakeProcess commandIntakeProcess = new CommandIntakeProcess(this);
-  public CommandIntakeHold commandIntakeHold = new CommandIntakeHold(this);
-  public CommandIntakeIndex commandIntakeIndex = new CommandIntakeIndex(this);
-
-  public CommandIndexIdle commandIndexIdle = new CommandIndexIdle(this);
-  public CommandIndexStart commandIndexStart = new CommandIndexStart(this);
-  public CommandIndexIntake commandIndexIntake = new CommandIndexIntake(this);
-  public CommandIndexProcess commandIndexProcess = new CommandIndexProcess(this);
-  public CommandIndexHold commandIndexHold = new CommandIndexHold(this);
-  public CommandIndexFire commandIndexFire = new CommandIndexFire(this);
   // AsynchronousInterrupt intakeSensor1Interrupt = new AsynchronousInterrupt(intakeSensor1, intakeLowerSensorCallback); 
   // AsynchronousInterrupt intakeSensor2Interrupt = new AsynchronousInterrupt(intakeSensor2, intakeLowerSensorCallback); 
   AsynchronousInterrupt intakeUpperSensorInterrupt = new AsynchronousInterrupt(intakeUpperSensor, intakeUpperSensorCallback); 

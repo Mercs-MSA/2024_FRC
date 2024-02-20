@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.CommandOverrideIndexStart;
 import frc.robot.commands.CommandOverrideIndexStop;
@@ -19,6 +20,7 @@ import frc.robot.commands.CommandOverrideIntakeStart;
 import frc.robot.commands.CommandOverrideIntakeStop;
 import frc.robot.commands.CommandShootNote;
 import frc.robot.commands.CommandStopShooter;
+import frc.robot.commands.CommandPivotPosition;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.SAT.SAT;
@@ -36,7 +38,6 @@ public class RobotContainer {
     public final CommandXboxController driver = new CommandXboxController(0);
     public final CommandXboxController operator = new CommandXboxController(1);
     
-
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
     public final SAT m_SAT = new SAT();
@@ -47,36 +48,16 @@ public class RobotContainer {
     /* AutoChooser */
     private final SendableChooser<Command> autoChooser;
 
-    /* Commands */
-    public CommandOverrideIntakeStart commandOverrideIntakeStart = new CommandOverrideIntakeStart(m_intake);
-    public CommandOverrideIndexStart commandOverrideIndexStart = new CommandOverrideIndexStart(m_intake);
-    public CommandOverrideIntakeStop commandOverrideIntakeStop = new CommandOverrideIntakeStop(m_intake);
-    public CommandOverrideIndexStop commandOverrideIndexStop = new CommandOverrideIndexStop(m_intake);
-
-    public CommandShootNote commandShootNote = new CommandShootNote(m_SAT);
-    public CommandStopShooter commandStopShooter = new CommandStopShooter(m_SAT);
-
     // public CommandSwerveToNote commandSwerveToNote = new CommandSwerveToNote(s_Swerve, m_GamePieceVision);
-    
-    // public CommandBasesPosition commandGoToBasePodiumPosition = new CommandBasesPosition("Podium", m_SAT);
-    // public CommandBasesPosition commandGoToBaseSubPosition = new CommandBasesPosition("Sub", m_SAT);
-    // public CommandBasesPosition commandGoToBaseTrapPosition = new CommandBasesPosition("Trap", m_SAT);
-    // public CommandBasesPosition commandGoToBaseZeroPosition = new CommandBasesPosition("Zero", m_SAT);
-    // public CommandBasesPosition commandGoToBaseAmpPosition = new CommandBasesPosition("Amp", m_SAT);
-    // public CommandBasesPosition commandGoToBaseWingPosition = new CommandBasesPosition("Wing", m_SAT);
-    // public CommandPivotPosition commandGoToPivotPodiumPosition = new CommandPivotPosition("Podium", m_SAT);
-    // public CommandPivotPosition commandGoToPivotSubPosition = new CommandPivotPosition("Sub", m_SAT);
-    // public CommandPivotPosition commandGoToPivotTrapPosition = new CommandPivotPosition("Trap", m_SAT);
-    // public CommandPivotPosition commandGoToPivotZeroPosition = new CommandPivotPosition("Zero", m_SAT);
-    // public CommandPivotPosition commandGoToPivotAmpPosition = new CommandPivotPosition("Amp", m_SAT);
-    // public CommandPivotPosition commandGoToPivotWingPosition = new CommandPivotPosition("Wing", m_SAT);
 
     Map<String, Command> autonomousCommands = new HashMap<String,Command>() {
         {
-            put("Start Intake", commandOverrideIntakeStart);
-            put("Start Index", commandOverrideIndexStart);
-            put("Stop Intake", commandOverrideIntakeStop);
-            put("Stop Index", commandOverrideIndexStop);
+            put("Start Intake", new CommandOverrideIntakeStart(m_intake));
+            put("Start Index", new CommandOverrideIndexStart(m_intake));
+            put("Stop Intake", new CommandOverrideIntakeStop(m_intake));
+            put("Stop Index", new CommandOverrideIndexStop(m_intake));
+            put("Start Shooter", new CommandShootNote(m_SAT));
+            put("Stop Shooter", new CommandStopShooter(m_SAT));
         }  
     };
 
@@ -99,18 +80,6 @@ public class RobotContainer {
         NamedCommands.registerCommands(autonomousCommands);
 
         // NamedCommands.registerCommand("Warm Up Shooter", Commands.runOnce(() -> m_SAT.shootNote(), m_SAT));
-
-        // NamedCommands.registerCommand("Go To Base Podium Positon", Commands.runOnce(() -> m_SAT.goToBasePodiumPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To Base AMP Positon", Commands.runOnce(() -> m_SAT.goToBaseAmpPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To Base Sub Positon", Commands.runOnce(() -> m_SAT.goToBaseSubPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To Base Trap Positon", Commands.runOnce(() -> m_SAT.goToBaseTrapPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To Base Zero Positon", Commands.runOnce(() -> m_SAT.goToBaseZeroPosition(), m_SAT));
-
-        // NamedCommands.registerCommand("Go To Pivot Podium Positon", Commands.runOnce(() -> m_SAT.goToPivotPodiumPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To Pivot AMP Positon", Commands.runOnce(() -> m_SAT.goToPivotAmpPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To Pivot Sub Positon", Commands.runOnce(() -> m_SAT.goToPivotSubPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To Pivot Trap Positon", Commands.runOnce(() -> m_SAT.goToPivotTrapPosition(), m_SAT));
-        // NamedCommands.registerCommand("Go To Pivot Zero Positon", Commands.runOnce(() -> m_SAT.goToPivotZeroPosition(), m_SAT));
          
         //Auto chooser
         autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`
@@ -125,14 +94,20 @@ public class RobotContainer {
     public void driverControls(){
         driver.start().and(driver.back()).onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
 
-        driver.leftBumper().onTrue(Commands.run(() -> m_SAT.shootNote(), m_SAT));
-        driver.rightBumper().onTrue(Commands.run(() -> m_SAT.stopShooter(), m_SAT));
-
-        driver.pov(0).onTrue(commandOverrideIndexStart);
-        driver.pov(180).onTrue(commandOverrideIndexStop);
-
-        driver.pov(90).onTrue(commandOverrideIntakeStart);
-        driver.pov(270).onTrue(commandOverrideIntakeStop);
+        // This button turns the shooter rollers on
+        driver.leftBumper().onTrue(new CommandShootNote(m_SAT));
+        // This button turns the shooter rollers off
+        driver.rightBumper().onTrue(new CommandStopShooter(m_SAT));
+        
+        // This button turns the indexer (SAT) rollers on
+        driver.pov(0).onTrue(new CommandOverrideIndexStart(m_intake));
+        // This button turns the indexer (SAT) rollers off
+        driver.pov(180).onTrue(new CommandOverrideIndexStop(m_intake));
+        
+        // This button turns the intake rollers on
+        driver.pov(90).onTrue(new CommandOverrideIntakeStart(m_intake));
+        // This button turns the intake rollers off
+        driver.pov(270).onTrue(new CommandOverrideIntakeStop(m_intake));
     }
 
     public void operatorControls(){
@@ -141,18 +116,21 @@ public class RobotContainer {
         // operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
         // operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
 
-        operator.pov(0).onTrue(new RunCommand(() -> m_SAT.movePivotMotor("podium"), m_SAT));
-        operator.pov(90).onTrue(new RunCommand(() -> m_SAT.movePivotMotor("start"), m_SAT));
-        operator.pov(270).onTrue(new RunCommand(() -> m_SAT.movePivotMotor("wing"), m_SAT));
-        operator.a().onTrue(new RunCommand(() -> m_SAT.movePivotMotor("handoff"), m_SAT));
-        operator.pov(180).onTrue(new RunCommand(() -> m_SAT.movePivotMotor("start"), m_SAT));
+        // operator.pov(0).onTrue(new CommandPivotPosition("podium", m_SAT));
+        // operator.pov(90).onTrue(new CommandPivotPosition("start", m_SAT));
+        // operator.pov(270).onTrue(new CommandPivotPosition("wing", m_SAT));
+        // operator.a().onTrue(new CommandPivotPosition("handoff", m_SAT));
+        // operator.pov(180).onTrue(new CommandPivotPosition("start", m_SAT));
 
-        // operator.pov(0).onTrue(new RunCommand(() -> m_SAT.moveBaseMotors(Constants.SATConstants.AMP.motor1_base), m_SAT));
-        // operator.pov(90).onTrue(new RunCommand(() -> m_SAT.movePivotMotor(Constants.SATConstants.AMP.pivot), m_SAT));
-
-        // operator.pov(180).onTrue(new RunCommand(() -> m_SAT.moveBaseMotors(Constants.SATConstants.START.motor1_base), m_SAT));
-        // operator.pov(270).onTrue(new RunCommand(() -> m_SAT.movePivotMotor(Constants.SATConstants.START.pivot), m_SAT));
-
+        operator.x()
+           .onTrue(
+               new SequentialCommandGroup(
+                    new CommandPivotPosition("handoff", m_SAT),
+                    m_intake.collectNote(),
+                    m_intake.passNoteToIndex(),
+                    new CommandPivotPosition("start", m_SAT)
+                )
+           );
     }
 
     public void operatorTesting(){
@@ -211,51 +189,6 @@ public class RobotContainer {
         //     .whileTrue(
         //         m_climber.climbDownLeftCommand()
         //     );
-
-        // // RUN STEP 1 OF SUB
-        // operator.x().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, true, false, false, 0));
-        // // RUN STEP 2 OF SUB`
-        // operator.a().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, false, true, false, 0));
-        // // RUN STEP 3 OF SUB
-        // operator.b().onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.SUB, false, false, true, 0));
-        // // RUN ALL STEPS OF SUB
-        // operator.y().onTrue(m_SAT.moveSATToPosition(Constants.SATConstants.Position.SUB, 1));
-
-        // // RUN STEP 1 OF START
-        // operator.pov(270).onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, true, false, false, 0));
-        // // RUN STEP 2 OF START
-        // operator.pov(180).onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, false, true, false, 0));
-        // // RUN STEP 3 OF START
-        // operator.pov(90).onTrue(m_SAT.moveSAT(Constants.SATConstants.Position.START, false, false, true, 0));
-        // // RUN ALL STEPS OF START
-        // operator.pov(0).onTrue(m_SAT.moveSATToPosition(Constants.SATConstants.Position.START, 1));
-
-        //operator.rightBumper()
-           // .onTrue(m_intake.collectNote());
-
-        //PHASE 2 TESTING, INTAKE TO INDEXER
-        operator.rightBumper()
-            .onTrue(commandOverrideIndexStop);
-
-        operator.leftBumper()
-            .onTrue(commandOverrideIntakeStart);
-
-        operator.leftTrigger()
-            .onTrue(commandOverrideIntakeStop);
-
-        operator.a()
-            .onTrue(m_intake.passNoteToIndex());
-
-        //PHASE 3 TESTING, INDEXER TO SHOOTER
-        operator.b()
-        .onTrue(commandOverrideIndexStop);
-
-        operator.x()
-        .onTrue(commandStopShooter);
-
-        operator.y()
-        .onTrue(new SequentialCommandGroup(commandShootNote,m_intake.fireNote(), commandStopShooter));
-
         
         // if (m_intake.simulationDebugMode) {
         //     operator.a()

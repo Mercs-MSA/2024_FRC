@@ -16,6 +16,24 @@
           "data": {
             "pathName": "TwoPiece"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FourPiece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThreePiece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Taxi"
+          }
         }
       ]
     }

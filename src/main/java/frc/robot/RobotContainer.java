@@ -80,12 +80,12 @@ public class RobotContainer {
 
         NamedCommands.registerCommands(autonomousCommands);
 
-        NamedCommands.registerCommand("Intake Note", Commands.runOnce(() -> new SequentialCommandGroup(
+        NamedCommands.registerCommand("Intake Note", new SequentialCommandGroup(
             new CommandPivotPosition("handoff", m_SAT),
             m_intake.collectNote(),
             m_intake.passNoteToIndex(),
             new CommandPivotPosition("start", m_SAT)
-            )));
+            ));
          
         //Auto chooser
         autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`

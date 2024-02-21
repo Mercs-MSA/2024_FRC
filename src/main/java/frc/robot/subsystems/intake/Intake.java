@@ -446,11 +446,12 @@ public class Intake extends SubsystemBase {
   private SequentialCommandGroup intakeAndIndexHandoff() {
     return new SequentialCommandGroup(
       new PrintCommand("intakeAndIndexHandoff step1"),
-      new CommandIndexStart(this),
+//      new CommandIndexStart(this),
       new PrintCommand("intakeAndIndexHandoff step2"),
-      //new CommandIndexIntake(this),
+//      new CommandIndexIntake(this),
       new PrintCommand("intakeAndIndexHandoff step3"),
-      new CommandIndexProcess(this),
+//      new CommandIndexProcess(this),
+      new WaitCommand(0.5),
       new PrintCommand("intakeAndIndexHandoff step4"),
       new CommandIntakeIdle(this),
       new PrintCommand("intakeAndIndexHandoff step5"),

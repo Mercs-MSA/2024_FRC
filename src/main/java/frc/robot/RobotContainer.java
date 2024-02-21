@@ -23,6 +23,7 @@ import frc.robot.commands.CommandShootNote;
 import frc.robot.commands.CommandStopShooter;
 import frc.robot.commands.CommandPivotPosition;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.IndexSubcommands.CommandIndexStart;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.climber.climber;
@@ -137,6 +138,7 @@ public class RobotContainer {
            .onTrue(
                new SequentialCommandGroup(
                     new CommandPivotPosition("handoff", m_SAT),
+                    new CommandIndexStart(m_intake),
                     m_intake.collectNote(),
                     m_intake.passNoteToIndex(),
                     new CommandPivotPosition("start", m_SAT)

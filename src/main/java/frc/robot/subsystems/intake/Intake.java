@@ -64,7 +64,7 @@ public class Intake extends SubsystemBase {
   private final DigitalInput intakeSensor3 = new DigitalInput(IntakeConstants.kIntakeLowerSensor3Id);
 
   // Define the intakeUpperSensorCallback
-  private BiConsumer<Boolean, Boolean> intakeUpperSensorCallback = (risingEdge, fallingEdge) -> {
+/*   private BiConsumer<Boolean, Boolean> intakeUpperSensorCallback = (risingEdge, fallingEdge) -> {
     if (risingEdge) {
       SmartDashboard.putString("sensor debug", "upper - rising");
       setUpperSensorDetectsNote(true);
@@ -73,7 +73,7 @@ public class Intake extends SubsystemBase {
     if (fallingEdge) {
       SmartDashboard.putString("sensor debug", "upper - falling");
     }
-  };
+  }; */
 
   // Define the intakeUpperSensorCallback
   // private BiConsumer<Boolean, Boolean> intakeLowerSensorCallback = (risingEdge, fallingEdge) -> {
@@ -89,7 +89,7 @@ public class Intake extends SubsystemBase {
   // AsynchronousInterrupt intakeSensor3Interrupt = new AsynchronousInterrupt(intakeSensor3, intakeLowerSensorCallback); 
   // AsynchronousInterrupt intakeSensor1Interrupt = new AsynchronousInterrupt(intakeSensor1, intakeLowerSensorCallback); 
   // AsynchronousInterrupt intakeSensor2Interrupt = new AsynchronousInterrupt(intakeSensor2, intakeLowerSensorCallback); 
-  AsynchronousInterrupt intakeUpperSensorInterrupt = new AsynchronousInterrupt(intakeUpperSensor, intakeUpperSensorCallback); 
+  //AsynchronousInterrupt intakeUpperSensorInterrupt = new AsynchronousInterrupt(intakeUpperSensor, intakeUpperSensorCallback); 
 
   // private final double prematchDelay = 2.5;
 
@@ -102,7 +102,7 @@ public class Intake extends SubsystemBase {
   public Intake() {
     SmartDashboard.putString("sensor debug", "init");
 
-    disableIntakeUpperSensorInterrupt();
+    //disableIntakeUpperSensorInterrupt();
     // disableIntakeLowerSensorInterrupt();
     // enableIntakeLowerSensorInterrupt();
     // enableIntakeUpperSensorInterrupt();
@@ -157,14 +157,14 @@ public class Intake extends SubsystemBase {
     isUpperNotePresent = value;
   }
 
-  public void enableIntakeUpperSensorInterrupt(){
+/*   public void enableIntakeUpperSensorInterrupt(){
     intakeUpperSensorInterrupt.setInterruptEdges(true, true);
     intakeUpperSensorInterrupt.enable();
   }
 
   public void disableIntakeUpperSensorInterrupt(){
     intakeUpperSensorInterrupt.disable();
-  }
+  } */
 
   // public void enableIntakeLowerSensorInterrupt(){
   //   intakeSensor1Interrupt.setInterruptEdges(true, true);
@@ -260,7 +260,7 @@ public class Intake extends SubsystemBase {
     if (!simulationDebugMode) {
       // We don't want to update the upper sensor in periodic because it's being
       // controlled by the AsynchronousInterrupt now.
-      // isUpperNotePresent = !intakeUpperSensor.get();
+       isUpperNotePresent = !intakeUpperSensor.get();
       isLowerNotePresent1 = !intakeSensor1.get();
       isLowerNotePresent2 = !intakeSensor2.get();
       isLowerNotePresent3 = !intakeSensor3.get();
@@ -342,9 +342,9 @@ public class Intake extends SubsystemBase {
    * The Intake must be holding a note and the SAT must be in the handoff position.
    */
   private boolean handoffAllowed() {
-    return (
-      IntakeConstants.currentIntakeState == IntakeConstants.intakeState.HOLD && 
-      SATConstants.state == SATConstants.Position.HANDOFF
+    return (true
+      //IntakeConstants.currentIntakeState == IntakeConstants.intakeState.HOLD && 
+      //SATConstants.state == SATConstants.Position.HANDOFF
     );
   }
 
@@ -412,9 +412,9 @@ public class Intake extends SubsystemBase {
       new PrintCommand("intakeNoteCollection step2"),
       new CommandIntakeIntake(this),
       new PrintCommand("intakeNoteCollection step3"),
-      new CommandIntakeProcess(this),
+      //new CommandIntakeProcess(this),
       new PrintCommand("intakeNoteCollection step4"),
-      new CommandIntakeHold(this),
+      //new CommandIntakeHold(this),
       new PrintCommand("intakeNoteCollection step5")
     );
   }
@@ -448,16 +448,14 @@ public class Intake extends SubsystemBase {
       new PrintCommand("intakeAndIndexHandoff step1"),
       new CommandIndexStart(this),
       new PrintCommand("intakeAndIndexHandoff step2"),
-      new CommandIntakeIndex(this),
+      //new CommandIndexIntake(this),
       new PrintCommand("intakeAndIndexHandoff step3"),
-      new CommandIndexIntake(this),
-      new PrintCommand("intakeAndIndexHandoff step4"),
       new CommandIndexProcess(this),
-      new PrintCommand("intakeAndIndexHandoff step5"),
+      new PrintCommand("intakeAndIndexHandoff step4"),
       new CommandIntakeIdle(this),
-      new PrintCommand("intakeAndIndexHandoff step6"),
+      new PrintCommand("intakeAndIndexHandoff step5"),
       new CommandIndexHold(this),
-      new PrintCommand("intakeAndIndexHandoff step7")
+      new PrintCommand("intakeAndIndexHandoff step6")
     );
   }
 

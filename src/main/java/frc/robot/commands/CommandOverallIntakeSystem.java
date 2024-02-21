@@ -31,7 +31,7 @@ public class CommandOverallIntakeSystem extends Command{
             // This line is commentted out because only one interrupt can exist,
             // and we've decided to use the upper sensor interrupt
             // m_intake.disableIntakeLowerSensorInterrupt();
-            m_intake.enableIntakeUpperSensorInterrupt();
+            //m_intake.enableIntakeUpperSensorInterrupt();
             m_SAT.movePivotMotor(Constants.SATConstants.HANDOFF.pivot);
             if (m_SAT.isWithinTol(Constants.SATConstants.HANDOFF.pivot, m_SAT.getPivotPos(), 0.01)){
                 m_intake.startIndexMotor();
@@ -41,7 +41,7 @@ public class CommandOverallIntakeSystem extends Command{
             }
         }
         else if (m_intake.upperSensorDetectsNote()){
-            m_intake.disableIntakeUpperSensorInterrupt();
+            //m_intake.disableIntakeUpperSensorInterrupt();
             m_intake.stopIntakeIndexerMotors();
             m_intake.indexMotorToPosition(0); //move index a specific amount forward 
             m_SAT.movePivotMotor(Constants.SATConstants.START.pivot);

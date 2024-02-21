@@ -281,7 +281,7 @@ public final class Constants {
         }
 
         public static class HANDOFF{
-            public static final double pivot = 7.2;
+            public static final double pivot = 8.4;
         }
 
         public static final double PIVOT_MECHANICALLY_REQUIRED_POS = 7.8;

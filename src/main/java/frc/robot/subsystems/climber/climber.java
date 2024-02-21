@@ -94,9 +94,9 @@ public class climber extends SubsystemBase {
    * This method prepares the robot for climbing in the middle of the chain
    */
   private void climbRightUp() {
-    if (rightMotorPosition < Constants.climberConstants.RIGHT_TOP_POSITION) {
+
       tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition + Constants.climberConstants.climber_Increment));
-    }
+  
   }
 
   private void climbRightDown() {
@@ -106,9 +106,9 @@ public class climber extends SubsystemBase {
   }
 
   private void climbLeftUp() {
-    if (leftMotorPosition > Constants.climberConstants.LEFT_TOP_POSITION) {
+   
       tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition - Constants.climberConstants.climber_Increment));
-    }
+
   }
 
   private void climbLeftDown() {

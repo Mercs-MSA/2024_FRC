@@ -451,7 +451,7 @@ public class Intake extends SubsystemBase {
 //      new CommandIndexIntake(this),
       new PrintCommand("intakeAndIndexHandoff step3"),
 //      new CommandIndexProcess(this),
-      new WaitCommand(0.5),
+      new WaitCommand(0.2),
       new PrintCommand("intakeAndIndexHandoff step4"),
       new CommandIntakeIdle(this),
       new PrintCommand("intakeAndIndexHandoff step5"),

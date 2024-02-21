@@ -173,7 +173,7 @@ public final class Constants {
         public static final int kIntakeMotorId = 26;
         public static final double kIntakeMotorSpeed = 0.4;
         public static final double kIntakeProcessRotations = 1.9;
-        public static final double kIndexProcessRotations = 2.0;
+        public static final double kIndexProcessRotations = -2;
         public static final int kIndexMotorId = 24;
         public static final double kIndexMotorSpeed = 0.70;
         public static final int kIntakeUpperSensorId = 0;
@@ -181,7 +181,7 @@ public final class Constants {
         public static final int kIntakeLowerSensor2Id = 2;
         public static final int kIntakeLowerSensor3Id = 3;       
         public static final double kIntakeMotorTolerance = 0.3;
-        public static final double kIndexMotorTolerance = 0.3;
+        public static final double kIndexMotorTolerance = 1.0;
         public static final double kIntakeMotorDCTolerance = 0.1;
         public static final double kIndexMotorDCTolerance = 0.1;
         
@@ -253,7 +253,7 @@ public final class Constants {
 
         public static class SUBWOOFER{
             public static final double pivot = 1.474;
-            public static final double shooterSpeed = -50;
+            public static final double shooterSpeed = -35;
         }
 
         public static class AMP{
@@ -266,7 +266,7 @@ public final class Constants {
         public static class TRAP{
             public static final double motor1_base = -41.573;
             public static final double motor2_base = -43.117;
-            public static final double pivot = 46.939;
+            public static final double pivot = 18.2; //46.939;
             public static final double shooterSpeed = -20;
         }
 
@@ -287,7 +287,7 @@ public final class Constants {
         public static final double PIVOT_MECHANICALLY_REQUIRED_POS = 7.8;
         public static final double MOTOR_TOLERANCE = 0.5;
 
-        public static final double SHOOTER_SPEED = -70;
+        public static final double SHOOTER_SPEED = -50;
         public static final double kShooterSpeedTolerance = 1.0;
 
         /*THIS NEEDS TO INCLUDE THE CONVERSION FROM DEGREES TO ENCODER COUNTS */
@@ -357,10 +357,10 @@ public final class Constants {
       public static final int tubeMotor_Right_ID = 38;
 
 
-      public static final double climber_Increment = 0.5;
+      public static final double climber_Increment = 0.8;
 
-      public static final double LEFT_BOTTOM_POSITION = 4.33;
-      public static final double RIGHT_BOTTOM_POSITION = -10.71;
+      public static final double LEFT_BOTTOM_POSITION = 40.03;
+      public static final double RIGHT_BOTTOM_POSITION = -0.03;
 
       public static final double LEFT_TOP_POSITION = -135;
       public static final double RIGHT_TOP_POSITION = 126;

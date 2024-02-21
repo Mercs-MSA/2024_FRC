@@ -23,6 +23,8 @@ import frc.robot.commands.CommandShootNote;
 import frc.robot.commands.CommandStopShooter;
 import frc.robot.commands.CommandPivotPosition;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.IndexSubcommands.CommandIndexIdle;
+import frc.robot.commands.IndexSubcommands.CommandIndexProcess;
 import frc.robot.commands.IndexSubcommands.CommandIndexStart;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.SAT.SAT;
@@ -101,20 +103,8 @@ public class RobotContainer {
     public void driverControls(){
         driver.start().and(driver.back()).onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
 
-        // This button turns the shooter rollers on
-        driver.leftBumper().onTrue(new CommandShootNote(m_SAT));
-        // This button turns the shooter rollers off
-        driver.rightBumper().onTrue(new CommandStopShooter(m_SAT));
-        
-        // This button turns the indexer (SAT) rollers on
-        driver.pov(0).onTrue(new CommandOverrideIndexStart(m_intake));
-        // This button turns the indexer (SAT) rollers off
-        driver.pov(180).onTrue(new CommandOverrideIndexStop(m_intake));
-        
-        // This button turns the intake rollers on
-        driver.pov(90).onTrue(new CommandOverrideIntakeStart(m_intake));
-        // This button turns the intake rollers off
-        driver.pov(270).onTrue(new CommandOverrideIntakeStop(m_intake));
+ 
+
     }
 
     public void operatorControls(){
@@ -129,10 +119,10 @@ public class RobotContainer {
         // operator.a().onTrue(new CommandPivotPosition("handoff", m_SAT));
         // operator.pov(180).onTrue(new CommandPivotPosition("start", m_SAT));
 
-        operator.pov(0).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("wing")));
-        operator.pov(90).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("podium")));
-        operator.pov(180).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("sub")));
-        operator.pov(270).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("amp")));
+        // operator.pov(0).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("wing")));
+        // operator.pov(90).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("podium")));
+        // operator.pov(180).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("sub")));
+        // operator.pov(270).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("amp")));
 
         operator.x()
            .onTrue(
@@ -144,43 +134,32 @@ public class RobotContainer {
                     new CommandPivotPosition("start", m_SAT)
                 )
         );
-    }
 
-    public void operatorTesting(){
-        /************************/
-        /*                      */
-        /*   Operator Buttons   */
-        /*                      */
-        /************************/
 
-        // operator.axisGreaterThan(5, 0.5)
-        //     .whileTrue(
-        //         m_climber.climbDownCommand()
+        operator.y()
+        .onTrue(
+            new SequentialCommandGroup(
+                new CommandIndexProcess(m_intake),
+                new CommandShootNote(m_SAT),
+                new CommandIndexStart(m_intake),
+                new WaitCommand(.3),
+                new CommandIndexIdle(m_intake),
+                new CommandStopShooter(m_SAT)
+        
+
+
+            ));
+
+        
+     
+        // operator.rightBumper()
+        //     .onTrue(
+        //         new CommandPivotPosition("trap", m_SAT)
         //     );
 
-        // operator.axisLessThan(5, -0.5)
-        //     .whileTrue(
-        //         m_climber.climbUpCommand()
-        //     );
-
-        // operator.axisLessThan(5, 0.5)
-        //     .whileTrue(
-        //         m_climber.climbMotorStop()
-        //     );
-
-        // operator.axisGreaterThan(5, -0.5)
-        //     .whileTrue(
-        //         m_climber.climbMotorStop()
-        //     );
-            
-        // operator.axisGreaterThan(1, 0.5)
-        //     .whileTrue(
-        //         m_climber.climbMidLeftCommand()
-        //     );
-
-        // operator.axisLessThan(1, -0.5)
-        //     .whileTrue(
-        //         m_climber.climbMidRightCommand()
+        // operator.leftBumper()
+        //     .onTrue(
+        //         new CommandPivotPosition("start", m_SAT)
         //     );
 
         // operator.y()
@@ -202,6 +181,31 @@ public class RobotContainer {
         //     .whileTrue(
         //         m_climber.climbDownLeftCommand()
         //     );
+    }
+
+    public void operatorTesting(){
+        /************************/
+        /*                      */
+        /*   Operator Buttons   */
+        /*                      */
+        /************************/
+
+/*         operator.axisGreaterThan(5, 0.5)
+            .whileTrue(
+                m_climber.climbDownCommand()
+            );
+ */
+        // operator.axisLessThan(5, -0.5)
+        //     .whileTrue(
+        //         m_climber.climbUpCommand()
+        //     );
+
+        // operator.axisLessThan(5, 0.5)
+        //     .whileTrue(
+        //         m_climber.climbMotorStop()
+        //     );
+
+
         
         // if (m_intake.simulationDebugMode) {
         //     operator.a()

@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.intake;
 
-import java.util.function.BiConsumer;
-
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
@@ -17,29 +15,13 @@ import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.wpilibj.AsynchronousInterrupt;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+
 import frc.robot.Robot;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.SATConstants;
-import frc.robot.commands.IndexSubcommands.CommandIndexFire;
-import frc.robot.commands.IndexSubcommands.CommandIndexHold;
-import frc.robot.commands.IndexSubcommands.CommandIndexIdle;
-import frc.robot.commands.IndexSubcommands.CommandIndexIntake;
-import frc.robot.commands.IndexSubcommands.CommandIndexProcess;
-import frc.robot.commands.IndexSubcommands.CommandIndexStart;
-import frc.robot.commands.IntakeSubcommands.CommandIntakeHold;
-import frc.robot.commands.IntakeSubcommands.CommandIntakeIdle;
-import frc.robot.commands.IntakeSubcommands.CommandIntakeIndex;
-import frc.robot.commands.IntakeSubcommands.CommandIntakeIntake;
-import frc.robot.commands.IntakeSubcommands.CommandIntakeProcess;
-import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
+
 //  USE NEXT LINE FOR TESTING
 import frc.robot.sim.PhysicsSim;
 
@@ -63,36 +45,6 @@ public class Intake extends SubsystemBase {
   private final DigitalInput intakeSensor2 = new DigitalInput(IntakeConstants.kIntakeLowerSensor2Id);
   private final DigitalInput intakeSensor3 = new DigitalInput(IntakeConstants.kIntakeLowerSensor3Id);
 
-  // Define the intakeUpperSensorCallback
-/*   private BiConsumer<Boolean, Boolean> intakeUpperSensorCallback = (risingEdge, fallingEdge) -> {
-    if (risingEdge) {
-      SmartDashboard.putString("sensor debug", "upper - rising");
-      setUpperSensorDetectsNote(true);
-      // setLowerSensorDetectsNote(false);
-    }
-    if (fallingEdge) {
-      SmartDashboard.putString("sensor debug", "upper - falling");
-    }
-  }; */
-
-  // Define the intakeUpperSensorCallback
-  // private BiConsumer<Boolean, Boolean> intakeLowerSensorCallback = (risingEdge, fallingEdge) -> {
-  //   if (risingEdge) {
-  //     SmartDashboard.putString("sensor debug", "lower - rising");
-  //   }
-  //   if (fallingEdge) {
-  //     // setLowerSensorDetectsNote(true);
-  //     SmartDashboard.putString("sensor debug", "lower - falling");
-  //   }
-  // };
-
-  // AsynchronousInterrupt intakeSensor3Interrupt = new AsynchronousInterrupt(intakeSensor3, intakeLowerSensorCallback); 
-  // AsynchronousInterrupt intakeSensor1Interrupt = new AsynchronousInterrupt(intakeSensor1, intakeLowerSensorCallback); 
-  // AsynchronousInterrupt intakeSensor2Interrupt = new AsynchronousInterrupt(intakeSensor2, intakeLowerSensorCallback); 
-  //AsynchronousInterrupt intakeUpperSensorInterrupt = new AsynchronousInterrupt(intakeUpperSensor, intakeUpperSensorCallback); 
-
-  // private final double prematchDelay = 2.5;
-
   private double intakeMotorPos;
   private double indexMotorPos;
   private double intakeMotorSpeed;
@@ -101,11 +53,6 @@ public class Intake extends SubsystemBase {
   /** Creates a new intake. */
   public Intake() {
     SmartDashboard.putString("sensor debug", "init");
-
-    //disableIntakeUpperSensorInterrupt();
-    // disableIntakeLowerSensorInterrupt();
-    // enableIntakeLowerSensorInterrupt();
-    // enableIntakeUpperSensorInterrupt();
 
     isUpperNotePresent = false;
     isLowerNotePresent1 = false;
@@ -157,30 +104,6 @@ public class Intake extends SubsystemBase {
     isUpperNotePresent = value;
   }
 
-/*   public void enableIntakeUpperSensorInterrupt(){
-    intakeUpperSensorInterrupt.setInterruptEdges(true, true);
-    intakeUpperSensorInterrupt.enable();
-  }
-
-  public void disableIntakeUpperSensorInterrupt(){
-    intakeUpperSensorInterrupt.disable();
-  } */
-
-  // public void enableIntakeLowerSensorInterrupt(){
-  //   intakeSensor1Interrupt.setInterruptEdges(true, true);
-  //   intakeSensor2Interrupt.setInterruptEdges(true, true);
-  //   intakeSensor3Interrupt.setInterruptEdges(true, true);
-  //   intakeSensor1Interrupt.enable();
-  //   intakeSensor2Interrupt.enable();
-  //   intakeSensor3Interrupt.enable();
-  // }
-
-  // public void disableIntakeLowerSensorInterrupt(){
-  //   intakeSensor1Interrupt.disable();
-  //   intakeSensor2Interrupt.disable();
-  //   intakeSensor3Interrupt.disable();
-  // }
-  
   public void intakeMotorToPosition(double rotations) {
     intakeMotor.setControl(intakeMotor_voltagePosition.withPosition(rotations));
   }
@@ -258,9 +181,7 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run 
 
     if (!simulationDebugMode) {
-      // We don't want to update the upper sensor in periodic because it's being
-      // controlled by the AsynchronousInterrupt now.
-       isUpperNotePresent = !intakeUpperSensor.get();
+      isUpperNotePresent = !intakeUpperSensor.get();
       isLowerNotePresent1 = !intakeSensor1.get();
       isLowerNotePresent2 = !intakeSensor2.get();
       isLowerNotePresent3 = !intakeSensor3.get();
@@ -283,206 +204,6 @@ public class Intake extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     PhysicsSim.getInstance().run();
-  }
-
-  /*
-   * ====================================================================
-   * 
-   *    PUBLIC COMPOSED COMMANDS
-   * 
-   * ====================================================================
-   */
-
-  /*
-   * This is the public command that collects the note if allowed.
-   * This function really should not need to be changed.
-   * The collection can only occur if the collectionAllowed() method returns true.
-   * This gives us the ability to change the conditions for when collection is
-   * allowed by changing the logic in that method, without affecting what
-   * commands are needed to collect a note. There is a debug print statement that outputs
-   * the current state in case things are not working.
-   */
-  public ConditionalCommand collectNote() {
-    System.out.println("collectNote CONDITIONAL CHECK: " + IntakeConstants.currentIntakeState + " = " + IntakeConstants.intakeState.IDLE);
-    return intakeNoteCollection()
-      .onlyIf(
-        () -> collectionAllowed()
-      );
-  }
-
-  /*
-   * This logic determines if we're allowed to run handoff.
-   * The Intake must be holding a note and the SAT must be in the handoff position.
-   */
-  private boolean collectionAllowed() {
-    return (
-      IntakeConstants.currentIntakeState == IntakeConstants.intakeState.IDLE
-    );
-  }
-
-  /*
-   * This is the public command that runs handoff if allowed.
-   * This function really should not need to be changed.
-   * The handoff can only occur if the handoffAllowed() method returns true.
-   * This gives us the ability to change the conditions for when a handoff is
-   * allowed by changing the logic in that method, without affecting what
-   * commands are needed to perform the handoff. There is a debug print statement
-   * that outputs whether a handoff was allowed in case things are not working.
-   */
-  public ConditionalCommand passNoteToIndex() {
-    System.out.println("passNoteToIndex CONDITIONAL CHECK: " + handoffAllowed());
-    return intakeAndIndexHandoff()
-      .onlyIf(
-        () -> handoffAllowed()
-      );
-  }
-
-  /*
-   * This logic determines if we're allowed to run handoff.
-   * The Intake must be holding a note and the SAT must be in the handoff position.
-   */
-  private boolean handoffAllowed() {
-    return (true
-      //IntakeConstants.currentIntakeState == IntakeConstants.intakeState.HOLD && 
-      //SATConstants.state == SATConstants.Position.HANDOFF
-    );
-  }
-
-  /*
-   * This is the public command that runs the index side of note firing if allowed.
-   * This function really should not need to be changed.
-   * Firing can only occur if the shootingAllowed() method returns true.
-   * This gives us the ability to change the conditions for when shooting is
-   * allowed by changing the logic in that method, without affecting what
-   * commands are needed to perform the shot. There is a debug print statement
-   * that outputs the current state in case things are not working.
-   */
-  public ConditionalCommand fireNote() {
-    System.out.println("fireNote CONDITIONAL CHECK: " + IntakeConstants.currentIndexState + " = " + IntakeConstants.indexState.HOLD);
-    return indexFireNote()
-      .onlyIf(
-        () -> shootingAllowed()
-      );
-  }
-
-  /*
-   * This logic determines if we're allowed to shoot a note.
-   * The Intake must be holding a note in the indexer.
-   */
-  private boolean shootingAllowed() {
-    return (
-      IntakeConstants.currentIndexState == IntakeConstants.indexState.HOLD
-    );
-  }
-
-
-  /*
-   * ==========================================================================
-   * 
-   *    PRIVATE COMPOSED COMMAND PIECES
-   * 
-   * ==========================================================================
-   */
-
-
-  /*
-   * This is a command chain for the intake side of handoff. This can be edited to
-   * change the sequence of what happens when a note is collected. Here's what it's
-   * composed of:
-   * 
-   * 1. debug message
-   * 2. start spinning intake rollers
-   * 3. debug message
-   * 4. watch for note to pass lower sensors
-   * 5. debug message
-   * 6. change intake motor movement to specific rotations and jog
-   *    note inward a small amount to lift it off floor
-   * 7. debug message
-   * 8. stop intake rollers
-   * 9. debug message
-   * 
-   * If this sequence fails in any way, use the debug messages to determine how far
-   * into the sequence things worked. This helps you not incorrectly assume something
-   * else was going wrong.
-   */
-  private SequentialCommandGroup intakeNoteCollection() {
-    return new SequentialCommandGroup(
-      new PrintCommand("intakeNoteCollection step1"),
-      new CommandIntakeStart(this),
-      new PrintCommand("intakeNoteCollection step2"),
-      new CommandIntakeIntake(this),
-      new PrintCommand("intakeNoteCollection step3"),
-      //new CommandIntakeProcess(this),
-      new PrintCommand("intakeNoteCollection step4"),
-      //new CommandIntakeHold(this),
-      new PrintCommand("intakeNoteCollection step5")
-    );
-  }
-  
-  /*
-   * This is a command chain that runs both sides if handoff at the same time. 
-   * This can be edited to change the sequence of what happens when a note is collected.
-   * Here's what it's composed of:
-   * 
-   * 1. debug message
-   * 2. start spinning indexer roller and enable interrupt
-   * 3. debug message
-   * 4. start spinning intake roller and wait for note to leave lower sensor
-   * 5. debug message
-   * 6. watch for note to pass upper sensor
-   * 7. debug message
-   * 8. change indexer motor movement to specific rotations and jog
-   *    note inward a small amount to pull it all the way into SAT
-   * 9. debug message
-   * 10. stop intake rollers
-   * 11. debug message
-   * 12. stop indexer roller and disable interrupt
-   * 13. debug message
-   * 
-   * If this sequence fails in any way, use the debug messages to determine how far
-   * into the sequence things worked. This helps you not incorrectly assume something
-   * else was going wrong.
-   */
-  private SequentialCommandGroup intakeAndIndexHandoff() {
-    return new SequentialCommandGroup(
-      new PrintCommand("intakeAndIndexHandoff step1"),
-//      new CommandIndexStart(this),
-      new PrintCommand("intakeAndIndexHandoff step2"),
-//      new CommandIndexIntake(this),
-      new PrintCommand("intakeAndIndexHandoff step3"),
-//      new CommandIndexProcess(this),
-      new WaitCommand(0.2),
-      new PrintCommand("intakeAndIndexHandoff step4"),
-      new CommandIntakeIdle(this),
-      new PrintCommand("intakeAndIndexHandoff step5"),
-      new CommandIndexHold(this),
-      new PrintCommand("intakeAndIndexHandoff step6")
-    );
-  }
-
-  /*
-   * This is a command chain for the indexer side of note firing
-   * This can be edited to change the sequence of what happens when a note is fired.
-   * Here's what it's composed of:
-   * 
-   * 1. debug message
-   * 2. start spinning indexer roller and wait for note to leave upper sensor
-   * 3. debug message
-   * 4. stop indexer roller
-   * 5. debug message
-   * 
-   * If this sequence fails in any way, use the debug messages to determine how far
-   * into the sequence things worked. This helps you not incorrectly assume something
-   * else was going wrong.
-   */
-  private SequentialCommandGroup indexFireNote() {
-    return new SequentialCommandGroup(
-      new PrintCommand("indexFireNote step1"),
-      new CommandIndexFire(this),
-      new PrintCommand("indexFireNote step2"),
-      new CommandIndexIdle(this),
-      new PrintCommand("indexFireNote step3")
-    );
   }
 
   public void optimization_for_CAN() {

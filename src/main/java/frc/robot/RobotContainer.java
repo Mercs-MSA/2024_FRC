@@ -23,9 +23,8 @@ import frc.robot.commands.CommandShootNote;
 import frc.robot.commands.CommandStopShooter;
 import frc.robot.commands.CommandPivotPosition;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.IndexSubcommands.CommandIndexIdle;
-import frc.robot.commands.IndexSubcommands.CommandIndexProcess;
-import frc.robot.commands.IndexSubcommands.CommandIndexStart;
+import frc.robot.commands.IntakeSubcommands.*;
+import frc.robot.commands.IndexSubcommands.*;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.climber.climber;
@@ -56,12 +55,33 @@ public class RobotContainer {
 
     Map<String, Command> autonomousCommands = new HashMap<String,Command>() {
         {
+            put("marker1", Commands.print("Finished 1 Piece"));
+            put("marker2", Commands.print("Finished 3-4 Piece"));
             put("Start Intake", new CommandOverrideIntakeStart(m_intake));
             put("Start Index", new CommandOverrideIndexStart(m_intake));
             put("Stop Intake", new CommandOverrideIntakeStop(m_intake));
             put("Stop Index", new CommandOverrideIndexStop(m_intake));
             put("Start Shooter", new CommandShootNote(m_SAT));
             put("Stop Shooter", new CommandStopShooter(m_SAT));
+            put("Intake Note", new SequentialCommandGroup(
+                new CommandPivotPosition("handoff", m_SAT),
+                new CommandIntakeStart(m_intake),
+                new CommandIndexStart(m_intake),
+                new CommandIntakeWaitForNote(m_intake),
+                // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
+                new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
+                new CommandIntakeStop(m_intake),
+                new CommandIndexStop(m_intake),
+                new CommandPivotPosition("start", m_SAT)
+            ));
+            put("Fire From Sub", new SequentialCommandGroup(
+                new CommandIndexMoveNoteToFiringPosition(m_intake),
+                new CommandShootNote(m_SAT),
+                new CommandIndexStart(m_intake),
+                new WaitCommand(0.3),
+                new CommandIndexStop(m_intake),
+                new CommandStopShooter(m_SAT)
+            ));
         }  
     };
 
@@ -77,19 +97,8 @@ public class RobotContainer {
             )
         );
 
-        // Pathplanner commands - templates
-        NamedCommands.registerCommand("marker1", Commands.print("Finished 1 Piece"));
-        NamedCommands.registerCommand("marker2", Commands.print("Finished 3-4 Piece"));
-
         NamedCommands.registerCommands(autonomousCommands);
 
-        NamedCommands.registerCommand("Intake Note", new SequentialCommandGroup(
-            new CommandPivotPosition("handoff", m_SAT),
-            m_intake.collectNote(),
-            m_intake.passNoteToIndex(),
-            new CommandPivotPosition("start", m_SAT)
-            ));
-         
         //Auto chooser
         autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`
         SmartDashboard.putData("Auto Mode", autoChooser);
@@ -128,30 +137,29 @@ public class RobotContainer {
            .onTrue(
                new SequentialCommandGroup(
                     new CommandPivotPosition("handoff", m_SAT),
+                    new CommandIntakeStart(m_intake),
                     new CommandIndexStart(m_intake),
-                    m_intake.collectNote(),
-                    m_intake.passNoteToIndex(),
+                    new CommandIntakeWaitForNote(m_intake),
+                    // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
+                    new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
+                    new CommandIntakeStop(m_intake),
+                    new CommandIndexStop(m_intake),
                     new CommandPivotPosition("start", m_SAT)
                 )
-        );
-
+            );
 
         operator.y()
-        .onTrue(
-            new SequentialCommandGroup(
-                new CommandIndexProcess(m_intake),
-                new CommandShootNote(m_SAT),
-                new CommandIndexStart(m_intake),
-                new WaitCommand(.3),
-                new CommandIndexIdle(m_intake),
-                new CommandStopShooter(m_SAT)
-        
+            .onTrue(
+                new SequentialCommandGroup(
+                    new CommandIndexMoveNoteToFiringPosition(m_intake),
+                    new CommandShootNote(m_SAT),
+                    new CommandIndexStart(m_intake),
+                    new WaitCommand(0.3),
+                    new CommandIndexStop(m_intake),
+                    new CommandStopShooter(m_SAT)
+                )
+            );
 
-
-            ));
-
-        
-     
         // operator.rightBumper()
         //     .onTrue(
         //         new CommandPivotPosition("trap", m_SAT)

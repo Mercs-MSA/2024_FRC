@@ -1,21 +1,21 @@
-package frc.robot.commands.IntakeSubcommands;
+package frc.robot.commands.IndexSubcommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.intake.Intake;
 
-public class CommandIntakeIntake extends Command {
+public class CommandIndexWaitForNote extends Command {
   private final Intake m_intake;
   
-  public CommandIntakeIntake(Intake i) {
+  public CommandIndexWaitForNote(Intake i) {
     m_intake = i;
     addRequirements(m_intake);
   }
 
   @Override
   public void initialize() {
-    m_intake.startIntakeMotor();
-    IntakeConstants.currentIntakeState = IntakeConstants.intakeState.INTAKE;
+    m_intake.startIndexMotor();
+    IntakeConstants.currentIndexState = IntakeConstants.indexState.INTAKE;
   }
 
   @Override
@@ -26,7 +26,7 @@ public class CommandIntakeIntake extends Command {
 
   @Override
   public boolean isFinished() {
-    return m_intake.lowerSensorDetectsNote() == true;
+    return m_intake.upperSensorDetectsNote() == true;
   }
 }
 

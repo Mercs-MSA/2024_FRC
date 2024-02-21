@@ -15,7 +15,6 @@ public class CommandIndexStart extends Command {
   @Override
   public void initialize() {
     m_intake.startIndexMotor();
-    //m_intake.enableIntakeUpperSensorInterrupt();
   }
 
   @Override

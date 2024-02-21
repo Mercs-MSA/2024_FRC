@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.intake.Intake;
 
-public class CommandIndexProcess extends Command {
+public class CommandIndexMoveNoteToFiringPosition extends Command {
   private final Intake m_intake;
   private double targetPos;
 
-  public CommandIndexProcess(Intake i) {
+  public CommandIndexMoveNoteToFiringPosition(Intake i) {
     m_intake = i;
     addRequirements(m_intake);
   }

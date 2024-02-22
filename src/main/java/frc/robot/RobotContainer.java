@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -72,16 +73,29 @@ public class RobotContainer {
                 new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
                 new CommandIntakeStop(m_intake),
                 new CommandIndexStop(m_intake),
-                new CommandMovePivotToPosition(m_SAT, ScoringConstants.ScoringMode.SUB)
+                new CommandMovePivotToPosition(m_SAT, ScoringMode.SUB)
             ));
             put("Fire From Sub", new SequentialCommandGroup(
-                new CommandMovePivotToPosition(m_SAT), // pivot move to whatever current mode is
+                new CommandMovePivotToPosition(m_SAT, ScoringMode.SUB),
                 new CommandIndexMoveNoteToFiringPosition(m_intake),
-                new CommandShootNote(m_SAT),
+                new CommandShootNote(m_SAT, ScoringMode.SUB),
                 new CommandIndexStart(m_intake),
                 new WaitCommand(0.3),
-                new CommandIndexStop(m_intake),
-                new CommandStopShooter(m_SAT)
+                new ParallelCommandGroup(
+                    new CommandIndexStop(m_intake),
+                    new CommandStopShooter(m_SAT)
+                )
+            ));
+            put("Fire From Podium", new SequentialCommandGroup(
+                new CommandMovePivotToPosition(m_SAT, ScoringMode.PODIUM),
+                new CommandIndexMoveNoteToFiringPosition(m_intake),
+                new CommandShootNote(m_SAT, ScoringMode.PODIUM),
+                new CommandIndexStart(m_intake),
+                new WaitCommand(0.3),
+                new ParallelCommandGroup(
+                    new CommandIndexStop(m_intake),
+                    new CommandStopShooter(m_SAT)
+                )
             ));
         }  
     };
@@ -145,8 +159,10 @@ public class RobotContainer {
                     new CommandShootNote(m_SAT),
                     new CommandIndexStart(m_intake),
                     new WaitCommand(0.3),
-                    new CommandIndexStop(m_intake),
-                    new CommandStopShooter(m_SAT)
+                    new ParallelCommandGroup(
+                        new CommandIndexStop(m_intake),
+                        new CommandStopShooter(m_SAT)
+                    )
                 )
             );
 

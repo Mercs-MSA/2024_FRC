@@ -18,15 +18,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
 import frc.robot.Constants.SATConstants;
-import frc.robot.commands.CommandBasesPosition;
-import frc.robot.commands.CommandPivotPosition;
 import frc.robot.sim.PhysicsSim;
 
 public class SAT extends SubsystemBase {
@@ -254,17 +247,6 @@ public class SAT extends SubsystemBase {
   public void moveBaseMotors(double base1Pos){
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(base1Pos)); 
   }
-
-
-  /**
-   * Moves both the base and pivot motors to the specified position.
-   */
-  // public SequentialCommandGroup moveSAT(String target) {
-  //   return new SequentialCommandGroup(
-  //     new CommandBasesPosition(target, this),
-  //     new CommandPivotPosition(target, this)
-  //   );
-  // }
 
   public boolean isWithinTol(double targetPose, double currentPose, double tolerance) {
     return (Math.abs(targetPose - currentPose) <= tolerance);

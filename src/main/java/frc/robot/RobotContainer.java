@@ -21,7 +21,9 @@ import frc.robot.commands.CommandOverrideIntakeStart;
 import frc.robot.commands.CommandOverrideIntakeStop;
 import frc.robot.commands.CommandShootNote;
 import frc.robot.commands.CommandStopShooter;
-import frc.robot.commands.CommandPivotPosition;
+import frc.robot.commands.CommandPivotHandoffPosition;
+import frc.robot.commands.CommandMovePivotToPosition;
+import frc.robot.commands.CommandChangeScoringMode;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.IntakeSubcommands.*;
 import frc.robot.commands.IndexSubcommands.*;
@@ -29,6 +31,8 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.climber.climber;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.Constants.ScoringConstants;
+import frc.robot.Constants.ScoringConstants.ScoringMode;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -64,7 +68,7 @@ public class RobotContainer {
             put("Start Shooter", new CommandShootNote(m_SAT));
             put("Stop Shooter", new CommandStopShooter(m_SAT));
             put("Intake Note", new SequentialCommandGroup(
-                new CommandPivotPosition("handoff", m_SAT),
+                new CommandPivotHandoffPosition(m_SAT),
                 new CommandIntakeStart(m_intake),
                 new CommandIndexStart(m_intake),
                 new CommandIntakeWaitForNote(m_intake),
@@ -72,9 +76,10 @@ public class RobotContainer {
                 new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
                 new CommandIntakeStop(m_intake),
                 new CommandIndexStop(m_intake),
-                new CommandPivotPosition("start", m_SAT)
+                new CommandMovePivotToPosition(m_SAT, ScoringConstants.ScoringMode.SUB)
             ));
             put("Fire From Sub", new SequentialCommandGroup(
+                new CommandMovePivotToPosition(m_SAT), // pivot move to whatever current mode is
                 new CommandIndexMoveNoteToFiringPosition(m_intake),
                 new CommandShootNote(m_SAT),
                 new CommandIndexStart(m_intake),
@@ -122,21 +127,22 @@ public class RobotContainer {
         // operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
         // operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
 
-        // operator.pov(0).onTrue(new CommandPivotPosition("podium", m_SAT));
-        // operator.pov(90).onTrue(new CommandPivotPosition("start", m_SAT));
-        // operator.pov(270).onTrue(new CommandPivotPosition("wing", m_SAT));
-        // operator.a().onTrue(new CommandPivotPosition("handoff", m_SAT));
-        // operator.pov(180).onTrue(new CommandPivotPosition("start", m_SAT));
+        // operator.pov(0).onTrue(new CommandMovePivotToPosition(m_SAT, ScoringConstants.ScoringMode.PODIUM));
+        // operator.pov(90).onTrue(new CommandMovePivotToPosition(m_SAT, ScoringConstants.ScoringMode.SUB));
+        // operator.pov(270).onTrue(new CommandMovePivotToPosition(m_SAT, ScoringConstants.ScoringMode.WING));
+        // operator.pov(180).onTrue(new CommandMovePivotToPosition(m_SAT, ScoringConstants.ScoringMode.AMP));
 
-        // operator.pov(0).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("wing")));
-        // operator.pov(90).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("podium")));
-        // operator.pov(180).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("sub")));
-        // operator.pov(270).onTrue(new InstantCommand(() -> Constants.SATConstants.setState("amp")));
+        // operator.a().onTrue(new CommandPivotHandoffPosition(m_SAT));
+
+        operator.povUp().onTrue(new CommandChangeScoringMode(ScoringMode.WING));
+        operator.povDown().onTrue(new CommandChangeScoringMode(ScoringMode.SUB));
+        operator.povLeft().onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
+        operator.povRight().onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
 
         operator.x()
            .onTrue(
                new SequentialCommandGroup(
-                    new CommandPivotPosition("handoff", m_SAT),
+                    new CommandPivotHandoffPosition(m_SAT),
                     new CommandIntakeStart(m_intake),
                     new CommandIndexStart(m_intake),
                     new CommandIntakeWaitForNote(m_intake),
@@ -144,13 +150,14 @@ public class RobotContainer {
                     new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
                     new CommandIntakeStop(m_intake),
                     new CommandIndexStop(m_intake),
-                    new CommandPivotPosition("start", m_SAT)
+                    new CommandMovePivotToPosition(m_SAT, ScoringConstants.ScoringMode.SUB)
                 )
             );
 
         operator.y()
             .onTrue(
                 new SequentialCommandGroup(
+                    new CommandMovePivotToPosition(m_SAT), // pivot move to whatever current mode is
                     new CommandIndexMoveNoteToFiringPosition(m_intake),
                     new CommandShootNote(m_SAT),
                     new CommandIndexStart(m_intake),
@@ -159,16 +166,6 @@ public class RobotContainer {
                     new CommandStopShooter(m_SAT)
                 )
             );
-
-        // operator.rightBumper()
-        //     .onTrue(
-        //         new CommandPivotPosition("trap", m_SAT)
-        //     );
-
-        // operator.leftBumper()
-        //     .onTrue(
-        //         new CommandPivotPosition("start", m_SAT)
-        //     );
 
         // operator.y()
         //     .whileTrue(

@@ -1,6 +1,5 @@
 package frc.robot;
 
-
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -17,10 +16,8 @@ import edu.wpi.first.units.Unit;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
-
 public final class Constants {
     public static final double stickDeadband = 0.1;
-
 
     public static final class Swerve {
         public static final int pigeonID = 16;
@@ -151,7 +148,6 @@ public final class Constants {
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
     }
-
 
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = 3;
@@ -429,6 +425,15 @@ public final class Constants {
        
     }
 
+    public static final class ScoringConstants {
+        public static ScoringMode currentScoringMode = ScoringMode.SUB;
+        public enum ScoringMode {
+            WING,
+            AMP,
+            SUB,
+            PODIUM
+        }
+    }
 }
 
 

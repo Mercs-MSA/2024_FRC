@@ -434,7 +434,8 @@ public final class Constants {
             WING,
             AMP,
             SUB,
-            PODIUM
+            PODIUM,
+            TRAP
         }
     }
 }

@@ -15,10 +15,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.CommandOverrideIndexStart;
-import frc.robot.commands.CommandOverrideIndexStop;
-import frc.robot.commands.CommandOverrideIntakeStart;
-import frc.robot.commands.CommandOverrideIntakeStop;
 import frc.robot.commands.CommandShootNote;
 import frc.robot.commands.CommandStopShooter;
 import frc.robot.commands.CommandPivotHandoffPosition;
@@ -45,19 +41,13 @@ public class RobotContainer {
     public final CommandXboxController driver = new CommandXboxController(0);
     public final CommandXboxController operator = new CommandXboxController(1);
 
-
-    
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
     public final SAT m_SAT = new SAT();
     public final Intake m_intake = new Intake();
     public final climber m_climber = new climber();
     //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
-    /* Commands */
-    public CommandOverrideIntakeStart commandOverrideIntakeStart = new CommandOverrideIntakeStart(m_intake);
-    public CommandOverrideIndexStart commandOverrideIndexStart = new CommandOverrideIndexStart(m_intake);
-    public CommandOverrideIntakeStop commandOverrideIntakeStop = new CommandOverrideIntakeStop(m_intake);
-    public CommandOverrideIndexStop commandOverrideIndexStop = new CommandOverrideIndexStop(m_intake);
+
     /* AutoChooser */
     private final SendableChooser<Command> autoChooser;
 
@@ -67,10 +57,10 @@ public class RobotContainer {
         {
             put("marker1", Commands.print("Finished 1 Piece"));
             put("marker2", Commands.print("Finished 3-4 Piece"));
-            put("Start Intake", new CommandOverrideIntakeStart(m_intake));
-            put("Start Index", new CommandOverrideIndexStart(m_intake));
-            put("Stop Intake", new CommandOverrideIntakeStop(m_intake));
-            put("Stop Index", new CommandOverrideIndexStop(m_intake));
+            put("Start Intake", new CommandIntakeStart(m_intake));
+            put("Start Index", new CommandIndexStart(m_intake));
+            put("Stop Intake", new CommandIntakeStop(m_intake));
+            put("Stop Index", new CommandIndexStop(m_intake));
             put("Start Shooter", new CommandShootNote(m_SAT, ScoringMode.SUB));
             put("Stop Shooter", new CommandStopShooter(m_SAT));
             put("Intake Note", new SequentialCommandGroup(
@@ -123,17 +113,10 @@ public class RobotContainer {
 
     public void driverControls(){
         driver.start().and(driver.back()).onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
-    
- 
 
     }
 
     public void operatorControls(){
-
-
-
-        operator.a().onTrue(new CommandPivotHandoffPosition(m_SAT));
-
         operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
         operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.SUB));
         // operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
@@ -194,11 +177,11 @@ public class RobotContainer {
         operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
         operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
 
-        driver.pov(0).onTrue(commandOverrideIndexStart);
-        driver.pov(180).onTrue(commandOverrideIndexStop);
+        driver.pov(0).onTrue(new CommandIndexStart(m_intake));
+        driver.pov(180).onTrue(new CommandIndexStop(m_intake));
 
-        driver.pov(90).onTrue(commandOverrideIntakeStart);
-        driver.pov(270).onTrue(commandOverrideIntakeStop);
+        driver.pov(90).onTrue(new CommandIntakeStart(m_intake));
+        driver.pov(270).onTrue(new CommandIntakeStop(m_intake));
     }
 
     public void operatorTesting(){
@@ -208,11 +191,11 @@ public class RobotContainer {
         /*                      */
         /************************/
 
-/*         operator.axisGreaterThan(5, 0.5)
-            .whileTrue(
-                m_climber.climbDownCommand()
-            );
- */
+        // operator.axisGreaterThan(5, 0.5)
+        //     .whileTrue(
+        //         m_climber.climbDownCommand()
+        //     );
+
         // operator.axisLessThan(5, -0.5)
         //     .whileTrue(
         //         m_climber.climbUpCommand()
@@ -222,19 +205,6 @@ public class RobotContainer {
         //     .whileTrue(
         //         m_climber.climbMotorStop()
         //     );
-
-
-        
-        // if (m_intake.simulationDebugMode) {
-        //     operator.a()
-        //         .onTrue(Commands.runOnce(() -> {m_intake.setLowerSensorDetectsNote(true);}));
-        //     operator.b()
-        //         .onTrue(Commands.runOnce(() -> {m_intake.setUpperSensorDetectsNote(true);}));
-        //     operator.x()
-        //         .onTrue(Commands.runOnce(() -> {m_intake.setLowerSensorDetectsNote(false);}));
-        //     operator.y()
-        //         .onTrue(Commands.runOnce(() -> {m_intake.setUpperSensorDetectsNote(false);}));
-        // }
     }
 
     /**

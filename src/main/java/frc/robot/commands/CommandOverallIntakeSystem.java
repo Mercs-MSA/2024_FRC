@@ -5,64 +5,71 @@ import frc.robot.Constants;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.intake.Intake;
 
+/*
+ * This was an expiramental Command for learning
+ * 
+ * It really shouldn't be used any more.
+ * Everything this did also exists as other individual Commands
+ */
+
 public class CommandOverallIntakeSystem extends Command{
-    private final Intake m_intake;
-    private final SAT m_SAT;
+    // private final Intake m_intake;
+    // private final SAT m_SAT;
 
     public CommandOverallIntakeSystem(Intake m_intake, SAT m_SAT){
-        this.m_intake = m_intake;
-        this.m_SAT = m_SAT;
-        addRequirements(this.m_intake, this.m_SAT);
+        // this.m_intake = m_intake;
+        // this.m_SAT = m_SAT;
+        // addRequirements(this.m_intake, this.m_SAT);
     }
 
-    @Override
-    public void initialize() {
-        if (!(m_intake.upperSensorDetectsNote() || m_intake.lowerSensorDetectsNote())){ //if no note
-            // This line is commentted out because only one interrupt can exist,
-            // and we've decided to use the upper sensor interrupt
-            // m_intake.enableIntakeLowerSensorInterrupt();
-            m_intake.startIntakeMotor();
-        }
-    }
+    // @Override
+    // public void initialize() {
+    //     if (!(m_intake.upperSensorDetectsNote() || m_intake.lowerSensorDetectsNote())){ //if no note
+    //         // This line is commentted out because only one interrupt can exist,
+    //         // and we've decided to use the upper sensor interrupt
+    //         // m_intake.enableIntakeLowerSensorInterrupt();
+    //         m_intake.startIntakeMotor();
+    //     }
+    // }
 
-    @Override
-    public void execute() {
-        if (m_intake.lowerSensorDetectsNote()){
-            // This line is commentted out because only one interrupt can exist,
-            // and we've decided to use the upper sensor interrupt
-            // m_intake.disableIntakeLowerSensorInterrupt();
-            //m_intake.enableIntakeUpperSensorInterrupt();
-            m_SAT.movePivotMotor(Constants.SATConstants.HANDOFF.pivot);
-            if (m_SAT.isWithinTol(Constants.SATConstants.HANDOFF.pivot, m_SAT.getPivotPos(), 0.01)){
-                m_intake.startIndexMotor();
-            }
-            else {
-                m_intake.intakeMotorToPosition(0);//move note further inside intake by moving intake a specific amount
-            }
-        }
-        else if (m_intake.upperSensorDetectsNote()){
-            //m_intake.disableIntakeUpperSensorInterrupt();
-            m_intake.stopIntakeIndexerMotors();
-            m_intake.indexMotorToPosition(0); //move index a specific amount forward 
-            m_SAT.movePivotMotor(Constants.SATConstants.SUBWOOFER.pivot);
-        }
-        else {
-            if (!(m_intake.upperSensorDetectsNote() || m_intake.lowerSensorDetectsNote())){ //if no note
-                // This line is commentted out because only one interrupt can exist,
-                // and we've decided to use the upper sensor interrupt
-                // m_intake.enableIntakeLowerSensorInterrupt();
-                m_intake.startIntakeMotor();
-            }
-        }
-    }
+    // @Override
+    // public void execute() {
+    //     if (m_intake.lowerSensorDetectsNote()){
+    //         // This line is commentted out because only one interrupt can exist,
+    //         // and we've decided to use the upper sensor interrupt
+    //         // m_intake.disableIntakeLowerSensorInterrupt();
+    //         //m_intake.enableIntakeUpperSensorInterrupt();
+    //         m_SAT.movePivotMotor(Constants.SATConstants.HANDOFF.pivot);
+    //         if (m_SAT.isWithinTol(Constants.SATConstants.HANDOFF.pivot, m_SAT.getPivotPos(), 0.01)){
+    //             m_intake.startIndexMotor();
+    //         }
+    //         else {
+    //             m_intake.intakeMotorToPosition(0);//move note further inside intake by moving intake a specific amount
+    //         }
+    //     }
+    //     else if (m_intake.upperSensorDetectsNote()){
+    //         //m_intake.disableIntakeUpperSensorInterrupt();
+    //         m_intake.stopIntakeIndexerMotors();
+    //         m_intake.indexMotorToPosition(0); //move index a specific amount forward 
+    //         m_SAT.movePivotMotor(Constants.SATConstants.SUBWOOFER.pivot);
+    //     }
+    //     else {
+    //         if (!(m_intake.upperSensorDetectsNote() || m_intake.lowerSensorDetectsNote())){ //if no note
+    //             // This line is commentted out because only one interrupt can exist,
+    //             // and we've decided to use the upper sensor interrupt
+    //             // m_intake.enableIntakeLowerSensorInterrupt();
+    //             m_intake.startIntakeMotor();
+    //         }
+    //     }
+    // }
 
-    @Override
-    public void end(boolean interrupted) {
-        //change state to ready to shoot
-    }
+    // @Override
+    // public void end(boolean interrupted) {
+    //     //change state to ready to shoot
+    // }
 
-    @Override
-    public boolean isFinished() {
-        return false; //chnage to manual mode state
-    }
+    // @Override
+    // public boolean isFinished() {
+    //     return false; //chnage to manual mode state
+    // }
 }

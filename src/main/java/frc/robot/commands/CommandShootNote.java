@@ -34,6 +34,9 @@ public class CommandShootNote extends Command {
         case WING:
             shooterSpeed = Constants.SATConstants.WING.shooterSpeed;
             break;
+        case TRAP:
+            shooterSpeed = Constants.SATConstants.TRAP.shooterSpeed;
+            break;
     }
   }
 

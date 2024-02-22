@@ -167,7 +167,7 @@ public final class Constants {
     
     public static class IntakeConstants {
         public static final int kIntakeMotorId = 26;
-        public static final double kIntakeMotorSpeed = 0.4;
+        public static final double kIntakeMotorSpeed = 0.5;
         public static final double kIntakeProcessRotations = 1.9;
         public static final double kIndexProcessRotations = -2;
         public static final int kIndexMotorId = 24;
@@ -245,7 +245,7 @@ public final class Constants {
             public static final double motor1_base = -0.656;
             public static final double motor2_base = -1.831;
             public static final double pivot = 1.474;
-            public static final double shooterSpeed = -50;
+            public static final double shooterSpeed = -52.5;
         }
 
         public static class AMP{
@@ -265,7 +265,7 @@ public final class Constants {
         public static class PODIUM{
             public static final double motor1_base = SUBWOOFER.motor1_base;
             public static final double motor2_base = SUBWOOFER.motor2_base;
-            public static final double pivot = 9.318;
+            public static final double pivot = 13.5;
             public static final double shooterSpeed = -70;
         }
 
@@ -279,7 +279,7 @@ public final class Constants {
         public static class HANDOFF{
             public static final double motor1_base = SUBWOOFER.motor1_base;
             public static final double motor2_base = SUBWOOFER.motor2_base;
-            public static final double pivot = 8.4;
+            public static final double pivot = 7.6;
             public static final double shooterSpeed = 0;
         }
 

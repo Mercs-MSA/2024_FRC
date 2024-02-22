@@ -44,6 +44,8 @@ public class RobotContainer {
     /* Controllers */
     public final CommandXboxController driver = new CommandXboxController(0);
     public final CommandXboxController operator = new CommandXboxController(1);
+
+
     
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -51,7 +53,11 @@ public class RobotContainer {
     public final Intake m_intake = new Intake();
     public final climber m_climber = new climber();
     //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
-
+    /* Commands */
+    public CommandOverrideIntakeStart commandOverrideIntakeStart = new CommandOverrideIntakeStart(m_intake);
+    public CommandOverrideIndexStart commandOverrideIndexStart = new CommandOverrideIndexStart(m_intake);
+    public CommandOverrideIntakeStop commandOverrideIntakeStop = new CommandOverrideIntakeStop(m_intake);
+    public CommandOverrideIndexStop commandOverrideIndexStop = new CommandOverrideIndexStop(m_intake);
     /* AutoChooser */
     private final SendableChooser<Command> autoChooser;
 
@@ -111,33 +117,27 @@ public class RobotContainer {
 
     public void configureButtonBindings() {
         driverControls();
-        operatorControls();
+        // operatorControls();
+        // manualTesting();
     }
 
     public void driverControls(){
         driver.start().and(driver.back()).onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
-
+    
  
 
     }
 
     public void operatorControls(){
-        // operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(0.25), m_SAT));
-        // operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(-0.25), m_SAT));
-        // operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
-        // operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
 
-        // operator.pov(0).onTrue(new CommandMovePivotToPosition(m_SAT, ScoringConstants.ScoringMode.PODIUM));
-        // operator.pov(90).onTrue(new CommandMovePivotToPosition(m_SAT, ScoringConstants.ScoringMode.SUB));
-        // operator.pov(270).onTrue(new CommandMovePivotToPosition(m_SAT, ScoringConstants.ScoringMode.WING));
-        // operator.pov(180).onTrue(new CommandMovePivotToPosition(m_SAT, ScoringConstants.ScoringMode.AMP));
 
-        // operator.a().onTrue(new CommandPivotHandoffPosition(m_SAT));
 
-        operator.povUp().onTrue(new CommandChangeScoringMode(ScoringMode.WING));
-        operator.povDown().onTrue(new CommandChangeScoringMode(ScoringMode.SUB));
-        operator.povLeft().onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
-        operator.povRight().onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
+        operator.a().onTrue(new CommandPivotHandoffPosition(m_SAT));
+
+        operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
+        operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.SUB));
+        // operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
+        operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
 
         operator.x()
            .onTrue(
@@ -186,6 +186,19 @@ public class RobotContainer {
         //     .whileTrue(
         //         m_climber.climbDownLeftCommand()
         //     );
+    }
+
+    public void manualTesting(){
+        operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(0.25), m_SAT));
+        operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(-0.25), m_SAT));
+        operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
+        operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
+
+        driver.pov(0).onTrue(commandOverrideIndexStart);
+        driver.pov(180).onTrue(commandOverrideIndexStop);
+
+        driver.pov(90).onTrue(commandOverrideIntakeStart);
+        driver.pov(270).onTrue(commandOverrideIntakeStop);
     }
 
     public void operatorTesting(){

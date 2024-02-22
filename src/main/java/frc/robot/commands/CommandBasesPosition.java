@@ -29,7 +29,7 @@ public class CommandBasesPosition extends Command {
             case "start":
             default:
                 System.out.println("Invalid Position");
-                basePos = Constants.SATConstants.START.motor1_base;
+                basePos = Constants.SATConstants.SUBWOOFER.motor1_base;
                 break;
         }
     }

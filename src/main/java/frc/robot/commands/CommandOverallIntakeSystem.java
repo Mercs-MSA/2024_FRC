@@ -44,7 +44,7 @@ public class CommandOverallIntakeSystem extends Command{
             //m_intake.disableIntakeUpperSensorInterrupt();
             m_intake.stopIntakeIndexerMotors();
             m_intake.indexMotorToPosition(0); //move index a specific amount forward 
-            m_SAT.movePivotMotor(Constants.SATConstants.START.pivot);
+            m_SAT.movePivotMotor(Constants.SATConstants.SUBWOOFER.pivot);
         }
         else {
             if (!(m_intake.upperSensorDetectsNote() || m_intake.lowerSensorDetectsNote())){ //if no note

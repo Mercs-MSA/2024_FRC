@@ -65,7 +65,7 @@ public class RobotContainer {
             put("Start Index", new CommandOverrideIndexStart(m_intake));
             put("Stop Intake", new CommandOverrideIntakeStop(m_intake));
             put("Stop Index", new CommandOverrideIndexStop(m_intake));
-            put("Start Shooter", new CommandShootNote(m_SAT));
+            put("Start Shooter", new CommandShootNote(m_SAT, ScoringMode.SUB));
             put("Stop Shooter", new CommandStopShooter(m_SAT));
             put("Intake Note", new SequentialCommandGroup(
                 new CommandPivotHandoffPosition(m_SAT),

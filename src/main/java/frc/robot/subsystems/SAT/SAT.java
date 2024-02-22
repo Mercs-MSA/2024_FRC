@@ -227,8 +227,8 @@ public class SAT extends SubsystemBase {
     satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(PivotStartPosition + pivotTargetPose));
   }
 
-  public void shootNote(){
-    satShooter1Motor.setControl(satShooter1_voltageVelocity.withVelocity(SATConstants.SHOOTER_SPEED)); 
+  public void shootNote(double speed){
+    satShooter1Motor.setControl(satShooter1_voltageVelocity.withVelocity(speed)); 
   }
 
   public void stopShooter(){

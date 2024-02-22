@@ -26,7 +26,7 @@ public class CommandMovePivotToPosition extends Command {
                 pivotPos = Constants.SATConstants.PODIUM.pivot;
                 break;
             case SUB:
-                pivotPos = Constants.SATConstants.START.pivot;
+                pivotPos = Constants.SATConstants.SUBWOOFER.pivot;
                 break;
             case AMP:
                 pivotPos = Constants.SATConstants.AMP.pivot;
@@ -38,32 +38,26 @@ public class CommandMovePivotToPosition extends Command {
     }
 
     @Override
-        public void initialize() { 
-            m_SAT.movePivotMotor(pivotPos);
-            SmartDashboard.putString("Pivot, I'm trying to go here: ", pivotPos + "");
-        }
-
-    @Override
-        public void execute() { 
-
-        }
-    @Override
-        public void end(boolean interupted){
-            SmartDashboard.putBoolean("is pivot done?", isWithinTol(pivotPos, m_SAT.getPivotPos(), Constants.SATConstants.MOTOR_TOLERANCE));
-        }
-    
-    @Override
-        public boolean isFinished(){
-            return (isWithinTol(pivotPos, m_SAT.getPivotPos(), Constants.SATConstants.MOTOR_TOLERANCE));
-        }
-    
-        public boolean isWithinTol(double targetPose, double currentPose, double tolerance){
-            return (Math.abs(targetPose - currentPose) <= tolerance);
-        }
-    
+    public void initialize() { 
+        m_SAT.movePivotMotor(pivotPos);
+        SmartDashboard.putString("Pivot, I'm trying to go here: ", pivotPos + "");
     }
 
+    @Override
+    public void execute() { 
+    }
 
+    @Override
+    public void end(boolean interupted){
+        SmartDashboard.putBoolean("is pivot done?", isWithinTol(pivotPos, m_SAT.getPivotPos(), Constants.SATConstants.MOTOR_TOLERANCE));
+    }
+    
+    @Override
+    public boolean isFinished(){
+        return (isWithinTol(pivotPos, m_SAT.getPivotPos(), Constants.SATConstants.MOTOR_TOLERANCE));
+    }
 
-
-
+    public boolean isWithinTol(double targetPose, double currentPose, double tolerance){
+        return (Math.abs(targetPose - currentPose) <= tolerance);
+    }
+}    

@@ -34,6 +34,9 @@ public class CommandMovePivotToPosition extends Command {
             case WING:
                 pivotPos = Constants.SATConstants.WING.pivot;
                 break;
+            case TRAP:
+                pivotPos = Constants.SATConstants.TRAP.pivot;
+                break;
         }
     }
 

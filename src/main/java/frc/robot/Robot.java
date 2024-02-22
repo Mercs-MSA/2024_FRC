@@ -90,6 +90,8 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Intake Speed", m_robotContainer.m_intake.getIntakeMotorSpeed());
     SmartDashboard.putNumber("Indexer Speed", m_robotContainer.m_intake.getIndexMotorSpeed());
+
+    SmartDashboard.putString("Scoring Mode", Constants.ScoringConstants.currentScoringMode.toString());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

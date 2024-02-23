@@ -55,8 +55,9 @@ public class SwerveModule {
         mDriveMotor.getConfigurator().setPosition(0.0);
 
         // expanded is there to support current data for troubleshooting
-        expanded_diagnostic_data();
         optimization_for_CAN();
+        expanded_diagnostic_data();
+        
 
         // USE NEXT LINE FOR TESTING
         PhysicsSim.getInstance().addTalonFX(mAngleMotor, 0.001);
@@ -122,9 +123,11 @@ public class SwerveModule {
         StatusSignal<Double> m_AngleEncoder_canbus1signal1 = angleEncoder.getAbsolutePosition();
         StatusSignal<Double> m_AngleMotor_canbus1signal2 = mAngleMotor.getPosition();
         StatusSignal<Double> m_DriveMotor_canbus1signal3 = mDriveMotor.getPosition();
+        StatusSignal<Double> m_AngleMotor_canbus1signal4 = mAngleMotor.getMotorVoltage();
+        StatusSignal<Double> m_DriveMotor_canbus1signal5 = mDriveMotor.getMotorVoltage();
         m_AngleEncoder_canbus1signal1.setUpdateFrequency(1);
-        BaseStatusSignal.setUpdateFrequencyForAll(60, m_AngleMotor_canbus1signal2, m_DriveMotor_canbus1signal3);
+        BaseStatusSignal.setUpdateFrequencyForAll(60, m_AngleMotor_canbus1signal2, m_DriveMotor_canbus1signal3, m_AngleMotor_canbus1signal4, m_DriveMotor_canbus1signal5);
         angleEncoder.optimizeBusUtilization();
-        ParentDevice.optimizeBusUtilizationForAll(mDriveMotor, mDriveMotor);
+        ParentDevice.optimizeBusUtilizationForAll(mDriveMotor, mAngleMotor);
     }
 }

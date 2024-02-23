@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("Current Robot State", Constants.State.getState().toString());
-    SmartDashboard.putString("Pose", m_robotContainer.s_Swerve.getPose().toString());
+    SmartDashboard.putString("Pose", RobotContainer.s_Swerve.getPose().toString());
 
     // SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());
     // SmartDashboard.putNumber("Climber Right motor Pos: ", m_robotContainer.m_climber.outputRightData());
@@ -81,11 +81,8 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Pivot Pos", m_robotContainer.m_SAT.outputPivotData());
     SmartDashboard.putNumber("MiniPC Input Voltage (volts)", Constants.Misc.Conversion_Factor*PSU_Volt_Monitor.getAverageVoltage());
 
-    poseEstimateField2d.setRobotPose(m_robotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
+    poseEstimateField2d.setRobotPose(RobotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
     SmartDashboard.putData("estimated robot pose", poseEstimateField2d);
-    SmartDashboard.putNumber("Current Heading", m_robotContainer.s_Swerve.getHeading().getRadians());
-
-    SmartDashboard.putData(m_robotContainer.s_Swerve);
     SmartDashboard.putData(CommandScheduler.getInstance());
 
     SmartDashboard.putNumber("Intake Speed", m_robotContainer.m_intake.getIntakeMotorSpeed());

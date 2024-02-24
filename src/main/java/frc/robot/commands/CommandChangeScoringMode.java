@@ -8,12 +8,16 @@ public class CommandChangeScoringMode extends Command {
   
   public CommandChangeScoringMode(ScoringConstants.ScoringMode t) {
     target = t;
-    
   }
 
   @Override
   public void initialize() {
     ScoringConstants.currentScoringMode = target;
+  }
+
+  @Override
+  public boolean isFinished(){
+    return true;
   }
 }
 

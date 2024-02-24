@@ -1,45 +1,17 @@
-package frc.robot.commands;
+package frc.robot.commands.BaseSubcommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SAT.SAT;
 
-public class CommandBasesPosition extends Command {
-    String target;
-    double basePos;
+public class CommandBaseStartPosition extends Command {
+    double basePos = Constants.SATConstants.START.motor1_base;
     public SAT m_SAT;
 
-    // public CommandBasesPosition(String t, SAT s) {
-    //     target = t.toLowerCase();
-    //     m_SAT = s;
-    //     addRequirements(m_SAT);
-
-    //     switch (target) {
-    //         case "amp":
-    //             basePos = Constants.SATConstants.AMP.motor1_base;
-    //             break;
-    //         case "trap":
-    //             basePos = Constants.SATConstants.TRAP.motor1_base;
-    //             break;
-    //         case "wing":
-    //         case "handoff":
-    //         case "podium":
-    //         case "sub":
-    //         case "start":
-    //         default:
-    //             System.out.println("Invalid Position");
-    //             basePos = Constants.SATConstants.SUBWOOFER.motor1_base;
-    //             break;
-    //     }
-    // }
-
-    
-    public CommandBasesPosition(SAT s) {
-        target = null;
+    public CommandBaseStartPosition(SAT s) {
         m_SAT = s;
         addRequirements(m_SAT);
-        basePos = Constants.SATConstants.SUBWOOFER.motor1_base;
     }
 
     @Override

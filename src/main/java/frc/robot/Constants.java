@@ -241,14 +241,21 @@ public final class Constants {
 
         public static final int SAT_OBJECTDETECTOR_SENSOR_ID = 1;
         
-        public static class SUBWOOFER{ // AKA START
+        public static class SUBWOOFER{
             public static final double motor1_base = -10.32;
             public static final double motor2_base = -10.4;
             public static final double pivot = 1.474;
             public static final double shooterSpeed = -52.5;
         }
 
-        public static class AMP{
+        public static class AMP_STAGE_1{
+            public static final double motor1_base = -41.573;
+            public static final double motor2_base = -43.117;
+            public static final double pivot = 46.939;
+            public static final double shooterSpeed = 0;
+        }
+
+        public static class AMP_STAGE_2{
             public static final double motor1_base = -41.573;
             public static final double motor2_base = -43.117;
             public static final double pivot = 46.939;
@@ -263,23 +270,30 @@ public final class Constants {
         }
 
         public static class PODIUM{
-            public static final double motor1_base = SUBWOOFER.motor1_base;
-            public static final double motor2_base = SUBWOOFER.motor2_base;
+            public static final double motor1_base = START.motor1_base;
+            public static final double motor2_base = START.motor2_base;
             public static final double pivot = 7.508;
             public static final double shooterSpeed = -52.5;
         }
 
         public static class WING{
-            public static final double motor1_base = SUBWOOFER.motor1_base;
-            public static final double motor2_base = SUBWOOFER.motor2_base;
+            public static final double motor1_base = START.motor1_base;
+            public static final double motor2_base = START.motor2_base;
             public static final double pivot = 15.2;
             public static final double shooterSpeed = -70;
         }
 
         public static class HANDOFF{
-            public static final double motor1_base = SUBWOOFER.motor1_base;
-            public static final double motor2_base = SUBWOOFER.motor2_base;
+            public static final double motor1_base = START.motor1_base;
+            public static final double motor2_base = START.motor2_base;
             public static final double pivot = 7.6;
+            public static final double shooterSpeed = 0;
+        }
+
+        public static class START{
+            public static final double motor1_base = -0.656;
+            public static final double motor2_base = -1.831;
+            public static final double pivot = 1.474;
             public static final double shooterSpeed = 0;
         }
 
@@ -429,17 +443,13 @@ public final class Constants {
     }
 
     public static final class ScoringConstants {
-        public static ScoringMode currentScoringMode = ScoringMode.SUB;
+        public static ScoringMode currentScoringMode = ScoringMode.SUBWOOFER;
         public enum ScoringMode {
             WING,
             AMP,
-            SUB,
+            SUBWOOFER,
             PODIUM,
             TRAP
-        }
-
-        public static void setScoringMode(ScoringMode i){
-            currentScoringMode = i;
         }
     }
 }

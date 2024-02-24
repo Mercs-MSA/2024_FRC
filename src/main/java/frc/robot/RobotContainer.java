@@ -10,21 +10,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.CommandShootNote;
-import frc.robot.commands.CommandStopShooter;
-import frc.robot.commands.CommandPivotHandoffPosition;
-import frc.robot.commands.CommandMovePivotToPosition;
-import frc.robot.commands.CommandBasesPosition;
+import frc.robot.commands.CommandShooterStart;
+import frc.robot.commands.CommandShooterStop;
 import frc.robot.commands.CommandChangeScoringMode;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.BaseSubcommands.*;
 import frc.robot.commands.IntakeSubcommands.*;
 import frc.robot.commands.IndexSubcommands.*;
+import frc.robot.commands.PivotSubcommands.*;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.climber.climber;
@@ -59,12 +59,17 @@ public class RobotContainer {
         {
             put("marker1", Commands.print("Finished 1 Piece"));
             put("marker2", Commands.print("Finished 3-4 Piece"));
-            put("Start Intake", new CommandIntakeStart(m_intake));
-            put("Start Index", new CommandIndexStart(m_intake));
-            put("Stop Intake", new CommandIntakeStop(m_intake));
-            put("Stop Index", new CommandIndexStop(m_intake));
-            put("Start Shooter", new CommandShootNote(m_SAT, ScoringMode.SUB));
-            put("Stop Shooter", new CommandStopShooter(m_SAT));
+            put("Test Start Intake", new CommandIntakeStart(m_intake));
+            put("Test Start Index", new CommandIndexStart(m_intake));
+            put("Test Stop Intake", new CommandIntakeStop(m_intake));
+            put("Test Stop Index", new CommandIndexStop(m_intake));
+            put("Test Start Shooter", new CommandShooterStart(m_SAT));
+            put("Test Stop Shooter", new CommandShooterStop(m_SAT));
+            put("Test Scoring Mode Wing", new CommandChangeScoringMode(ScoringMode.WING));
+            put("Test Scoring Mode Subwoofer", new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
+            put("Test Scoring Mode Podium", new CommandChangeScoringMode(ScoringMode.PODIUM));
+            put("Test Scoring Mode Amp", new CommandChangeScoringMode(ScoringMode.AMP));
+
             put("Intake Note", new SequentialCommandGroup(
                 new CommandPivotHandoffPosition(m_SAT),
                 new CommandIntakeStart(m_intake),
@@ -74,29 +79,35 @@ public class RobotContainer {
                 new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
                 new CommandIntakeStop(m_intake),
                 new CommandIndexStop(m_intake),
-                new CommandMovePivotToPosition(m_SAT, ScoringMode.SUB)
+                new CommandPivotStartPosition(m_SAT)
             ));
             put("Fire From Sub", new SequentialCommandGroup(
-                new CommandMovePivotToPosition(m_SAT, ScoringMode.SUB),
+                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+                new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
+                new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
                 new CommandIndexMoveNoteToFiringPosition(m_intake),
-                new CommandShootNote(m_SAT, ScoringMode.SUB),
+                new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
                 new CommandIndexStart(m_intake),
-                new WaitCommand(0.3),
-                new ParallelCommandGroup(
+                new WaitCommand(0.3), // waiting for the note to leave robot
+                new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
                     new CommandIndexStop(m_intake),
-                    new CommandStopShooter(m_SAT)
-                )
+                    new CommandShooterStop(m_SAT)
+                ),
+                new CommandBaseStartPosition(m_SAT),
+                new CommandPivotStartPosition(m_SAT)
             ));
             put("Fire From Podium", new SequentialCommandGroup(
-                new CommandMovePivotToPosition(m_SAT, ScoringMode.PODIUM),
+                new CommandChangeScoringMode(ScoringMode.PODIUM),
+                new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
                 new CommandIndexMoveNoteToFiringPosition(m_intake),
-                new CommandShootNote(m_SAT, ScoringMode.PODIUM),
+                new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
                 new CommandIndexStart(m_intake),
-                new WaitCommand(0.3),
-                new ParallelCommandGroup(
+                new WaitCommand(0.3), // waiting for the note to leave robot
+                new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
                     new CommandIndexStop(m_intake),
-                    new CommandStopShooter(m_SAT)
-                )
+                    new CommandShooterStop(m_SAT)
+                ),
+                new CommandPivotStartPosition(m_SAT)
             ));
         }  
     };
@@ -122,13 +133,18 @@ public class RobotContainer {
 
     public void configureButtonBindings() {
         // driverControls();
-        // operatorControls();
-        manualTesting();
+        operatorControls();
+        // manualTesting();
     }
 
     public void driverControls(){
         driver.start().and(driver.back()).onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
 
+        // 
+        // THIS SET OF CONTROLS IS A POSSIBLE SOLUTION TO ROBORIO
+        // CPU % OVERLOAD. WE ARE NOT USING IT FOR BELTON BUT PLEASE
+        // LEAVE IT HERE COMMENTED FOR EXPLORATION LATER!
+        // 
         // driver.axisGreaterThan(0, 0.1)
         // .or(driver.axisLessThan(0, -0.1))
         // .or(driver.axisGreaterThan(1, 0.1))
@@ -155,10 +171,10 @@ public class RobotContainer {
     }
 
     public void operatorControls(){
-        operator.pov(0).onTrue(new InstantCommand(() -> Constants.ScoringConstants.setScoringMode(ScoringMode.WING)));
-        operator.pov(180).onTrue(new InstantCommand(() -> Constants.ScoringConstants.setScoringMode(ScoringMode.SUB)));
-        operator.pov(90).onTrue(new InstantCommand(() -> Constants.ScoringConstants.setScoringMode(ScoringMode.PODIUM)));
-        // operator.pov(270).onTrue(new RunCommand(() -> Constants.ScoringConstants.setScoringMode(ScoringMode.AMP)));
+        operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
+        operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
+        operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
+        operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
 
         operator.x()
            .onTrue(
@@ -171,23 +187,35 @@ public class RobotContainer {
                     new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
                     new CommandIntakeStop(m_intake),
                     new CommandIndexStop(m_intake),
-                    new CommandMovePivotToPosition(m_SAT, ScoringConstants.ScoringMode.SUB)
+                    new CommandPivotStartPosition(m_SAT)
                 )
             );
 
         operator.y()
             .onTrue(
                 new SequentialCommandGroup(
-                    new CommandMovePivotToPosition(m_SAT), // pivot move to whatever current mode is
-                    new CommandBasesPosition(m_SAT),
+                    new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
+                    new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
+                    new ConditionalCommand( // IF WE NEED TO SCORE AMP...
+                        new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
+                        new InstantCommand(), // if we're not scoring amp, do nothing
+                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                    ),
                     new CommandIndexMoveNoteToFiringPosition(m_intake),
-                    new CommandShootNote(m_SAT),
+                    new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
                     new CommandIndexStart(m_intake),
-                    new WaitCommand(0.3),
-                    new ParallelCommandGroup(
+                    new WaitCommand(0.3), // waiting for the note to leave robot
+                    new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
                         new CommandIndexStop(m_intake),
-                        new CommandStopShooter(m_SAT)
-                    )
+                        new CommandShooterStop(m_SAT)
+                    ),
+                    new ConditionalCommand( // IF WE JUST SCORED AMP...
+                        new CommandPivotScoringPosition(m_SAT),  // A 2nd pivot rotation is needed
+                        new InstantCommand(), // if we're not scoring amp, do nothing
+                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                    ),
+                    new CommandBaseStartPosition(m_SAT),
+                    new CommandPivotStartPosition(m_SAT)
                 )
             );
 
@@ -224,8 +252,8 @@ public class RobotContainer {
         driver.pov(90).onTrue(new CommandIntakeStart(m_intake));
         driver.pov(270).onTrue(new CommandIntakeStop(m_intake));
 
-        driver.leftBumper().onTrue(new CommandShootNote(m_SAT));
-        driver.rightBumper().onTrue(new CommandStopShooter(m_SAT));
+        driver.leftBumper().onTrue(new CommandShooterStart(m_SAT));
+        driver.rightBumper().onTrue(new CommandShooterStop(m_SAT));
     }
 
     public void operatorTesting(){

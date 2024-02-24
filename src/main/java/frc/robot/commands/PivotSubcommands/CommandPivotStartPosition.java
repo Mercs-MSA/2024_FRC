@@ -1,15 +1,15 @@
-package frc.robot.commands;
+package frc.robot.commands.PivotSubcommands;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SAT.SAT;
 
-public class CommandPivotHandoffPosition extends Command {
-    String target;
-    double pivotPos = Constants.SATConstants.HANDOFF.pivot;;
+public class CommandPivotStartPosition extends Command {
+    double pivotPos = Constants.SATConstants.START.pivot;
     public SAT m_SAT;
 
-    public CommandPivotHandoffPosition(SAT s){
+    public CommandPivotStartPosition(SAT s){
         m_SAT = s;
         addRequirements(m_SAT);
     }

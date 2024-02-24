@@ -366,21 +366,22 @@ public final class Constants {
     public static final class climberConstants
     {
  
-      public static final int tubeMotor_Left_ID = 23;    ///  reassign this to something else...
-      public static final int tubeMotor_Right_ID = 38;
+      public static final int tubeMotor_Left_ID = 38;    ///  reassign this to something else...
+      public static final int tubeMotor_Right_ID = 23;
 
 
       public static final double climber_Increment = 0.8;
 
-      public static final double LEFT_BOTTOM_POSITION = 40.03;
-      public static final double RIGHT_BOTTOM_POSITION = -0.03;
+      public static final double LEFT_BOTTOM_POSITION = 2.49;
+      public static final double RIGHT_BOTTOM_POSITION = 2.834;
 
-      public static final double LEFT_TOP_POSITION = -135;
-      public static final double RIGHT_TOP_POSITION = 126;
+      public static final double LEFT_TOP_POSITION = -141.3;
+      public static final double RIGHT_TOP_POSITION = -105.74;
 
 
-      public static final double LEFT_MID_POSITION = -60;
-      public static final double RIGHT_MID_POSITION = 51;
+      public static final double LEFT_MID_POSITION = -71.43;
+      public static final double RIGHT_MID_POSITION = -68.74;
+    
     
     }
 

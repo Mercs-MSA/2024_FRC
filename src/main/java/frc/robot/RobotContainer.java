@@ -128,6 +128,29 @@ public class RobotContainer {
     public void driverControls(){
         driver.start().and(driver.back()).onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
 
+        // driver.axisGreaterThan(0, 0.1)
+        // .or(driver.axisLessThan(0, -0.1))
+        // .or(driver.axisGreaterThan(1, 0.1))
+        // .or(driver.axisLessThan(1, -0.1))
+        // .or(driver.axisGreaterThan(4, 0.1))
+        // .or(driver.axisLessThan(4, -0.1))
+        // .whileTrue(
+        //     new TeleopSwerve(
+        //         s_Swerve, 
+        //         () -> -driver.getLeftY(), 
+        //         () -> -driver.getLeftX(), 
+        //         () -> -driver.getRightX(), 
+        //         () -> driver.leftBumper().getAsBoolean()
+        //     )
+        // ).onFalse(
+        //     new TeleopSwerve(
+        //         s_Swerve, 
+        //         () -> 0, 
+        //         () -> 0, 
+        //         () -> 0, 
+        //         () -> driver.leftBumper().getAsBoolean()
+        //     ));
+
     }
 
     public void operatorControls(){

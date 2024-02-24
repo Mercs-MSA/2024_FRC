@@ -57,7 +57,67 @@
             {
               "type": "named",
               "data": {
-                "name": "Fire From Sub"
+                "name": "scoring mode subwoofer"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "pivot scoring position"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "base scoring position"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "note to firing position"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "shooter start"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "index start"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.3
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "index stop"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "shooter stop"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "base start position"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "pivot start position"
               }
             }
           ]
@@ -74,7 +134,49 @@
             {
               "type": "named",
               "data": {
-                "name": "Intake Note"
+                "name": "pivot handoff position"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "intake start"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "index start"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "wait for note"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.2
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "intake stop"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "index stop"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "pivot start position"
               }
             }
           ]
@@ -91,7 +193,67 @@
             {
               "type": "named",
               "data": {
-                "name": "Fire From Sub"
+                "name": "scoring mode subwoofer"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "pivot scoring position"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "base scoring position"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "note to firing position"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "shooter start"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "index start"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.3
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "index stop"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "shooter stop"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "base start position"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "pivot start position"
               }
             }
           ]

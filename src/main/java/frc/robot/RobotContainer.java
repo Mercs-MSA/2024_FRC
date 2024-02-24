@@ -20,6 +20,7 @@ import frc.robot.commands.CommandShootNote;
 import frc.robot.commands.CommandStopShooter;
 import frc.robot.commands.CommandPivotHandoffPosition;
 import frc.robot.commands.CommandMovePivotToPosition;
+import frc.robot.commands.CommandBasesPosition;
 import frc.robot.commands.CommandChangeScoringMode;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.IntakeSubcommands.*;
@@ -120,9 +121,9 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        driverControls();
+        // driverControls();
         // operatorControls();
-        // manualTesting();
+        manualTesting();
     }
 
     public void driverControls(){
@@ -154,10 +155,10 @@ public class RobotContainer {
     }
 
     public void operatorControls(){
-        operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
-        operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.SUB));
-        // operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
-        operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
+        operator.pov(0).onTrue(new InstantCommand(() -> Constants.ScoringConstants.setScoringMode(ScoringMode.WING)));
+        operator.pov(180).onTrue(new InstantCommand(() -> Constants.ScoringConstants.setScoringMode(ScoringMode.SUB)));
+        operator.pov(90).onTrue(new InstantCommand(() -> Constants.ScoringConstants.setScoringMode(ScoringMode.PODIUM)));
+        // operator.pov(270).onTrue(new RunCommand(() -> Constants.ScoringConstants.setScoringMode(ScoringMode.AMP)));
 
         operator.x()
            .onTrue(
@@ -178,6 +179,7 @@ public class RobotContainer {
             .onTrue(
                 new SequentialCommandGroup(
                     new CommandMovePivotToPosition(m_SAT), // pivot move to whatever current mode is
+                    new CommandBasesPosition(m_SAT),
                     new CommandIndexMoveNoteToFiringPosition(m_intake),
                     new CommandShootNote(m_SAT),
                     new CommandIndexStart(m_intake),
@@ -211,8 +213,8 @@ public class RobotContainer {
     }
 
     public void manualTesting(){
-        operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(0.25), m_SAT));
-        operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(-0.25), m_SAT));
+        operator.pov(0).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(0.25), m_SAT));
+        operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(-0.25), m_SAT));
         operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
         operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
 
@@ -221,6 +223,9 @@ public class RobotContainer {
 
         driver.pov(90).onTrue(new CommandIntakeStart(m_intake));
         driver.pov(270).onTrue(new CommandIntakeStop(m_intake));
+
+        driver.leftBumper().onTrue(new CommandShootNote(m_SAT));
+        driver.rightBumper().onTrue(new CommandStopShooter(m_SAT));
     }
 
     public void operatorTesting(){

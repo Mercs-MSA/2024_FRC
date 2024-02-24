@@ -20,6 +20,11 @@ public class CommandMovePivotToPosition extends Command {
         target = t;
         m_SAT = s;
         addRequirements(m_SAT);
+    }
+
+    @Override
+    public void initialize() { 
+        target = ScoringConstants.currentScoringMode;
 
         switch (target) {
             case PODIUM:
@@ -38,16 +43,14 @@ public class CommandMovePivotToPosition extends Command {
                 pivotPos = Constants.SATConstants.TRAP.pivot;
                 break;
         }
-    }
 
-    @Override
-    public void initialize() { 
         m_SAT.movePivotMotor(pivotPos);
         SmartDashboard.putString("Pivot, I'm trying to go here: ", pivotPos + "");
     }
 
     @Override
     public void execute() { 
+
     }
 
     @Override

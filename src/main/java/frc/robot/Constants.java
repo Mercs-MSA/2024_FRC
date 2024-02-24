@@ -169,7 +169,7 @@ public final class Constants {
         public static final int kIntakeMotorId = 26;
         public static final double kIntakeMotorSpeed = 0.5;
         public static final double kIntakeProcessRotations = 1.9;
-        public static final double kIndexProcessRotations = -2;
+        public static final double kIndexProcessRotations = -1;
         public static final int kIndexMotorId = 24;
         public static final double kIndexMotorSpeed = 0.70;
         public static final int kIntakeUpperSensorId = 0;
@@ -242,8 +242,8 @@ public final class Constants {
         public static final int SAT_OBJECTDETECTOR_SENSOR_ID = 1;
         
         public static class SUBWOOFER{ // AKA START
-            public static final double motor1_base = -0.656;
-            public static final double motor2_base = -1.831;
+            public static final double motor1_base = -10.32;
+            public static final double motor2_base = -10.4;
             public static final double pivot = 1.474;
             public static final double shooterSpeed = -52.5;
         }
@@ -265,8 +265,8 @@ public final class Constants {
         public static class PODIUM{
             public static final double motor1_base = SUBWOOFER.motor1_base;
             public static final double motor2_base = SUBWOOFER.motor2_base;
-            public static final double pivot = 13.5;
-            public static final double shooterSpeed = -70;
+            public static final double pivot = 7.508;
+            public static final double shooterSpeed = -52.5;
         }
 
         public static class WING{
@@ -436,6 +436,10 @@ public final class Constants {
             SUB,
             PODIUM,
             TRAP
+        }
+
+        public static void setScoringMode(ScoringMode i){
+            currentScoringMode = i;
         }
     }
 }

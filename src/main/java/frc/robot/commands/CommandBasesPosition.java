@@ -10,28 +10,36 @@ public class CommandBasesPosition extends Command {
     double basePos;
     public SAT m_SAT;
 
-    public CommandBasesPosition(String t, SAT s) {
-        target = t.toLowerCase();
+    // public CommandBasesPosition(String t, SAT s) {
+    //     target = t.toLowerCase();
+    //     m_SAT = s;
+    //     addRequirements(m_SAT);
+
+    //     switch (target) {
+    //         case "amp":
+    //             basePos = Constants.SATConstants.AMP.motor1_base;
+    //             break;
+    //         case "trap":
+    //             basePos = Constants.SATConstants.TRAP.motor1_base;
+    //             break;
+    //         case "wing":
+    //         case "handoff":
+    //         case "podium":
+    //         case "sub":
+    //         case "start":
+    //         default:
+    //             System.out.println("Invalid Position");
+    //             basePos = Constants.SATConstants.SUBWOOFER.motor1_base;
+    //             break;
+    //     }
+    // }
+
+    
+    public CommandBasesPosition(SAT s) {
+        target = null;
         m_SAT = s;
         addRequirements(m_SAT);
-
-        switch (target) {
-            case "amp":
-                basePos = Constants.SATConstants.AMP.motor1_base;
-                break;
-            case "trap":
-                basePos = Constants.SATConstants.TRAP.motor1_base;
-                break;
-            case "wing":
-            case "handoff":
-            case "podium":
-            case "sub":
-            case "start":
-            default:
-                System.out.println("Invalid Position");
-                basePos = Constants.SATConstants.SUBWOOFER.motor1_base;
-                break;
-        }
+        basePos = Constants.SATConstants.SUBWOOFER.motor1_base;
     }
 
     @Override

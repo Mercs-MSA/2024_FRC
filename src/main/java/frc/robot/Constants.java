@@ -249,9 +249,9 @@ public final class Constants {
         }
 
         public static class AMP_STAGE_1{
-            public static final double motor1_base = -41.573;
-            public static final double motor2_base = -43.117;
-            public static final double pivot = 46.939;
+            public static final double motor1_base = -22.36621;
+            public static final double motor2_base = -22.27587;
+            public static final double pivot = 20.1220703;
             public static final double shooterSpeed = 0;
         }
 

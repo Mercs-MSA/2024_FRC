@@ -70,45 +70,68 @@ public class RobotContainer {
             put("Test Scoring Mode Podium", new CommandChangeScoringMode(ScoringMode.PODIUM));
             put("Test Scoring Mode Amp", new CommandChangeScoringMode(ScoringMode.AMP));
 
-            put("Intake Note", new SequentialCommandGroup(
-                new CommandPivotHandoffPosition(m_SAT),
-                new CommandIntakeStart(m_intake),
-                new CommandIndexStart(m_intake),
-                new CommandIntakeWaitForNote(m_intake),
-                // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
-                new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
-                new CommandIntakeStop(m_intake),
-                new CommandIndexStop(m_intake),
-                new CommandPivotStartPosition(m_SAT)
-            ));
-            put("Fire From Sub", new SequentialCommandGroup(
-                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
-                new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
-                new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
-                new CommandIndexMoveNoteToFiringPosition(m_intake),
-                new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
-                new CommandIndexStart(m_intake),
-                new WaitCommand(0.3), // waiting for the note to leave robot
-                new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
-                    new CommandIndexStop(m_intake),
-                    new CommandShooterStop(m_SAT)
-                ),
-                new CommandBaseStartPosition(m_SAT),
-                new CommandPivotStartPosition(m_SAT)
-            ));
-            put("Fire From Podium", new SequentialCommandGroup(
-                new CommandChangeScoringMode(ScoringMode.PODIUM),
-                new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
-                new CommandIndexMoveNoteToFiringPosition(m_intake),
-                new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
-                new CommandIndexStart(m_intake),
-                new WaitCommand(0.3), // waiting for the note to leave robot
-                new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
-                    new CommandIndexStop(m_intake),
-                    new CommandShooterStop(m_SAT)
-                ),
-                new CommandPivotStartPosition(m_SAT)
-            ));
+            put("pivot handoff position", new CommandPivotHandoffPosition(m_SAT));
+            put("intake start", new CommandIntakeStart(m_intake));
+            // put("index start", new CommandIndexStart(m_intake));
+            put("wait for note", new CommandIntakeWaitForNote(m_intake));
+            put("wait 0.2", new WaitCommand(0.2));
+            put("intake stop", new CommandIntakeStop(m_intake));
+            // put("index stop", new CommandIndexStop(m_intake));
+            // put("pivot start position", new CommandPivotStartPosition(m_SAT));
+
+            put("scoring mode subwoofer", new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
+            put("pivot scoing position", new CommandPivotScoringPosition(m_SAT));
+            put("base scoring position", new CommandBaseScoringPosition(m_SAT));
+            put("note to firing position", new CommandIndexMoveNoteToFiringPosition(m_intake));
+            put("shooter start", new CommandShooterStart(m_SAT));
+            put("index start", new CommandIndexStart(m_intake));
+            put("wait 0.3", new WaitCommand(0.3));
+            put("index stop", new CommandIndexStop(m_intake));
+            put("shooter stop", new CommandShooterStop(m_SAT));
+            put("base start position", new CommandBaseStartPosition(m_SAT));
+            put("pivot start position", new CommandPivotStartPosition(m_SAT));
+
+            put("scoring mode podium", new CommandChangeScoringMode(ScoringMode.PODIUM));
+
+            // put("Intake Note", new SequentialCommandGroup(
+            //     new CommandPivotHandoffPosition(m_SAT),
+            //     new CommandIntakeStart(m_intake),
+            //     new CommandIndexStart(m_intake),
+            //     new CommandIntakeWaitForNote(m_intake),
+            //     // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
+            //     new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
+            //     new CommandIntakeStop(m_intake),
+            //     new CommandIndexStop(m_intake),
+            //     new CommandPivotStartPosition(m_SAT)
+            // ));
+            // put("Fire From Sub", new SequentialCommandGroup(
+            //     new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+            //     new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
+            //     new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
+            //     new CommandIndexMoveNoteToFiringPosition(m_intake),
+            //     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
+            //     new CommandIndexStart(m_intake),
+            //     new WaitCommand(0.3), // waiting for the note to leave robot
+            //     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
+            //         new CommandIndexStop(m_intake),
+            //         new CommandShooterStop(m_SAT)
+            //     ),
+            //     new CommandBaseStartPosition(m_SAT),
+            //     new CommandPivotStartPosition(m_SAT)
+            // ));
+            // put("Fire From Podium", new SequentialCommandGroup(
+            //     new CommandChangeScoringMode(ScoringMode.PODIUM),
+            //     new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
+            //     new CommandIndexMoveNoteToFiringPosition(m_intake),
+            //     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
+            //     new CommandIndexStart(m_intake),
+            //     new WaitCommand(0.3), // waiting for the note to leave robot
+            //     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
+            //         new CommandIndexStop(m_intake),
+            //         new CommandShooterStop(m_SAT)
+            //     ),
+            //     new CommandPivotStartPosition(m_SAT)
+            // ));
         }  
     };
 

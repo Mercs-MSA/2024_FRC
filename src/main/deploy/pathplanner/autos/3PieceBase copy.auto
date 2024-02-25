@@ -12,9 +12,21 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "score sub note"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Podium"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score wing note"
           }
         },
         {

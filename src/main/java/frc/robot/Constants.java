@@ -71,7 +71,7 @@ public final class Constants {
         /* These values are used by the drive falcon to ramp in open loop and closed loop driving.
          * We found a small open loop ramp (0.25) helps with tread wear, tipping, etc */
         public static final double openLoopRamp = 0.3;
-        public static final double closedLoopRamp = 0.3;
+        public static final double closedLoopRamp = 0.4;
 
 
         /* Angle Motor PID Values */
@@ -81,7 +81,7 @@ public final class Constants {
 
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 0.12;
+        public static final double driveKP = 0.03;
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
         public static final double driveKF = 0.0;
@@ -95,9 +95,9 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 4.1;
+        public static final double maxSpeed = 5.0;
         /** Radians per Second */
-        public static final double maxAngularVelocity = 7.5;
+        public static final double maxAngularVelocity = 10;
 
 
         /* Neutral Modes */
@@ -171,7 +171,7 @@ public final class Constants {
         public static final double kIntakeProcessRotations = 1.9;
         public static final double kIndexProcessRotations = -1;
         public static final int kIndexMotorId = 24;
-        public static final double kIndexMotorSpeed = 0.80;
+        public static final double kIndexMotorSpeed = 0.90;
         public static final int kIntakeUpperSensorId = 0;
         public static final int kIntakeLowerSensor1Id = 1;
         public static final int kIntakeLowerSensor2Id = 2;

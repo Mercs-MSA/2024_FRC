@@ -101,7 +101,7 @@ public class RobotContainer {
                         new InstantCommand(), // if we're not scoring amp, do nothing
                         () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
                     ),
-                    new CommandIndexMoveNoteToFiringPosition(m_intake),
+                    // new CommandIndexMoveNoteToFiringPosition(m_intake),
                     // new WaitCommand(0.1),
                     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
                     new CommandIndexStart(m_intake),
@@ -217,16 +217,16 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        // driverControls();
+        driverControls();
         // operatorControls();
-        manualTesting();
+        // manualTesting();
     }
 
     public void driverControls(){
         driver.start().and(driver.back()).onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
 
         // driver.leftBumper().onTrue(new CommandBaseStartPosition(m_SAT));
-        driver.leftBumper().onTrue(new InstantCommand(() -> m_intake.reverseIntakeMotor()));
+        // driver.leftBumper().onTrue(new InstantCommand(() -> m_intake.reverseIntakeMotor()));
 
         // 
         // THIS SET OF CONTROLS IS A POSSIBLE SOLUTION TO ROBORIO
@@ -256,6 +256,29 @@ public class RobotContainer {
         //         () -> driver.leftBumper().getAsBoolean()
         //     ));
 
+        driver.rightBumper()
+        .onTrue(
+            new SequentialCommandGroup(
+                new CommandPivotHandoffPosition(m_SAT),
+
+                new CommandIndexStart(m_intake),
+                //new WaitCommand(0.5),
+                new CommandIntakeStart(m_intake),
+                new CommandIntakeWaitForNote(m_intake),
+                // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
+                new WaitCommand(0.3), // This just worked more reliably and more easily than the sensor did
+                new CommandIntakeStop(m_intake),
+                new InstantCommand(() -> m_SAT.shootNote(35)), 
+                new WaitCommand(3),
+                new CommandIndexStop(m_intake),
+                new InstantCommand(() -> m_SAT.stopShooter())
+            )
+        );
+
+        driver.leftBumper()
+        .onTrue(
+            new InstantCommand(() -> m_intake.stopIntakeMotor())
+        );
     }
 
     public void operatorControls(){

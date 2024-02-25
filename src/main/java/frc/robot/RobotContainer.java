@@ -70,15 +70,14 @@ public class RobotContainer {
             put("Test Scoring Mode Podium", new CommandChangeScoringMode(ScoringMode.PODIUM));
             put("Test Scoring Mode Amp", new CommandChangeScoringMode(ScoringMode.AMP));
 
+            // Intake handoff commands
             put("pivot handoff position", new CommandPivotHandoffPosition(m_SAT));
             put("intake start", new CommandIntakeStart(m_intake));
-            // put("index start", new CommandIndexStart(m_intake));
             put("wait for note", new CommandIntakeWaitForNote(m_intake));
             put("wait 0.2", new WaitCommand(0.2));
             put("intake stop", new CommandIntakeStop(m_intake));
-            // put("index stop", new CommandIndexStop(m_intake));
-            // put("pivot start position", new CommandPivotStartPosition(m_SAT));
 
+            // shooting commmands
             put("scoring mode subwoofer", new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
             put("pivot scoing position", new CommandPivotScoringPosition(m_SAT));
             put("base scoring position", new CommandBaseScoringPosition(m_SAT));
@@ -286,7 +285,10 @@ public class RobotContainer {
                     new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
                     new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
                     new ConditionalCommand( // IF WE NEED TO SCORE AMP...
-                        new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
+                        new SequentialCommandGroup(
+                            new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
+                            new CommandBaseStageTwoPosition(m_SAT)
+                        ),
                         new InstantCommand(), // if we're not scoring amp, do nothing
                         () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
                     ),
@@ -300,7 +302,10 @@ public class RobotContainer {
                         new CommandShooterStop(m_SAT)
                     ),
                     new ConditionalCommand( // IF WE JUST SCORED AMP...
-                        new CommandPivotScoringPosition(m_SAT),  // A 2nd pivot rotation is needed
+                        new SequentialCommandGroup(
+                            new CommandBaseScoringPosition(m_SAT),
+                            new CommandPivotScoringPosition(m_SAT)  // A 2nd pivot rotation is needed
+                        ),
                         new InstantCommand(), // if we're not scoring amp, do nothing
                         () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
                     ),
@@ -346,6 +351,33 @@ public class RobotContainer {
 
         driver.leftBumper().onTrue(new CommandShooterStart(m_SAT));
         driver.rightBumper().onTrue(new CommandShooterStop(m_SAT));
+
+        operator.start()
+            .onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
+        operator.a()
+            .onTrue(new CommandPivotScoringPosition(m_SAT));
+        operator.b()
+            .onTrue(new CommandBaseScoringPosition(m_SAT));
+        operator.x()
+            .onTrue(new CommandPivotStageTwoPosition(m_SAT));
+        operator.y()
+            .onTrue(new CommandBaseStageTwoPosition(m_SAT));
+        operator.leftBumper()
+            .onTrue(new CommandBaseStartPosition(m_SAT));
+        operator.rightBumper()
+            .onTrue(new CommandPivotStartPosition(m_SAT));
+
+        /* TESTING SEQUENCE
+         * 1. start
+         * 2. a
+         * 3. b
+         * 4. x
+         * 5. y
+         * 6. b
+         * 7. a
+         * 8. left bumper
+         * 9. right bumper
+         */ 
 
 
         operator.start()
@@ -397,6 +429,11 @@ public class RobotContainer {
         //     .whileTrue(
         //         m_climber.climbMotorStop()
         //     );
+
+        operator.a().onTrue(m_climber.climbDownCommand());
+        operator.y().onTrue(m_climber.climbUpCommand());
+        operator.x().onTrue(m_climber.climbMidLeftCommand());
+        operator.b().onTrue(m_climber.climbMidRightCommand());
     }
 
     /**

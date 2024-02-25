@@ -17,13 +17,13 @@ import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-    public static final double stickDeadband = 0.1;
+    public static final double stickDeadband = 0.05;
 
     public static final class Swerve {
         public static final int pigeonID = 16;
 
 
-        public static final COTSTalonFXSwerveConstants chosenModule = COTSTalonFXSwerveConstants.WCP.SwerveXFlipped.KrakenX60(COTSTalonFXSwerveConstants.WCP.SwerveXFlipped.driveRatios.X2_12);
+        public static final COTSTalonFXSwerveConstants chosenModule = COTSTalonFXSwerveConstants.WCP.SwerveXFlipped.KrakenX60(COTSTalonFXSwerveConstants.WCP.SwerveXFlipped.driveRatios.X2_10);
 
 
         /* Drivetrain Constants */
@@ -58,13 +58,13 @@ public final class Constants {
         /* Swerve Current Limiting */
         public static final int angleCurrentLimit = 15;
         public static final int angleCurrentThreshold = 25;
-        public static final double angleCurrentThresholdTime = 0.1;
+        public static final double angleCurrentThresholdTime = 0.05;
         public static final boolean angleEnableCurrentLimit = true;
 
 
-        public static final int driveCurrentLimit = 25;
+        public static final int driveCurrentLimit = 30;
         public static final int driveCurrentThreshold = 35;
-        public static final double driveCurrentThresholdTime = 0.1;
+        public static final double driveCurrentThresholdTime = 0.05;
         public static final boolean driveEnableCurrentLimit = true;
 
 
@@ -95,9 +95,9 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 3.0;
+        public static final double maxSpeed = 4.1;
         /** Radians per Second */
-        public static final double maxAngularVelocity = 7.0;
+        public static final double maxAngularVelocity = 7.5;
 
 
         /* Neutral Modes */
@@ -167,11 +167,11 @@ public final class Constants {
     
     public static class IntakeConstants {
         public static final int kIntakeMotorId = 26;
-        public static final double kIntakeMotorSpeed = 0.5;
+        public static final double kIntakeMotorSpeed = 0.65;
         public static final double kIntakeProcessRotations = 1.9;
         public static final double kIndexProcessRotations = -1;
         public static final int kIndexMotorId = 24;
-        public static final double kIndexMotorSpeed = 0.70;
+        public static final double kIndexMotorSpeed = 0.80;
         public static final int kIntakeUpperSensorId = 0;
         public static final int kIntakeLowerSensor1Id = 1;
         public static final int kIntakeLowerSensor2Id = 2;
@@ -242,8 +242,8 @@ public final class Constants {
         public static final int SAT_OBJECTDETECTOR_SENSOR_ID = 1;
         
         public static class SUBWOOFER{
-            public static final double motor1_base = -10.32;
-            public static final double motor2_base = -10.4;
+            public static final double motor1_base = -13;
+            public static final double motor2_base = -11.4;
             public static final double pivot = 1.474;
             public static final double shooterSpeed = -52.5;
         }
@@ -279,14 +279,14 @@ public final class Constants {
         public static class WING{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = 15.2;
-            public static final double shooterSpeed = -70;
+            public static final double pivot = 5;
+            public static final double shooterSpeed = -52.5;
         }
 
         public static class HANDOFF{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = 7.6;
+            public static final double pivot = 9.7;
             public static final double shooterSpeed = 0;
         }
 
@@ -301,7 +301,7 @@ public final class Constants {
         public static final double MOTOR_TOLERANCE = 0.5;
 
         public static final double SHOOTER_SPEED = -50;
-        public static final double kShooterSpeedTolerance = 1.0;
+        public static final double kShooterSpeedTolerance = 10.0;
 
         /*THIS NEEDS TO INCLUDE THE CONVERSION FROM DEGREES TO ENCODER COUNTS */
         public static final int BASE_ENCODER_RATIO = 50;

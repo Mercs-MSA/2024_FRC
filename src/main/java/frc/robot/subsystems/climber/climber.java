@@ -80,6 +80,10 @@ public class climber extends SubsystemBase {
     rightMotorPosition = tubeMotorRight.getPosition().getValueAsDouble();
     leftMotorPosition = tubeMotorLeft.getPosition().getValueAsDouble();
 
+    SmartDashboard.putNumber("climber right motor position", rightMotorPosition);
+
+    SmartDashboard.putNumber("climber left motor position", leftMotorPosition);
+
     SmartDashboard.putNumber("Motor Right State", outputRightData());
     SmartDashboard.putNumber("Motor Left State", outputLeftData());
   }
@@ -140,6 +144,11 @@ public class climber extends SubsystemBase {
   private void climbStop() {
     tubeMotorRight.setControl(new NeutralOut());
     tubeMotorLeft.setControl(new NeutralOut());
+  }
+
+  public void incrementalClimbBothSides(double y){
+    tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition - (y*Constants.climberConstants.climber_Increment)));
+    tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition + ((y*Constants.climberConstants.climber_Increment))));
   }
 
   // public void leftGoToPosition(double joystick){

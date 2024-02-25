@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.SwerveModule;
 import frc.robot.sim.PhysicsSim;
 import frc.robot.Constants;
-
+import frc.robot.RobotContainer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -42,6 +42,8 @@ public class Swerve extends SubsystemBase {
     private Field2d field = new Field2d();
     public SwerveDrivePoseEstimator poseEstimator;
     private final StructArrayPublisher<SwerveModuleState> publisher;
+    Field2d poseEstimateField2d = new Field2d();
+
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -193,7 +195,7 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic(){
-        // swerveOdometry.update(getGyroYaw(), getModulePositions());
+        swerveOdometry.update(getGyroYaw(), getModulePositions());
         poseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
@@ -206,7 +208,8 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("gyro Y field", gyro.getMagneticFieldY().getValueAsDouble());
         SmartDashboard.putNumber("gyro Z field", gyro.getMagneticFieldZ().getValueAsDouble());
         SmartDashboard.putNumber("Magnetic North Heading (degrees)", Math.atan2(gyro.getMagneticFieldX().getValueAsDouble(), gyro.getMagneticFieldY().getValueAsDouble()) * 180 / Math.PI);        
-
+        poseEstimateField2d.setRobotPose(poseEstimator.getEstimatedPosition());
+        SmartDashboard.putData("Estimated Pose", poseEstimateField2d);
         publisher.set(getModuleStates());
     }
 

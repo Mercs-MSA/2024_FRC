@@ -237,6 +237,10 @@ public class SAT extends SubsystemBase {
     satShooter1Motor.setControl(new NeutralOut());
   }
 
+  public void stopShooterBrake(){
+    satShooter1Motor.setControl(satShooter1_voltageVelocity.withVelocity(0));
+  }
+
   public void movePivotMotor(double pos){
     satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(pos));
   }

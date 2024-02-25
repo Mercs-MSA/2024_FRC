@@ -82,9 +82,9 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Pivot Pos", m_robotContainer.m_SAT.outputPivotData());
     SmartDashboard.putNumber("MiniPC Input Voltage (volts)", Constants.Misc.Conversion_Factor*PSU_Volt_Monitor.getAverageVoltage());
 
-    poseEstimateField2d.setRobotPose(RobotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
-    SmartDashboard.putData("estimated robot pose", poseEstimateField2d);
-    SmartDashboard.putData(CommandScheduler.getInstance());
+    // poseEstimateField2d.setRobotPose(RobotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
+    // SmartDashboard.putData("estimated robot pose", poseEstimateField2d);
+    // SmartDashboard.putData(CommandScheduler.getInstance());
 
     SmartDashboard.putNumber("Intake Speed", m_robotContainer.m_intake.getIntakeMotorSpeed());
     SmartDashboard.putNumber("Indexer Speed", m_robotContainer.m_intake.getIndexMotorSpeed());

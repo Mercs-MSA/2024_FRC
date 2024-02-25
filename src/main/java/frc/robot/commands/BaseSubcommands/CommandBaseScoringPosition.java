@@ -51,6 +51,7 @@ public class CommandBaseScoringPosition extends Command {
                 SATConstants.MOTOR_TOLERANCE
             )
         );
+        SmartDashboard.putBoolean("this base command is over", true);
     }
 
     @Override

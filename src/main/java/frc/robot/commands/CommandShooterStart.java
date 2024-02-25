@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.SATConstants;
 import frc.robot.Constants.ScoringConstants;
@@ -44,12 +45,13 @@ public class CommandShooterStart extends Command {
 
     @Override
     public void end(boolean interrupted) {
-
+        SmartDashboard.putBoolean("shooter command is done", true);
     }
 
     @Override
     public boolean isFinished() {
         return Math.abs(m_SAT.getShooterSpeed() - shooterSpeed) <= SATConstants.kShooterSpeedTolerance;
+        
     }
 
 }

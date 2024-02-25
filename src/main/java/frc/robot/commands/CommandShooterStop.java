@@ -13,7 +13,7 @@ public class CommandShooterStop extends Command {
 
   @Override
   public void initialize() {
-    m_SAT.stopShooter();
+    m_SAT.stopShooter(); //neutral out
   }
   
   @Override
@@ -23,11 +23,16 @@ public class CommandShooterStop extends Command {
 
   @Override
   public void end(boolean interrupted) {
-   
+    m_SAT.stopShooter();
   }
   @Override
   public boolean isFinished() {
-    return m_SAT.getShooterSpeed() == 0.0;
+    //return isWithinTol(0.0, m_SAT.getShooterSpeed(), 25); 
+    return true;
   }
 
+
+  public boolean isWithinTol(double targetPose, double currentPose, double tolerance) {
+    return (Math.abs(targetPose - currentPose) <= tolerance);
+}
 }

@@ -65,9 +65,10 @@ public class Intake extends SubsystemBase {
     configs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
 
     // Peak output of 8 volts
-    configs.Voltage.PeakForwardVoltage = 8;
-    configs.Voltage.PeakReverseVoltage = -8;
-
+    configs.Voltage.PeakForwardVoltage = 12;
+    configs.Voltage.PeakReverseVoltage = -12;
+    configs.CurrentLimits.StatorCurrentLimitEnable = true;
+    configs.CurrentLimits.StatorCurrentLimit = 25;
 
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -126,6 +127,13 @@ public class Intake extends SubsystemBase {
     // DO NOT USE THIS FUNCTION DIRECTLY!!
     // INSTEAD USE: CommandOverrideIntakeStart
     intakeMotor.setControl(intakeMotor_dutyCycleOut.withOutput(-IntakeConstants.kIntakeMotorSpeed));
+  }
+
+  public void reverseIntakeMotor() {
+    // WARNING!! 
+    // DO NOT USE THIS FUNCTION DIRECTLY!!
+    // INSTEAD USE: CommandOverrideIntakeStart
+    intakeMotor.setControl(intakeMotor_dutyCycleOut.withOutput(IntakeConstants.kIntakeMotorSpeed));
   }
 
   // public void reverseIntakeMotor() {

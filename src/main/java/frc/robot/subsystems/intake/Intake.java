@@ -186,6 +186,10 @@ public class Intake extends SubsystemBase {
     return indexMotorSpeed;
   }
 
+  public void resetMotors(){
+    stopIntakeIndexerMotors();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run 

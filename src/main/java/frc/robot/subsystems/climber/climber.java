@@ -103,6 +103,16 @@ public class climber extends SubsystemBase {
   
   }
 
+  public void resetMotors(){
+    tubeMotorRight.setControl(new NeutralOut());
+    tubeMotorLeft.setControl(new NeutralOut());
+  }
+
+  public void goToHomePos(){
+    tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.RIGHT_BOTTOM_POSITION));
+    tubeMotorLeft.setControl(tubeMotorRight_voltagePosition.withPosition(Constants.climberConstants.LEFT_BOTTOM_POSITION));
+  }
+
   private void climbRightDown() {
     if (rightMotorPosition > Constants.climberConstants.RIGHT_BOTTOM_POSITION) {
       tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition - Constants.climberConstants.climber_Increment));

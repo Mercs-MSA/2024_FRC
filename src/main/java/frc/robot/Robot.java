@@ -149,9 +149,14 @@ public class Robot extends TimedRobot {
    ** This should be run whenever you want to make sure that everything stops being controlled. */  
   public void resetAllMotorCommands() {
     CommandScheduler.getInstance().cancelAll();
-    //m_robotContainer.m_SAT.resetMotors();
-    //m_robotContainer.m_climber.resetMotors();
-    //m_robotContainer.m_intake.resetMotors();
+    m_robotContainer.m_SAT.resetMotors();
+    m_robotContainer.m_climber.resetMotors();
+    m_robotContainer.m_intake.resetMotors();
+  }
+
+  public void goToHomePos(){
+    m_robotContainer.m_SAT.goToHomePos();
+    m_robotContainer.m_climber.goToHomePos();
   }
 
 }

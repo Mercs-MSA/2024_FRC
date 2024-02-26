@@ -19,6 +19,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.SATConstants;
 import frc.robot.sim.PhysicsSim;
 
@@ -284,6 +285,19 @@ public class SAT extends SubsystemBase {
    */
   public double getShooterSpeed() {
     return shooterMotor1Speed;
+  }
+
+  public void resetMotors(){
+    satBase1Motor.setControl(new NeutralOut());
+    satPivotMotor.setControl(new NeutralOut());
+    satShooter1Motor.setControl(new NeutralOut());
+
+  }
+
+  public void goToHomePos(){
+    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.START.pivot));
+    satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.START.motor1_base));
+
   }
 
   public void optimization_for_CAN() {

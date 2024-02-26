@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Base1 Pos", m_robotContainer.m_SAT.outputBase1Data());
     // SmartDashboard.putNumber("Base2 Pos", m_robotContainer.m_SAT.outputBase2Data());
     // SmartDashboard.putNumber("Pivot Pos", m_robotContainer.m_SAT.outputPivotData());
-    SmartDashboard.putNumber("MiniPC Input Voltage (volts)", Constants.Misc.Conversion_Factor*PSU_Volt_Monitor.getAverageVoltage());
+    //SmartDashboard.putNumber("MiniPC Input Voltage (volts)", Constants.Misc.Conversion_Factor*PSU_Volt_Monitor.getAverageVoltage());
 
     // poseEstimateField2d.setRobotPose(RobotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
     // SmartDashboard.putData("estimated robot pose", poseEstimateField2d);
@@ -94,7 +94,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    resetAllMotorCommands();
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -123,6 +125,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    resetAllMotorCommands();
   }
 
   /** This function is called periodically during operator control. */
@@ -134,10 +137,21 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
+    resetAllMotorCommands();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
+
+  /** This function makes sure that all outstanding commands are cleared and that all motors are commanded to stop.
+   ** This should be run whenever you want to make sure that everything stops being controlled. */  
+  public void resetAllMotorCommands() {
+    CommandScheduler.getInstance().cancelAll();
+    //m_robotContainer.m_SAT.resetMotors();
+    //m_robotContainer.m_climber.resetMotors();
+    //m_robotContainer.m_intake.resetMotors();
+  }
+
 }

@@ -28,7 +28,7 @@ public class CommandBaseStartPosition extends Command {
     @Override
     public void end(boolean interupted) {
         SmartDashboard.putBoolean("is base done?", 
-            isWithinTol(
+        Constants.isWithinTol(
                 basePos, 
                 m_SAT.getBase1Pos(),
                 Constants.SATConstants.MOTOR_TOLERANCE
@@ -39,15 +39,11 @@ public class CommandBaseStartPosition extends Command {
     @Override
     public boolean isFinished() {
         return (
-            isWithinTol(
+            Constants.isWithinTol(
                 basePos, 
                 m_SAT.getBase1Pos(),
                 Constants.SATConstants.MOTOR_TOLERANCE
             )
         );
-    }
-
-    public boolean isWithinTol(double targetPose, double currentPose, double tolerance) {
-        return (Math.abs(targetPose - currentPose) <= tolerance);
     }
 }

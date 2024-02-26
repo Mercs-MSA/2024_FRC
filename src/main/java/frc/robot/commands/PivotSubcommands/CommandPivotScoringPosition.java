@@ -2,6 +2,7 @@ package frc.robot.commands.PivotSubcommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Constants.SATConstants;
 import frc.robot.Constants.ScoringConstants;
 import frc.robot.subsystems.SAT.SAT;
@@ -46,15 +47,11 @@ public class CommandPivotScoringPosition extends Command {
 
     @Override
     public void end(boolean interupted){
-        SmartDashboard.putBoolean("is pivot done?", isWithinTol(pivotPos, m_SAT.getPivotPos(), SATConstants.MOTOR_TOLERANCE));
+        SmartDashboard.putBoolean("is pivot done?", Constants.isWithinTol(pivotPos, m_SAT.getPivotPos(), SATConstants.MOTOR_TOLERANCE));
     }
     
     @Override
     public boolean isFinished(){
-        return (isWithinTol(pivotPos, m_SAT.getPivotPos(), SATConstants.MOTOR_TOLERANCE));
-    }
-
-    public boolean isWithinTol(double targetPose, double currentPose, double tolerance){
-        return (Math.abs(targetPose - currentPose) <= tolerance);
+        return (Constants.isWithinTol(pivotPos, m_SAT.getPivotPos(), SATConstants.MOTOR_TOLERANCE));
     }
 }    

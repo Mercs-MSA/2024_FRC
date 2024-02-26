@@ -34,5 +34,5 @@ public class CommandShooterStop extends Command {
 
   public boolean isWithinTol(double targetPose, double currentPose, double tolerance) {
     return (Math.abs(targetPose - currentPose) <= tolerance);
-}
+  }
 }

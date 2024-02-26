@@ -388,6 +388,8 @@ public final class Constants {
     public static class Vision {
         public static boolean isNoteDetected = false;
 
+        public static double gamePieceYawOffset = 12;
+
         public static class aprilTagBackLeft {
             public static String camera = "AprilTagBackLeft";
             public static Transform3d robotToCamera = new Transform3d(-0.1820926, 0.2952496, 0.3039618, new Rotation3d(0, 0.785398, -0.785398));
@@ -453,6 +455,10 @@ public final class Constants {
             TRAP
         }
     }
+
+    public static boolean isWithinTol(double targetPose, double currentPose, double tolerance) {
+        return (Math.abs(targetPose - currentPose) <= tolerance);
+      }
 }
 
 

@@ -27,16 +27,12 @@ public class CommandBaseStageTwoPosition extends Command {
 
     @Override
     public void end(boolean interupted){
-        SmartDashboard.putBoolean("is base done?", isWithinTol(basePos, m_SAT.getBase1Pos(), Constants.SATConstants.MOTOR_TOLERANCE));
+        SmartDashboard.putBoolean("is base done?", Constants.isWithinTol(basePos, m_SAT.getBase1Pos(), Constants.SATConstants.MOTOR_TOLERANCE));
     }
 
     @Override
     public boolean isFinished(){
-        return (isWithinTol(basePos, m_SAT.getBase1Pos(), Constants.SATConstants.MOTOR_TOLERANCE));
-    }
-
-    public boolean isWithinTol(double targetPose, double currentPose, double tolerance){
-        return (Math.abs(targetPose - currentPose) <= tolerance);
+        return (Constants.isWithinTol(basePos, m_SAT.getBase1Pos(), Constants.SATConstants.MOTOR_TOLERANCE));
     }
 }
 

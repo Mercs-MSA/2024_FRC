@@ -205,7 +205,7 @@ public class RobotContainer {
                 () -> -driver.getLeftY(), 
                 () -> -driver.getLeftX(), 
                 () -> -driver.getRightX(), 
-                () -> driver.leftBumper().getAsBoolean()
+                () -> false // just hardcoded field centric... could make this a button if we want
             )
         );
 

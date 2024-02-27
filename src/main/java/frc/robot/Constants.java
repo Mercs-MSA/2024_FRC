@@ -180,6 +180,8 @@ public final class Constants {
         public static final double kIndexMotorTolerance = 1.0;
         public static final double kIntakeMotorDCTolerance = 0.1;
         public static final double kIndexMotorDCTolerance = 0.1;
+
+        public static boolean kRobotHasNote;
         
         /*
          * States for Intake:

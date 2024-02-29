@@ -121,6 +121,33 @@ public class RobotContainer {
                     new CommandBaseStartPosition(m_SAT),
                     new CommandPivotStartPosition(m_SAT)
                 ));
+                put("score podium note", new SequentialCommandGroup(
+                    new CommandChangeScoringMode(ScoringMode.PODIUM),
+                    new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
+                    new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
+                    new ConditionalCommand( // IF WE NEED TO SCORE AMP...
+                        new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
+                        new InstantCommand(), // if we're not scoring amp, do nothing
+                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                    ),
+                    // new CommandIndexMoveNoteToFiringPosition(m_intake),
+                    // new WaitCommand(0.1),
+                    new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
+                    new CommandIndexStart(m_intake),
+                    new WaitCommand(0.3), // waiting for the note to leave robot
+                    new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
+                        new CommandIndexStop(m_intake),
+                        new CommandShooterStop(m_SAT)
+                    ),
+                    new CommandChangeRobotHasNote(false),
+                    new ConditionalCommand( // IF WE JUST SCORED AMP...
+                        new CommandPivotScoringPosition(m_SAT),  // A 2nd pivot rotation is needed
+                        new InstantCommand(), // if we're not scoring amp, do nothing
+                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                    ),
+                    new CommandBaseStartPosition(m_SAT),
+                    new CommandPivotStartPosition(m_SAT)
+                ));
             put("score wing note", new SequentialCommandGroup(
                     new CommandChangeScoringMode(ScoringMode.WING),
                     new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is

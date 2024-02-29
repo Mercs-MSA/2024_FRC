@@ -26,13 +26,13 @@
         {
           "type": "named",
           "data": {
-            "name": "score wing note"
+            "name": "score podium note"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.1
           }
         },
         {
@@ -42,15 +42,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "score wing note"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.1
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "3PieceBase"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score podium note"
           }
         }
       ]

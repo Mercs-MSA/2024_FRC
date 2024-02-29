@@ -211,7 +211,7 @@ public class RobotContainer {
 
     public void configureButtonBindings() {
         driverControls();
-        // operatorControls();
+        operatorControls();
         // manualTesting();
     }
 
@@ -240,10 +240,48 @@ public class RobotContainer {
             )
         );
 
-        driver.leftBumper()
-        .onTrue(
-            new InstantCommand(() -> m_intake.stopIntakeMotor())
-        );
+        // should be fixed now, so dodn't need this
+
+        // driver.leftBumper()
+        // .onTrue(
+        //     new InstantCommand(() -> m_intake.stopIntakeMotor())
+        // );
+
+        driver.y()
+            .onTrue(
+                new SequentialCommandGroup(
+                    new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
+                    new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
+                    new ConditionalCommand( // IF WE NEED TO SCORE AMP...
+                        new SequentialCommandGroup(
+                            new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
+                            new CommandBaseStageTwoPosition(m_SAT)
+                        ),
+                        new InstantCommand(), // if we're not scoring amp, do nothing
+                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                    ),
+                    new CommandIndexMoveNoteToFiringPosition(m_intake),
+                    new WaitCommand(0.1),
+                    new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
+                    new CommandIndexStart(m_intake),
+                    new WaitCommand(0.3), // waiting for the note to leave robot
+                    new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
+                        new CommandIndexStop(m_intake),
+                        new CommandShooterStop(m_SAT)
+                    ),
+                    new CommandChangeRobotHasNote(false),
+                    new ConditionalCommand( // IF WE JUST SCORED AMP...
+                        new SequentialCommandGroup(
+                            new CommandBaseScoringPosition(m_SAT),
+                            new CommandPivotScoringPosition(m_SAT)  // A 2nd pivot rotation is needed
+                        ),
+                        new InstantCommand(), // if we're not scoring amp, do nothing
+                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                    ),
+                    new CommandBaseStartPosition(m_SAT),
+                    new CommandPivotStartPosition(m_SAT)
+                )
+            );
     }
 
     public void operatorControls(){
@@ -295,41 +333,7 @@ public class RobotContainer {
                 () -> m_intake.getIndexMotorSpeed() != 0
             ));
 
-        operator.y()
-            .onTrue(
-                new SequentialCommandGroup(
-                    new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
-                    new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
-                    new ConditionalCommand( // IF WE NEED TO SCORE AMP...
-                        new SequentialCommandGroup(
-                            new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
-                            new CommandBaseStageTwoPosition(m_SAT)
-                        ),
-                        new InstantCommand(), // if we're not scoring amp, do nothing
-                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
-                    ),
-                    new CommandIndexMoveNoteToFiringPosition(m_intake),
-                    new WaitCommand(0.1),
-                    new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
-                    new CommandIndexStart(m_intake),
-                    new WaitCommand(0.3), // waiting for the note to leave robot
-                    new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
-                        new CommandIndexStop(m_intake),
-                        new CommandShooterStop(m_SAT)
-                    ),
-                    new CommandChangeRobotHasNote(false),
-                    new ConditionalCommand( // IF WE JUST SCORED AMP...
-                        new SequentialCommandGroup(
-                            new CommandBaseScoringPosition(m_SAT),
-                            new CommandPivotScoringPosition(m_SAT)  // A 2nd pivot rotation is needed
-                        ),
-                        new InstantCommand(), // if we're not scoring amp, do nothing
-                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
-                    ),
-                    new CommandBaseStartPosition(m_SAT),
-                    new CommandPivotStartPosition(m_SAT)
-                )
-            );
+
 
         operator.a().whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSides(operator.getLeftY())));
 

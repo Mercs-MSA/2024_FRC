@@ -246,8 +246,7 @@ public class RobotContainer {
         // .onTrue(
         //     new InstantCommand(() -> m_intake.stopIntakeMotor())
         // );
-
-        driver.y()
+        driver.rightTrigger(0.15)
             .onTrue(
                 new SequentialCommandGroup(
                     new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is

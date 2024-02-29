@@ -56,7 +56,7 @@ public class SwerveModule {
 
         // expanded is there to support current data for troubleshooting
         optimization_for_CAN();
-        expanded_diagnostic_data();
+        //expanded_diagnostic_data();
         
 
         // USE NEXT LINE FOR TESTING

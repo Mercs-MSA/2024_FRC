@@ -199,15 +199,15 @@ public class Swerve extends SubsystemBase {
         poseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
+            //SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond); 
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Drive Current", mod.getDriveCurrent());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle Current", mod.getAngleCurrent());      
         }
-        SmartDashboard.putNumber("gyro X field", gyro.getMagneticFieldX().getValueAsDouble());
-        SmartDashboard.putNumber("gyro Y field", gyro.getMagneticFieldY().getValueAsDouble());
-        SmartDashboard.putNumber("gyro Z field", gyro.getMagneticFieldZ().getValueAsDouble());
-        SmartDashboard.putNumber("Magnetic North Heading (degrees)", Math.atan2(gyro.getMagneticFieldX().getValueAsDouble(), gyro.getMagneticFieldY().getValueAsDouble()) * 180 / Math.PI);        
+        //SmartDashboard.putNumber("gyro X field", gyro.getMagneticFieldX().getValueAsDouble());
+        //SmartDashboard.putNumber("gyro Y field", gyro.getMagneticFieldY().getValueAsDouble());
+        //SmartDashboard.putNumber("gyro Z field", gyro.getMagneticFieldZ().getValueAsDouble());
+        //SmartDashboard.putNumber("Magnetic North Heading (degrees)", Math.atan2(gyro.getMagneticFieldX().getValueAsDouble(), gyro.getMagneticFieldY().getValueAsDouble()) * 180 / Math.PI);        
         poseEstimateField2d.setRobotPose(poseEstimator.getEstimatedPosition());
         SmartDashboard.putData("Estimated Pose", poseEstimateField2d);
         publisher.set(getModuleStates());

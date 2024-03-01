@@ -211,7 +211,7 @@ public class RobotContainer {
 
     public void configureButtonBindings() {
         driverControls();
-        operatorControls();
+        //operatorControls();
         // manualTesting();
     }
 
@@ -224,7 +224,7 @@ public class RobotContainer {
         driver.rightBumper()
         .onTrue(
             new SequentialCommandGroup(
-                new CommandPivotHandoffPosition(m_SAT),
+                //new CommandPivotHandoffPosition(m_SAT),
 
                 new CommandIndexStart(m_intake),
                 //new WaitCommand(0.5),
@@ -246,7 +246,7 @@ public class RobotContainer {
         // .onTrue(
         //     new InstantCommand(() -> m_intake.stopIntakeMotor())
         // );
-        driver.rightTrigger(0.15)
+/*         driver.rightTrigger(0.15)
             .onTrue(
                 new SequentialCommandGroup(
                     new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
@@ -280,7 +280,7 @@ public class RobotContainer {
                     new CommandBaseStartPosition(m_SAT),
                     new CommandPivotStartPosition(m_SAT)
                 )
-            );
+            ); */
     }
 
     public void operatorControls(){

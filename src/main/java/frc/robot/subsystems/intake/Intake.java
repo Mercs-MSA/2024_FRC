@@ -61,14 +61,14 @@ public class Intake extends SubsystemBase {
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
     configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    configs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
+    configs.Slot0.kP = 12.0; // An error of 0.5 rotations results in 1.2 volts output
     configs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
 
     // Peak output of 8 volts
     configs.Voltage.PeakForwardVoltage = 16;
     configs.Voltage.PeakReverseVoltage = -16;
     configs.CurrentLimits.StatorCurrentLimitEnable = true;
-    configs.CurrentLimits.StatorCurrentLimit = 35;
+    configs.CurrentLimits.StatorCurrentLimit = 40;
 
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;

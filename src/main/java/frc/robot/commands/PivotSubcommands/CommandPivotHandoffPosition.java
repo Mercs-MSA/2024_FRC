@@ -33,7 +33,7 @@ public class CommandPivotHandoffPosition extends Command {
 
     @Override
     public boolean isFinished(){
-        m_SAT.neturalPivot();
+        //m_SAT.neturalPivot();
         return (Constants.isWithinTol(pivotPos, m_SAT.getPivotPos(), Constants.SATConstants.MOTOR_TOLERANCE));
     }
 

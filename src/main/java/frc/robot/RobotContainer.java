@@ -221,24 +221,23 @@ public class RobotContainer {
         // driver.leftBumper().onTrue(new CommandBaseStartPosition(m_SAT));
         // driver.leftBumper().onTrue(new InstantCommand(() -> m_intake.reverseIntakeMotor()));
 
-        // driver.rightBumper()
-        // .onTrue(
-        //     new SequentialCommandGroup(
-        //         //new CommandPivotHandoffPosition(m_SAT),
-
-        //         new CommandIndexStart(m_intake),
-        //         //new WaitCommand(0.5),
-        //         new CommandIntakeStart(m_intake),
-        //         new CommandIntakeWaitForNote(m_intake),
-        //         // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
-        //         new WaitCommand(0.3), // This just worked more reliably and more easily than the sensor did
-        //         new CommandIntakeStop(m_intake),
-        //         new InstantCommand(() -> m_SAT.shootNote(35)), 
-        //         new WaitCommand(3),
-        //         new CommandIndexStop(m_intake),
-        //         new InstantCommand(() -> m_SAT.stopShooter())
-        //     )
-        // );
+         driver.rightBumper()
+         .onTrue(
+             new SequentialCommandGroup(
+                 new CommandPivotHandoffPosition(m_SAT),
+                 new CommandIndexStart(m_intake),
+                 //new WaitCommand(0.5),
+                 new CommandIntakeStart(m_intake),
+                 new CommandIntakeWaitForNote(m_intake),
+                 // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
+                 new WaitCommand(0.3), // This just worked more reliably and more easily than the sensor did
+                 new CommandIntakeStop(m_intake),
+                 new InstantCommand(() -> m_SAT.shootNote(35)), 
+                 new WaitCommand(3),
+                 new CommandIndexStop(m_intake),
+                 new InstantCommand(() -> m_SAT.stopShooter())
+             )
+         );
 
         // should be fixed now, so dodn't need this
 
@@ -246,6 +245,51 @@ public class RobotContainer {
         // .onTrue(
         //     new InstantCommand(() -> m_intake.stopIntakeMotor())
         // );
+
+        driver.x()
+                .onTrue(
+                    // new ConditionalCommand(
+                    //     new ConditionalCommand(
+                    //         // if the intake system is on and you have a note, the system does nothing
+                    //         new InstantCommand(),
+
+                    //         // if the intake system is on and you don't have a note, the system turns off
+                    //         new SequentialCommandGroup(
+                    //             new CommandIntakeStop(m_intake),
+                    //             new CommandIndexStop(m_intake),        
+                    //             new CommandPivotStartPosition(m_SAT)      
+                    //         ),
+
+                    //         // this checks if we have a note
+                    //         () -> IntakeConstants.kRobotHasNote == true
+                    //     ),
+                    //    new ConditionalCommand(
+                            // if the intake system is off and you have a note, the system does nothing
+                    //        new InstantCommand(),
+
+                            // if the intake system is off and you don't have a note, the system turns on
+                            new SequentialCommandGroup(
+                                new CommandPivotHandoffPosition(m_SAT),
+                                new CommandIntakeStart(m_intake),
+                                new CommandIndexStart(m_intake),
+                                new CommandIntakeWaitForNote(m_intake),
+                                new CommandChangeRobotHasNote(true),
+                                // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
+                                new WaitCommand(0.4), // This just worked more reliably and more easily than the sensor did
+                                new CommandIntakeStop(m_intake),
+                                new CommandIndexStop(m_intake),
+                                new CommandPivotStartPosition(m_SAT)
+                            )
+
+                            // this checks if we have a note
+                    //        () -> IntakeConstants.kRobotHasNote == true
+                    //    ),
+                        // this checks if the intake system is on
+                    //    () -> m_intake.getIndexMotorSpeed() != 0
+                    );
+
+
+
          driver.rightTrigger(0.15)
             .onTrue(
                 new SequentialCommandGroup(

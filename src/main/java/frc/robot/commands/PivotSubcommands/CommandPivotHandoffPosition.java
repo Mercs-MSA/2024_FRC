@@ -27,11 +27,13 @@ public class CommandPivotHandoffPosition extends Command {
 
     @Override
     public void end(boolean interupted){
+        m_SAT.neturalPivot();
         SmartDashboard.putBoolean("is pivot done?", Constants.isWithinTol(pivotPos, m_SAT.getPivotPos(), Constants.SATConstants.MOTOR_TOLERANCE));
     }
 
     @Override
     public boolean isFinished(){
+        //m_SAT.neturalPivot();
         return (Constants.isWithinTol(pivotPos, m_SAT.getPivotPos(), Constants.SATConstants.MOTOR_TOLERANCE));
     }
 

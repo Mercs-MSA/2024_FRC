@@ -12,11 +12,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class CommandSwerveToNote extends Command {    
+public class CommandSwerveTurnToNote extends Command {    
     private Swerve s_Swerve;
     private CustomGamePieceVision m_CustomGamePieceVision;
 
-    public CommandSwerveToNote(Swerve s_Swerve, CustomGamePieceVision m_CustomGamePieceVision) {
+    public CommandSwerveTurnToNote(Swerve s_Swerve, CustomGamePieceVision m_CustomGamePieceVision) {
         this.s_Swerve = s_Swerve;
         this.m_CustomGamePieceVision = m_CustomGamePieceVision;
         addRequirements(s_Swerve);
@@ -29,12 +29,12 @@ public class CommandSwerveToNote extends Command {
   
     @Override
     public void end(boolean interrupted) {
-        s_Swerve.drive(
-            new Translation2d(0.0, 0.0), 
-            0.0, 
-            false, 
-            false
-        );
+        // s_Swerve.drive(
+        //     new Translation2d(0.0, 0.0), 
+        //     0.0, 
+        //     false, 
+        //     false
+        // );
     }
   
     @Override
@@ -47,14 +47,25 @@ public class CommandSwerveToNote extends Command {
         //     true
         // );
 
-        s_Swerve.driveToPose(new Pose2d(s_Swerve.poseEstimator.getEstimatedPosition().getTranslation(), new Rotation2d(Units.degreesToRadians(m_CustomGamePieceVision.getGamePieceYaw()))));
+        s_Swerve.driveToPose(
+            new Pose2d(
+                s_Swerve.poseEstimator.getEstimatedPosition().getTranslation(), 
+                new Rotation2d(
+                    Units.degreesToRadians(
+                        m_CustomGamePieceVision.getGamePieceYaw()
+                    )
+                )
+            )
+        );
     }
   
     @Override
     public boolean isFinished() {
         // Should return true when no note is seen?
-        //return Constants.isWithinTol(Constants.Vision.gamePieceYawOffset, m_CustomGamePieceVision.getGamePieceYaw(), 3);
-        return false;
-        
+        return Constants.isWithinTol(
+            0, 
+            m_CustomGamePieceVision.getGamePieceYaw(), 
+            3
+        );
     }
 }

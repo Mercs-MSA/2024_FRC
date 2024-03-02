@@ -69,6 +69,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("Current Robot State", Constants.State.getState().toString());
     SmartDashboard.putString("Pose", RobotContainer.s_Swerve.getPose().toString());
+    SmartDashboard.putBoolean("Robot Has Note", Constants.IntakeConstants.kRobotHasNote);
 
     // SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());
     // SmartDashboard.putNumber("Climber Right motor Pos: ", m_robotContainer.m_climber.outputRightData());

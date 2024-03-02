@@ -27,6 +27,7 @@ public class CommandBaseStartPosition extends Command {
 
     @Override
     public void end(boolean interupted) {
+        m_SAT.neturalBase();
         SmartDashboard.putBoolean("is base done?", 
         Constants.isWithinTol(
                 basePos, 

@@ -294,6 +294,14 @@ public class SAT extends SubsystemBase {
 
   }
 
+  public void neturalPivot(){
+    satPivotMotor.setControl(new NeutralOut());
+  }
+
+  public void neturalBase(){
+    satPivotMotor.setControl(new NeutralOut());
+  }
+
   public void goToHomePos(){
     satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.START.pivot));
     satBase1Motor.setControl(satBase1_voltagePosition.withPosition(Constants.SATConstants.START.motor1_base));

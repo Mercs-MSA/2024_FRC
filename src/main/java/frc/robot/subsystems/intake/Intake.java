@@ -122,6 +122,8 @@ public class Intake extends SubsystemBase {
     return indexMotorPos;
   }
 
+  
+
   public void startIntakeMotor() {
     // WARNING!! 
     // DO NOT USE THIS FUNCTION DIRECTLY!!

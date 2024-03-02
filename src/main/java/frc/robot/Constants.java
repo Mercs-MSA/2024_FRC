@@ -17,7 +17,7 @@ import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-    public static final double stickDeadband = 0.05;
+    public static final double stickDeadband = 0.1;
 
     public static final class Swerve {
         public static final int pigeonID = 16;
@@ -167,7 +167,7 @@ public final class Constants {
     
     public static class IntakeConstants {
         public static final int kIntakeMotorId = 26;
-        public static final double kIntakeMotorSpeed = 0.65;
+        public static final double kIntakeMotorSpeed = 0.80;
         public static final double kIntakeProcessRotations = 1.9;
         public static final double kIndexProcessRotations = -1;
         public static final int kIndexMotorId = 24;
@@ -288,12 +288,12 @@ public final class Constants {
         public static class HANDOFF{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = 13.5;
+            public static final double pivot = 1.392;
             public static final double shooterSpeed = 0;
         }
 
         public static class START{
-            public static final double motor1_base = -0.656;
+            public static final double motor1_base = -0.2045;
             public static final double motor2_base = -1.831;
             public static final double pivot = 1.474;
             public static final double shooterSpeed = 0;
@@ -372,7 +372,7 @@ public final class Constants {
       public static final int tubeMotor_Right_ID = 23;
 
 
-      public static final double climber_Increment = 0.8;
+      public static final double climber_Increment = 0.5;
 
       public static final double LEFT_BOTTOM_POSITION = -1.10;
       public static final double RIGHT_BOTTOM_POSITION = 0.80;

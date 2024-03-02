@@ -157,8 +157,18 @@ public class climber extends SubsystemBase {
   }
 
   public void incrementalClimbBothSides(double y){
-    tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition - (y*Constants.climberConstants.climber_Increment)));
+    tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition + (y*Constants.climberConstants.climber_Increment)));
     tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition + ((y*Constants.climberConstants.climber_Increment))));
+  }
+
+  public void incrementalClimbBothSidesLeft(double y){
+    // tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition + (y*Constants.climberConstants.climber_Increment)));
+    tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition + ((y*Constants.climberConstants.climber_Increment))));
+  }
+
+  public void incrementalClimbBothSidesRight(double y){
+    tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition + (y*Constants.climberConstants.climber_Increment)));
+    // tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition + ((y*Constants.climberConstants.climber_Increment))));
   }
 
   // public void leftGoToPosition(double joystick){

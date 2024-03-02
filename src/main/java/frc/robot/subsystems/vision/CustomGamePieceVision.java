@@ -13,24 +13,31 @@ import frc.robot.subsystems.Swerve;
 public class CustomGamePieceVision extends SubsystemBase{
     private NetworkTableInstance ntInst;
     private DoubleTopic yawTopic;
+    private DoubleTopic distTopic;
     private DoubleSubscriber yawSubscriber;
+    private DoubleSubscriber distSubscriber;
 
     double gamePieceYaw = 999.0;
+    double gamePieceDist = 999.0;
 
-    public CustomGamePieceVision(String yawString){
+    public CustomGamePieceVision(String yawString, String distString){
         ntInst = NetworkTableInstance.getDefault();
 
         // get a topic from a NetworkTableInstance
         // the topic name in this case is the full name
         this.yawTopic = ntInst.getDoubleTopic("/Vision/" + yawString);
+        this.yawTopic = ntInst.getDoubleTopic("/Vision/" + distString);
 
         this.yawSubscriber = this.yawTopic.subscribe(999.0);
+        this.distSubscriber = this.distTopic.subscribe(999.0);
     }
 
     @Override
     public void periodic(){
         gamePieceYaw = yawSubscriber.get();
+        gamePieceDist = distSubscriber.get();
         SmartDashboard.putNumber("Game Piece Yaw", gamePieceYaw);
+        SmartDashboard.putNumber("Game Piece Dist", gamePieceDist);
         Constants.Vision.isNoteDetected = (gamePieceYaw != 999.0);
         
     }
@@ -42,6 +49,15 @@ public class CustomGamePieceVision extends SubsystemBase{
     public double getGamePieceYaw(){
         return gamePieceYaw;
     }
+
+    /**
+     * Gets the distance of the game piece.
+     * @return The Distance (inches)
+     */
+    public double getGamePieceDist(){
+        return gamePieceDist;
+    }
+
 
     /**
      * Align center of camera with game piece

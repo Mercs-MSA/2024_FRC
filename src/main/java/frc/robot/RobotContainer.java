@@ -50,7 +50,7 @@ public class RobotContainer {
     public final SAT m_SAT = new SAT();
     public final Intake m_intake = new Intake();
     public final climber m_climber = new climber();
-    //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_pipeline");
+    //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_yaw", "note_dist");
 
     /* AutoChooser */
     private final SendableChooser<Command> autoChooser;

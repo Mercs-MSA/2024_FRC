@@ -28,6 +28,12 @@
           "data": {
             "pathName": "TwoPiecePart1"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score podium note"
+          }
         }
       ]
     }

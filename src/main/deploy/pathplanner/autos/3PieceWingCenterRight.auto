@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7316468234281956,
+      "y": 6.6525497946829235
+    },
+    "rotation": 60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftBase"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4PieceBase"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5PieceBase"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

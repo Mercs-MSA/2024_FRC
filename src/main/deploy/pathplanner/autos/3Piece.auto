@@ -20,7 +20,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Three-FourPiece"
+            "pathName": "FourPiece"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score sub note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThreePiece"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score sub note"
           }
         },
         {

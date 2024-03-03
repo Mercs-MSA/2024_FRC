@@ -4,7 +4,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
-
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -274,7 +274,7 @@ public final class Constants {
         public static class PODIUM{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = -14.0;
+            public static final double pivot = -13;
             public static final double shooterSpeed = -52.5;
         }
 
@@ -390,7 +390,9 @@ public final class Constants {
     public static class Vision {
         public static boolean isNoteDetected = false;
 
-        public static double gamePieceYawOffset = 12;
+        public static double gamePieceYawOffset = -56.088;
+
+        public static Pose2d temp = new Pose2d();
 
         public static class aprilTagBackLeft {
             public static String camera = "AprilTagBackLeft";
@@ -400,6 +402,10 @@ public final class Constants {
         public static class aprilTagFrontRight {
             public static String camera = "AprilTagFrontRight";
             public static Transform3d robotToCamera = new Transform3d(0.2269744, -0.2446782, 0.3039618, new Rotation3d(0, -0.785398, -0.785398));
+        }
+
+        public static double getRobotHeading(double gamePieceYaw){
+            return ((gamePieceYaw*0.501) + 11.3);
         }
     }
 

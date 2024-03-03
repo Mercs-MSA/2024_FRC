@@ -10,10 +10,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import java.util.Optional;
+import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathfindHolonomic;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -209,6 +211,7 @@ public class Swerve extends SubsystemBase {
         //SmartDashboard.putNumber("gyro Z field", gyro.getMagneticFieldZ().getValueAsDouble());
         //SmartDashboard.putNumber("Magnetic North Heading (degrees)", Math.atan2(gyro.getMagneticFieldX().getValueAsDouble(), gyro.getMagneticFieldY().getValueAsDouble()) * 180 / Math.PI);        
         poseEstimateField2d.setRobotPose(poseEstimator.getEstimatedPosition());
+        // SmartDashboard.putData("s_Swerve", this);
         SmartDashboard.putData("Estimated Pose", poseEstimateField2d);
         publisher.set(getModuleStates());
     }
@@ -221,6 +224,33 @@ public class Swerve extends SubsystemBase {
      */
     public Command driveToPose(Pose2d pose)
     {
+        // Create the constraints to use while pathfinding
+        PathConstraints constraints = new PathConstraints(
+            Constants.AutoConstants.kMaxSpeedMetersPerSecond, 
+            Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared,
+            Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond,
+            Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared);
+
+        // return PathfindHolonomic(pose, constraints, 9, getPose(), getRobotRelativeSpeeds(), this::getRobotRelativeSpeeds, this::driveRobotRelative, )
+
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        return AutoBuilder.pathfindToPose(
+            pose,
+            constraints,
+            0.0, // Goal end velocity in meters/sec
+            0.0); // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.                     
+    }
+
+
+        /**
+     * Use PathPlanner Path finding to go to a point on the field.
+     *
+     * @param pose Target {@link Pose2d} to go to.
+     * @return PathFinding command
+     */
+    public Command driveToPose(DoubleSupplier tx, DoubleSupplier ty, DoubleSupplier yaw)
+    {
+        Pose2d pose = new Pose2d(tx.getAsDouble(), ty.getAsDouble(), new Rotation2d(yaw.getAsDouble()));
         // Create the constraints to use while pathfinding
         PathConstraints constraints = new PathConstraints(
             Constants.AutoConstants.kMaxSpeedMetersPerSecond, 

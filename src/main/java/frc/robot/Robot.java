@@ -85,7 +85,8 @@ public class Robot extends TimedRobot {
 
     // poseEstimateField2d.setRobotPose(RobotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
     // SmartDashboard.putData("estimated robot pose", poseEstimateField2d);
-    // SmartDashboard.putData(CommandScheduler.getInstance());
+
+    SmartDashboard.putData(CommandScheduler.getInstance());
 
     SmartDashboard.putNumber("Intake Speed", m_robotContainer.m_intake.getIntakeMotorSpeed());
     SmartDashboard.putNumber("Indexer Speed", m_robotContainer.m_intake.getIndexMotorSpeed());

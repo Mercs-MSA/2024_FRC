@@ -6,6 +6,8 @@ import java.util.Map;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,12 +15,15 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.CommandShooterStart;
 import frc.robot.commands.CommandShooterStop;
+import frc.robot.commands.CommandSwerveDriveToNote;
+import frc.robot.commands.CommandSwerveTurnToNote;
 import frc.robot.commands.CommandChangeRobotHasNote;
 import frc.robot.commands.CommandChangeScoringMode;
 import frc.robot.commands.TeleopSwerve;
@@ -30,6 +35,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.climber.climber;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.vision.CustomGamePieceVision;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ScoringConstants;
 import frc.robot.Constants.ScoringConstants.ScoringMode;
@@ -50,7 +56,7 @@ public class RobotContainer {
     public final SAT m_SAT = new SAT();
     public final Intake m_intake = new Intake();
     public final climber m_climber = new climber();
-    //public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_yaw", "note_dist");
+    public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_yaw", "note_dist");
 
     /* AutoChooser */
     private final SendableChooser<Command> autoChooser;
@@ -61,6 +67,7 @@ public class RobotContainer {
         {
             put("marker1", Commands.print("Finished 1 Piece"));
             put("marker2", Commands.print("Finished 3-4 Piece"));
+            
             put("Test Start Intake", new CommandIntakeStart(m_intake));
             put("Test Start Index", new CommandIndexStart(m_intake));
             put("Test Stop Intake", new CommandIntakeStop(m_intake));
@@ -246,51 +253,36 @@ public class RobotContainer {
         //     new InstantCommand(() -> m_intake.stopIntakeMotor())
         // );
 
-        driver.x()
-                .onTrue(
-                    // new ConditionalCommand(
-                    //     new ConditionalCommand(
-                    //         // if the intake system is on and you have a note, the system does nothing
-                    //         new InstantCommand(),
+        // driver.a().onTrue(new SequentialCommandGroup(
+        //     new PrintCommand("this started"),
+        //     s_Swerve.driveToPose(
+        //         () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getX(),
+        //         () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getY(),
+        //         () -> Constants.Vision.getRobotHeading(m_GamePieceVision.getGamePieceYaw())
+        //     ),
+        //     new PrintCommand("this finished")
+        //     ));
 
-                    //         // if the intake system is on and you don't have a note, the system turns off
-                    //         new SequentialCommandGroup(
-                    //             new CommandIntakeStop(m_intake),
-                    //             new CommandIndexStop(m_intake),        
-                    //             new CommandPivotStartPosition(m_SAT)      
-                    //         ),
+        // driver.a().onTrue(
+        //     s_Swerve.driveToPose(
+        //         () -> s_Swerve.poseEstimator.getEstimatedPosition().getX(),
+        //         () -> s_Swerve.poseEstimator.getEstimatedPosition().getY(),
+        //         () -> 90)
+        //     );
 
-                    //         // this checks if we have a note
-                    //         () -> IntakeConstants.kRobotHasNote == true
-                    //     ),
-                    //    new ConditionalCommand(
-                            // if the intake system is off and you have a note, the system does nothing
-                    //        new InstantCommand(),
+        driver.a().onTrue(
+            s_Swerve.driveToPose(
+                () -> Constants.Vision.temp.getTranslation().getX()+0.1,
+                () -> Constants.Vision.temp.getTranslation().getY(),
+                () -> Constants.Vision.temp.getTranslation().getAngle().getDegrees()
+            ));
 
-                            // if the intake system is off and you don't have a note, the system turns on
-                            new SequentialCommandGroup(
-                                new CommandPivotHandoffPosition(m_SAT),
-                                new CommandIntakeStart(m_intake),
-                                new CommandIndexStart(m_intake),
-                                new CommandIntakeWaitForNote(m_intake),
-                                new CommandChangeRobotHasNote(true),
-                                // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
-                                new WaitCommand(0.4), // This just worked more reliably and more easily than the sensor did
-                                new CommandIntakeStop(m_intake),
-                                new CommandIndexStop(m_intake),
-                                new CommandPivotStartPosition(m_SAT)
-                            )
-
-                            // this checks if we have a note
-                    //        () -> IntakeConstants.kRobotHasNote == true
-                    //    ),
-                        // this checks if the intake system is on
-                    //    () -> m_intake.getIndexMotorSpeed() != 0
-                    );
+        // driver.a().onTrue(s_Swerve.driveToPose(Constants.Vision.temp));
+            
+        // driver.b().onTrue(new CommandSwerveDriveToNote(s_Swerve, m_GamePieceVision));
 
 
-
-         driver.rightTrigger(0.15)
+         driver.rightBumper()
             .onTrue(
                 new SequentialCommandGroup(
                     new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
@@ -334,27 +326,46 @@ public class RobotContainer {
         // operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
 
         operator.x()
-           .onTrue(
-               new SequentialCommandGroup(
-                    new CommandIndexStart(m_intake),
-                    // new CommandBaseStartPosition(m_SAT),
-                    new CommandPivotHandoffPosition(m_SAT),
-                    new CommandIntakeStart(m_intake),
-                    new CommandIntakeWaitForNote(m_intake),
-                    // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
-                    new WaitCommand(0.3), // This just worked more reliably and more easily than the sensor did
-                    new CommandIntakeStop(m_intake),
-                    new CommandIndexStop(m_intake),
-                    new CommandPivotStartPosition(m_SAT)
-                )
-            )
-            .onFalse(
-                    new SequentialCommandGroup(
-                        new CommandIntakeStop(m_intake),
-                        new CommandIndexStop(m_intake),        
-                        new CommandPivotStartPosition(m_SAT)      
-                    )
-            );
+                .onTrue(
+                    // new ConditionalCommand(
+                    //     new ConditionalCommand(
+                    //         // if the intake system is on and you have a note, the system does nothing
+                    //         new InstantCommand(),
+
+                    //         // if the intake system is on and you d9on't have a note, the system turns off
+                    //         new SequentialCommandGroup(
+                    //             new CommandIntakeStop(m_intake),
+                    //             new CommandIndexStop(m_intake),        
+                    //             new CommandPivotStartPosition(m_SAT)      
+                    //         ),
+
+                    //         // this checks if we have a note
+                    //         () -> IntakeConstants.kRobotHasNote == true
+                    //     ),
+                    //    new ConditionalCommand(
+                            // if the intake system is off and you have a note, the system does nothing
+                    //        new InstantCommand(),
+
+                            // if the intake system is off and you don't have a note, the system turns on
+                            new SequentialCommandGroup(
+                                new CommandPivotHandoffPosition(m_SAT),
+                                new CommandIntakeStart(m_intake),
+                                new CommandIndexStart(m_intake),
+                                new CommandIntakeWaitForNote(m_intake),
+                                new CommandChangeRobotHasNote(true),
+                                // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
+                                new WaitCommand(0.4), // This just worked more reliably and more easily than the sensor did
+                                new CommandIntakeStop(m_intake),
+                                new CommandIndexStop(m_intake),
+                                new CommandPivotStartPosition(m_SAT)
+                            )
+
+                            // this checks if we have a note
+                    //        () -> IntakeConstants.kRobotHasNote == true
+                    //    ),
+                        // this checks if the intake system is on
+                    //    () -> m_intake.getIndexMotorSpeed() != 0
+                    );
         
 
         // operator.b()

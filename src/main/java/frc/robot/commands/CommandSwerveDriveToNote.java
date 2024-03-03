@@ -50,15 +50,15 @@ public class CommandSwerveDriveToNote extends Command {
         //     true
         // );
 
-        s_Swerve.driveToPose(
-            new Pose2d(
-                new Translation2d(
-                    distanceToNote,
-                    new Rotation2d(0)
-                ), 
-                s_Swerve.poseEstimator.getEstimatedPosition().getRotation()
-            )
-        );
+        // s_Swerve.driveToPose(
+        //     new Pose2d(
+        //         new Translation2d(
+        //             distanceToNote,
+        //             new Rotation2d(0)
+        //         ), 
+        //         s_Swerve.poseEstimator.getEstimatedPosition().getRotation()
+        //     )
+        // );
     }
   
     @Override

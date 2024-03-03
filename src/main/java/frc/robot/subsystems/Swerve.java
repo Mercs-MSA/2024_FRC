@@ -224,6 +224,7 @@ public class Swerve extends SubsystemBase {
      */
     public Command driveToPose(Pose2d pose)
     {
+        SmartDashboard.putBoolean("it started this driveToPose", true);
         // Create the constraints to use while pathfinding
         PathConstraints constraints = new PathConstraints(
             Constants.AutoConstants.kMaxSpeedMetersPerSecond, 
@@ -232,7 +233,6 @@ public class Swerve extends SubsystemBase {
             Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared);
 
         // return PathfindHolonomic(pose, constraints, 9, getPose(), getRobotRelativeSpeeds(), this::getRobotRelativeSpeeds, this::driveRobotRelative, )
-
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
         return AutoBuilder.pathfindToPose(
             pose,

@@ -13,16 +13,24 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 
 public class CommandSwerveTurnToNote extends Command {    
     private Swerve s_Swerve;
     private CustomGamePieceVision m_CustomGamePieceVision;
     private double targetYaw, currentYaw;
-    private double deltaYaw, finalYaw;
+    private double deltaYaw, finalYaw, currentRotation;
+    private PIDController pidController;
+    private double rotateVal;
+
 
     public CommandSwerveTurnToNote(Swerve s_Swerve, CustomGamePieceVision m_CustomGamePieceVision) {
         this.s_Swerve = s_Swerve;
         this.m_CustomGamePieceVision = m_CustomGamePieceVision;
+        pidController = new PIDController(0.2, 0.0, 0.01);
+        pidController.setTolerance(1);
+        pidController.setSetpoint(0.0);
         addRequirements(s_Swerve);
         addRequirements(m_CustomGamePieceVision);
     }
@@ -30,32 +38,23 @@ public class CommandSwerveTurnToNote extends Command {
     @Override
     public void initialize() {
         deltaYaw = 0.501*(m_CustomGamePieceVision.getGamePieceYaw()) + 11.3;
-        finalYaw = s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees() + deltaYaw;
+        currentRotation = s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees();
+        finalYaw = currentRotation + deltaYaw;
+        
+        //s_Swerve.driveToPose(new Pose2d(s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getX() + 0.1, s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getY(), s_Swerve.poseEstimator.getEstimatedPosition().getRotation())).schedule();
+        // s_Swerve.drive(new Translation2d(), Units.degreesToRadians(deltaYaw)*2, true, false);
 
-        s_Swerve.drive(new Translation2d(), finalYaw, true, true);
 
-        // targetYaw = s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees() + (m_CustomGamePieceVision.getGamePieceYaw() - Constants.Vision.gamePieceYawOffset);
-        // currentYaw = s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees();
-        if (Math.abs(m_CustomGamePieceVision.getGamePieceYaw()) != 999.0){
-            if (Math.abs(m_CustomGamePieceVision.getGamePieceYaw() - Constants.Vision.gamePieceYawOffset) > 10){
-                s_Swerve.drive(new Translation2d(), (targetYaw - currentYaw)/20, false, false);
-            }
-            else if (Math.abs(m_CustomGamePieceVision.getGamePieceYaw() - Constants.Vision.gamePieceYawOffset) > 5){
-                s_Swerve.drive(new Translation2d(), (targetYaw - currentYaw)/10, false, false);
-            }
-            else if (Math.abs(m_CustomGamePieceVision.getGamePieceYaw() - Constants.Vision.gamePieceYawOffset) > 0){
-                s_Swerve.drive(new Translation2d(), (targetYaw - currentYaw)/5, false, false);
-            }
-            else {
-                s_Swerve.drive(new Translation2d(), 0, false, false);
-
-            }
-        }
     }
   
     @Override
     public void end(boolean interrupted) {
-        // s_Swerve.drive(new Translation2d(), 0, false, false);
+        // if (Constants.isWithinTol(finalYaw, s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0.5)){
+        //     rotateVal = MathUtil.clamp(pidController.calculate(s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees(), finalYaw), -5, 5);
+        //     s_Swerve.drive(new Translation2d(), rotateVal, true, false);
+        // }
+
+        s_Swerve.drive(new Translation2d(), 0, false, false);
     }
   
     @Override
@@ -64,35 +63,24 @@ public class CommandSwerveTurnToNote extends Command {
         SmartDashboard.putNumber("temp heading", s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees());
         SmartDashboard.putNumber("temp deltaYaw", deltaYaw);
         SmartDashboard.putNumber("temp finalYaw", finalYaw);
-        /* Drive */
-        // s_Swerve.drive(
-        //     new Translation2d(0.0, m_CustomGamePieceVision.alignNoteCommands()[1]).times(Constants.Swerve.maxSpeed), 
-        //     m_CustomGamePieceVision.alignNoteCommands()[0] * Constants.Swerve.maxAngularVelocity, 
-        //     false, 
-        //     true
-        // );
 
-        // s_Swerve.driveToPose(
-        //     new Pose2d(
-        //         new Translation2d(s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getX()-0.01, s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getY()),
-        //         new Rotation2d(
-        //             Units.degreesToRadians(
-        //                 s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees()+(m_CustomGamePieceVision.getGamePieceYaw() - Constants.Vision.gamePieceYawOffset)
-        //             )
-        //         )
-        //     )
-        // );
+        if (m_CustomGamePieceVision.getGamePieceYaw() != 999.0){
+            rotateVal = MathUtil.clamp(pidController.calculate(s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees(), finalYaw), -5,
+                                           5);
+            s_Swerve.drive(new Translation2d(), rotateVal, true, false);
+        }
+
+        // s_Swerve.faceHeading(new Rotation2d(Units.degreesToRadians(deltaYaw)));
 
 
     }
   
     @Override
     public boolean isFinished() {
+        SmartDashboard.putBoolean("turn to note is finished", Constants.isWithinTol(finalYaw, s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0.1));
         // Should return true when no note is seen?
-        return Constants.isWithinTol(
-            targetYaw,
-            s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 
-            1
-        );
+        return Constants.isWithinTol(finalYaw, s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0.1);
+        // finalYaw == s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees();
+        // return false;
     }
 }

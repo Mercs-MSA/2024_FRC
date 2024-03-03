@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -270,14 +271,34 @@ public class RobotContainer {
         //         () -> 90)
         //     );
 
-        driver.a().onTrue(
-            s_Swerve.driveToPose(
-                () -> Constants.Vision.temp.getTranslation().getX()+0.1,
-                () -> Constants.Vision.temp.getTranslation().getY(),
-                () -> Constants.Vision.temp.getTranslation().getAngle().getDegrees()
-            ));
+        // driver.a().onTrue(
+        //     s_Swerve.driveToPose(
+        //         () -> Constants.Vision.temp.getTranslation().getX(),
+        //         () -> Constants.Vision.temp.getTranslation().getY(),
+        //         () -> Constants.Vision.temp.getTranslation().getAngle().getDegrees()
+        //     ));
 
-        // driver.a().onTrue(s_Swerve.driveToPose(Constants.Vision.temp));
+        driver.a()
+        .onTrue(
+            new SequentialCommandGroup(
+                new CommandSwerveTurnToNote(s_Swerve, m_GamePieceVision),
+                new CommandIntakeStart(m_intake),
+                new CommandPivotHandoffPosition(m_SAT),
+                new CommandIndexStart(m_intake),
+                new CommandSwerveDriveToNote(s_Swerve, m_intake),
+                // new CommandIntakeWaitForNote(m_intake),
+                new CommandChangeRobotHasNote(true),
+                // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
+                new WaitCommand(0.4), // This just worked more reliably and more easily than the sensor did
+                new CommandIntakeStop(m_intake),
+                new CommandIndexStop(m_intake),
+                new CommandPivotStartPosition(m_SAT)))
+        .onFalse(
+            new SequentialCommandGroup(
+                new InstantCommand(() -> s_Swerve.drive(new Translation2d(), 0, false, false)),
+                new CommandIntakeStop(m_intake),
+                new CommandIndexStop(m_intake),
+                new CommandPivotStartPosition(m_SAT)));
             
         // driver.b().onTrue(new CommandSwerveDriveToNote(s_Swerve, m_GamePieceVision));
 

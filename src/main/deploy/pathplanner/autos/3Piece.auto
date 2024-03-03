@@ -12,21 +12,21 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "score sub note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Three-FourPiece"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "TwoPiecePart1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ThreePiece"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Taxi"
           }
         }
       ]

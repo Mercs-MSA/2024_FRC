@@ -281,7 +281,7 @@ public class RobotContainer {
         driver.a()
         .onTrue(
             new SequentialCommandGroup(
-                new CommandSwerveTurnToNote(s_Swerve, m_GamePieceVision),
+                // new CommandSwerveTurnToNote(s_Swerve, m_GamePieceVision),
                 new CommandIntakeStart(m_intake),
                 new CommandPivotHandoffPosition(m_SAT),
                 new CommandIndexStart(m_intake),

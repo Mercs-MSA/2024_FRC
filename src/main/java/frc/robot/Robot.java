@@ -71,6 +71,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Pose", RobotContainer.s_Swerve.getPose().toString());
     SmartDashboard.putBoolean("Robot Has Note", Constants.IntakeConstants.kRobotHasNote);
 
+    SmartDashboard.putNumber("gyro yaw", m_robotContainer.s_Swerve.gyro.getAngle());
+
     // SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());
     // SmartDashboard.putNumber("Climber Right motor Pos: ", m_robotContainer.m_climber.outputRightData());
     // SmartDashboard.putNumber("Base1 Pos", m_robotContainer.m_SAT.outputBase1Data());

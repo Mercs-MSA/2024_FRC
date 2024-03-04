@@ -82,12 +82,15 @@ public class CustomGamePieceVision extends SubsystemBase{
     }
 
      /**
-     * Generate yaw command based on Note position in camera view
-     * Output is a size 2 double array with the angle command 1st and the forward translation 2nd
+     * Generate yaw command based on Note sighting from the camera
+     * Output is robot rotation in radians (relative to the current heading) to turn towards the target
      */
-    public double[] alignNoteCommands() {
-        double[] yaw_and_translate = {gamePieceYaw/20, 0.1};
-        return yaw_and_translate;
+    public double calculateGamePieceHeading() {
+        double xt = Math.sin(gamePieceYaw) * gamePieceDist - Constants.Vision.gamePieceCameraInfo.robotToCamera.getX();  //units are in inches
+        return Math.atan(xt/(gamePieceDist - Constants.Vision.gamePieceCameraInfo.robotToCamera.getY())); // units in radians
     }
+
+
+
 
 }

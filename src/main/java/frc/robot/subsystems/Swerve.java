@@ -44,7 +44,7 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     private Field2d field = new Field2d();
-    public SwerveDrivePoseEstimator poseEstimator;
+    public static SwerveDrivePoseEstimator poseEstimator;
     private final StructArrayPublisher<SwerveModuleState> publisher;
     Field2d poseEstimateField2d = new Field2d();
 

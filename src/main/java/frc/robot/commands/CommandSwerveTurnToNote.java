@@ -37,11 +37,11 @@ public class CommandSwerveTurnToNote extends Command {
 
     @Override
     public void initialize() {
-        deltaYaw = 0.501*(m_CustomGamePieceVision.getGamePieceYaw()) + 11.3;
+        deltaYaw = 0.513*(m_CustomGamePieceVision.getGamePieceYaw()) + 9.08;
         currentRotation = s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees();
         finalYaw = currentRotation + deltaYaw;
         
-        //s_Swerve.driveToPose(new Pose2d(s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getX() + 0.1, s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getY(), s_Swerve.poseEstimator.getEstimatedPosition().getRotation())).schedule();
+        // s_Swerve.driveToPose(new Pose2d(s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getX() + 0.1, s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getY(), s_Swerve.poseEstimator.getEstimatedPosition().getRotation())).schedule();
         // s_Swerve.drive(new Translation2d(), Units.degreesToRadians(deltaYaw)*2, true, false);
 
 
@@ -65,8 +65,7 @@ public class CommandSwerveTurnToNote extends Command {
         SmartDashboard.putNumber("temp finalYaw", finalYaw);
 
         if (m_CustomGamePieceVision.getGamePieceYaw() != 999.0){
-            rotateVal = MathUtil.clamp(pidController.calculate(s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees(), finalYaw), -5,
-                                           5);
+            rotateVal = MathUtil.clamp(pidController.calculate(s_Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees(), finalYaw), -5, 5);
             s_Swerve.drive(new Translation2d(), rotateVal, true, false);
         }
 

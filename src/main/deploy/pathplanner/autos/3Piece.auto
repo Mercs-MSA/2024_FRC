@@ -24,33 +24,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "score sub note"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "ThreePiece"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "score sub note"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "TwoPiecePart1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score podium note"
           }
         }
       ]

@@ -36,6 +36,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.climber.climber;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.vision.ApriltagVision;
 import frc.robot.subsystems.vision.CustomGamePieceVision;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ScoringConstants;
@@ -58,6 +59,7 @@ public class RobotContainer {
     public final Intake m_intake = new Intake();
     public final climber m_climber = new climber();
     public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_yaw", "note_dist");
+    // public ApriltagVision m_ApriltagVision = new ApriltagVision();
 
     /* AutoChooser */
     private final SendableChooser<Command> autoChooser;
@@ -103,16 +105,10 @@ public class RobotContainer {
 
             put("scoring mode podium", new CommandChangeScoringMode(ScoringMode.PODIUM));
             put("score sub note", new SequentialCommandGroup(
-                    new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
-                    new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
-                    new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
-                    new ConditionalCommand( // IF WE NEED TO SCORE AMP...
-                        new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
-                        new InstantCommand(), // if we're not scoring amp, do nothing
-                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
-                    ),
-                    // new CommandIndexMoveNoteToFiringPosition(m_intake),
-                    // new WaitCommand(0.1),
+                    new CommandChangeScoringMode(ScoringMode.SUBWOOFER), // pivot move to whatever current mode is
+                    new CommandBaseScoringPosition(m_SAT),
+                    new CommandIndexMoveNoteToFiringPosition(m_intake),
+                    new WaitCommand(0.1),
                     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
                     new CommandIndexStart(m_intake),
                     new WaitCommand(0.3), // waiting for the note to leave robot
@@ -121,11 +117,6 @@ public class RobotContainer {
                         new CommandShooterStop(m_SAT)
                     ),
                     new CommandChangeRobotHasNote(false),
-                    new ConditionalCommand( // IF WE JUST SCORED AMP...
-                        new CommandPivotScoringPosition(m_SAT),  // A 2nd pivot rotation is needed
-                        new InstantCommand(), // if we're not scoring amp, do nothing
-                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
-                    ),
                     new CommandBaseStartPosition(m_SAT),
                     new CommandPivotStartPosition(m_SAT)
                 ));
@@ -229,23 +220,23 @@ public class RobotContainer {
         // driver.leftBumper().onTrue(new CommandBaseStartPosition(m_SAT));
         // driver.leftBumper().onTrue(new InstantCommand(() -> m_intake.reverseIntakeMotor()));
 
-         driver.rightBumper()
-         .onTrue(
-             new SequentialCommandGroup(
-                 new CommandPivotHandoffPosition(m_SAT),
-                 new CommandIndexStart(m_intake),
-                 //new WaitCommand(0.5),
-                 new CommandIntakeStart(m_intake),
-                 new CommandIntakeWaitForNote(m_intake),
-                 // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
-                 new WaitCommand(0.3), // This just worked more reliably and more easily than the sensor did
-                 new CommandIntakeStop(m_intake),
-                 new InstantCommand(() -> m_SAT.shootNote(35)), 
-                 new WaitCommand(3),
-                 new CommandIndexStop(m_intake),
-                 new InstantCommand(() -> m_SAT.stopShooter())
-             )
-         );
+        //  driver.rightBumper()
+        //  .onTrue(
+        //      new SequentialCommandGroup(
+        //          new CommandPivotHandoffPosition(m_SAT),
+        //          new CommandIndexStart(m_intake),
+        //          //new WaitCommand(0.5),
+        //          new CommandIntakeStart(m_intake),
+        //          new CommandIntakeWaitForNote(m_intake),
+        //          // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
+        //          new WaitCommand(0.3), // This just worked more reliably and more easily than the sensor did
+        //          new CommandIntakeStop(m_intake),
+        //          new InstantCommand(() -> m_SAT.shootNote(35)), 
+        //          new WaitCommand(3),
+        //          new CommandIndexStop(m_intake),
+        //          new InstantCommand(() -> m_SAT.stopShooter())
+        //      )
+        //  );
 
         // should be fixed now, so dodn't need this
 
@@ -279,20 +270,8 @@ public class RobotContainer {
         //     ));
 
         driver.a()
-        .onTrue(
-            new SequentialCommandGroup(
-                // new CommandSwerveTurnToNote(s_Swerve, m_GamePieceVision),
-                new CommandIntakeStart(m_intake),
-                new CommandPivotHandoffPosition(m_SAT),
-                new CommandIndexStart(m_intake),
-                new CommandSwerveDriveToNote(s_Swerve, m_intake),
-                // new CommandIntakeWaitForNote(m_intake),
-                new CommandChangeRobotHasNote(true),
-                // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
-                new WaitCommand(0.4), // This just worked more reliably and more easily than the sensor did
-                new CommandIntakeStop(m_intake),
-                new CommandIndexStop(m_intake),
-                new CommandPivotStartPosition(m_SAT)))
+        .whileTrue(
+                new CommandSwerveTurnToNote(s_Swerve, m_GamePieceVision))
         .onFalse(
             new SequentialCommandGroup(
                 new InstantCommand(() -> s_Swerve.drive(new Translation2d(), 0, false, false)),
@@ -369,16 +348,19 @@ public class RobotContainer {
 
                             // if the intake system is off and you don't have a note, the system turns on
                             new SequentialCommandGroup(
+                                new CommandIndexStart(m_intake),
                                 new CommandPivotHandoffPosition(m_SAT),
                                 new CommandIntakeStart(m_intake),
-                                new CommandIndexStart(m_intake),
                                 new CommandIntakeWaitForNote(m_intake),
-                                new CommandChangeRobotHasNote(true),
+                                // new CommandChangeRobotHasNote(true),
+                                // new WaitCommand(0.2),
+                                // new CommandIndexStop(m_intake),
+                                new CommandShooterStart(m_SAT)
                                 // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
-                                new WaitCommand(0.4), // This just worked more reliably and more easily than the sensor did
-                                new CommandIntakeStop(m_intake),
-                                new CommandIndexStop(m_intake),
-                                new CommandPivotStartPosition(m_SAT)
+                                // new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
+                                // new CommandIntakeStop(m_intake),
+                                // new CommandPivotStartPosition(m_SAT),
+
                             )
 
                             // this checks if we have a note
@@ -387,6 +369,15 @@ public class RobotContainer {
                         // this checks if the intake system is on
                     //    () -> m_intake.getIndexMotorSpeed() != 0
                     );
+
+            operator.b().onTrue(
+                new SequentialCommandGroup(
+                    new CommandIntakeStop(m_intake),
+                    new CommandPivotStartPosition(m_SAT),
+                    new CommandIndexStop(m_intake),
+                    new CommandShooterStop(m_SAT)
+                )
+            );
         
 
         // operator.b()
@@ -475,14 +466,14 @@ public class RobotContainer {
         operator.a().whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesLeft(operator.getLeftY())))
         .whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesRight(operator.getRightY())));
 
-        // driver.pov(0).onTrue(new CommandIndexStart(m_intake));
-        // driver.pov(180).onTrue(new CommandIndexStop(m_intake));
+        driver.pov(0).onTrue(new CommandIndexStart(m_intake));
+        driver.pov(180).onTrue(new CommandIndexStop(m_intake));
 
-        // driver.pov(90).onTrue(new CommandIntakeStart(m_intake));
-        // driver.pov(270).onTrue(new CommandIntakeStop(m_intake));
+        driver.pov(90).onTrue(new CommandIntakeStart(m_intake));
+        driver.pov(270).onTrue(new CommandIntakeStop(m_intake));
 
-        // driver.leftBumper().onTrue(new CommandShooterStart(m_SAT));
-        // driver.rightBumper().onTrue(new CommandShooterStop(m_SAT));
+        driver.leftBumper().onTrue(new CommandShooterStart(m_SAT));
+        driver.rightBumper().onTrue(new CommandShooterStop(m_SAT));
 
         // operator.start()
         //     .onTrue(new CommandChangeScoringMode(ScoringMode.AMP));

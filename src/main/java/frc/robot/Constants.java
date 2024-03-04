@@ -167,19 +167,19 @@ public final class Constants {
     
     public static class IntakeConstants {
         public static final int kIntakeMotorId = 26;
-        public static final double kIntakeMotorSpeed = 0.80;
+        public static final double kIntakeMotorSpeed = 75;
         public static final double kIntakeProcessRotations = 1.9;
         public static final double kIndexProcessRotations = -0.2;
         public static final int kIndexMotorId = 24;
-        public static final double kIndexMotorSpeed = 0.90;
+        public static final double kIndexMotorSpeed = 0.50;
         public static final int kIntakeUpperSensorId = 0;
         public static final int kIntakeLowerSensor1Id = 1;
         public static final int kIntakeLowerSensor2Id = 2;
         public static final int kIntakeLowerSensor3Id = 3;       
         public static final double kIntakeMotorTolerance = 0.3;
         public static final double kIndexMotorTolerance = 0.1;
-        public static final double kIntakeMotorDCTolerance = 0.1;
-        public static final double kIndexMotorDCTolerance = 0.1;
+        public static final double kIntakeMotorDCTolerance = 0.3;
+        public static final double kIndexMotorDCTolerance = 0.05;
 
         public static boolean kRobotHasNote;
         
@@ -288,7 +288,7 @@ public final class Constants {
         public static class HANDOFF{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = -14.0;
+            public static final double pivot = -18.55;
             public static final double shooterSpeed = 0;
         }
 
@@ -300,7 +300,7 @@ public final class Constants {
         }
 
         public static final double PIVOT_MECHANICALLY_REQUIRED_POS = 7.8;
-        public static final double MOTOR_TOLERANCE = 0.5;
+        public static final double MOTOR_TOLERANCE = 0.1;
 
         public static final double SHOOTER_SPEED = -50;
         public static final double kShooterSpeedTolerance = 10.0;

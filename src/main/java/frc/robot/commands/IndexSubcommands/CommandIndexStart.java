@@ -27,7 +27,8 @@ public class CommandIndexStart extends Command {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(m_intake.getIndexMotorSpeed() + IntakeConstants.kIndexMotorSpeed) <= IntakeConstants.kIndexMotorDCTolerance;
+    return true;
+    //return Math.abs(m_intake.getIndexMotorSpeed() + IntakeConstants.kIndexMotorSpeed) <= IntakeConstants.kIndexMotorDCTolerance;
   }
 }
 

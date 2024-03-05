@@ -393,7 +393,8 @@ public final class Constants {
         public static double gamePieceYawOffset = -56.088;
 
         public static class gamePieceCameraInfo {
-            public static Transform3d robotToCamera = new Transform3d(12.114, -8.874, 15.266, new Rotation3d(0, 0, 0));
+            // public static Transform3d robotToCamera = new Transform3d(12.114, -8.874, 15.266, new Rotation3d(0, 0, 0));
+            public static Transform3d robotToCamera = new Transform3d(10, -3.5, 16.966, new Rotation3d(0, 0, 0));
         }
 
         public static Pose2d temp = new Pose2d();

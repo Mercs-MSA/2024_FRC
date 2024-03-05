@@ -36,7 +36,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.climber.climber;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.vision.ApriltagVision;
+// import frc.robot.subsystems.vision.ApriltagVision;
 import frc.robot.subsystems.vision.CustomGamePieceVision;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ScoringConstants;
@@ -51,7 +51,8 @@ import frc.robot.Constants.ScoringConstants.ScoringMode;
 public class RobotContainer {
     /* Controllers */
     public final CommandXboxController driver = new CommandXboxController(0);
-    public final CommandXboxController operator = new CommandXboxController(1);
+    public final CommandXboxController 
+    operator = new CommandXboxController(1);
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -209,9 +210,9 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        driverControls();
-        operatorControls();
-        // manualTesting();
+        // driverControls();
+        // operatorControls();
+        manualTesting();
     }
 
     public void driverControls(){
@@ -255,29 +256,35 @@ public class RobotContainer {
         //     new PrintCommand("this finished")
         //     ));
 
-        // driver.a().onTrue(
-        //     s_Swerve.driveToPose(
-        //         () -> s_Swerve.poseEstimator.getEstimatedPosition().getX(),
-        //         () -> s_Swerve.poseEstimator.getEstimatedPosition().getY(),
-        //         () -> 90)
-        //     );
+        driver.a().onTrue( //podium blue
+            s_Swerve.driveToPose(
+                () -> 2.977,
+                () -> 4.082,
+                () -> -32.61)
+            );
 
-        // driver.a().onTrue(
-        //     s_Swerve.driveToPose(
-        //         () -> Constants.Vision.temp.getTranslation().getX(),
-        //         () -> Constants.Vision.temp.getTranslation().getY(),
-        //         () -> Constants.Vision.temp.getTranslation().getAngle().getDegrees()
-        //     ));
+        driver.b().onTrue( //speaker center blue
+            s_Swerve.driveToPose(
+                () -> 1.38,
+                () -> 5.54,
+                () -> 0)
+            );
 
-        driver.a()
-        .whileTrue(
-                new CommandSwerveTurnToNote(s_Swerve, m_GamePieceVision))
-        .onFalse(
-            new SequentialCommandGroup(
-                new InstantCommand(() -> s_Swerve.drive(new Translation2d(), 0, false, false)),
-                new CommandIntakeStop(m_intake),
-                new CommandIndexStop(m_intake),
-                new CommandPivotStartPosition(m_SAT)));
+
+        // driver.a().whileTrue(
+        //     s_Swerve.rotateToPose(45))
+        //     .onFalse(new InstantCommand(() -> s_Swerve.drive(new Translation2d(), 0, false, false)));
+
+
+        // driver.a()
+        // .whileTrue(
+        //         new CommandSwerveTurnToNote(s_Swerve, m_GamePieceVision))
+        // .onFalse(
+        //     new SequentialCommandGroup(
+        //         new InstantCommand(() -> s_Swerve.drive(new Translation2d(), 0, false, false)),
+        //         new CommandIntakeStop(m_intake),
+        //         new CommandIndexStop(m_intake),
+        //         new CommandPivotStartPosition(m_SAT)));
             
         // driver.b().onTrue(new CommandSwerveDriveToNote(s_Swerve, m_GamePieceVision));
 
@@ -323,6 +330,7 @@ public class RobotContainer {
         operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
         operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
         operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
+
         // operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
 
         operator.x()
@@ -463,8 +471,6 @@ public class RobotContainer {
         operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
         operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
 
-        operator.a().whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesLeft(operator.getLeftY())))
-        .whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesRight(operator.getRightY())));
 
         driver.pov(0).onTrue(new CommandIndexStart(m_intake));
         driver.pov(180).onTrue(new CommandIndexStop(m_intake));
@@ -474,6 +480,11 @@ public class RobotContainer {
 
         driver.leftBumper().onTrue(new CommandShooterStart(m_SAT));
         driver.rightBumper().onTrue(new CommandShooterStop(m_SAT));
+
+        operator.b().whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesLeft(operator.getLeftY())))
+        .whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesRight(operator.getRightY())));
+
+        operator.a().whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSides(operator.getLeftY())));
 
         // operator.start()
         //     .onTrue(new CommandChangeScoringMode(ScoringMode.AMP));

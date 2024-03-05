@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
 import frc.robot.sim.PhysicsSim;
+import frc.lib.util.COTSTalonFXSwerveConstants.SDS.MK3.driveRatios;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -29,6 +30,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -44,9 +46,10 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     private Field2d field = new Field2d();
-    public static SwerveDrivePoseEstimator poseEstimator;
+    public SwerveDrivePoseEstimator poseEstimator;
     private final StructArrayPublisher<SwerveModuleState> publisher;
     Field2d poseEstimateField2d = new Field2d();
+    Pose2d tempPose;
 
 
     public Swerve() {
@@ -215,6 +218,9 @@ public class Swerve extends SubsystemBase {
         poseEstimateField2d.setRobotPose(poseEstimator.getEstimatedPosition());
         // SmartDashboard.putData("s_Swerve", this);
         SmartDashboard.putData("Estimated Pose", poseEstimateField2d);
+        SmartDashboard.putNumber("Estimated pose x", poseEstimator.getEstimatedPosition().getTranslation().getX());
+        SmartDashboard.putNumber("Estimated pose y", poseEstimator.getEstimatedPosition().getTranslation().getY());
+        SmartDashboard.putNumber("Estimated pose yaw", poseEstimator.getEstimatedPosition().getTranslation().getAngle().getDegrees());
         SmartDashboard.putNumber("heading", poseEstimator.getEstimatedPosition().getRotation().getDegrees());
         publisher.set(getModuleStates());
     }
@@ -253,7 +259,9 @@ public class Swerve extends SubsystemBase {
      */
     public Command driveToPose(DoubleSupplier tx, DoubleSupplier ty, DoubleSupplier yaw)
     {
-        Pose2d pose = new Pose2d(tx.getAsDouble(), ty.getAsDouble(), new Rotation2d(yaw.getAsDouble()));
+        tempPose = new Pose2d(tx.getAsDouble(), ty.getAsDouble(), Rotation2d.fromDegrees(yaw.getAsDouble()));
+
+        SmartDashboard.putString("Target Pose x", tempPose.toString());
         // Create the constraints to use while pathfinding
         PathConstraints constraints = new PathConstraints(
             Constants.AutoConstants.kMaxSpeedMetersPerSecond, 
@@ -263,11 +271,51 @@ public class Swerve extends SubsystemBase {
 
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
         return AutoBuilder.pathfindToPose(
-            pose,
+            tempPose,
             constraints,
             0.0, // Goal end velocity in meters/sec
             0.0); // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.                     
     }
+
+    public Command rotateToPose(double yaw)
+    {
+        tempPose = new Pose2d(this.getPose().getX(), this.getPose().getY(), Rotation2d.fromDegrees(yaw));
+
+        SmartDashboard.putString("Target Pose x", yaw + "");
+        // Create the constraints to use while pathfinding
+        PathConstraints constraints = new PathConstraints(
+            Constants.AutoConstants.kMaxSpeedMetersPerSecond, 
+            Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared,
+            Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond,
+            Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared);
+
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        return AutoBuilder.pathfindToPose(
+            tempPose,
+            constraints,
+            0.0, // Goal end velocity in meters/sec
+            0.0); // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.                     
+    }
+
+    // public Command rotateToPose(double yaw)
+    // {
+    //     Pose2d pose = new Pose2d(this.getPose().getTranslation(), Rotation2d.fromDegrees(yaw));
+
+    //     SmartDashboard.putString("Target Pose x", pose.toString());
+    //     // Create the constraints to use while pathfinding
+    //     PathConstraints constraints = new PathConstraints(
+    //         Constants.AutoConstants.kMaxSpeedMetersPerSecond, 
+    //         Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared,
+    //         Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond,
+    //         Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared);
+
+    //     // Since AutoBuilder is configured, we can use it to build pathfinding commands
+    //     return AutoBuilder.pathfindToPose(
+    //         pose,
+    //         constraints,
+    //         0.0, // Goal end velocity in meters/sec
+    //         0.0); // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.                     
+    // }
   
     // USE FOR TESTING ALSO
     @Override

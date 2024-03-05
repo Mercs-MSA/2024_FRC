@@ -226,8 +226,8 @@ public class SAT extends SubsystemBase {
 
   // This is for test purposes only
   public void pivotGoToPositionIncrement(double increment) {
-    pivotTargetPose = pivotTargetPose + (increment);
-    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(this.pivotMotorPos + pivotTargetPose));
+    // pivotTargetPose = pivotTargetPose + (increment);
+    satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(this.pivotMotorPos + increment*6));
   }
 
   public void shootNote(double speed){

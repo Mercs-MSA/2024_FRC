@@ -50,6 +50,10 @@ public class CustomGamePieceVision extends SubsystemBase{
             SmartDashboard.putNumber("Game Piece Yaw", gamePieceYaw);
             SmartDashboard.putNumber("Game Piece Yaw - Offset", gamePieceYaw - Constants.Vision.gamePieceYawOffset);
             SmartDashboard.putNumber("Game Piece Dist", gamePieceDist);
+            SmartDashboard.putNumber("Note Bounding Box Width", convertDistanceToWidth());
+            SmartDashboard.putNumber("Note Width Angle", convertWidthToAngle());  
+            SmartDashboard.putNumber("Note estimated distance from Pupil to center", convertNoteAngleToDistance());     
+            SmartDashboard.putNumber("Calculated Robot Command Yaw (new version)", calculateGamePieceHeading2());           
             SmartDashboard.putNumber("Calculated Robot Command Yaw", calculateGamePieceHeading());
             Constants.Vision.isNoteDetected = (gamePieceYaw != 999.0);
         }
@@ -91,6 +95,39 @@ public class CustomGamePieceVision extends SubsystemBase{
         double trueHypotenuse = Math.sin(groundNoteAngle) * gamePieceDist;
         double xFromCenter = (trueHypotenuse * Math.sin(Math.toRadians(gamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
         double yFromCenter = (trueHypotenuse * Math.cos(Math.toRadians(gamePieceYaw)) - Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
-        return Math.atan(yFromCenter/xFromCenter);
+        return Math.toDegrees(Math.atan(yFromCenter/xFromCenter));
+    }
+
+     /**
+     * Another Try at this...    1280 x 720 camera; 110 degree FOV, so horizontal IFOV is ~ 0.086 degrees per pixel.
+     */
+    public double calculateGamePieceHeading2() {
+        double groundNoteAngle = Math.acos(Constants.Vision.gamePieceCameraInfo.robotToCamera.getZ()/convertNoteAngleToDistance()); //angle of gamepiece distance and height of camera
+        double trueHypotenuse = Math.sin(groundNoteAngle) * convertNoteAngleToDistance();
+        double xFromCenter = (trueHypotenuse * Math.sin(Math.toRadians(gamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
+        double yFromCenter = (trueHypotenuse * Math.cos(Math.toRadians(gamePieceYaw)) - Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
+        return Math.toDegrees(Math.atan(yFromCenter/xFromCenter));
+    }
+
+     /**
+     * Convert the game piece camera distance info from gamevision back into the bounding box width
+     */
+    public double convertDistanceToWidth() {
+        return 1/(14*288.14*gamePieceDist);
+    }
+
+     /**
+     * Convert the game piece camera bounding box width to an angular extent in degrees
+     */
+    public double convertWidthToAngle() {
+        return convertDistanceToWidth()*0.0859375;
+    }
+
+     /**
+     * Determine the Note Distance based on its angular extent in the FOV
+     * Split in into 2 right triangles and you can calculate the distance using width angle divided by 2, and known Note wisth of 14 inches (divide by 2)
+     */
+    public double convertNoteAngleToDistance() {
+        return 7.0/Math.tan(convertWidthToAngle());
     }
 }

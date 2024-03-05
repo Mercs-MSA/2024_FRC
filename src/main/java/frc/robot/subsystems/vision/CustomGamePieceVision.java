@@ -49,9 +49,9 @@ public class CustomGamePieceVision extends SubsystemBase{
             SmartDashboard.putNumber("Game Piece Yaw", gamePieceYaw);
             SmartDashboard.putNumber("Game Piece Yaw - Offset", gamePieceYaw - Constants.Vision.gamePieceYawOffset);
             SmartDashboard.putNumber("Game Piece Dist", gamePieceDist);
+            SmartDashboard.putNumber("Calculated Robot Command Yaw", calculateGamePieceHeading());
             Constants.Vision.isNoteDetected = (gamePieceYaw != 999.0);
         }
-        
     }
 
     /**
@@ -86,8 +86,11 @@ public class CustomGamePieceVision extends SubsystemBase{
      * Output is robot rotation in radians (relative to the current heading) to turn towards the target
      */
     public double calculateGamePieceHeading() {
-        double xt = Math.sin(gamePieceYaw) * gamePieceDist - Constants.Vision.gamePieceCameraInfo.robotToCamera.getX();  //units are in inches
-        return Math.atan(xt/(gamePieceDist - Constants.Vision.gamePieceCameraInfo.robotToCamera.getY())); // units in radians
+        double groundNoteAngle = Math.acos(Constants.Vision.gamePieceCameraInfo.robotToCamera.getZ()/gamePieceDist); //angle of gamepiece distance and height of camera
+        double trueHypotenuse = Math.sin(groundNoteAngle) * gamePieceDist;
+        double xFromCenter = (trueHypotenuse * Math.sin(Math.toRadians(gamePieceYaw)) - Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
+        double yFromCenter = (trueHypotenuse * Math.cos(Math.toRadians(gamePieceYaw)) - Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
+        return Math.atan(yFromCenter/xFromCenter);
     }
 
 

@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.CommandShooterStart;
 import frc.robot.commands.CommandShooterStop;
 import frc.robot.commands.CommandSwerveDriveToNote;
+import frc.robot.commands.CommandSwerveToPoseProxy;
 import frc.robot.commands.CommandSwerveTurnToNote;
 import frc.robot.commands.CommandChangeRobotHasNote;
 import frc.robot.commands.CommandChangeScoringMode;
@@ -210,9 +211,9 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        // driverControls();
+        driverControls();
         // operatorControls();
-        manualTesting();
+        // manualTesting();
     }
 
     public void driverControls(){
@@ -257,24 +258,29 @@ public class RobotContainer {
         //     ));
 
         driver.a().onTrue( //podium blue
-            s_Swerve.driveToPose(
+            new CommandSwerveToPoseProxy(
+                s_Swerve,
                 () -> 2.977,
                 () -> 4.082,
                 () -> -32.61)
             );
 
         driver.b().onTrue( //speaker center blue
-            s_Swerve.driveToPose(
+            new CommandSwerveToPoseProxy(
+                s_Swerve,
                 () -> 1.38,
                 () -> 5.54,
                 () -> 0)
             );
 
-
-        // driver.a().whileTrue(
-        //     s_Swerve.rotateToPose(45))
-        //     .onFalse(new InstantCommand(() -> s_Swerve.drive(new Translation2d(), 0, false, false)));
-
+        driver.y().onTrue(
+            new CommandSwerveToPoseProxy(
+                s_Swerve,
+                () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getX(),
+                () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getY(),
+                () -> 90
+            )
+        );
 
         // driver.a()
         // .whileTrue(

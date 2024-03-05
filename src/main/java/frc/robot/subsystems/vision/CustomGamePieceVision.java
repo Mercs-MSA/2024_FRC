@@ -88,12 +88,8 @@ public class CustomGamePieceVision extends SubsystemBase{
     public double calculateGamePieceHeading() {
         double groundNoteAngle = Math.acos(Constants.Vision.gamePieceCameraInfo.robotToCamera.getZ()/gamePieceDist); //angle of gamepiece distance and height of camera
         double trueHypotenuse = Math.sin(groundNoteAngle) * gamePieceDist;
-        double xFromCenter = (trueHypotenuse * Math.sin(Math.toRadians(gamePieceYaw)) - Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
+        double xFromCenter = (trueHypotenuse * Math.sin(Math.toRadians(gamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
         double yFromCenter = (trueHypotenuse * Math.cos(Math.toRadians(gamePieceYaw)) - Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
         return Math.atan(yFromCenter/xFromCenter);
     }
-
-
-
-
 }

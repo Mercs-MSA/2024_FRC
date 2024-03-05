@@ -8,6 +8,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Swerve;
 
 public class GamePieceVision extends SubsystemBase{
     private String cameraName;
@@ -82,6 +83,12 @@ public class GamePieceVision extends SubsystemBase{
      */
     public double getGamePieceAreaPercent(){
         return gamePieceAreaPercent;
+    }
+
+    public double calculateGamePieceHeading(){
+        double deltaYaw = 0.513*(getGamePieceYaw()) + 9.08;
+        double currentRotation = Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees();
+        return currentRotation + deltaYaw;
     }
 
 }

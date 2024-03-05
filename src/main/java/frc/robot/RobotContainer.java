@@ -278,7 +278,7 @@ public class RobotContainer {
                 s_Swerve,
                 () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getX(),
                 () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getY(),
-                () -> 90
+                () -> m_GamePieceVision.calculateGamePieceHeading()
             )
         );
 

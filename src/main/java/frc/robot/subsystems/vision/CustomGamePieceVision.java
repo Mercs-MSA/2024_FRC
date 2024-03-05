@@ -93,4 +93,8 @@ public class CustomGamePieceVision extends SubsystemBase{
         double yFromCenter = (trueHypotenuse * Math.cos(Math.toRadians(gamePieceYaw)) - Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
         return Math.atan(yFromCenter/xFromCenter);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 49c15ea78acebd0a44ca5f18d3195df95fa0ef71

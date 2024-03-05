@@ -120,7 +120,7 @@ public class CustomGamePieceVision extends SubsystemBase{
      * Convert the game piece camera bounding box width to an angular extent in degrees
      */
     public double convertWidthToAngle() {
-        return convertDistanceToWidth()*0.0859375;
+        return convertDistanceToWidth()*0.1328125;
     }
 
      /**

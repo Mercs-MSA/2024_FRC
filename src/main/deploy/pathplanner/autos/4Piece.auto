@@ -14,12 +14,6 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TwoPiecePart1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
             "pathName": "FourPiece"
           }
         },
@@ -32,7 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Taxi"
+            "pathName": "TwoPiecePart1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FivePiece"
           }
         }
       ]

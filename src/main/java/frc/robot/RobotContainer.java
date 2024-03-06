@@ -285,7 +285,7 @@ public class RobotContainer {
         //         s_Swerve,
         //         () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getX(),
         //         () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getY(),
-        //         () -> m_GamePieceVision.calculateGamePieceHeading2()
+        //         () -> m_GamePieceVision.calculateGamePieceHeading()
         //     )
         // );
 

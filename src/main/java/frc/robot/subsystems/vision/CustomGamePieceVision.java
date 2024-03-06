@@ -92,11 +92,11 @@ public class CustomGamePieceVision extends SubsystemBase{
      * Output is robot rotation in radians (relative to the current heading) to turn towards the target
      */
     public double calculateGamePieceHeading() {
-        double xFromCenter = -1*(gamePieceDist * Math.sin(Math.toRadians(gamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
-        double yFromCenter = (gamePieceDist * Math.cos(Math.toRadians(gamePieceYaw)) - Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
+        double xFromCenter = -1*(gamePieceDist * Math.sin(Math.toRadians(gamePieceYaw)) + Constants.Vision.gamePieceCamera.robotToCamera.getX());
+        double yFromCenter = (gamePieceDist * Math.cos(Math.toRadians(gamePieceYaw)) + Constants.Vision.gamePieceCamera.robotToCamera.getY());
         SmartDashboard.putNumber("xFromCenter", xFromCenter);
         SmartDashboard.putNumber("yFromCenter", yFromCenter); 
-        return Math.toDegrees(Math.atan(yFromCenter/xFromCenter));
+        return Math.toDegrees(Math.atan(yFromCenter/xFromCenter))-60;
     }
 
      /**

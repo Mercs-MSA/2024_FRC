@@ -16,12 +16,28 @@
     },
     {
       "anchor": {
-        "x": 2.5,
-        "y": 4.1515043393223365
+        "x": 2.507474944275699,
+        "y": 8.166563791316241
       },
       "prevControl": {
-        "x": 2.498713029182424,
-        "y": 4.174720847488571
+        "x": 2.0694878418248956,
+        "y": 8.194910570769311
+      },
+      "nextControl": {
+        "x": 2.9454620467265027,
+        "y": 8.13821701186317
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.8692705558877556,
+        "y": 4.085890168886819
+      },
+      "prevControl": {
+        "x": 2.8679835850701796,
+        "y": 4.109106677053053
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +49,7 @@
   "eventMarkers": [
     {
       "name": "Start Intake",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,8 +73,8 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
-    "rotateFast": false
+    "rotation": 0.0,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": null,

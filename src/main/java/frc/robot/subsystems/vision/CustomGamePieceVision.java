@@ -116,7 +116,7 @@ public class CustomGamePieceVision extends SubsystemBase{
 
     public double calculateGamePieceHeading3() {
         double xFromCenter = (convertBoxWidthToDistance2() * Math.sin(Math.toRadians(-1*gamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
-        double yFromCenter = (convertBoxWidthToDistance2() * Math.cos(Math.toRadians(-1*xFromCentergamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
+        double yFromCenter = (convertBoxWidthToDistance2() * Math.cos(Math.toRadians(-1*gamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
         return Math.toDegrees(Math.atan(yFromCenter/xFromCenter));
     }
 

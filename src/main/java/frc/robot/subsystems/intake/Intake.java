@@ -59,7 +59,7 @@ public class Intake extends SubsystemBase {
     setLowerSensorDetectsNote(true);
   };
 
-  private AsynchronousInterrupt asynchronousInterrupt = new AsynchronousInterrupt(intakeSensor1, callback);
+  private AsynchronousInterrupt asynchronousInterrupt = new AsynchronousInterrupt(intakeSensor3, callback);
 
   /** Creates a new intake. */
   public Intake() {

@@ -113,7 +113,7 @@ public class CustomGamePieceVision extends SubsystemBase{
      * Convert the game piece camera distance info from gamevision back into the bounding box width
      */
     public double convertDistanceToWidth() {
-        return 1/(14*288.14*gamePieceDist);
+        return 14*288.14/(gamePieceDist);
     }
 
      /**
@@ -128,6 +128,6 @@ public class CustomGamePieceVision extends SubsystemBase{
      * Split in into 2 right triangles and you can calculate the distance using width angle divided by 2, and known Note wisth of 14 inches (divide by 2)
      */
     public double convertNoteAngleToDistance() {
-        return 7.0/Math.tan(convertWidthToAngle());
+        return 7.0/Math.tan(Units.degreesToRadians(convertWidthToAngle()));
     }
 }

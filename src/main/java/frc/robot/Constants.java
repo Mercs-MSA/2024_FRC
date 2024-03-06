@@ -15,6 +15,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Unit;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
+import frc.robot.subsystems.SAT.SAT;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
@@ -244,8 +245,8 @@ public final class Constants {
         public static final int SAT_OBJECTDETECTOR_SENSOR_ID = 1;
         
         public static class SUBWOOFER{
-            public static final double motor1_base = -13.0;
-            public static final double motor2_base = -11.4;
+            public static final double motor1_base = -6.571777;
+            public static final double motor2_base = -7.906;
             public static final double pivot = 0.0;
             public static final double shooterSpeed = -52.5;
         }
@@ -274,7 +275,7 @@ public final class Constants {
         public static class PODIUM{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = -13;
+            public static final double pivot = -15;
             public static final double shooterSpeed = -52.5;
         }
 
@@ -288,19 +289,19 @@ public final class Constants {
         public static class HANDOFF{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = -18.55;
+            public static final double pivot = 10.142;
             public static final double shooterSpeed = 0;
         }
 
         public static class START{
-            public static final double motor1_base = -0.2045;
-            public static final double motor2_base = -1.831;
-            public static final double pivot = 0.0;
+            public static final double motor1_base = 0.334;
+            public static final double motor2_base = -0.334;
+            public static final double pivot = 16.249;
             public static final double shooterSpeed = 0;
         }
 
         public static final double PIVOT_MECHANICALLY_REQUIRED_POS = 7.8;
-        public static final double MOTOR_TOLERANCE = 0.1;
+        public static final double MOTOR_TOLERANCE = 0.6;
 
         public static final double SHOOTER_SPEED = -50;
         public static final double kShooterSpeedTolerance = 10.0;
@@ -407,7 +408,7 @@ public final class Constants {
         
         public static class aprilTagFrontRight {
             public static String camera = "AprilTagFrontRight";
-            public static Transform3d robotToCamera = new Transform3d(0.2269744, -0.2446782, 0.3039618, new Rotation3d(0, -0.785398, -0.785398));
+            public static Transform3d robotToCamera = new Transform3d(0.2794, -0.2286, 0.224155, new Rotation3d(0, -0.785398, -0.785398));
         }
 
         public static double getRobotHeading(double gamePieceYaw){

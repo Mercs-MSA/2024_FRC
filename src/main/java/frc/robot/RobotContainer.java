@@ -37,6 +37,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.SAT.SAT;
 import frc.robot.subsystems.climber.climber;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.vision.ApriltagVision;
 // import frc.robot.subsystems.vision.ApriltagVision;
 import frc.robot.subsystems.vision.CustomGamePieceVision;
 import frc.robot.Constants.IntakeConstants;
@@ -177,17 +178,21 @@ public class RobotContainer {
                     new CommandPivotStartPosition(m_SAT)
                 ));
             put("Intake Note", new SequentialCommandGroup(
-                    new CommandPivotHandoffPosition(m_SAT),
-                    new CommandIntakeStart(m_intake),
-                    new CommandIndexStart(m_intake),
-                    new CommandIntakeWaitForNote(m_intake),
-                    new CommandChangeRobotHasNote(true),
-                    // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
-                    new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
-                    new CommandIntakeStop(m_intake),
-                    new CommandIndexStop(m_intake),
-                    new CommandPivotStartPosition(m_SAT)
-                ));
+                                new CommandBaseStartPosition(m_SAT),
+                                // new CommandPivotStartPosition(m_SAT),
+                                new CommandIndexStart(m_intake),
+                                new CommandPivotHandoffPosition(m_SAT),
+                                new CommandIntakeStart(m_intake),
+                                new CommandIntakeWaitForNote(m_intake),
+                                new CommandChangeRobotHasNote(true),
+                                new WaitCommand(0.65),
+                                new CommandIndexStop(m_intake),
+                                // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
+                                new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
+                                new CommandIntakeStop(m_intake),
+                                new CommandPivotStartPosition(m_SAT)
+
+                            ));
         }  
     };
 
@@ -211,9 +216,9 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        driverControls();
+        // driverControls();
         // operatorControls();
-        // manualTesting();
+        manualTesting();
     }
 
     public void driverControls(){
@@ -257,30 +262,30 @@ public class RobotContainer {
         //     new PrintCommand("this finished")
         //     ));
 
-        driver.a().onTrue( //podium blue
-            new CommandSwerveToPoseProxy(
-                s_Swerve,
-                () -> 2.977,
-                () -> 4.082,
-                () -> -32.61)
-            );
+        // driver.a().onTrue( //podium blue
+        //     new CommandSwerveToPoseProxy(
+        //         s_Swerve,
+        //         () -> 2.977,
+        //         () -> 4.082,
+        //         () -> -32.61)
+        //     );
 
-        driver.b().onTrue( //speaker center blue
-            new CommandSwerveToPoseProxy(
-                s_Swerve,
-                () -> 1.38,
-                () -> 5.54,
-                () -> 0)
-            );
+        // driver.b().onTrue( //speaker center blue
+        //     new CommandSwerveToPoseProxy(
+        //         s_Swerve,
+        //         () -> 1.38,
+        //         () -> 5.54,
+        //         () -> 0)
+        //     );
 
-        driver.y().onTrue(
-            new CommandSwerveToPoseProxy(
-                s_Swerve,
-                () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getX(),
-                () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getY(),
-                () -> m_GamePieceVision.calculateGamePieceHeading()
-            )
-        );
+        // driver.y().onTrue(
+        //     new CommandSwerveToPoseProxy(
+        //         s_Swerve,
+        //         () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getX(),
+        //         () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getY(),
+        //         () -> m_GamePieceVision.calculateGamePieceHeading2()
+        //     )
+        // );
 
         // driver.a()
         // .whileTrue(
@@ -300,32 +305,33 @@ public class RobotContainer {
                 new SequentialCommandGroup(
                     new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
                     new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
-                    new ConditionalCommand( // IF WE NEED TO SCORE AMP...
-                        new SequentialCommandGroup(
-                            new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
-                            new CommandBaseStageTwoPosition(m_SAT)
-                        ),
-                        new InstantCommand(), // if we're not scoring amp, do nothing
-                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
-                    ),
+                    // new ConditionalCommand( // IF WE NEED TO SCORE AMP...
+                    //     new SequentialCommandGroup(
+                    //         new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
+                    //         new CommandBaseStageTwoPosition(m_SAT)
+                    //     ),
+                    //     new InstantCommand(), // if we're not scoring amp, do nothing
+                    //     () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                    // ),
                     new CommandIndexMoveNoteToFiringPosition(m_intake),
                     new WaitCommand(0.1),
                     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
                     new CommandIndexStart(m_intake),
-                    new WaitCommand(0.3), // waiting for the note to leave robot
+                    new WaitCommand(3), // waiting for the note to leave robot
                     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
                         new CommandIndexStop(m_intake),
                         new CommandShooterStop(m_SAT)
                     ),
                     new CommandChangeRobotHasNote(false),
-                    new ConditionalCommand( // IF WE JUST SCORED AMP...
-                        new SequentialCommandGroup(
-                            new CommandBaseScoringPosition(m_SAT),
-                            new CommandPivotScoringPosition(m_SAT)  // A 2nd pivot rotation is needed
-                        ),
-                        new InstantCommand(), // if we're not scoring amp, do nothing
-                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
-                    ),
+                    // new ConditionalCommand( // IF WE JUST SCORED AMP...
+                    //     new SequentialCommandGroup(
+                    //         new CommandBaseScoringPosition(m_SAT),
+                    //         new CommandPivotScoringPosition(m_SAT)  // A 2nd pivot rotation is needed
+                    //     ),
+                    //     new InstantCommand(), // if we're not scoring amp, do nothing
+                    //     () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                    // ),
+                    new WaitCommand(3),
                     new CommandBaseStartPosition(m_SAT),
                     new CommandPivotStartPosition(m_SAT)
                 )
@@ -362,18 +368,19 @@ public class RobotContainer {
 
                             // if the intake system is off and you don't have a note, the system turns on
                             new SequentialCommandGroup(
+                                new CommandBaseStartPosition(m_SAT),
+                                // new CommandPivotStartPosition(m_SAT),
                                 new CommandIndexStart(m_intake),
                                 new CommandPivotHandoffPosition(m_SAT),
                                 new CommandIntakeStart(m_intake),
                                 new CommandIntakeWaitForNote(m_intake),
-                                // new CommandChangeRobotHasNote(true),
-                                // new WaitCommand(0.2),
-                                // new CommandIndexStop(m_intake),
-                                new CommandShooterStart(m_SAT)
+                                new CommandChangeRobotHasNote(true),
+                                new WaitCommand(0.65),
+                                new CommandIndexStop(m_intake),
                                 // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
-                                // new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
-                                // new CommandIntakeStop(m_intake),
-                                // new CommandPivotStartPosition(m_SAT),
+                                new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
+                                new CommandIntakeStop(m_intake),
+                                new CommandPivotStartPosition(m_SAT)
 
                             )
 

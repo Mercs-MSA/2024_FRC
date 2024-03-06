@@ -57,7 +57,7 @@ public class ApriltagVision extends SubsystemBase {
             mFrontRight = getBackLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mFrontRightAprilTagResult);
 
             if (mFrontRight.isPresent()){
-                Swerve.poseEstimator.addVisionMeasurement(mFrontRight.get().estimatedPose.toPose2d(), mFrontRightAprilTagResult.getTimestampSeconds());
+                Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mFrontRight.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mFrontRightAprilTagResult.getTimestampSeconds());
             }
 
         }
@@ -68,7 +68,7 @@ public class ApriltagVision extends SubsystemBase {
             mBackLeft = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
 
             if (mBackLeft.isPresent()){
-                Swerve.poseEstimator.addVisionMeasurement(mBackLeft.get().estimatedPose.toPose2d(), mBackLeftAprilTagResult.getTimestampSeconds());
+                Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds());
             }
 
         }

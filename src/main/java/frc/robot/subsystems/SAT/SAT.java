@@ -54,7 +54,7 @@ public class SAT extends SubsystemBase {
      */
     satBase1MotorConfigs = new TalonFXConfiguration();
     satBase1MotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    satBase1MotorConfigs.Slot0.kP = 1.0; // An error of 0.5 rotations results in 1.2 volts output
+    satBase1MotorConfigs.Slot0.kP = 2.0; // An error of 0.5 rotations results in 1.2 volts output
     satBase1MotorConfigs.Slot0.kD = 0; // A change of 1 rotation per second results in 0 volts output
     satBase1MotorConfigs.Slot0.kG = 0.0;
     satBase1MotorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;

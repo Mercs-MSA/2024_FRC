@@ -53,7 +53,7 @@ public class CustomGamePieceVision extends SubsystemBase{
             SmartDashboard.putNumber("Note Bounding Box Width", convertDistanceToWidth());
             SmartDashboard.putNumber("Note Width Angle", convertWidthToAngle());  
             SmartDashboard.putNumber("Note estimated distance from Pupil to center", convertNoteAngleToDistance());     
-            SmartDashboard.putNumber("Calculated Robot Command Yaw (new version)", calculateGamePieceHeading2());           
+            SmartDashboard.putNumber("Calculated Robot Command Yaw (new version)", calculateGamePieceHeading2());          
             SmartDashboard.putNumber("Calculated Robot Command Yaw", calculateGamePieceHeading());
             Constants.Vision.isNoteDetected = (gamePieceYaw != 999.0);
         }
@@ -93,8 +93,8 @@ public class CustomGamePieceVision extends SubsystemBase{
     public double calculateGamePieceHeading() {
         double groundNoteAngle = Math.acos(Constants.Vision.gamePieceCameraInfo.robotToCamera.getZ()/gamePieceDist); //angle of gamepiece distance and height of camera
         double trueHypotenuse = Math.sin(groundNoteAngle) * gamePieceDist;
-        double xFromCenter = (trueHypotenuse * Math.sin(Math.toRadians(gamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
-        double yFromCenter = (trueHypotenuse * Math.cos(Math.toRadians(gamePieceYaw)) - Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
+        double xFromCenter = -1*(gamePieceDist * Math.sin(Math.toRadians(gamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
+        double yFromCenter = (gamePieceDist * Math.cos(Math.toRadians(gamePieceYaw)) - Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
         return Math.toDegrees(Math.atan(yFromCenter/xFromCenter));
     }
 
@@ -107,6 +107,8 @@ public class CustomGamePieceVision extends SubsystemBase{
         double trueHypotenuse = Math.sin(groundNoteAngle) * convertNoteAngleToDistance();
         double xFromCenter = (trueHypotenuse * Math.sin(Math.toRadians(gamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
         double yFromCenter = (trueHypotenuse * Math.cos(Math.toRadians(gamePieceYaw)) - Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
+        SmartDashboard.putNumber("xFromCenter", xFromCenter);
+        SmartDashboard.putNumber("yFromCenter", yFromCenter); 
         return Math.toDegrees(Math.atan(yFromCenter/xFromCenter));
     }
 

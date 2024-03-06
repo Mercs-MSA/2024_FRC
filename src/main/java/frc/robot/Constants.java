@@ -289,14 +289,14 @@ public final class Constants {
         public static class HANDOFF{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = 10.142;
+            public static final double pivot = -6.5;
             public static final double shooterSpeed = 0;
         }
 
         public static class START{
             public static final double motor1_base = 0.334;
             public static final double motor2_base = -0.334;
-            public static final double pivot = 16.249;
+            public static final double pivot = -1.21;
             public static final double shooterSpeed = 0;
         }
 

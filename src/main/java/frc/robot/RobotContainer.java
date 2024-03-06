@@ -362,34 +362,31 @@ public class RobotContainer {
                     //         // this checks if we have a note
                     //         () -> IntakeConstants.kRobotHasNote == true
                     //     ),
-                    //    new ConditionalCommand(
-                            // if the intake system is off and you have a note, the system does nothing
-                    //        new InstantCommand(),
+                    //     new ConditionalCommand(
+                    //         // if the intake system is off and you have a note, the system does nothing
+                    //         new InstantCommand(),
 
                             // if the intake system is off and you don't have a note, the system turns on
                             new SequentialCommandGroup(
-                                new CommandBaseStartPosition(m_SAT),
-                                // new CommandPivotStartPosition(m_SAT),
                                 new CommandIndexStart(m_intake),
                                 new CommandPivotHandoffPosition(m_SAT),
                                 new CommandIntakeStart(m_intake),
                                 new CommandIntakeWaitForNote(m_intake),
                                 new CommandChangeRobotHasNote(true),
+                                // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
                                 new WaitCommand(0.65),
                                 new CommandIndexStop(m_intake),
-                                // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
-                                new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
                                 new CommandIntakeStop(m_intake),
                                 new CommandPivotStartPosition(m_SAT)
-
                             )
 
-                            // this checks if we have a note
-                    //        () -> IntakeConstants.kRobotHasNote == true
-                    //    ),
-                        // this checks if the intake system is on
-                    //    () -> m_intake.getIndexMotorSpeed() != 0
-                    );
+                    //         // this checks if we have a note
+                    //         () -> IntakeConstants.kRobotHasNote == true
+                    //     ),
+                    //     // this checks if the intake system is on
+                    //     () -> m_intake.getIndexMotorSpeed() != 0
+                    // )
+                );
 
             operator.b().onTrue(
                 new SequentialCommandGroup(

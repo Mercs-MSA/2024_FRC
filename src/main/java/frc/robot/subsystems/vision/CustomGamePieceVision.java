@@ -53,7 +53,8 @@ public class CustomGamePieceVision extends SubsystemBase{
             SmartDashboard.putNumber("Note Bounding Box Width", convertDistanceToWidth());
             SmartDashboard.putNumber("Note Width Angle", convertWidthToAngle());  
             SmartDashboard.putNumber("Note estimated distance from Pupil to center", convertNoteAngleToDistance());     
-            SmartDashboard.putNumber("Calculated Robot Command Yaw (new version)", calculateGamePieceHeading2());          
+            SmartDashboard.putNumber("Calculated Robot Command Yaw (new version)", calculateGamePieceHeading2());
+            SmartDashboard.putNumber("Calculated Robot Command Yaw (v3)", calculateGamePieceHeading3());     
             SmartDashboard.putNumber("Calculated Robot Command Yaw", calculateGamePieceHeading());
             Constants.Vision.isNoteDetected = (gamePieceYaw != 999.0);
         }
@@ -91,25 +92,39 @@ public class CustomGamePieceVision extends SubsystemBase{
      * Output is robot rotation in radians (relative to the current heading) to turn towards the target
      */
     public double calculateGamePieceHeading() {
-        double groundNoteAngle = Math.acos(Constants.Vision.gamePieceCameraInfo.robotToCamera.getZ()/gamePieceDist); //angle of gamepiece distance and height of camera
-        double trueHypotenuse = Math.sin(groundNoteAngle) * gamePieceDist;
         double xFromCenter = -1*(gamePieceDist * Math.sin(Math.toRadians(gamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
         double yFromCenter = (gamePieceDist * Math.cos(Math.toRadians(gamePieceYaw)) - Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
+        SmartDashboard.putNumber("xFromCenter", xFromCenter);
+        SmartDashboard.putNumber("yFromCenter", yFromCenter); 
         return Math.toDegrees(Math.atan(yFromCenter/xFromCenter));
     }
 
      /**
      * Another Try at this...    1280 x 720 camera; 110 degree FOV, so horizontal IFOV is ~ 0.086 degrees per pixel.
      * https://pyimagesearch.com/2015/01/19/find-distance-camera-objectmarker-using-python-opencv/
+     * 46" below had focal length of 345
+     * 44" below and left, had focal length of 370.9
+     * 
      */
     public double calculateGamePieceHeading2() {
         double groundNoteAngle = Math.acos(Constants.Vision.gamePieceCameraInfo.robotToCamera.getZ()/convertNoteAngleToDistance()); //angle of gamepiece distance and height of camera
         double trueHypotenuse = Math.sin(groundNoteAngle) * convertNoteAngleToDistance();
         double xFromCenter = (trueHypotenuse * Math.sin(Math.toRadians(gamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
         double yFromCenter = (trueHypotenuse * Math.cos(Math.toRadians(gamePieceYaw)) - Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
-        SmartDashboard.putNumber("xFromCenter", xFromCenter);
-        SmartDashboard.putNumber("yFromCenter", yFromCenter); 
         return Math.toDegrees(Math.atan(yFromCenter/xFromCenter));
+    }
+
+    public double calculateGamePieceHeading3() {
+        double xFromCenter = (convertBoxWidthToDistance2() * Math.sin(Math.toRadians(-1*gamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
+        double yFromCenter = (convertBoxWidthToDistance2() * Math.cos(Math.toRadians(-1*xFromCentergamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
+        return Math.toDegrees(Math.atan(yFromCenter/xFromCenter));
+    }
+
+     /**
+     * Convert the game piece camera bounding box into an estimated distance based on calculated focal length of 360
+     */
+    public double convertBoxWidthToDistance2() {
+        return (360*14/(14*288.14/(gamePieceDist)));
     }
 
      /**

@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -13,6 +15,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Unit;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 import frc.robot.subsystems.SAT.SAT;
@@ -391,6 +395,8 @@ public final class Constants {
     public static class Vision {
         public static boolean isNoteDetected = false;
 
+        public static boolean isRedAlliance = true;
+
         public static double gamePieceYawOffset = -56.088;
 
         public static class gamePieceCameraInfo {
@@ -419,6 +425,43 @@ public final class Constants {
         public static double getRobotHeading(double gamePieceYaw){
             return ((gamePieceYaw*0.501) + 11.3);
         }
+
+        public static class Sub{
+            public static Pose2d bluePose = new Pose2d(new Translation2d(1.38, 5.54), Rotation2d.fromDegrees(0));
+            public static Pose2d redPose = convertToRedSide(bluePose);
+        }
+
+        public static class Podium{
+            public static Pose2d bluePose = new Pose2d(new Translation2d(2.977, 4.082), Rotation2d.fromDegrees(-32.61));
+            public static Pose2d redPose = convertToRedSide(bluePose);
+        }
+
+        public static double fieldWidth = 16.541;
+        public static double fieldHeight = 8.211;
+
+        public static final Pose2d convertToRedSide(Pose2d pose) {
+            return new Pose2d(fieldWidth - pose.getX(), pose.getY(), Rotation2d.fromDegrees(180).minus(pose.getRotation()));
+
+        }
+
+        public static Pose2d getPose(String a){
+            a = a.toLowerCase();
+            if (a == "sub"){
+                if (isRedAlliance){
+                    return Sub.redPose;
+                }
+                return Sub.bluePose;
+            }
+            else if (a == "podium"){
+                if (isRedAlliance){
+                    return Sub.redPose;
+                }
+                return Sub.bluePose;
+            }
+
+            return null;
+        }
+        
     }
 
     public static final class State {

@@ -92,6 +92,7 @@ public class Swerve extends SubsystemBase {
                this // Reference to this subsystem to set requirements
            );
 
+
         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), getPose());
         // Set up custom logging to add the current path to a field 2d widget
         PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));

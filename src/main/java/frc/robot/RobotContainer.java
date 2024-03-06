@@ -216,13 +216,15 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        // driverControls();
-        // operatorControls();
-        manualTesting();
+        driverControls();
+        operatorControls();
+        // manualTesting();
     }
 
     public void driverControls(){
         driver.start().and(driver.back()).onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
+
+
 
         // driver.leftBumper().onTrue(new CommandBaseStartPosition(m_SAT));
         // driver.leftBumper().onTrue(new InstantCommand(() -> m_intake.reverseIntakeMotor()));
@@ -262,20 +264,20 @@ public class RobotContainer {
         //     new PrintCommand("this finished")
         //     ));
 
-        // driver.a().onTrue( //podium blue
+        // driver.a().onTrue( //podium 
         //     new CommandSwerveToPoseProxy(
         //         s_Swerve,
-        //         () -> 2.977,
-        //         () -> 4.082,
-        //         () -> -32.61)
+        //         () -> Constants.Vision.getPose("podium").getX(),
+        //         () -> Constants.Vision.getPose("podium").getY(),
+        //         () -> Constants.Vision.getPose("podium").getRotation().getDegrees())
         //     );
 
-        // driver.b().onTrue( //speaker center blue
+        // driver.b().onTrue( //speaker center 
         //     new CommandSwerveToPoseProxy(
         //         s_Swerve,
-        //         () -> 1.38,
-        //         () -> 5.54,
-        //         () -> 0)
+        //         () -> Constants.Vision.getPose("sub").getX(),
+        //         () -> Constants.Vision.getPose("sub").getY(),
+        //         () -> Constants.Vision.getPose("sub").getRotation().getDegrees())
         //     );
 
         // driver.y().onTrue(

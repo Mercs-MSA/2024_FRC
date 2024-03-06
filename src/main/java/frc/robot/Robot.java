@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -21,6 +22,8 @@ import frc.robot.Constants.Vision.aprilTagBackLeft;
 import frc.robot.subsystems.climber.climber;
 import frc.robot.subsystems.SAT.SAT;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -50,6 +53,10 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer.configureButtonBindings();
     Constants.State.setState("IDLE");
+    Optional<Alliance> alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      Constants.Vision.isRedAlliance = (alliance.get() == DriverStation.Alliance.Red);
+    }
   }
 
   /**

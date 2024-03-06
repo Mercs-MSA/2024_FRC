@@ -53,7 +53,8 @@ public class CustomGamePieceVision extends SubsystemBase{
             SmartDashboard.putNumber("Note Bounding Box Width", convertDistanceToWidth());
             SmartDashboard.putNumber("Note Width Angle", convertWidthToAngle());  
             SmartDashboard.putNumber("Note estimated distance from Pupil to center", convertNoteAngleToDistance());     
-            SmartDashboard.putNumber("Calculated Robot Command Yaw (new version)", calculateGamePieceHeading2());          
+            SmartDashboard.putNumber("Calculated Robot Command Yaw (new version)", calculateGamePieceHeading2());
+            SmartDashboard.putNumber("Calculated Robot Command Yaw (v3)", calculateGamePieceHeading3());     
             SmartDashboard.putNumber("Calculated Robot Command Yaw", calculateGamePieceHeading());
             Constants.Vision.isNoteDetected = (gamePieceYaw != 999.0);
         }
@@ -114,8 +115,8 @@ public class CustomGamePieceVision extends SubsystemBase{
     }
 
     public double calculateGamePieceHeading3() {
-        double xFromCenter = (convertBoxWidthToDistance2() * Math.sin(Math.toRadians(gamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
-        double yFromCenter = (convertBoxWidthToDistance2() * Math.cos(Math.toRadians(gamePieceYaw)) - Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
+        double xFromCenter = (convertBoxWidthToDistance2() * Math.sin(Math.toRadians(-1*gamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getX());
+        double yFromCenter = (convertBoxWidthToDistance2() * Math.cos(Math.toRadians(-1*xFromCentergamePieceYaw)) + Constants.Vision.gamePieceCameraInfo.robotToCamera.getY());
         return Math.toDegrees(Math.atan(yFromCenter/xFromCenter));
     }
 

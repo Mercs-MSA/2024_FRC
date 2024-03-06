@@ -118,9 +118,10 @@ public class CustomGamePieceVision extends SubsystemBase{
 
      /**
      * Convert the game piece camera bounding box width to an angular extent in degrees
+     * Angle of view = (180/π) × 2 × aTan(Image size / (2 × Focal length × (Magnification + 1))),
      */
     public double convertWidthToAngle() {
-        return convertDistanceToWidth()*0.0859375;
+        return convertDistanceToWidth()*0.058333;
     }
 
      /**
@@ -128,6 +129,6 @@ public class CustomGamePieceVision extends SubsystemBase{
      * Split in into 2 right triangles and you can calculate the distance using width angle divided by 2, and known Note wisth of 14 inches (divide by 2)
      */
     public double convertNoteAngleToDistance() {
-        return 7.0/Math.tan(Units.degreesToRadians(convertWidthToAngle()));
+        return 7.0/Math.tan(0.5*Units.degreesToRadians(convertWidthToAngle()));
     }
 }

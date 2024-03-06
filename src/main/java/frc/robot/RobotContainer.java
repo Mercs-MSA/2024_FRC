@@ -52,8 +52,8 @@ import frc.robot.Constants.ScoringConstants.ScoringMode;
 public class RobotContainer {
     /* Controllers */
     public final CommandXboxController driver = new CommandXboxController(0);
-    public final CommandXboxController 
-    operator = new CommandXboxController(1);
+    public final CommandXboxController operator = new CommandXboxController(1);
+    public final CommandXboxController tester = new CommandXboxController(2);
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -445,9 +445,6 @@ public class RobotContainer {
         //         // this checks if the intake system is on
         //         () -> m_intake.getIndexMotorSpeed() != 0
         //     ));
-
-
-
         
 
         // operator.y()
@@ -518,7 +515,41 @@ public class RobotContainer {
          * 8. left bumper
          * 9. right bumper
          */ 
+    }
 
+    public void pitTestControls(){
+        //swerve
+        s_Swerve.setDefaultCommand(
+            new TeleopSwerve(
+                s_Swerve, 
+                () -> -tester.getLeftY(), 
+                () -> -tester.getLeftX(), 
+                () -> -tester.getRightX(), 
+                () -> false // just hardcoded field centric... could make this a button if we want
+            )
+        );
+
+        //outake
+        tester.a().and(tester.pov(0).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(0.25), m_SAT)));
+        tester.a().and(tester.pov(180).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(-0.25), m_SAT)));
+        tester.a().and(tester.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT)));
+        tester.a().and(tester.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT)));
+        
+        tester.leftBumper().onTrue(new CommandShooterStart(m_SAT));
+        tester.rightBumper().onTrue(new CommandShooterStop(m_SAT));
+
+        //intake
+        tester.b().and(tester.pov(0).onTrue(new CommandIndexStart(m_intake)));
+        tester.b().and(tester.pov(180).onTrue(new CommandIndexStop(m_intake)));
+
+        tester.b().and(tester.pov(90).onTrue(new CommandIntakeStart(m_intake)));
+        tester.b().and(tester.pov(270).onTrue(new CommandIntakeStop(m_intake)));
+
+        //climber
+        tester.x().whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesLeft(operator.getLeftY())))
+        .whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesRight(operator.getRightY())));
+
+        tester.y().whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSides(operator.getLeftY())));
     }
 
     public void operatorTesting(){

@@ -100,6 +100,7 @@ public class CustomGamePieceVision extends SubsystemBase{
 
      /**
      * Another Try at this...    1280 x 720 camera; 110 degree FOV, so horizontal IFOV is ~ 0.086 degrees per pixel.
+     * https://pyimagesearch.com/2015/01/19/find-distance-camera-objectmarker-using-python-opencv/
      */
     public double calculateGamePieceHeading2() {
         double groundNoteAngle = Math.acos(Constants.Vision.gamePieceCameraInfo.robotToCamera.getZ()/convertNoteAngleToDistance()); //angle of gamepiece distance and height of camera

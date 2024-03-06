@@ -58,18 +58,6 @@
           "data": {
             "pathName": "3PieceLeft"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score podium note"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
         }
       ]
     }

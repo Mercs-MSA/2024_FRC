@@ -48,21 +48,9 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "3PieceBase"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score podium note"
           }
         }
       ]

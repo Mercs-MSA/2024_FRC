@@ -185,7 +185,7 @@ public class RobotContainer {
                                 new CommandIntakeStart(m_intake),
                                 new CommandIntakeWaitForNote(m_intake),
                                 new CommandChangeRobotHasNote(true),
-                                new WaitCommand(0.65),
+                                new WaitCommand(0.35),
                                 new CommandIndexStop(m_intake),
                                 // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
                                 new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did

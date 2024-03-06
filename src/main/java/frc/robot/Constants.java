@@ -403,12 +403,17 @@ public final class Constants {
 
         public static class aprilTagBackLeft {
             public static String camera = "AprilTagBackLeft";
-            public static Transform3d robotToCamera = new Transform3d(-0.1820926, 0.2952496, 0.3039618, new Rotation3d(0, 0.785398, -0.785398));
+            public static Transform3d robotToCamera = new Transform3d(-Units.inchesToMeters(9.647), Units.inchesToMeters(8.923), Units.inchesToMeters(1.7 + 9.217), new Rotation3d(0, 0.785398, -0.785398));
         }
         
         public static class aprilTagFrontRight {
             public static String camera = "AprilTagFrontRight";
-            public static Transform3d robotToCamera = new Transform3d(0.2794, -0.2286, 0.224155, new Rotation3d(0, -0.785398, -0.785398));
+            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(5.668), -Units.inchesToMeters(10.631), Units.inchesToMeters(1.7 + 17.470), new Rotation3d(0, -0.785398, -0.785398));
+        }
+
+        public static class gamePieceCamera {
+            public static String camera = "GamePieceCamera";
+            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(5.537), -Units.inchesToMeters(-10.120), Units.inchesToMeters(1.7 + 15.216), new Rotation3d(0, 0, 0));
         }
 
         public static double getRobotHeading(double gamePieceYaw){

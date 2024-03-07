@@ -114,7 +114,7 @@ public class RobotContainer {
                     new CommandIndexMoveNoteToFiringPosition(m_intake),
                     new WaitCommand(0.1),
                     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
-                    new WaitCommand(0.5),
+                    new WaitCommand(0.35),
                     new CommandIndexStart(m_intake),
                     new WaitCommand(0.3), // waiting for the note to leave robot
                     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
@@ -266,38 +266,38 @@ public class RobotContainer {
         //     new PrintCommand("this finished")
         //     ));
 
-        driver.a().onTrue( //podium 
-            new CommandSwerveToPoseProxy(
-                s_Swerve,
-                () -> Constants.Vision.getPose("podium").getX(),
-                () -> Constants.Vision.getPose("podium").getY(),
-                () -> Constants.Vision.getPose("podium").getRotation().getDegrees())
-            );
+        // driver.a().onTrue( //podium 
+        //     new CommandSwerveToPoseProxy(
+        //         s_Swerve,
+        //         () -> Constants.Vision.getPose("podium").getX(),
+        //         () -> Constants.Vision.getPose("podium").getY(),
+        //         () -> Constants.Vision.getPose("podium").getRotation().getDegrees())
+        //     );
 
-        driver.b().onTrue( //speaker center 
-            new CommandSwerveToPoseProxy(
-                s_Swerve,
-                () -> Constants.Vision.getPose("sub").getX(),
-                () -> Constants.Vision.getPose("sub").getY(),
-                () -> Constants.Vision.getPose("sub").getRotation().getDegrees())
-            );
+        // driver.b().onTrue( //speaker center 
+        //     new CommandSwerveToPoseProxy(
+        //         s_Swerve,
+        //         () -> Constants.Vision.getPose("sub").getX(),
+        //         () -> Constants.Vision.getPose("sub").getY(),
+        //         () -> Constants.Vision.getPose("sub").getRotation().getDegrees())
+        //     );
 
-        driver.rightBumper().onTrue( //speaker center 
-            new CommandSwerveToPoseProxy(
-                s_Swerve,
-                () -> Constants.Vision.getPose("subright").getX(),
-                () -> Constants.Vision.getPose("subright").getY(),
-                () -> Constants.Vision.getPose("subright").getRotation().getDegrees())
-            );
+        // driver.rightBumper().onTrue( //speaker center 
+        //     new CommandSwerveToPoseProxy(
+        //         s_Swerve,
+        //         () -> Constants.Vision.getPose("subright").getX(),
+        //         () -> Constants.Vision.getPose("subright").getY(),
+        //         () -> Constants.Vision.getPose("subright").getRotation().getDegrees())
+        //     );
 
-        driver.y().onTrue(
-            new CommandSwerveToPoseProxy(
-                s_Swerve,
-                () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getX(),
-                () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getY(),
-                () -> m_GamePieceVision.calculateGamePieceHeading()
-            )
-        );
+        // driver.y().onTrue(
+        //     new CommandSwerveToPoseProxy(
+        //         s_Swerve,
+        //         () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getX(),
+        //         () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getY(),
+        //         () -> m_GamePieceVision.calculateGamePieceHeading()
+        //     )
+        // );
 
         driver.leftBumper().onTrue(new InstantCommand(() -> m_intake.reverseIntakeMotor())).onFalse(new InstantCommand(() -> m_intake.stopIntakeMotor()));
 

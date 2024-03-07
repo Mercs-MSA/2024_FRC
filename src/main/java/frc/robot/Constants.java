@@ -454,9 +454,9 @@ public final class Constants {
             }
             else if (a == "podium"){
                 if (isRedAlliance){
-                    return Sub.redPose;
+                    return Podium.redPose;
                 }
-                return Sub.bluePose;
+                return Podium.bluePose;
             }
 
             return null;

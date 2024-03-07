@@ -28,6 +28,7 @@ import frc.robot.commands.CommandSwerveToPoseProxy;
 import frc.robot.commands.CommandSwerveTurnToNote;
 import frc.robot.commands.CommandChangeRobotHasNote;
 import frc.robot.commands.CommandChangeScoringMode;
+import frc.robot.commands.CommandShooterBrakeStop;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.BaseSubcommands.*;
 import frc.robot.commands.IntakeSubcommands.*;
@@ -117,7 +118,7 @@ public class RobotContainer {
                     new WaitCommand(0.3), // waiting for the note to leave robot
                     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
                         new CommandIndexStop(m_intake),
-                        new CommandShooterStop(m_SAT)
+                        new CommandShooterBrakeStop(m_SAT)
                     ),
                     new CommandChangeRobotHasNote(false),
                     new CommandBaseStartPosition(m_SAT),
@@ -139,7 +140,7 @@ public class RobotContainer {
                     new WaitCommand(0.3), // waiting for the note to leave robot
                     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
                         new CommandIndexStop(m_intake),
-                        new CommandShooterStop(m_SAT)
+                        new CommandShooterBrakeStop(m_SAT)
                     ),
                     new CommandChangeRobotHasNote(false),
                     new ConditionalCommand( // IF WE JUST SCORED AMP...
@@ -280,14 +281,14 @@ public class RobotContainer {
         //         () -> Constants.Vision.getPose("sub").getRotation().getDegrees())
         //     );
 
-        // driver.y().onTrue(
-        //     new CommandSwerveToPoseProxy(
-        //         s_Swerve,
-        //         () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getX(),
-        //         () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getY(),
-        //         () -> m_GamePieceVision.calculateGamePieceHeading()
-        //     )
-        // );
+        driver.y().onTrue(
+            new CommandSwerveToPoseProxy(
+                s_Swerve,
+                () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getX(),
+                () -> s_Swerve.poseEstimator.getEstimatedPosition().getTranslation().getY(),
+                () -> m_GamePieceVision.calculateGamePieceHeading()
+            )
+        );
 
         // driver.a()
         // .whileTrue(

@@ -265,21 +265,21 @@ public class RobotContainer {
         //     new PrintCommand("this finished")
         //     ));
 
-        // driver.a().onTrue( //podium 
-        //     new CommandSwerveToPoseProxy(
-        //         s_Swerve,
-        //         () -> Constants.Vision.getPose("podium").getX(),
-        //         () -> Constants.Vision.getPose("podium").getY(),
-        //         () -> Constants.Vision.getPose("podium").getRotation().getDegrees())
-        //     );
+        driver.a().onTrue( //podium 
+            new CommandSwerveToPoseProxy(
+                s_Swerve,
+                () -> Constants.Vision.getPose("podium").getX(),
+                () -> Constants.Vision.getPose("podium").getY(),
+                () -> Constants.Vision.getPose("podium").getRotation().getDegrees())
+            );
 
-        // driver.b().onTrue( //speaker center 
-        //     new CommandSwerveToPoseProxy(
-        //         s_Swerve,
-        //         () -> Constants.Vision.getPose("sub").getX(),
-        //         () -> Constants.Vision.getPose("sub").getY(),
-        //         () -> Constants.Vision.getPose("sub").getRotation().getDegrees())
-        //     );
+        driver.b().onTrue( //speaker center 
+            new CommandSwerveToPoseProxy(
+                s_Swerve,
+                () -> Constants.Vision.getPose("sub").getX(),
+                () -> Constants.Vision.getPose("sub").getY(),
+                () -> Constants.Vision.getPose("sub").getRotation().getDegrees())
+            );
 
         driver.y().onTrue(
             new CommandSwerveToPoseProxy(

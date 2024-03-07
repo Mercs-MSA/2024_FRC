@@ -51,25 +51,28 @@ public class ApriltagVision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (this.mFrontRightCam != null){
-            mFrontRightAprilTagResult = mFrontRightCam.getLatestResult();
+        // if (this.mFrontRightCam != null){
+        //     mFrontRightAprilTagResult = mFrontRightCam.getLatestResult();
 
-            mFrontRight = getBackLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mFrontRightAprilTagResult);
+        //     mFrontRight = getBackLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mFrontRightAprilTagResult);
 
-            if (mFrontRight.isPresent()){
-                Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mFrontRight.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mFrontRightAprilTagResult.getTimestampSeconds());
-            }
+        //     if (mFrontRight.isPresent()){
+        //         Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mFrontRight.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mFrontRightAprilTagResult.getTimestampSeconds());
+        //     }
 
-        }
+        // }
 
         if (this.mBackLeftCam != null){
             mBackLeftAprilTagResult = mBackLeftCam.getLatestResult();
 
-            mBackLeft = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
+            if (mBackLeftAprilTagResult.getTargets().size() >= 2){
+                mBackLeft = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
 
-            if (mBackLeft.isPresent()){
-                Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds());
+                if (mBackLeft.isPresent()){
+                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds());
+                }
             }
+
 
         }
 

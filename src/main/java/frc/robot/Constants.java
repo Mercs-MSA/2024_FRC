@@ -174,7 +174,7 @@ public final class Constants {
         public static final int kIntakeMotorId = 26;
         public static final double kIntakeMotorSpeed = 75;
         public static final double kIntakeProcessRotations = 1.9;
-        public static final double kIndexProcessRotations = -0.3;
+        public static final double kIndexProcessRotations = -0.7;
         public static final int kIndexMotorId = 24;
         public static final double kIndexMotorSpeed = 0.50;
         public static final int kIntakeUpperSensorId = 0;
@@ -249,7 +249,7 @@ public final class Constants {
         public static final int SAT_OBJECTDETECTOR_SENSOR_ID = 1;
         
         public static class SUBWOOFER{
-            public static final double motor1_base = -6.571777;
+            public static final double motor1_base = -9.571777;
             public static final double motor2_base = -7.906;
             public static final double pivot = 0.0;
             public static final double shooterSpeed = -52.5;

@@ -28,7 +28,7 @@ import frc.robot.commands.CommandSwerveToPoseProxy;
 import frc.robot.commands.CommandSwerveTurnToNote;
 import frc.robot.commands.CommandChangeRobotHasNote;
 import frc.robot.commands.CommandChangeScoringMode;
-import frc.robot.commands.CommandShooterBrakeStop;
+import frc.robot.commands.CommandShooterReverse;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.BaseSubcommands.*;
 import frc.robot.commands.IntakeSubcommands.*;
@@ -119,7 +119,7 @@ public class RobotContainer {
                     new WaitCommand(0.3), // waiting for the note to leave robot
                     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
                         new CommandIndexStop(m_intake),
-                        new CommandShooterBrakeStop(m_SAT)
+                        new CommandShooterStop(m_SAT)
                     ),
                     new CommandChangeRobotHasNote(false),
                     new CommandBaseStartPosition(m_SAT),
@@ -141,7 +141,7 @@ public class RobotContainer {
                     new WaitCommand(0.3), // waiting for the note to leave robot
                     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
                         new CommandIndexStop(m_intake),
-                        new CommandShooterBrakeStop(m_SAT)
+                        new CommandShooterStop(m_SAT)
                     ),
                     new CommandChangeRobotHasNote(false),
                     new ConditionalCommand( // IF WE JUST SCORED AMP...
@@ -327,11 +327,10 @@ public class RobotContainer {
                     //     new InstantCommand(), // if we're not scoring amp, do nothing
                     //     () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
                     // ),
-                    new CommandIndexMoveNoteToFiringPosition(m_intake),
-                    new WaitCommand(0.1),
                     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
+                    new WaitCommand(1), // waiting for the note to leave robot
                     new CommandIndexStart(m_intake),
-                    new WaitCommand(3), // waiting for the note to leave robot
+                    new WaitCommand(2), // waiting for the note to leave robot
                     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
                         new CommandIndexStop(m_intake),
                         new CommandShooterStop(m_SAT)
@@ -383,6 +382,7 @@ public class RobotContainer {
 
                             // if the intake system is off and you don't have a note, the system turns on
                             new SequentialCommandGroup(
+                                new CommandBaseStartPosition(m_SAT),
                                 new CommandIndexStart(m_intake),
                                 new CommandPivotHandoffPosition(m_SAT),
                                 new CommandIntakeStart(m_intake),
@@ -392,7 +392,11 @@ public class RobotContainer {
                                 new WaitCommand(0.65),
                                 new CommandIndexStop(m_intake),
                                 new CommandIntakeStop(m_intake),
-                                new CommandPivotStartPosition(m_SAT)
+                                new CommandPivotStartPosition(m_SAT),
+                                new CommandShooterReverse(m_SAT),
+                                new CommandIndexMoveNoteToFiringPosition(m_intake),
+                                new CommandIndexStop(m_intake),
+                                new CommandShooterStop(m_SAT)
                             )
 
                     //         // this checks if we have a note
@@ -408,8 +412,14 @@ public class RobotContainer {
                     new CommandIntakeStop(m_intake),
                     new CommandPivotStartPosition(m_SAT),
                     new CommandIndexStop(m_intake),
+                    new CommandShooterStop(m_SAT),
+
+                    new CommandShooterReverse(m_SAT),
+                    new CommandIndexMoveNoteToFiringPosition(m_intake),
+                    new WaitCommand(0.2),
+                    new CommandIndexStop(m_intake),
                     new CommandShooterStop(m_SAT)
-                )
+        )
             );
         
 

@@ -114,6 +114,7 @@ public class RobotContainer {
                     new CommandIndexMoveNoteToFiringPosition(m_intake),
                     new WaitCommand(0.1),
                     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
+                    new WaitCommand(0.5),
                     new CommandIndexStart(m_intake),
                     new WaitCommand(0.3), // waiting for the note to leave robot
                     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
@@ -133,8 +134,8 @@ public class RobotContainer {
                         new InstantCommand(), // if we're not scoring amp, do nothing
                         () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
                     ),
-                    // new CommandIndexMoveNoteToFiringPosition(m_intake),
-                    // new WaitCommand(0.1),
+                    new CommandIndexMoveNoteToFiringPosition(m_intake),
+                    new WaitCommand(0.1),
                     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
                     new CommandIndexStart(m_intake),
                     new WaitCommand(0.3), // waiting for the note to leave robot
@@ -186,7 +187,7 @@ public class RobotContainer {
                                 new CommandIntakeStart(m_intake),
                                 new CommandIntakeWaitForNote(m_intake),
                                 new CommandChangeRobotHasNote(true),
-                                new WaitCommand(0.35),
+                                new WaitCommand(0.65),
                                 new CommandIndexStop(m_intake),
                                 // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
                                 new WaitCommand(0.2), // This just worked more reliably and more easily than the sensor did
@@ -281,6 +282,14 @@ public class RobotContainer {
                 () -> Constants.Vision.getPose("sub").getRotation().getDegrees())
             );
 
+        driver.rightBumper().onTrue( //speaker center 
+            new CommandSwerveToPoseProxy(
+                s_Swerve,
+                () -> Constants.Vision.getPose("subright").getX(),
+                () -> Constants.Vision.getPose("subright").getY(),
+                () -> Constants.Vision.getPose("subright").getRotation().getDegrees())
+            );
+
         driver.y().onTrue(
             new CommandSwerveToPoseProxy(
                 s_Swerve,
@@ -289,6 +298,8 @@ public class RobotContainer {
                 () -> m_GamePieceVision.calculateGamePieceHeading()
             )
         );
+
+        driver.leftBumper().onTrue(new InstantCommand(() -> m_intake.reverseIntakeMotor())).onFalse(new InstantCommand(() -> m_intake.stopIntakeMotor()));
 
         // driver.a()
         // .whileTrue(
@@ -345,6 +356,7 @@ public class RobotContainer {
         operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
         operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
         operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
+        // operator.leftBumper().onTrue(new CommandIndexStart(m_intake)));
 
         // operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
 

@@ -88,8 +88,8 @@ public class SAT extends SubsystemBase {
     satPivotMotorConfigs.Voltage.PeakReverseVoltage = -14;
 
     TalonFXConfiguration satShooter1MotorConfigs = new TalonFXConfiguration();
-    satShooter1MotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    satShooter1MotorConfigs.Slot0.kP = 0.6; // An error of 0.5 rotations results in 1.2 volts output
+    satShooter1MotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    satShooter1MotorConfigs.Slot0.kP = 0.8; // An error of 0.5 rotations results in 1.2 volts output
     satShooter1MotorConfigs.Slot0.kS = 0.05; // Add 0.05 V output to overcome static friction
     satShooter1MotorConfigs.Slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
     satShooter1MotorConfigs.Slot0.kI = 0; // no output for integrated error

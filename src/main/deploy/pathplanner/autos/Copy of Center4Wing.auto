@@ -42,12 +42,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "score sub note"
@@ -57,12 +51,6 @@
           "type": "path",
           "data": {
             "pathName": "ThreePiece"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
           }
         },
         {

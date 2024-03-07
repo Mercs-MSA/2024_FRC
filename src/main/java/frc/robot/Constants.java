@@ -174,7 +174,7 @@ public final class Constants {
         public static final int kIntakeMotorId = 26;
         public static final double kIntakeMotorSpeed = 75;
         public static final double kIntakeProcessRotations = 1.9;
-        public static final double kIndexProcessRotations = -0.2;
+        public static final double kIndexProcessRotations = -0.3;
         public static final int kIndexMotorId = 24;
         public static final double kIndexMotorSpeed = 0.50;
         public static final int kIntakeUpperSensorId = 0;
@@ -431,6 +431,11 @@ public final class Constants {
             public static Pose2d redPose = convertToRedSide(bluePose);
         }
 
+        public static class SubRight{
+            public static Pose2d bluePose = new Pose2d(new Translation2d(0.75, 4.48), Rotation2d.fromDegrees(-60));
+            public static Pose2d redPose = convertToRedSide(bluePose);
+        }
+
         public static class Podium{
             public static Pose2d bluePose = new Pose2d(new Translation2d(2.977, 4.082), Rotation2d.fromDegrees(-32.61));
             public static Pose2d redPose = convertToRedSide(bluePose);
@@ -457,6 +462,12 @@ public final class Constants {
                     return Podium.redPose;
                 }
                 return Podium.bluePose;
+            }
+            else if (a == "subright"){
+                if (isRedAlliance){
+                    return SubRight.redPose;
+                }
+                return SubRight.bluePose;
             }
 
             return null;

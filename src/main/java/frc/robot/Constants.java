@@ -395,6 +395,8 @@ public final class Constants {
     public static class Vision {
         public static boolean isNoteDetected = false;
 
+        public static boolean visionTurnedOn = false;
+
         public static boolean isRedAlliance = true;
 
         public static double gamePieceYawOffset = -56.088;

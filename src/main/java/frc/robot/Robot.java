@@ -120,6 +120,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+
+    Constants.Vision.visionTurnedOn = false;
   }
 
   /** This function is called periodically during autonomous. */
@@ -136,6 +138,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     resetAllMotorCommands();
+    Constants.Vision.visionTurnedOn = true;
   }
 
   /** This function is called periodically during operator control. */

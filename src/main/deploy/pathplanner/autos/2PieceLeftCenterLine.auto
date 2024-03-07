@@ -16,12 +16,6 @@
           "data": {
             "pathName": "1CenterRight"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "2CenterRight"
-          }
         }
       ]
     }

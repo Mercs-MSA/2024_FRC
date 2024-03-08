@@ -11,9 +11,13 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -51,30 +55,33 @@ public class ApriltagVision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // if (this.mFrontRightCam != null){
-        //     mFrontRightAprilTagResult = mFrontRightCam.getLatestResult();
+        if (Constants.Vision.visionTurnedOn){
+            if (this.mFrontRightCam != null){
+                mFrontRightAprilTagResult = mFrontRightCam.getLatestResult();
 
-        //     mFrontRight = getBackLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mFrontRightAprilTagResult);
+                mFrontRight = getBackLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mFrontRightAprilTagResult);
 
-        //     if (mFrontRight.isPresent()){
-        //         Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mFrontRight.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mFrontRightAprilTagResult.getTimestampSeconds());
-        //     }
-
-        // }
-
-        if (this.mBackLeftCam != null){
-            mBackLeftAprilTagResult = mBackLeftCam.getLatestResult();
-
-            if (mBackLeftAprilTagResult.getTargets().size() >= 2){
-                mBackLeft = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
-
-                if (mBackLeft.isPresent()){
-                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds());
+                if (mFrontRight.isPresent()){
+                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mFrontRight.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mFrontRightAprilTagResult.getTimestampSeconds());
                 }
+
             }
 
+            if (this.mBackLeftCam != null){
+                mBackLeftAprilTagResult = mBackLeftCam.getLatestResult();
 
+                if (mBackLeftAprilTagResult.getTargets().size() >= 2){
+                    mBackLeft = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
+
+                    if (mBackLeft.isPresent()){
+                        Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds());
+                    }
+                }
+
+
+            }
         }
+
 
     }
 
@@ -87,6 +94,7 @@ public class ApriltagVision extends SubsystemBase {
         mBackLeftEstimator.setReferencePose(prevEstimatedRobotPose);
         return mBackLeftEstimator.update(mBackLeftAprilTagResult);
     }
+
 
     
 }

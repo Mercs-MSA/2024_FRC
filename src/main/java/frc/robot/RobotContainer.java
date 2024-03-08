@@ -204,8 +204,8 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -driver.getLeftY(), 
-                () -> -driver.getLeftX(), 
+                () -> driver.getLeftY(), 
+                () -> driver.getLeftX(), 
                 () -> -driver.getRightX(), 
                 () -> false // just hardcoded field centric... could make this a button if we want
             )
@@ -414,20 +414,20 @@ public class RobotContainer {
                     // )
                 );
 
-            operator.b().onTrue(
-                new SequentialCommandGroup(
-                    new CommandIntakeStop(m_intake),
-                    new CommandPivotStartPosition(m_SAT),
-                    new CommandIndexStop(m_intake),
-                    new CommandShooterStop(m_SAT),
+        //     operator.b().onTrue(
+        //         new SequentialCommandGroup(
+        //             new CommandIntakeStop(m_intake),
+        //             new CommandPivotStartPosition(m_SAT),
+        //             new CommandIndexStop(m_intake),
+        //             new CommandShooterStop(m_SAT),
 
-                    new CommandShooterReverse(m_SAT),
-                    new CommandIndexMoveNoteToFiringPosition(m_intake),
-                    new WaitCommand(0.2),
-                    new CommandIndexStop(m_intake),
-                    new CommandShooterStop(m_SAT)
-        )
-            );
+        //             new CommandShooterReverse(m_SAT),
+        //             new CommandIndexMoveNoteToFiringPosition(m_intake),
+        //             new WaitCommand(0.2),
+        //             new CommandIndexStop(m_intake),
+        //             new CommandShooterStop(m_SAT)
+        // )
+        //     );
 
         operator.a().whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesLeft(operator.getLeftY())))
         .whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesRight(operator.getRightY())));

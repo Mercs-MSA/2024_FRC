@@ -111,10 +111,11 @@ public class RobotContainer {
             put("score sub note", new SequentialCommandGroup(
                     new CommandChangeScoringMode(ScoringMode.SUBWOOFER), // pivot move to whatever current mode is
                     new CommandBaseScoringPosition(m_SAT),
-                    new CommandIndexMoveNoteToFiringPosition(m_intake),
-                    new WaitCommand(0.1),
+                    // new CommandIndexMoveNoteToFiringPosition(m_intake),
+                    new CommandIndexReverse(m_intake),
+                    new WaitCommand(0.05),
                     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
-                    new WaitCommand(0.35),
+                    new WaitCommand(1),
                     new CommandIndexStart(m_intake),
                     new WaitCommand(0.3), // waiting for the note to leave robot
                     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
@@ -327,7 +328,10 @@ public class RobotContainer {
                     //     new InstantCommand(), // if we're not scoring amp, do nothing
                     //     () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
                     // ),
-                    new CommandIndexMoveNoteToFiringPosition(m_intake),
+                    new CommandIndexReverse(m_intake),
+                    new WaitCommand(0.05),
+                    new CommandIndexStop(m_intake),
+                    // new CommandIndexMoveNoteToFiringPosition(m_intake),
                     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
                     new WaitCommand(1), // waiting for the note to leave robot
                     new CommandIndexStart(m_intake),

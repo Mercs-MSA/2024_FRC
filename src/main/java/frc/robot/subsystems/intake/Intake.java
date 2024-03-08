@@ -74,7 +74,7 @@ public class Intake extends SubsystemBase {
 
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
-    configs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     configs.Slot0.kP = 25.0; // An error of 0.5 rotations results in 1.2 volts output
     configs.Slot0.kD = 0.4; // A change of 1 rotation per second results in 0.1 volts output
 
@@ -175,6 +175,15 @@ public class Intake extends SubsystemBase {
     // indexMotor.setControl(indexMotor_dutyCycleOut.withOutput(-IntakeConstants.kIndexMotorSpeed));
     // indexMotor.set(Constants.IntakeConstants.kIndexMotorSpeed);
     indexMotor.setControl(indexMotor_voltageVelocity.withVelocity(Constants.IntakeConstants.kIndexMotorSpeed));
+  }
+
+    public void reverseIndexMotor() {
+    // WARNING!! 
+    // DO NOT USE THIS FUNCTION DIRECTLY!!
+    // INSTEAD USE: CommandOverrideIndexStart
+    // indexMotor.setControl(indexMotor_dutyCycleOut.withOutput(-IntakeConstants.kIndexMotorSpeed));
+    // indexMotor.set(Constants.IntakeConstants.kIndexMotorSpeed);
+    indexMotor.setControl(indexMotor_voltageVelocity.withVelocity(Constants.IntakeConstants.kSlowIndexMotorSpeed));
   }
 
   public void startIntakeIndexerMotors(){

@@ -25,7 +25,7 @@ public class CommandIntakeReverse extends Command {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(m_intake.getIntakeMotorSpeed() - IntakeConstants.kIntakeMotorSpeed) <= IntakeConstants.kIntakeMotorDCTolerance;
+    return true;//Math.abs(m_intake.getIntakeMotorSpeed() - IntakeConstants.kIntakeMotorSpeed) <= IntakeConstants.kIntakeMotorDCTolerance;
   }
 }
 

@@ -12,27 +12,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "score sub note"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "TwoPiecePart1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score podium note"
+            "pathName": "Copy of TwoPiecePart1"
           }
         }
       ]

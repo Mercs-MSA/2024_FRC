@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TwoPiecePart1"
+            "pathName": "Copy of TwoPiecePart1"
           }
         },
         {
@@ -30,15 +30,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "score sub note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "FourPiece"
+            "waitTime": 0.1
           }
         },
         {
@@ -50,7 +44,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ThreePiece"
+            "pathName": "Copy of FourPiece"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score sub note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of ThreePiece"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
           }
         },
         {

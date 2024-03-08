@@ -16,6 +16,12 @@
           "data": {
             "pathName": "LeftBase"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4PieceBase"
+          }
         }
       ]
     }

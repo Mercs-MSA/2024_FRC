@@ -45,6 +45,8 @@ public class Intake extends SubsystemBase {
   private final PositionVoltage intakeMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final PositionVoltage indexMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final VelocityVoltage intakeMotor_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
+  private final VelocityVoltage indexMotor_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
+
   private final DigitalInput intakeUpperSensor = new DigitalInput(IntakeConstants.kIntakeUpperSensorId);
   private final DigitalInput intakeSensor1 = new DigitalInput(IntakeConstants.kIntakeLowerSensor1Id);
   private final DigitalInput intakeSensor2 = new DigitalInput(IntakeConstants.kIntakeLowerSensor2Id);
@@ -171,7 +173,8 @@ public class Intake extends SubsystemBase {
     // DO NOT USE THIS FUNCTION DIRECTLY!!
     // INSTEAD USE: CommandOverrideIndexStart
     // indexMotor.setControl(indexMotor_dutyCycleOut.withOutput(-IntakeConstants.kIndexMotorSpeed));
-    indexMotor.set(Constants.IntakeConstants.kIndexMotorSpeed);
+    // indexMotor.set(Constants.IntakeConstants.kIndexMotorSpeed);
+    indexMotor.setControl(indexMotor_voltageVelocity.withVelocity(Constants.IntakeConstants.kIndexMotorSpeed));
   }
 
   public void startIntakeIndexerMotors(){

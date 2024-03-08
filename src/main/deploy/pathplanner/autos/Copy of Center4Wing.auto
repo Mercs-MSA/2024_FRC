@@ -12,21 +12,27 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "score sub note"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Copy of TwoPiecePart1"
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "TwoPiecePart2"
-          }
-        },
-        {
           "type": "wait",
           "data": {
             "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score sub note"
           }
         },
         {
@@ -42,9 +48,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "score sub note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of ThreePiece"
+          }
+        },
+        {
           "type": "wait",
           "data": {
             "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score sub note"
           }
         }
       ]

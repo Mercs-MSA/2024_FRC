@@ -14,7 +14,7 @@ public class CommandIntakeWaitForNote extends Command {
 
   @Override
   public void initialize() {
-    m_intake.enableAsynchronousInterrupt();
+    // m_intake.enableAsynchronousInterrupt();
     m_intake.startIntakeMotor();
     IntakeConstants.currentIntakeState = IntakeConstants.intakeState.INTAKE;
     
@@ -25,7 +25,7 @@ public class CommandIntakeWaitForNote extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    m_intake.disableAsynchronousInterrupt();
+    // m_intake.disableAsynchronousInterrupt();
   }
 
   @Override

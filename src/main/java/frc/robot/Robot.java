@@ -79,6 +79,8 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("gyro yaw", m_robotContainer.s_Swerve.gyro.getAngle());
 
+    SmartDashboard.putBoolean("Are we red alliance?", Constants.Vision.isRedAlliance);
+
     // SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());
     // SmartDashboard.putNumber("Climber Right motor Pos: ", m_robotContainer.m_climber.outputRightData());
     // SmartDashboard.putNumber("Base1 Pos", m_robotContainer.m_SAT.outputBase1Data());

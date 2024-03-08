@@ -69,21 +69,21 @@ public class ApriltagVision extends SubsystemBase {
 
             }
 
-            if (this.mBackLeftCam != null){
-                mBackLeftAprilTagResult = mBackLeftCam.getLatestResult();
+            // if (this.mBackLeftCam != null){
+            //     mBackLeftAprilTagResult = mBackLeftCam.getLatestResult();
 
                 
 
-                if (mBackLeftAprilTagResult.getTargets().size() >= 2){
-                    mBackLeft = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
+            //     if (mBackLeftAprilTagResult.getTargets().size() >= 2){
+            //         mBackLeft = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
 
-                    if (mBackLeft.isPresent()){
-                        Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds());
-                    }
-                }
+            //         if (mBackLeft.isPresent()){
+            //             Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds());
+            //         }
+            //     }
 
 
-            }
+            // }
 
             // SmartDashboard.putData("mFrontRightAprilTagResult", mFrontRightAprilTagResult.getLatestResult().targets);
 

@@ -327,6 +327,7 @@ public class RobotContainer {
                     //     new InstantCommand(), // if we're not scoring amp, do nothing
                     //     () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
                     // ),
+                    new CommandIndexMoveNoteToFiringPosition(m_intake),
                     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
                     new WaitCommand(1), // waiting for the note to leave robot
                     new CommandIndexStart(m_intake),

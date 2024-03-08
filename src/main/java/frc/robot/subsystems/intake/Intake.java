@@ -73,8 +73,8 @@ public class Intake extends SubsystemBase {
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
     configs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    configs.Slot0.kP = 22.0; // An error of 0.5 rotations results in 1.2 volts output
-    configs.Slot0.kD = 0.2; // A change of 1 rotation per second results in 0.1 volts output
+    configs.Slot0.kP = 25.0; // An error of 0.5 rotations results in 1.2 volts output
+    configs.Slot0.kD = 0.4; // A change of 1 rotation per second results in 0.1 volts output
 
     // Peak output of 8 volts
     configs.Voltage.PeakForwardVoltage = 16;

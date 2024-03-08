@@ -42,12 +42,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of ThreePiece"
-          }
-        },
-        {
           "type": "wait",
           "data": {
             "waitTime": 0.1

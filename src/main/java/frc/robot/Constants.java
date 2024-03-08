@@ -176,10 +176,10 @@ public final class Constants {
     
     public static class IntakeConstants {
         public static final int kIntakeMotorId = 26;
-        public static final double kIntakeMotorSpeed = 75;
+        public static final double kIntakeMotorSpeed = 70;
         public static final double kIntakeProcessRotations = 1.9;
         public static final double kIndexProcessRotations = -0.7;
-        public static final int kIndexMotorId = 24;
+        public static final int kIndexMotorId = 24; 
         public static final double kIndexMotorSpeed = 90;
         public static final int kIntakeUpperSensorId = 0;
         public static final int kIntakeLowerSensor1Id = 1;
@@ -381,7 +381,7 @@ public final class Constants {
       public static final int tubeMotor_Right_ID = 23;
 
 
-      public static final double climber_Increment = 0.5;
+      public static final double climber_Increment = 2;
 
       public static final double LEFT_BOTTOM_POSITION = -1.10;
       public static final double RIGHT_BOTTOM_POSITION = 0.80;

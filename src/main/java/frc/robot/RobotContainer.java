@@ -188,7 +188,6 @@ public class RobotContainer {
                                 new CommandShooterReverse(m_SAT),
                                 new CommandIndexWaitForNote(m_intake),
                                 new CommandChangeRobotHasNote(true),
-                                new WaitCommand(1.5),
                                 new CommandIndexStop(m_intake),
                                 new CommandShooterStop(m_SAT),
                                 // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
@@ -390,7 +389,7 @@ public class RobotContainer {
                                 new CommandShooterReverse(m_SAT),
                                 new CommandIndexWaitForNote(m_intake),
                                 new CommandChangeRobotHasNote(true),
-                                new WaitCommand(1.5),
+                                // new WaitCommand(0.25),
                                 // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
                                 // new WaitCommand(0.75),
                                 // new CommandIndexStop(m_intake),

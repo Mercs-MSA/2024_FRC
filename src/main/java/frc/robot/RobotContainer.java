@@ -187,7 +187,7 @@ public class RobotContainer {
                                 new CommandIntakeStart(m_intake),
                                 new CommandIntakeWaitForNote(m_intake),
                                 new CommandChangeRobotHasNote(true),
-                                new WaitCommand(.3),
+                                new WaitCommand(.6),
                                 new CommandIndexMoveNoteToFiringPosition(m_intake),
                                 new WaitCommand(.2),
                                 new CommandShooterReverse(m_SAT),

@@ -14,7 +14,7 @@ public class CommandShooterReverse extends Command {
 
     @Override
     public void initialize() {
-        m_SAT.shootNote(20);
+        m_SAT.shootNote(10);
     }
 
     @Override

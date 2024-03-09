@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1076991436969506,
+        "x": 1.7576991436969498,
         "y": 5.6
       },
       "isLocked": false,
@@ -20,7 +20,7 @@
         "y": 5.6
       },
       "prevControl": {
-        "x": 1.8831387284362138,
+        "x": 2.699907732257378,
         "y": 5.6
       },
       "nextControl": null,
@@ -36,25 +36,7 @@
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "Intake",
-      "waypointRelativePos": 0.0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake Note"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
     "maxAcceleration": 4.5,

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7316468234281956,
-      "y": 6.6525497946829235
+      "x": 1.0798029014032335,
+      "y": 6.5463576290918635
     },
     "rotation": 60.0
   },
@@ -15,24 +15,6 @@
           "type": "named",
           "data": {
             "name": "score sub note"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LeftBase"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score podium note"
           }
         }
       ]

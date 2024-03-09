@@ -204,8 +204,8 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> driver.getLeftY(), 
-                () -> driver.getLeftX(), 
+                () -> -driver.getLeftY(), 
+                () -> -driver.getLeftX(), 
                 () -> -driver.getRightX(), 
                 () -> false // just hardcoded field centric... could make this a button if we want
             )

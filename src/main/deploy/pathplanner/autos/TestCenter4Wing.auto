@@ -34,6 +34,12 @@
           "data": {
             "name": "score sub note"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of FourPiece"
+          }
         }
       ]
     }

@@ -163,11 +163,25 @@ public class climber extends SubsystemBase {
 
   public void incrementalClimbBothSidesLeft(double y){
     // tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition + (y*Constants.climberConstants.climber_Increment)));
-    tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition + ((y*Constants.climberConstants.climber_Increment))));
+    if (Math.abs(y) > 0.1){
+      tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition + ((-y*Constants.climberConstants.climber_Increment))));
+
+    }
+    else {
+      tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition + ((-0*Constants.climberConstants.climber_Increment))));
+
+    }
   }
 
   public void incrementalClimbBothSidesRight(double y){
-    tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition + (y*Constants.climberConstants.climber_Increment)));
+    if (Math.abs(y) > 0.1){
+      tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition + (y*Constants.climberConstants.climber_Increment)));
+
+    }
+    else {
+      tubeMotorRight.setControl(tubeMotorRight_voltagePosition.withPosition(rightMotorPosition + (0*Constants.climberConstants.climber_Increment)));
+
+    }
     // tubeMotorLeft.setControl(tubeMotorLeft_voltagePosition.withPosition(leftMotorPosition + ((y*Constants.climberConstants.climber_Increment))));
   }
 

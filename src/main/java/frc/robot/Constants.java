@@ -382,7 +382,7 @@ public final class Constants {
       public static final int tubeMotor_Right_ID = 23;
 
 
-      public static final double climber_Increment = 2;
+      public static final double climber_Increment = 64;
 
       public static final double LEFT_BOTTOM_POSITION = -1.10;
       public static final double RIGHT_BOTTOM_POSITION = 0.80;

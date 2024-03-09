@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "score sub note"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "1CenterRight"

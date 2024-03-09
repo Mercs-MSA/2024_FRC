@@ -113,9 +113,9 @@ public class RobotContainer {
                     new CommandBaseScoringPosition(m_SAT),
                     // new CommandIndexMoveNoteToFiringPosition(m_intake),
                     new CommandIndexReverse(m_intake),
-                    new WaitCommand(0.05),
+                  //  new WaitCommand(0.05),
                     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
-                    new WaitCommand(1),
+                    new WaitCommand(0.25),
                     new CommandIndexStart(m_intake),
                     new WaitCommand(0.3), // waiting for the note to leave robot
                     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time

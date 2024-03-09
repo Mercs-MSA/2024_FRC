@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3754032049697344,
-      "y": 5.543606856845236
+      "x": 15.141699008369082,
+      "y": 5.536799448996757
     },
-    "rotation": 0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of TwoPiecePart1"
+            "pathName": "Copy of RedCenterLeave"
           }
         },
         {
@@ -38,25 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of ThreePiece"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score sub note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of FourPiece"
+            "pathName": "Red 3Piece"
           }
         },
         {

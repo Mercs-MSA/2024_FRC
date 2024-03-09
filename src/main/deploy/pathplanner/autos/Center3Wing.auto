@@ -52,24 +52,6 @@
           "data": {
             "name": "score sub note"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of FourPiece"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score sub note"
-          }
         }
       ]
     }

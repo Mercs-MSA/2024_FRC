@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -16,8 +17,26 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.State.robotState;
 import frc.robot.Constants.Vision.aprilTagBackLeft;
+import frc.robot.commands.CommandChangeRobotHasNote;
+import frc.robot.commands.CommandShooterReverse;
+import frc.robot.commands.CommandShooterStart;
+import frc.robot.commands.CommandShooterStop;
+import frc.robot.commands.CommandSwerveToPoseProxy;
+import frc.robot.commands.BaseSubcommands.CommandBaseScoringPosition;
+import frc.robot.commands.BaseSubcommands.CommandBaseStartPosition;
+import frc.robot.commands.IndexSubcommands.CommandIndexReverse;
+import frc.robot.commands.IndexSubcommands.CommandIndexStart;
+import frc.robot.commands.IndexSubcommands.CommandIndexStop;
+import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
+import frc.robot.commands.IntakeSubcommands.CommandIntakeStop;
+import frc.robot.commands.PivotSubcommands.CommandPivotHandoffPosition;
+import frc.robot.commands.PivotSubcommands.CommandPivotScoringPosition;
+import frc.robot.commands.PivotSubcommands.CommandPivotStartPosition;
 // import frc.robot.subsystems.vision.ApriltagVision;
 import frc.robot.subsystems.climber.climber;
 import frc.robot.subsystems.SAT.SAT;
@@ -53,10 +72,10 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer.configureButtonBindings();
     Constants.State.setState("IDLE");
-    Optional<Alliance> alliance = DriverStation.getAlliance();
-    if (alliance.isPresent()) {
-      Constants.Vision.isRedAlliance = (alliance.get() == DriverStation.Alliance.Red);
-    }
+    // Optional<Alliance> alliance = DriverStation.getAlliance();
+    // if (alliance.isPresent()) {
+    //   Constants.Vision.isRedAlliance = (alliance.get() == DriverStation.Alliance.Red);
+    // }
   }
 
   /**
@@ -118,10 +137,82 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    // // schedule the autonomous command (example)
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.schedule();
+    // }
+
+    m_robotContainer.s_Swerve.resetOdometry(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)));
+            new SequentialCommandGroup(
+              //fire note
+              new CommandPivotScoringPosition(m_robotContainer.m_SAT), // pivot move to whatever current mode is
+                    new CommandBaseScoringPosition(m_robotContainer.m_SAT), // base move to whatever current mode is
+
+                    new CommandIndexReverse(m_robotContainer.m_intake),
+                    new WaitCommand(0.1),
+                    new CommandIndexStop(m_robotContainer.m_intake),
+                    new CommandShooterStart(m_robotContainer.m_SAT), // shoot with speed of whatever current mode is
+                    new WaitCommand(1), // waiting for the note to leave robot
+                    new CommandIndexStart(m_robotContainer.m_intake),
+                    new WaitCommand(2), // waiting for the note to leave robot
+                    new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
+                        new CommandIndexStop(m_robotContainer.m_intake),
+                        new CommandShooterStop(m_robotContainer.m_SAT)
+                    ),
+                    new CommandChangeRobotHasNote(false),
+                    new WaitCommand(3),
+                    new CommandBaseStartPosition(m_robotContainer.m_SAT),
+                    new CommandPivotStartPosition(m_robotContainer.m_SAT),
+
+            //start handoof / intake
+            new CommandBaseStartPosition(m_robotContainer.m_SAT),
+            new CommandIndexStart(m_robotContainer.m_intake),
+            new CommandPivotHandoffPosition(m_robotContainer.m_SAT),
+            new CommandIntakeStart(m_robotContainer.m_intake),
+            new CommandShooterReverse(m_robotContainer.m_SAT),
+            new CommandChangeRobotHasNote(true),
+
+            //drive to note
+            new CommandSwerveToPoseProxy(
+                m_robotContainer.s_Swerve,
+                () -> 3.45,
+                () -> 5.54,
+                () -> 0),
+
+              new WaitCommand(3)
+            
+            // //speaker center 
+            // new CommandSwerveToPoseProxy(
+            //     m_robotContainer.s_Swerve,
+            //     () -> 1.38,
+            //     () -> 5.54,
+            //     () -> 0),
+
+                
+            // new WaitCommand(3),
+
+            //   //fire note
+            //   new CommandPivotScoringPosition(m_robotContainer.m_SAT), // pivot move to whatever current mode is
+            //         new CommandBaseScoringPosition(m_robotContainer.m_SAT), // base move to whatever current mode is
+
+            //         new CommandIndexReverse(m_robotContainer.m_intake),
+            //         new WaitCommand(0.1),
+            //         new CommandIndexStop(m_robotContainer.m_intake),
+            //         new CommandShooterStart(m_robotContainer.m_SAT), // shoot with speed of whatever current mode is
+            //         new WaitCommand(1), // waiting for the note to leave robot
+            //         new CommandIndexStart(m_robotContainer.m_intake),
+            //         new WaitCommand(2), // waiting for the note to leave robot
+            //         new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
+            //             new CommandIndexStop(m_robotContainer.m_intake),
+            //             new CommandShooterStop(m_robotContainer.m_SAT)
+            //         ),
+            //         new CommandChangeRobotHasNote(false),
+            //         new WaitCommand(3),
+            //         new CommandBaseStartPosition(m_robotContainer.m_SAT),
+            //         new CommandPivotStartPosition(m_robotContainer.m_SAT)
+            ).schedule();
+
+    
 
     Constants.Vision.visionTurnedOn = false;
   }
@@ -136,11 +227,11 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.cancel();
+    // }
     resetAllMotorCommands();
-    Constants.Vision.visionTurnedOn = true;
+    // Constants.Vision.visionTurnedOn = true;
   }
 
   /** This function is called periodically during operator control. */

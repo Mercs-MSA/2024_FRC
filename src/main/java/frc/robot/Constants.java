@@ -176,7 +176,7 @@ public final class Constants {
     
     public static class IntakeConstants {
         public static final int kIntakeMotorId = 26;
-        public static final double kIntakeMotorSpeed = 70;
+        public static final double kIntakeMotorSpeed = 100;
         public static final double kIntakeProcessRotations = 1.9;
         public static final double kIndexProcessRotations = -1.5;
         public static final int kIndexMotorId = 24; 
@@ -289,10 +289,10 @@ public final class Constants {
         }
 
         public static class WING{
-            public static final double motor1_base = START.motor1_base;
-            public static final double motor2_base = START.motor2_base;
+            public static final double motor1_base = -9.571777;
+            public static final double motor2_base = -7.906;
             public static final double pivot = 0.0;
-            public static final double shooterSpeed = -52.5;
+            public static final double shooterSpeed = -20.5;
         }
 
         public static class HANDOFF{
@@ -402,7 +402,7 @@ public final class Constants {
 
         public static boolean visionTurnedOn = false;
 
-        public static boolean isRedAlliance = true;
+        public static boolean isRedAlliance = false;
 
         public static double gamePieceYawOffset = -56.088;
 

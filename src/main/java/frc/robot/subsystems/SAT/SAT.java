@@ -210,6 +210,9 @@ public class SAT extends SubsystemBase {
     SmartDashboard.putNumber("shooter1MotorVoltage", satShooter1Motor.getMotorVoltage().getValueAsDouble());
     SmartDashboard.putNumber("shooter2MotorVoltage", satShooter2Motor.getMotorVoltage().getValueAsDouble());
 
+    SmartDashboard.putNumber("shooter1MotorVoltage", satShooter1Motor.getStatorCurrent().getValue());
+    SmartDashboard.putNumber("shooter2MotorVoltage", satShooter2Motor.getStatorCurrent().getValue());
+
   }
 
   @Override

@@ -110,10 +110,12 @@ public class RobotContainer {
             put("scoring mode podium", new CommandChangeScoringMode(ScoringMode.PODIUM));
             put("score sub note", new SequentialCommandGroup(
                     new CommandChangeScoringMode(ScoringMode.SUBWOOFER), // pivot move to whatever current mode is
+                    new CommandIntakeStart(m_intake),
                     new CommandBaseScoringPosition(m_SAT),
                     // new CommandIndexMoveNoteToFiringPosition(m_intake),
-                    new CommandIndexReverse(m_intake),
+                   new CommandIndexReverse(m_intake),
                   //  new WaitCommand(0.05),
+                    // new CommandIndexStopInstant(m_intake),
                     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
                     new WaitCommand(0.25),
                     new CommandIndexStart(m_intake),
@@ -122,6 +124,7 @@ public class RobotContainer {
                         new CommandIndexStop(m_intake),
                         new CommandShooterStop(m_SAT)
                     ),
+                    new CommandIntakeStop(m_intake),
                     new CommandChangeRobotHasNote(false),
                     new CommandBaseStartPosition(m_SAT),
                     new CommandPivotStartPosition(m_SAT)
@@ -283,6 +286,8 @@ public class RobotContainer {
         //         () -> Constants.Vision.getPose("sub").getRotation().getDegrees())
         //     );
 
+        
+
         // driver.rightBumper().onTrue( //speaker center 
         //     new CommandSwerveToPoseProxy(
         //         s_Swerve,
@@ -329,7 +334,7 @@ public class RobotContainer {
                     //     () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
                     // ),
                     new CommandIndexReverse(m_intake),
-                    new WaitCommand(0.05),
+                    new WaitCommand(0.1),
                     new CommandIndexStop(m_intake),
                     // new CommandIndexMoveNoteToFiringPosition(m_intake),
                     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
@@ -392,7 +397,8 @@ public class RobotContainer {
                                 new CommandPivotHandoffPosition(m_SAT),
                                 new CommandIntakeStart(m_intake),
                                 new CommandShooterReverse(m_SAT),
-                                new CommandIndexWaitForNote(m_intake),
+                                // new CommandIndexWaitForNote(m_intake),
+                                new WaitCommand(3),
                                 new CommandChangeRobotHasNote(true),
                                 // new WaitCommand(0.25),
                                 // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete

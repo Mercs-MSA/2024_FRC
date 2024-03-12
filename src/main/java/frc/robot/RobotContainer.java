@@ -185,19 +185,23 @@ public class RobotContainer {
                 ));
             put("Intake Note", new SequentialCommandGroup(
                                 new CommandBaseStartPosition(m_SAT),
-                                // new CommandPivotStartPosition(m_SAT),
                                 new CommandIndexStart(m_intake),
                                 new CommandPivotHandoffPosition(m_SAT),
                                 new CommandIntakeStart(m_intake),
                                 new CommandShooterReverse(m_SAT),
-                                new CommandIndexWaitForNote(m_intake),
+                                // new CommandIndexWaitForNote(m_intake),
+                                new WaitCommand(1),
                                 new CommandChangeRobotHasNote(true),
-                                new CommandIndexStop(m_intake),
-                                new CommandShooterStop(m_SAT),
+                                // new WaitCommand(0.25),
                                 // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
+                                // new WaitCommand(0.75),
+                                // new CommandIndexStop(m_intake),
+                                
+                                // new CommandIndexMoveNoteToFiringPosition(m_intake),
+                                new CommandIndexStop(m_intake),
                                 new CommandIntakeStop(m_intake),
-                                new CommandPivotStartPosition(m_SAT)
-
+                                new CommandPivotStartPosition(m_SAT),
+                                new CommandShooterStop(m_SAT)
                             ));
         }  
     };
@@ -368,6 +372,8 @@ public class RobotContainer {
         // operator.leftBumper().onTrue(new CommandIndexStart(m_intake)));
 
         // operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
+
+        
 
         operator.x()
                 .onTrue(

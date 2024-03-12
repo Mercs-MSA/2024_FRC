@@ -12,9 +12,34 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Copy of TwoPiecePart1"
+            "name": "score sub note"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Copy of TwoPiecePart1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score podium note"
           }
         }
       ]

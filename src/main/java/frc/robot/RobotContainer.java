@@ -217,7 +217,7 @@ public class RobotContainer {
         NamedCommands.registerCommands(autonomousCommands);
 
         //Auto chooser
-        autoChooser = AutoBuilder.buildAutoChooser("New Auto"); // Default auto will be `Commands.none()`
+        autoChooser = AutoBuilder.buildAutoChooser("DONOTHING"); // Default auto will be `Commands.none()`
         SmartDashboard.putData("Auto Mode", autoChooser);
     }
 
@@ -398,7 +398,7 @@ public class RobotContainer {
                                 new CommandIntakeStart(m_intake),
                                 new CommandShooterReverse(m_SAT),
                                 // new CommandIndexWaitForNote(m_intake),
-                                new WaitCommand(3),
+                                new WaitCommand(2),
                                 new CommandChangeRobotHasNote(true),
                                 // new WaitCommand(0.25),
                                 // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete

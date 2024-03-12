@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3754032049697344,
+      "x": 1.38,
       "y": 5.543606856845236
     },
     "rotation": 0
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TwoPiecePart1"
+            "pathName": "Copy of TwoPiecePart1"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FourPiece"
+            "pathName": "Copy of ThreePiece"
           }
         },
         {
@@ -62,7 +62,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ThreePiece"
+            "pathName": "Copy of FourPiece"
           }
         },
         {

@@ -137,84 +137,9 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    // // schedule the autonomous command (example)
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.schedule();
-    // }
-
-    m_robotContainer.s_Swerve.resetOdometry(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)));
-            new SequentialCommandGroup(
-              //fire note
-              new CommandPivotScoringPosition(m_robotContainer.m_SAT), // pivot move to whatever current mode is
-                    new CommandBaseScoringPosition(m_robotContainer.m_SAT), // base move to whatever current mode is
-
-                    new CommandIndexReverse(m_robotContainer.m_intake),
-                    new WaitCommand(0.1),
-                    new CommandIndexStop(m_robotContainer.m_intake),
-                    new CommandShooterStart(m_robotContainer.m_SAT), // shoot with speed of whatever current mode is
-                    new WaitCommand(1), // waiting for the note to leave robot
-                    new CommandIndexStart(m_robotContainer.m_intake),
-                    new WaitCommand(2), // waiting for the note to leave robot
-                    new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
-                        new CommandIndexStop(m_robotContainer.m_intake),
-                        new CommandShooterStop(m_robotContainer.m_SAT)
-                    ),
-                    new CommandChangeRobotHasNote(false),
-                    new WaitCommand(3),
-                    new CommandBaseStartPosition(m_robotContainer.m_SAT),
-                    new CommandPivotStartPosition(m_robotContainer.m_SAT),
-
-            //start handoof / intake
-            new CommandBaseStartPosition(m_robotContainer.m_SAT),
-            new CommandIndexStart(m_robotContainer.m_intake),
-            new CommandPivotHandoffPosition(m_robotContainer.m_SAT),
-            new CommandIntakeStart(m_robotContainer.m_intake),
-            new CommandShooterReverse(m_robotContainer.m_SAT),
-            new CommandChangeRobotHasNote(true),
-
-            //drive to note
-            new CommandSwerveToPoseProxy(
-                m_robotContainer.s_Swerve,
-                () -> 3.45,
-                () -> 5.54,
-                () -> 0),
-
-              new WaitCommand(3)
-            
-            // //speaker center 
-            // new CommandSwerveToPoseProxy(
-            //     m_robotContainer.s_Swerve,
-            //     () -> 1.38,
-            //     () -> 5.54,
-            //     () -> 0),
-
-                
-            // new WaitCommand(3),
-
-            //   //fire note
-            //   new CommandPivotScoringPosition(m_robotContainer.m_SAT), // pivot move to whatever current mode is
-            //         new CommandBaseScoringPosition(m_robotContainer.m_SAT), // base move to whatever current mode is
-
-            //         new CommandIndexReverse(m_robotContainer.m_intake),
-            //         new WaitCommand(0.1),
-            //         new CommandIndexStop(m_robotContainer.m_intake),
-            //         new CommandShooterStart(m_robotContainer.m_SAT), // shoot with speed of whatever current mode is
-            //         new WaitCommand(1), // waiting for the note to leave robot
-            //         new CommandIndexStart(m_robotContainer.m_intake),
-            //         new WaitCommand(2), // waiting for the note to leave robot
-            //         new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
-            //             new CommandIndexStop(m_robotContainer.m_intake),
-            //             new CommandShooterStop(m_robotContainer.m_SAT)
-            //         ),
-            //         new CommandChangeRobotHasNote(false),
-            //         new WaitCommand(3),
-            //         new CommandBaseStartPosition(m_robotContainer.m_SAT),
-            //         new CommandPivotStartPosition(m_robotContainer.m_SAT)
-            ).schedule();
-
-    
-
-    Constants.Vision.visionTurnedOn = false;
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+    }
   }
 
   /** This function is called periodically during autonomous. */

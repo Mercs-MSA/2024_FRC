@@ -404,17 +404,17 @@ public class RobotContainer {
                                 new CommandIntakeStart(m_intake),
                                 new CommandShooterReverse(m_SAT),
                                 // new CommandIndexWaitForNote(m_intake),
-                                new WaitCommand(2),
-                                new CommandChangeRobotHasNote(true),
+                                // new WaitCommand(2),
+                                // new CommandChangeRobotHasNote(true),
                                 // new WaitCommand(0.25),
                                 // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
                                 // new WaitCommand(0.75),
                                 // new CommandIndexStop(m_intake),
                                 
                                 // new CommandIndexMoveNoteToFiringPosition(m_intake),
-                                new CommandIndexStop(m_intake),
-                                new CommandIntakeStop(m_intake),
-                                new CommandPivotStartPosition(m_SAT),
+                                // new CommandIndexStop(m_intake),
+                                // new CommandIntakeStop(m_intake),
+                                // new CommandPivotStartPosition(m_SAT),
                                 new CommandShooterStop(m_SAT)
                             )
 
@@ -425,6 +425,13 @@ public class RobotContainer {
                     //     () -> m_intake.getIndexMotorSpeed() != 0
                     // )
                 );
+
+        operator.x().onFalse(
+            new SequentialCommandGroup(
+                new CommandIndexMoveNoteToFiringPosition(m_intake),
+                new CommandIndexStop(m_intake),
+                new CommandIntakeStop(m_intake)
+        ));
 
         //     operator.b().onTrue(
         //         new SequentialCommandGroup(

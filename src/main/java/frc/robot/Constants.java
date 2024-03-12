@@ -80,7 +80,7 @@ public final class Constants {
         /* These values are used by the drive falcon to ramp in open loop and closed loop driving.
          * We found a small open loop ramp (0.25) helps with tread wear, tipping, etc */
         public static final double openLoopRamp = 0.3;
-        public static final double closedLoopRamp = 0.4;
+        public static final double closedLoopRamp = 0.2;
 
 
         /* Angle Motor PID Values */
@@ -90,7 +90,7 @@ public final class Constants {
 
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 0.03;
+        public static final double driveKP = 0.25;
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
         public static final double driveKF = 0.0;

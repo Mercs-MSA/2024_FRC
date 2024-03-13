@@ -29,6 +29,7 @@ import frc.robot.commands.CommandSwerveToPoseProxy;
 import frc.robot.commands.CommandSwerveTurnToNote;
 import frc.robot.commands.CommandChangeRobotHasNote;
 import frc.robot.commands.CommandChangeScoringMode;
+import frc.robot.commands.CommandDriveToPose;
 import frc.robot.commands.CommandShooterReverse;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.BaseSubcommands.*;
@@ -645,12 +646,93 @@ public class RobotContainer {
         operator.b().onTrue(m_climber.climbMidRightCommand());
     }
 
+    // /**
+    //  * Use this to pass the autonomous command to the main {@link Robot} class.
+    //  *
+    //  * @return the command to run in autonomous
+    //  */
+    // public Command getAutonomousCommand() {
+    //     return autoChooser.getSelected();
+    // }
+
+
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
+        return new SequentialCommandGroup(
+            new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))),
+
+            intakeNote(),
+
+            new CommandDriveToPose(s_Swerve, new Pose2d(2.85, 5.60, Rotation2d.fromDegrees(0))),
+
+            stopIntakeNote(),
+
+            new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
+
+            shootNoteSub(),
+            intakeNote(),
+
+            new CommandDriveToPose(s_Swerve, new Pose2d(2.67, 4.09, Rotation2d.fromDegrees(0))),
+
+            stopIntakeNote(),
+
+            new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
+
+            shootNoteSub(),
+            intakeNote(),
+
+            new CommandDriveToPose(s_Swerve, new Pose2d(2.77, 7.09, Rotation2d.fromDegrees(0))),
+
+            stopIntakeNote(),
+
+            new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
+
+            shootNoteSub()
+
+        );
+    }
+
+    public Command intakeNote(){
+        return new SequentialCommandGroup(
+            new CommandBaseStartPosition(m_SAT),
+            new CommandIndexStart(m_intake),
+            new CommandPivotHandoffPosition(m_SAT),
+            new CommandIntakeStart(m_intake)
+        );
+    }
+
+    public Command stopIntakeNote(){
+        return new SequentialCommandGroup(
+            new WaitCommand(0.5),
+            new CommandIntakeStop(m_intake),
+            new CommandIndexStop(m_intake)
+        );
+    }
+
+    public Command shootNoteSub(){
+        return new SequentialCommandGroup(
+            new CommandPivotScoringPosition(m_SAT),
+            new CommandBaseScoringPosition(m_SAT), 
+            new CommandIndexReverse(m_intake),
+            new WaitCommand(0.20),
+              new ParallelCommandGroup( 
+                new CommandShooterStart(m_SAT),
+                new CommandIndexStop(m_intake)
+            ),
+            new CommandIndexStart(m_intake),
+            new WaitCommand(1),
+            new ParallelCommandGroup( 
+                new CommandIndexStop(m_intake),
+                new CommandShooterStop(m_SAT)
+            ),
+            new CommandChangeRobotHasNote(false),
+            new WaitCommand(1),
+            new CommandBaseStartPosition(m_SAT),
+            new CommandPivotStartPosition(m_SAT)
+        );
     }
 }

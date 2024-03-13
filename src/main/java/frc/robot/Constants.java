@@ -255,7 +255,7 @@ public final class Constants {
         public static final int SAT_OBJECTDETECTOR_SENSOR_ID = 1;
         
         public static class SUBWOOFER{
-            public static final double motor1_base = -9.571777;
+            public static final double motor1_base = -14.507;
             public static final double motor2_base = -7.906;
             public static final double pivot = 0.0;
             public static final double shooterSpeed = -35;
@@ -285,8 +285,8 @@ public final class Constants {
         public static class PODIUM{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = -18;
-            public static final double shooterSpeed = -50;
+            public static final double pivot = -13.5;
+            public static final double shooterSpeed = -40;
         }
 
         public static class WING{
@@ -299,7 +299,7 @@ public final class Constants {
         public static class HANDOFF{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = -4.5;
+            public static final double pivot = -2.25;
             public static final double shooterSpeed = 0;
         }
 

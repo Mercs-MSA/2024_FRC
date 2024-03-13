@@ -556,6 +556,57 @@ public class RobotContainer {
 
         operator.a().whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSides(operator.getLeftY())));
 
+                operator.x()
+                .onTrue(
+                    // new ConditionalCommand(
+                    //     new ConditionalCommand(
+                    //         // if the intake system is on and you have a note, the system does nothing
+                    //         new InstantCommand(),
+
+                    //         // if the intake system is on and you d9on't have a note, the system turns off
+                    //         new SequentialCommandGroup(
+                    //             new CommandIntakeStop(m_intake),
+                    //             new CommandIndexStop(m_intake),        
+                    //             new CommandPivotStartPosition(m_SAT)      
+                    //         ),
+
+                    //         // this checks if we have a note
+                    //         () -> IntakeConstants.kRobotHasNote == true
+                    //     ),
+                    //     new ConditionalCommand(
+                    //         // if the intake system is off and you have a note, the system does nothing
+                    //         new InstantCommand(),
+
+                            // if the intake system is off and you don't have a note, the system turns on
+                            new SequentialCommandGroup(
+                                new CommandBaseStartPosition(m_SAT),
+                                new CommandIndexStart(m_intake),
+                                new CommandPivotHandoffPosition(m_SAT),
+                                new CommandIntakeStart(m_intake),
+                                new CommandShooterReverse(m_SAT),
+                                // new CommandIndexWaitForNote(m_intake),
+                                // new WaitCommand(2),
+                                // new CommandChangeRobotHasNote(true),
+                                // new WaitCommand(0.25),
+                                // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
+                                // new WaitCommand(0.75),
+                                // new CommandIndexStop(m_intake),
+                                
+                                // new CommandIndexMoveNoteToFiringPosition(m_intake),
+                                // new CommandIndexStop(m_intake),
+                                // new CommandIntakeStop(m_intake),
+                                // new CommandPivotStartPosition(m_SAT),
+                                new CommandShooterStop(m_SAT)
+                            )
+
+                    //         // this checks if we have a note
+                    //         () -> IntakeConstants.kRobotHasNote == true
+                    //     ),
+                    //     // this checks if the intake system is on
+                    //     () -> m_intake.getIndexMotorSpeed() != 0
+                    // )
+                );
+
         // operator.start()
         //     .onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
         // operator.a()
@@ -688,25 +739,28 @@ public class RobotContainer {
 
             new ParallelCommandGroup(
                 new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.67 + 0.3, 4.09 - 0.35, Rotation2d.fromDegrees(-30)))), 
-                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+                new CommandChangeScoringMode(ScoringMode.PODIUM),
                 intakeBasePivot()
             ),  
-
+            
             stopIntakeNote(),
+            moveStuffPodium(),
+            shootNotePodium(),
+            new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
 
             
-            new ParallelCommandGroup(
-                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
-                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
-                moveStuffSub()
-            ),
+            // new ParallelCommandGroup(
+            //     new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
+            //     new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+            //     moveStuffSub()
+            // ),
 
-            shootNoteSub(),
-            intakeNote(),
+            // shootNoteSub(),
+            // intakeNote(),
 
             new ParallelCommandGroup(
-                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.77 + 0.35, 7.09 - 0.35, Rotation2d.fromDegrees(30)))), 
-                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.77 + 0.35, 7.09 + 0.15, Rotation2d.fromDegrees(30)))), 
+                new CommandChangeScoringMode(ScoringMode.PODIUM),
                 intakeBasePivot()
             ),  
 

@@ -338,13 +338,16 @@ public class RobotContainer {
                     //     () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
                     // ),
                     new CommandIndexReverse(m_intake),
-                    new WaitCommand(0.1),
-                    new CommandIndexStop(m_intake),
+                    new WaitCommand(0.05),
+                      new ParallelCommandGroup( 
+                        new CommandShooterStart(m_SAT),
+                        new CommandIndexStop(m_intake)
+                    ), // shoot with speed of whatever current mode is)
                     // new CommandIndexMoveNoteToFiringPosition(m_intake),
-                    new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
-                    new WaitCommand(1), // waiting for the note to leave robot
+                   
+                    // new WaitCommand(1), // waiting for the note to leave robot
                     new CommandIndexStart(m_intake),
-                    new WaitCommand(2), // waiting for the note to leave robot
+                    new WaitCommand(1), // waiting for the note to leave robot
                     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
                         new CommandIndexStop(m_intake),
                         new CommandShooterStop(m_SAT)
@@ -358,7 +361,7 @@ public class RobotContainer {
                     //     new InstantCommand(), // if we're not scoring amp, do nothing
                     //     () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
                     // ),
-                    new WaitCommand(3),
+                    new WaitCommand(1),
                     new CommandBaseStartPosition(m_SAT),
                     new CommandPivotStartPosition(m_SAT)
                 )
@@ -428,7 +431,7 @@ public class RobotContainer {
 
         operator.x().onFalse(
             new SequentialCommandGroup(
-                new CommandIndexMoveNoteToFiringPosition(m_intake),
+                //new CommandIndexMoveNoteToFiringPosition(m_intake),
                 new CommandIndexStop(m_intake),
                 new CommandIntakeStop(m_intake)
         ));

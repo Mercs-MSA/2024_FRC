@@ -257,7 +257,7 @@ public final class Constants {
             public static final double motor1_base = -9.571777;
             public static final double motor2_base = -7.906;
             public static final double pivot = 0.0;
-            public static final double shooterSpeed = -52.5;
+            public static final double shooterSpeed = -35;
         }
 
         public static class AMP_STAGE_1{
@@ -298,7 +298,7 @@ public final class Constants {
         public static class HANDOFF{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = -5.5;
+            public static final double pivot = -4.5;
             public static final double shooterSpeed = 0;
         }
 
@@ -313,7 +313,7 @@ public final class Constants {
         public static final double MOTOR_TOLERANCE = 0.6;
 
         public static final double SHOOTER_SPEED = -50;
-        public static final double kShooterSpeedTolerance = 10.0;
+        public static final double kShooterSpeedTolerance = 8.0;
 
         /*THIS NEEDS TO INCLUDE THE CONVERSION FROM DEGREES TO ENCODER COUNTS */
         public static final int BASE_ENCODER_RATIO = 50;

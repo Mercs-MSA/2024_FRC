@@ -95,12 +95,12 @@ public class SAT extends SubsystemBase {
     satShooter1MotorConfigs.Slot0.kI = 0; // no output for integrated error
     satShooter1MotorConfigs.Slot0.kD = 0; // no output for error derivative
     
-    satShooter1MotorConfigs.Voltage.PeakForwardVoltage = 12;
-    satShooter1MotorConfigs.Voltage.PeakReverseVoltage = -12;
+    satShooter1MotorConfigs.Voltage.PeakForwardVoltage = 15;
+    satShooter1MotorConfigs.Voltage.PeakReverseVoltage = -15;
     satShooter1MotorConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.2;
-    satShooter1MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.4;  
+    satShooter1MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.2;  
     satShooter1MotorConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
-    satShooter1MotorConfigs.CurrentLimits.StatorCurrentLimit = 25;
+    satShooter1MotorConfigs.CurrentLimits.StatorCurrentLimit = 35;
 
     // STATUS FOR BASE1
     StatusCode status1 = StatusCode.StatusCodeNotInitialized;

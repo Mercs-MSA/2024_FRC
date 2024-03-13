@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -436,6 +437,9 @@ public class RobotContainer {
                 new CommandIntakeStop(m_intake)
         ));
 
+        operator.start().onTrue(
+            Commands.runOnce(() -> CommandScheduler.getInstance().cancelAll())
+        );
         //     operator.b().onTrue(
         //         new SequentialCommandGroup(
         //             new CommandIntakeStop(m_intake),

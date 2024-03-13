@@ -678,7 +678,7 @@ public class RobotContainer {
             stopIntakeNote(),
             
             new ParallelCommandGroup(
-                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
+                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.48, 5.54, Rotation2d.fromDegrees(0)))), //sub
                 new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
                 moveStuffSub()
             ),
@@ -711,7 +711,7 @@ public class RobotContainer {
             ),  
 
             stopIntakeNote(),
-            moveStuffSub(),
+            moveStuffPodium(),
             shootNotePodium());
 
             // new ParallelCommandGroup(

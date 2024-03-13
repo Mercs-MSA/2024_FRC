@@ -687,7 +687,7 @@ public class RobotContainer {
             intakeNote(),
 
             new ParallelCommandGroup(
-                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.67 + 0.3, 4.09 - 0.3, Rotation2d.fromDegrees(-30)))), 
+                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.67 + 0.3, 4.09 - 0.35, Rotation2d.fromDegrees(-30)))), 
                 new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
                 intakeBasePivot()
             ),  

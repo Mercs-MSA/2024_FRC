@@ -27,7 +27,7 @@ public class CommandDriveToPose extends Command {
 
     xController.setTolerance(0.2);
     yController.setTolerance(0.2);
-    thetaController.setTolerance(Units.degreesToRadians(1));
+    thetaController.setTolerance(Units.degreesToRadians(2.5));
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     addRequirements(swerve);

@@ -666,44 +666,112 @@ public class RobotContainer {
         return new SequentialCommandGroup(
             new InstantCommand(() -> s_Swerve.resetOdometry(AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))))),
 
+            shootFirstNoteSub(),
             intakeNote(),
-
-            new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.85, 5.60, Rotation2d.fromDegrees(0)))),
+            
+            new ParallelCommandGroup(
+                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(3.1, 5.50, Rotation2d.fromDegrees(0)))), 
+                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+                intakeBasePivot()
+            ),  
 
             stopIntakeNote(),
-
-            new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
+            
+            new ParallelCommandGroup(
+                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
+                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+                moveStuffSub()
+            ),
 
             shootNoteSub(),
             intakeNote(),
 
-            new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.67, 4.09, Rotation2d.fromDegrees(0)))),
+            new ParallelCommandGroup(
+                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.67 + 0.3, 4.09 - 0.3, Rotation2d.fromDegrees(-30)))), 
+                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+                intakeBasePivot()
+            ),  
 
             stopIntakeNote(),
 
-            new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
+            
+            new ParallelCommandGroup(
+                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
+                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+                moveStuffSub()
+            ),
 
             shootNoteSub(),
             intakeNote(),
 
-            new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.77, 7.09, Rotation2d.fromDegrees(0)))),
+            new ParallelCommandGroup(
+                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.77 + 0.35, 7.09 - 0.35, Rotation2d.fromDegrees(30)))), 
+                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+                intakeBasePivot()
+            ),  
 
             stopIntakeNote(),
 
-            new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
+            new ParallelCommandGroup(
+                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
+                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+                moveStuffSub()
+            ),
 
-            shootNoteSub()
+            shootNoteSub());            
+            // intakeNote(),
 
-        );
+            // new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.67 + 0.3, 4.09 - 0.3, Rotation2d.fromDegrees(-30)))),
+
+            // stopIntakeNote(),
+
+            // new ParallelCommandGroup(
+            //     new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
+            //     new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+            //     moveStuffSub()
+            // ),
+            // shootNoteSub(),
+            // intakeNote(),
+
+            // new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.77 + 0.35, 7.09 - 0.35, Rotation2d.fromDegrees(30)))),
+
+            // new ParallelCommandGroup(
+            //     new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.25, 6.14, Rotation2d.fromDegrees(30)))),
+            //     moveStuffPodium()
+            // ),
+
+            // stopIntakeNote(),
+
+            // shootNotePodium(),
+            // new CommandIntakeStop(m_intake)
+
     }
 
     public Command intakeNote(){
         Constants.State.currentRobotState = Constants.State.robotState.INTAKE;
         return new SequentialCommandGroup(
-            new CommandBaseStartPosition(m_SAT),
+            // new CommandBaseStartPosition(m_SAT),
+            // new CommandPivotStartPosition(m_SAT),
+            // new CommandShooterStop(m_SAT),
+            new CommandIntakeStart(m_intake),
             new CommandIndexStart(m_intake),
-            new CommandPivotHandoffPosition(m_SAT),
-            new CommandIntakeStart(m_intake)
+            new CommandShooterReverse(m_SAT)
+            
+            // new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+            // new CommandBaseScoringPosition(m_SAT), 
+            // new CommandPivotScoringPosition(m_SAT)
+            
+            // new CommandPivotHandoffPosition(m_SAT),
+            
+        );
+    }
+
+    public Command intakeBasePivot(){
+        return new SequentialCommandGroup(
+            new CommandBaseStartPosition(m_SAT),
+            // new CommandPivotStartPosition(m_SAT)            
+            new CommandPivotHandoffPosition(m_SAT)
+            
         );
     }
 
@@ -711,32 +779,109 @@ public class RobotContainer {
         Constants.State.currentRobotState = Constants.State.robotState.IDLE;
         return new SequentialCommandGroup(
             new WaitCommand(0.5),
-            new CommandIntakeStop(m_intake),
-            new CommandIndexStop(m_intake)
+            // new CommandIntakeStop(m_intake),
+            // new CommandShooterStart(m_SAT),
+            new CommandIndexStop(m_intake),
+            new CommandChangeScoringMode(ScoringMode.SUBWOOFER)
+        );
+    }
+
+    public Command moveStuffSub(){
+        return new SequentialCommandGroup(
+        new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+        new CommandIndexReverse(m_intake),
+        new WaitCommand(0.2),
+        new CommandIndexStop(m_intake),
+        new CommandShooterStart(m_SAT),
+        new CommandBaseScoringPosition(m_SAT), 
+        new CommandPivotScoringPosition(m_SAT));
+    }
+
+    public Command moveStuffPodium(){
+        return new SequentialCommandGroup(
+        new CommandChangeScoringMode(ScoringMode.PODIUM),
+        new CommandIndexReverse(m_intake),
+        new WaitCommand(0.15),
+        new CommandIndexStop(m_intake),
+        new CommandShooterStart(m_SAT),
+        new CommandBaseScoringPosition(m_SAT), 
+        new CommandPivotScoringPosition(m_SAT));
+    }
+
+    public Command shootFirstNoteSub(){
+        Constants.State.currentRobotState = Constants.State.robotState.SCORING;
+        return new SequentialCommandGroup(
+            new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+            new CommandBaseScoringPosition(m_SAT), 
+            new CommandPivotScoringPosition(m_SAT),
+            new CommandIndexReverse(m_intake),
+            new WaitCommand(0.175),
+              new ParallelCommandGroup( 
+                new CommandShooterStart(m_SAT),
+                new CommandIndexStop(m_intake)
+            ),
+            new CommandIndexStart(m_intake),
+            new WaitCommand(0.35),
+            new ParallelCommandGroup( 
+                new CommandIndexStop(m_intake),
+                new CommandShooterStop(m_SAT)
+            ),
+            new CommandChangeRobotHasNote(false)
+            // new WaitCommand(0.25),
+            // new CommandBaseStartPosition(m_SAT),
+            // new CommandPivotStartPosition(m_SAT)
         );
     }
 
     public Command shootNoteSub(){
         Constants.State.currentRobotState = Constants.State.robotState.SCORING;
         return new SequentialCommandGroup(
-            new CommandPivotScoringPosition(m_SAT),
+            new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
             new CommandBaseScoringPosition(m_SAT), 
-            new CommandIndexReverse(m_intake),
-            new WaitCommand(0.20),
-              new ParallelCommandGroup( 
-                new CommandShooterStart(m_SAT),
-                new CommandIndexStop(m_intake)
-            ),
+            new CommandPivotScoringPosition(m_SAT),
             new CommandIndexStart(m_intake),
-            new WaitCommand(1),
+            new CommandShooterStart(m_SAT),
+            // new CommandIndexReverse(m_intake),
+            // new WaitCommand(0.20),
+            //   new ParallelCommandGroup( 
+            //     new CommandShooterStart(m_SAT),
+            //     new CommandIndexStop(m_intake)
+            // ),
+            // new CommandShooterStart(m_SAT),
+            // new CommandIndexStart(m_intake),
+            new WaitCommand(0.15),
             new ParallelCommandGroup( 
                 new CommandIndexStop(m_intake),
                 new CommandShooterStop(m_SAT)
             ),
-            new CommandChangeRobotHasNote(false),
-            new WaitCommand(1),
-            new CommandBaseStartPosition(m_SAT),
-            new CommandPivotStartPosition(m_SAT)
+            // new CommandShooterStop(m_SAT),
+            new CommandChangeRobotHasNote(false)
+            // new WaitCommand(0.15),
+            // new CommandBaseStartPosition(m_SAT),
+            // new CommandPivotStartPosition(m_SAT)
+        );
+    }
+
+    public Command shootNotePodium(){
+        Constants.State.currentRobotState = Constants.State.robotState.SCORING;
+        return new SequentialCommandGroup(
+            new CommandChangeScoringMode(ScoringMode.PODIUM),
+            new CommandBaseScoringPosition(m_SAT), 
+            new CommandPivotScoringPosition(m_SAT),
+            // new CommandIndexReverse(m_intake),
+            // new WaitCommand(0.20),
+            //   new ParallelCommandGroup( 
+            //     new CommandShooterStart(m_SAT),
+            //     new CommandIndexStop(m_intake)
+            // ),
+            // new CommandShooterStart(m_SAT),
+            new CommandIndexStart(m_intake),
+            new WaitCommand(0.3),
+            new ParallelCommandGroup( 
+                new CommandIndexStop(m_intake),
+                new CommandShooterStop(m_SAT)
+            ),
+            new CommandChangeRobotHasNote(false)
         );
     }
 }

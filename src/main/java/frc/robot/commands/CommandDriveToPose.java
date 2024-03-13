@@ -15,9 +15,9 @@ public class CommandDriveToPose extends Command {
   private Pose2d desiredPose;
 
   private final ProfiledPIDController xController =
-      new ProfiledPIDController(4, Constants.Swerve.driveKI, Constants.Swerve.driveKD, new TrapezoidProfile.Constraints(4, 3.0));
+      new ProfiledPIDController(3, Constants.Swerve.driveKI, Constants.Swerve.driveKD, new TrapezoidProfile.Constraints(3.5, 3));
   private final ProfiledPIDController yController =
-      new ProfiledPIDController(4, Constants.Swerve.driveKI, Constants.Swerve.driveKD, new TrapezoidProfile.Constraints(4, 3.0));
+      new ProfiledPIDController(3, Constants.Swerve.driveKI, Constants.Swerve.driveKD, new TrapezoidProfile.Constraints(3.5, 3));
   private final ProfiledPIDController thetaController =
       new ProfiledPIDController(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD, new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
 
@@ -25,8 +25,8 @@ public class CommandDriveToPose extends Command {
     this.swerve = swerve;
     this.desiredPose = pose;
 
-    xController.setTolerance(0.01);
-    yController.setTolerance(0.01);
+    xController.setTolerance(0.2);
+    yController.setTolerance(0.2);
     thetaController.setTolerance(Units.degreesToRadians(1));
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 

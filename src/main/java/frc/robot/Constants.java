@@ -306,7 +306,7 @@ public final class Constants {
         public static class START{
             public static final double motor1_base = 0.334;
             public static final double motor2_base = -0.334;
-            public static final double pivot = -1.21;
+            public static final double pivot = -1.161;
             public static final double shooterSpeed = 0;
         }
 

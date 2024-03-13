@@ -339,7 +339,7 @@ public class RobotContainer {
                     //     () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
                     // ),
                     new CommandIndexReverse(m_intake),
-                    new WaitCommand(0.05),
+                    new WaitCommand(0.20),
                       new ParallelCommandGroup( 
                         new CommandShooterStart(m_SAT),
                         new CommandIndexStop(m_intake)

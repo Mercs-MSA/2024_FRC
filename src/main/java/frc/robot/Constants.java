@@ -181,7 +181,7 @@ public final class Constants {
         public static final double kIndexProcessRotations = -1.5;
         public static final int kIndexMotorId = 24; 
         public static final int kIndexMotorSpeed = 90;
-        public static final double kSlowIndexMotorSpeed = -20;
+        public static final double kSlowIndexMotorSpeed = -5;
         public static final int kIntakeUpperSensorId = 0;
         public static final int kIntakeLowerSensor1Id = 1;
         public static final int kIntakeLowerSensor2Id = 2;
@@ -284,8 +284,8 @@ public final class Constants {
         public static class PODIUM{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = -22;
-            public static final double shooterSpeed = -52.5;
+            public static final double pivot = -18;
+            public static final double shooterSpeed = -50;
         }
 
         public static class WING{

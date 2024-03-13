@@ -711,14 +711,15 @@ public class RobotContainer {
             ),  
 
             stopIntakeNote(),
+            moveStuffSub(),
+            shootNotePodium());
 
-            new ParallelCommandGroup(
-                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
-                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
-                moveStuffSub()
-            ),
+            // new ParallelCommandGroup(
+            //     new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
+            //     new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+            //     moveStuffSub()
+            // ),
 
-            shootNoteSub());            
             // intakeNote(),
 
             // new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.67 + 0.3, 4.09 - 0.3, Rotation2d.fromDegrees(-30)))),

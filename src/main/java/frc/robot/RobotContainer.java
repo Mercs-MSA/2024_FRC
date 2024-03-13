@@ -43,6 +43,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.vision.ApriltagVision;
 // import frc.robot.subsystems.vision.ApriltagVision;
 import frc.robot.subsystems.vision.CustomGamePieceVision;
+import frc.robot.Constants.AllianceFlipUtil;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ScoringConstants;
 import frc.robot.Constants.ScoringConstants.ScoringMode;
@@ -663,33 +664,33 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return new SequentialCommandGroup(
-            new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))),
+            new InstantCommand(() -> s_Swerve.resetOdometry(AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))))),
 
             intakeNote(),
 
-            new CommandDriveToPose(s_Swerve, new Pose2d(2.85, 5.60, Rotation2d.fromDegrees(0))),
+            new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.85, 5.60, Rotation2d.fromDegrees(0)))),
 
             stopIntakeNote(),
 
-            new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
+            new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
 
             shootNoteSub(),
             intakeNote(),
 
-            new CommandDriveToPose(s_Swerve, new Pose2d(2.67, 4.09, Rotation2d.fromDegrees(0))),
+            new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.67, 4.09, Rotation2d.fromDegrees(0)))),
 
             stopIntakeNote(),
 
-            new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
+            new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
 
             shootNoteSub(),
             intakeNote(),
 
-            new CommandDriveToPose(s_Swerve, new Pose2d(2.77, 7.09, Rotation2d.fromDegrees(0))),
+            new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.77, 7.09, Rotation2d.fromDegrees(0)))),
 
             stopIntakeNote(),
 
-            new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
+            new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
 
             shootNoteSub()
 
@@ -697,6 +698,7 @@ public class RobotContainer {
     }
 
     public Command intakeNote(){
+        Constants.State.currentRobotState = Constants.State.robotState.INTAKE;
         return new SequentialCommandGroup(
             new CommandBaseStartPosition(m_SAT),
             new CommandIndexStart(m_intake),
@@ -706,6 +708,7 @@ public class RobotContainer {
     }
 
     public Command stopIntakeNote(){
+        Constants.State.currentRobotState = Constants.State.robotState.IDLE;
         return new SequentialCommandGroup(
             new WaitCommand(0.5),
             new CommandIntakeStop(m_intake),
@@ -714,6 +717,7 @@ public class RobotContainer {
     }
 
     public Command shootNoteSub(){
+        Constants.State.currentRobotState = Constants.State.robotState.SCORING;
         return new SequentialCommandGroup(
             new CommandPivotScoringPosition(m_SAT),
             new CommandBaseScoringPosition(m_SAT), 

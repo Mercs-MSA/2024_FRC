@@ -4,45 +4,16 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.util.Optional;
-
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+
 import frc.robot.Constants.State.robotState;
-import frc.robot.Constants.Vision.aprilTagBackLeft;
-import frc.robot.commands.CommandChangeRobotHasNote;
-import frc.robot.commands.CommandShooterReverse;
-import frc.robot.commands.CommandShooterStart;
-import frc.robot.commands.CommandShooterStop;
-import frc.robot.commands.CommandSwerveToPoseProxy;
-import frc.robot.commands.BaseSubcommands.CommandBaseScoringPosition;
-import frc.robot.commands.BaseSubcommands.CommandBaseStartPosition;
-import frc.robot.commands.IndexSubcommands.CommandIndexReverse;
-import frc.robot.commands.IndexSubcommands.CommandIndexStart;
-import frc.robot.commands.IndexSubcommands.CommandIndexStop;
-import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
-import frc.robot.commands.IntakeSubcommands.CommandIntakeStop;
-import frc.robot.commands.PivotSubcommands.CommandPivotHandoffPosition;
-import frc.robot.commands.PivotSubcommands.CommandPivotScoringPosition;
-import frc.robot.commands.PivotSubcommands.CommandPivotStartPosition;
 // import frc.robot.subsystems.vision.ApriltagVision;
-import frc.robot.subsystems.climber.climber;
-import frc.robot.subsystems.SAT.SAT;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -60,7 +31,6 @@ public class Robot extends TimedRobot {
 
   Field2d poseEstimateField2d = new Field2d();
   Pose2d apiltagPlusGyro = new Pose2d();
-  private AnalogInput PSU_Volt_Monitor = new AnalogInput(0);
 
   /**
    * This function is run when the robot is first started up and should be used for any

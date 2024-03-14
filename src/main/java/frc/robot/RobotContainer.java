@@ -109,54 +109,141 @@ public class RobotContainer {
             put("pivot start position", new CommandPivotStartPosition(m_SAT));
 
             put("scoring mode podium", new CommandChangeScoringMode(ScoringMode.PODIUM));
-            put("score sub note", new SequentialCommandGroup(
-                    new CommandChangeScoringMode(ScoringMode.SUBWOOFER), // pivot move to whatever current mode is
-                    new CommandIntakeStart(m_intake),
-                    new CommandBaseScoringPosition(m_SAT),
-                    // new CommandIndexMoveNoteToFiringPosition(m_intake),
-                   new CommandIndexReverse(m_intake),
-                  //  new WaitCommand(0.05),
-                    // new CommandIndexStopInstant(m_intake),
-                    new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
-                    new WaitCommand(0.25),
-                    new CommandIndexStart(m_intake),
-                    new WaitCommand(0.3), // waiting for the note to leave robot
-                    new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
-                        new CommandIndexStop(m_intake),
-                        new CommandShooterStop(m_SAT)
-                    ),
-                    new CommandIntakeStop(m_intake),
-                    new CommandChangeRobotHasNote(false),
-                    new CommandBaseStartPosition(m_SAT),
-                    new CommandPivotStartPosition(m_SAT)
-                ));
-                put("score podium note", new SequentialCommandGroup(
-                    new CommandChangeScoringMode(ScoringMode.PODIUM),
+         put("score sub note", new SequentialCommandGroup(
+                    new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+                    new SequentialCommandGroup(
                     new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
                     new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
-                    new ConditionalCommand( // IF WE NEED TO SCORE AMP...
-                        new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
-                        new InstantCommand(), // if we're not scoring amp, do nothing
-                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
-                    ),
-                    new CommandIndexMoveNoteToFiringPosition(m_intake),
-                    new WaitCommand(0.1),
-                    new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
+                    // new ConditionalCommand( // IF WE NEED TO SCORE AMP...
+                    //     new SequentialCommandGroup(
+                    //         new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
+                    //         new CommandBaseStageTwoPosition(m_SAT)
+                    //     ),
+                    //     new InstantCommand(), // if we're not scoring amp, do nothing
+                    //     () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                    // ),
+                    new CommandIndexReverse(m_intake),
+                    new WaitCommand(0.50),
+                      new ParallelCommandGroup( 
+                        new CommandShooterStart(m_SAT),
+                        new CommandIndexStop(m_intake)
+                    ), // shoot with speed of whatever current mode is)
+                    // new CommandIndexMoveNoteToFiringPosition(m_intake),
+                   
+                    // new WaitCommand(1), // waiting for the note to leave robot
                     new CommandIndexStart(m_intake),
-                    new WaitCommand(0.3), // waiting for the note to leave robot
+                    new WaitCommand(1), // waiting for the note to leave robot
                     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
                         new CommandIndexStop(m_intake),
                         new CommandShooterStop(m_SAT)
                     ),
                     new CommandChangeRobotHasNote(false),
-                    new ConditionalCommand( // IF WE JUST SCORED AMP...
-                        new CommandPivotScoringPosition(m_SAT),  // A 2nd pivot rotation is needed
-                        new InstantCommand(), // if we're not scoring amp, do nothing
-                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                    // new ConditionalCommand( // IF WE JUST SCORED AMP...
+                    //     new SequentialCommandGroup(
+                    //         new CommandBaseScoringPosition(m_SAT),
+                    //         new CommandPivotScoringPosition(m_SAT)  // A 2nd pivot rotation is needed
+                    //     ),
+                    //     new InstantCommand(), // if we're not scoring amp, do nothing
+                    //     () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                    // ),
+                    new WaitCommand(1),
+                    
+                    new CommandPivotStartPosition(m_SAT),
+                    new CommandBaseStartPosition(m_SAT)
+                )
+                //     new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
+                //     new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
+                //     new ConditionalCommand( // IF WE NEED TO SCORE AMP...
+                //         new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
+                //         new InstantCommand(), // if we're not scoring amp, do nothing
+                //         () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                //     ),
+                //     new CommandIndexMoveNoteToFiringPosition(m_intake),
+                //     new WaitCommand(0.1),
+                //     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
+                //     new CommandIndexStart(m_intake),
+                //     new WaitCommand(0.3), // waiting for the note to leave robot
+                //     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
+                //         new CommandIndexStop(m_intake),
+                //         new CommandShooterStop(m_SAT)
+                //     ),
+                //     new CommandChangeRobotHasNote(false),
+                //     new ConditionalCommand( // IF WE JUST SCORED AMP...
+                //         new CommandPivotScoringPosition(m_SAT),  // A 2nd pivot rotation is needed
+                //         new InstantCommand(), // if we're not scoring amp, do nothing
+                //         () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                //     ),
+                //     new CommandBaseStartPosition(m_SAT),
+                //     new CommandPivotStartPosition(m_SAT)
+                // )
+            ));
+            put("score podium note", new SequentialCommandGroup(
+                    new CommandChangeScoringMode(ScoringMode.PODIUM),
+                    new SequentialCommandGroup(
+                    new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
+                    new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
+                    // new ConditionalCommand( // IF WE NEED TO SCORE AMP...
+                    //     new SequentialCommandGroup(
+                    //         new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
+                    //         new CommandBaseStageTwoPosition(m_SAT)
+                    //     ),
+                    //     new InstantCommand(), // if we're not scoring amp, do nothing
+                    //     () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                    // ),
+                    new CommandIndexReverse(m_intake),
+                    new WaitCommand(0.50),
+                      new ParallelCommandGroup( 
+                        new CommandShooterStart(m_SAT),
+                        new CommandIndexStop(m_intake)
+                    ), // shoot with speed of whatever current mode is)
+                    // new CommandIndexMoveNoteToFiringPosition(m_intake),
+                   
+                    // new WaitCommand(1), // waiting for the note to leave robot
+                    new CommandIndexStart(m_intake),
+                    new WaitCommand(1), // waiting for the note to leave robot
+                    new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
+                        new CommandIndexStop(m_intake),
+                        new CommandShooterStop(m_SAT)
                     ),
+                    new CommandChangeRobotHasNote(false),
+                    // new ConditionalCommand( // IF WE JUST SCORED AMP...
+                    //     new SequentialCommandGroup(
+                    //         new CommandBaseScoringPosition(m_SAT),
+                    //         new CommandPivotScoringPosition(m_SAT)  // A 2nd pivot rotation is needed
+                    //     ),
+                    //     new InstantCommand(), // if we're not scoring amp, do nothing
+                    //     () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                    // ),
+                    new WaitCommand(1),
                     new CommandBaseStartPosition(m_SAT),
                     new CommandPivotStartPosition(m_SAT)
-                ));
+                )
+                //     new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
+                //     new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
+                //     new ConditionalCommand( // IF WE NEED TO SCORE AMP...
+                //         new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
+                //         new InstantCommand(), // if we're not scoring amp, do nothing
+                //         () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                //     ),
+                //     new CommandIndexMoveNoteToFiringPosition(m_intake),
+                //     new WaitCommand(0.1),
+                //     new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
+                //     new CommandIndexStart(m_intake),
+                //     new WaitCommand(0.3), // waiting for the note to leave robot
+                //     new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
+                //         new CommandIndexStop(m_intake),
+                //         new CommandShooterStop(m_SAT)
+                //     ),
+                //     new CommandChangeRobotHasNote(false),
+                //     new ConditionalCommand( // IF WE JUST SCORED AMP...
+                //         new CommandPivotScoringPosition(m_SAT),  // A 2nd pivot rotation is needed
+                //         new InstantCommand(), // if we're not scoring amp, do nothing
+                //         () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+                //     ),
+                //     new CommandBaseStartPosition(m_SAT),
+                //     new CommandPivotStartPosition(m_SAT)
+                // )
+            ));
             put("score wing note", new SequentialCommandGroup(
                     new CommandChangeScoringMode(ScoringMode.WING),
                     new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
@@ -181,29 +268,50 @@ public class RobotContainer {
                         new InstantCommand(), // if we're not scoring amp, do nothing
                         () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
                     ),
-                    new CommandBaseStartPosition(m_SAT),
-                    new CommandPivotStartPosition(m_SAT)
+                    
+                    new CommandPivotStartPosition(m_SAT),
+                    new CommandBaseStartPosition(m_SAT)
                 ));
             put("Intake Note", new SequentialCommandGroup(
+                     new SequentialCommandGroup(
                                 new CommandBaseStartPosition(m_SAT),
                                 new CommandIndexStart(m_intake),
                                 new CommandPivotHandoffPosition(m_SAT),
                                 new CommandIntakeStart(m_intake),
                                 new CommandShooterReverse(m_SAT),
                                 // new CommandIndexWaitForNote(m_intake),
-                                new WaitCommand(1),
-                                new CommandChangeRobotHasNote(true),
+                                // new WaitCommand(2),
+                                // new CommandChangeRobotHasNote(true),
                                 // new WaitCommand(0.25),
                                 // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
-                                // new WaitCommand(0.75),
+                                new WaitCommand(0.75),
                                 // new CommandIndexStop(m_intake),
                                 
                                 // new CommandIndexMoveNoteToFiringPosition(m_intake),
-                                new CommandIndexStop(m_intake),
-                                new CommandIntakeStop(m_intake),
-                                new CommandPivotStartPosition(m_SAT),
+                                // new CommandIndexStop(m_intake),
+                                // new CommandIntakeStop(m_intake),
+                                // new CommandPivotStartPosition(m_SAT),
                                 new CommandShooterStop(m_SAT)
-                            ));
+                            )));
+                            //     new CommandBaseStartPosition(m_SAT),
+                            //     new CommandIndexStart(m_intake),
+                            //     new CommandPivotHandoffPosition(m_SAT),
+                            //     new CommandIntakeStart(m_intake),
+                            //     new CommandShooterReverse(m_SAT),
+                            //     // new CommandIndexWaitForNote(m_intake),
+                            //     new WaitCommand(1),
+                            //     new CommandChangeRobotHasNote(true),
+                            //     // new WaitCommand(0.25),
+                            //     // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
+                            //     // new WaitCommand(0.75),
+                            //     // new CommandIndexStop(m_intake),
+                                
+                            //     // new CommandIndexMoveNoteToFiringPosition(m_intake),
+                            //     new CommandIndexStop(m_intake),
+                            //     new CommandIntakeStop(m_intake),
+                            //     new CommandPivotStartPosition(m_SAT),
+                            //     new CommandShooterStop(m_SAT)
+                            // ));
         }  
     };
 
@@ -363,8 +471,9 @@ public class RobotContainer {
                     //     () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
                     // ),
                     new WaitCommand(1),
-                    new CommandBaseStartPosition(m_SAT),
-                    new CommandPivotStartPosition(m_SAT)
+                   
+                    new CommandPivotStartPosition(m_SAT),
+                    new CommandBaseStartPosition(m_SAT)
                 )
             ); 
     }
@@ -375,7 +484,7 @@ public class RobotContainer {
         operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
         // operator.leftBumper().onTrue(new CommandIndexStart(m_intake)));
 
-        // operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
+        operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
 
         
 
@@ -412,7 +521,7 @@ public class RobotContainer {
                                 // new CommandChangeRobotHasNote(true),
                                 // new WaitCommand(0.25),
                                 // Once we see a note on the bottom sensors, then the wait command below is for the handoff to complete
-                                // new WaitCommand(0.75),
+                                new WaitCommand(0.75),
                                 // new CommandIndexStop(m_intake),
                                 
                                 // new CommandIndexMoveNoteToFiringPosition(m_intake),
@@ -437,7 +546,7 @@ public class RobotContainer {
                 new CommandIntakeStop(m_intake)
         ));
 
-        operator.start().onTrue(
+        operator.y().onTrue(                               
             Commands.runOnce(() -> CommandScheduler.getInstance().cancelAll())
         );
         //     operator.b().onTrue(

@@ -18,21 +18,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Podium"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Note"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Podium"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "score podium note"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
           }
         },
         {

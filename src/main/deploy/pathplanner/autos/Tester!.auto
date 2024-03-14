@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Copy of TwoPiecePart1"
+                  "pathName": "Podium"
                 }
               },
               {
@@ -34,6 +34,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score podium note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2PieceBase"
           }
         },
         {

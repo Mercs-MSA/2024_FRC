@@ -2,19 +2,19 @@ package frc.robot.commands.IndexSubcommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.index.Index;
 
 public class CommandIndexReverse extends Command {
-  private final Intake m_intake;
+  private final Index m_index;
   
-  public CommandIndexReverse(Intake i) {
-    m_intake = i;
-    addRequirements(m_intake);
+  public CommandIndexReverse(Index i) {
+    m_index = i;
+    addRequirements(m_index);
   }
 
   @Override
   public void initialize() {
-    m_intake.reverseIndexMotor();
+    m_index.reverseIndexMotor();
   }
 
   @Override
@@ -28,7 +28,7 @@ public class CommandIndexReverse extends Command {
   @Override
   public boolean isFinished() {
     return true;
-    //return Math.abs(m_intake.getIndexMotorSpeed() + IntakeConstants.kIndexMotorSpeed) <= IntakeConstants.kIndexMotorDCTolerance;
+    //return Math.abs(m_index.getIndexMotorSpeed() + IntakeConstants.kIndexMotorSpeed) <= IntakeConstants.kIndexMotorDCTolerance;
   }
 }
 

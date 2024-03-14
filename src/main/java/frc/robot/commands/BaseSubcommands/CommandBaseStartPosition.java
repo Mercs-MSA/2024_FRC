@@ -3,20 +3,20 @@ package frc.robot.commands.BaseSubcommands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.SAT.SAT;
+import frc.robot.subsystems.base.Base;
 
 public class CommandBaseStartPosition extends Command {
     double basePos = Constants.SATConstants.START.motor1_base;
-    public SAT m_SAT;
+    public Base m_base;
 
-    public CommandBaseStartPosition(SAT s) {
-        m_SAT = s;
-        addRequirements(m_SAT);
+    public CommandBaseStartPosition(Base s) {
+        m_base = s;
+        addRequirements(m_base);
     }
 
     @Override
     public void initialize() {
-        m_SAT.moveBaseMotors(basePos); 
+        m_base.moveBaseMotors(basePos); 
         SmartDashboard.putString("base, I'm trying to go here: ", basePos + " ");
     }
 
@@ -27,11 +27,11 @@ public class CommandBaseStartPosition extends Command {
 
     @Override
     public void end(boolean interupted) {
-        m_SAT.neturalBase();
+        m_base.resetMotors();
         SmartDashboard.putBoolean("is base done?", 
         Constants.isWithinTol(
                 basePos, 
-                m_SAT.getBase1Pos(),
+                m_base.getBase1Pos(),
                 Constants.SATConstants.MOTOR_TOLERANCE
             )
         );
@@ -42,7 +42,7 @@ public class CommandBaseStartPosition extends Command {
         return (
             Constants.isWithinTol(
                 basePos, 
-                m_SAT.getBase1Pos(),
+                m_base.getBase1Pos(),
                 Constants.SATConstants.MOTOR_TOLERANCE
             )
         );

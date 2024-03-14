@@ -1,19 +1,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.SAT.SAT;
+import frc.robot.subsystems.shooter.Shooter;
 
 public class CommandShooterBrakeStop extends Command {
-  public SAT m_SAT;
+  public Shooter m_shooter;
 
-  public CommandShooterBrakeStop(SAT s) {
-    m_SAT = s;
-    addRequirements(m_SAT);
+  public CommandShooterBrakeStop(Shooter s) {
+    m_shooter = s;
+    addRequirements(m_shooter);
   }
 
   @Override
   public void initialize() {
-    m_SAT.stopShooterBrake(); //neutral out
+    m_shooter.stopShooterBrake(); //neutral out
   }
   
   @Override
@@ -23,11 +23,11 @@ public class CommandShooterBrakeStop extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    m_SAT.stopShooter();
+    m_shooter.stopShooter();
   }
   @Override
   public boolean isFinished() {
-    //return isWithinTol(0.0, m_SAT.getShooterSpeed(), 25); 
+    //return isWithinTol(0.0, m_shooter.getShooterSpeed(), 25); 
     return true;
   }
 

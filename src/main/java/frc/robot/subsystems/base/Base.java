@@ -131,6 +131,7 @@ public class Base extends SubsystemBase {
 
   public void resetMotors(){
     satBase1Motor.setControl(new NeutralOut());
+    satBase2Motor.setControl(new NeutralOut());
 
   }
 

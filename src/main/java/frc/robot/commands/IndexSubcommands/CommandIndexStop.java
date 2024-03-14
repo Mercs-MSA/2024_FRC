@@ -2,19 +2,19 @@ package frc.robot.commands.IndexSubcommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.index.Index;
 
 public class CommandIndexStop extends Command {
-  private final Intake m_intake;
+  private final Index m_index;
   
-  public CommandIndexStop(Intake i) {
-    m_intake = i;
-    addRequirements(m_intake);
+  public CommandIndexStop(Index i) {
+    m_index = i;
+    addRequirements(m_index);
   }
 
   @Override
   public void initialize() {
-    m_intake.stopIndexMotor();
+    m_index.stopIndexMotor();
   }
 
   @Override
@@ -27,7 +27,7 @@ public class CommandIndexStop extends Command {
 
   @Override
   public boolean isFinished() {
-    return m_intake.getIndexMotorSpeed() == 0;
+    return m_index.getIndexMotorSpeed() == 0;
   }
 }
 

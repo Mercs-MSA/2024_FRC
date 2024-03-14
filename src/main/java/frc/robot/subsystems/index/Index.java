@@ -111,6 +111,11 @@ public class Index extends SubsystemBase {
     asynchronousInterrupt.disable();
   }
 
+  
+  public void resetMotors(){
+    stopIndexMotor();
+  }
+
   public void startIndexMotor() {
     indexMotor.setControl(indexMotor_voltageVelocity.withVelocity(Constants.IntakeConstants.kIndexMotorSpeed));
   }

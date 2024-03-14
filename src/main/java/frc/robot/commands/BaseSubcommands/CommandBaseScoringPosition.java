@@ -5,15 +5,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.SATConstants;
 import frc.robot.Constants.ScoringConstants;
-import frc.robot.subsystems.SAT.SAT;
+import frc.robot.subsystems.base.Base;
 
 public class CommandBaseScoringPosition extends Command {
     double basePos;
-    public SAT m_SAT;
+    public Base m_base;
 
-    public CommandBaseScoringPosition(SAT s) {
-        m_SAT = s;
-        addRequirements(m_SAT);
+    public CommandBaseScoringPosition(Base m_base) {
+        this.m_base = m_base;
+        addRequirements(m_base);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class CommandBaseScoringPosition extends Command {
                 break;
         }
 
-        m_SAT.moveBaseMotors(basePos); 
+        m_base.moveBaseMotors(basePos); 
         SmartDashboard.putString("base, I'm trying to go here: ", basePos + " ");
     }
 
@@ -48,7 +48,7 @@ public class CommandBaseScoringPosition extends Command {
         SmartDashboard.putBoolean("is base done?", 
             Constants.isWithinTol(
                 basePos, 
-                m_SAT.getBase1Pos(),
+                m_base.getBase1Pos(),
                 SATConstants.MOTOR_TOLERANCE
             )
         );
@@ -60,7 +60,7 @@ public class CommandBaseScoringPosition extends Command {
         return (
             Constants.isWithinTol(
                 basePos, 
-                m_SAT.getBase1Pos(),
+                m_base.getBase1Pos(),
                 SATConstants.MOTOR_TOLERANCE
             )
         );

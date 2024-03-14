@@ -10,7 +10,6 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -23,31 +22,20 @@ import edu.wpi.first.wpilibj.AsynchronousInterrupt;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.Robot;
 //  USE NEXT LINE FOR TESTING
 import frc.robot.sim.PhysicsSim;
 
 public class Intake extends SubsystemBase {
-  // USE NEXT LINE FOR TESTING
-  public boolean simulationDebugMode = Robot.isSimulation();
 
-  private boolean isUpperNotePresent;
   private boolean isLowerNotePresent1;
   private boolean isLowerNotePresent2;
   private boolean isLowerNotePresent3;
   
   private final TalonFX intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorId); //carpet
-  private final TalonFX indexMotor = new TalonFX(IntakeConstants.kIndexMotorId); //sat (feeder)
-  private final DutyCycleOut intakeMotor_dutyCycleOut = new DutyCycleOut(0);
-  private final DutyCycleOut indexMotor_dutyCycleOut = new DutyCycleOut(0);
   private final PositionVoltage intakeMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
-  private final PositionVoltage indexMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final VelocityVoltage intakeMotor_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
-  private final VelocityVoltage indexMotor_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
 
-  private final DigitalInput intakeUpperSensor = new DigitalInput(IntakeConstants.kIntakeUpperSensorId);
   private final DigitalInput intakeSensor1 = new DigitalInput(IntakeConstants.kIntakeLowerSensor1Id);
   private final DigitalInput intakeSensor2 = new DigitalInput(IntakeConstants.kIntakeLowerSensor2Id);
   private final DigitalInput intakeSensor3 = new DigitalInput(IntakeConstants.kIntakeLowerSensor3Id);
@@ -67,7 +55,6 @@ public class Intake extends SubsystemBase {
   public Intake() {
     SmartDashboard.putString("sensor debug", "init");
 
-    isUpperNotePresent = false;
     isLowerNotePresent1 = false;
     isLowerNotePresent2 = false;
     isLowerNotePresent3 = false;
@@ -91,7 +78,6 @@ public class Intake extends SubsystemBase {
     StatusCode status = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
       status = intakeMotor.getConfigurator().apply(configs);
-      status = indexMotor.getConfigurator().apply(configs);
       if (status.isOK()) break;
     }
     if(!status.isOK()) {
@@ -103,15 +89,10 @@ public class Intake extends SubsystemBase {
 
     // USE NEXT LINE FOR TESTING
     PhysicsSim.getInstance().addTalonFX(intakeMotor, 0.001);
-    PhysicsSim.getInstance().addTalonFX(indexMotor, 0.001);
   }
 
   public boolean lowerSensorDetectsNote() {
     return isLowerNotePresent1 || isLowerNotePresent2 || isLowerNotePresent3;
-  }
-
-  public boolean upperSensorDetectsNote() {
-    return isUpperNotePresent;
   }
 
   public void setLowerSensorDetectsNote(boolean value) {
@@ -119,17 +100,9 @@ public class Intake extends SubsystemBase {
     isLowerNotePresent2 = value;
     isLowerNotePresent3 = value;
   }
-  
-  public void setUpperSensorDetectsNote(boolean value) {
-    isUpperNotePresent = value;
-  }
-
+ 
   public void intakeMotorToPosition(double rotations) {
     intakeMotor.setControl(intakeMotor_voltagePosition.withPosition(rotations));
-  }
-
-  public void indexMotorToPosition(double rotations) {
-    indexMotor.setControl(indexMotor_voltagePosition.withPosition(rotations));
   }
 
   public double getIntakeMotorPosition() {
@@ -170,52 +143,11 @@ public class Intake extends SubsystemBase {
   //   intakeMotor.set(IntakeConstants.kIntakeMotorSpeed);
   // }
 
-  public void startIndexMotor() {
-    // WARNING!! 
-    // DO NOT USE THIS FUNCTION DIRECTLY!!
-    // INSTEAD USE: CommandOverrideIndexStart
-    // indexMotor.setControl(indexMotor_dutyCycleOut.withOutput(-IntakeConstants.kIndexMotorSpeed));
-    // indexMotor.set(Constants.IntakeConstants.kIndexMotorSpeed);
-    indexMotor.setControl(indexMotor_voltageVelocity.withVelocity(Constants.IntakeConstants.kIndexMotorSpeed));
-  }
-
-    public void reverseIndexMotor() {
-    // WARNING!! 
-    // DO NOT USE THIS FUNCTION DIRECTLY!!
-    // INSTEAD USE: CommandOverrideIndexStart
-    // indexMotor.setControl(indexMotor_dutyCycleOut.withOutput(-IntakeConstants.kIndexMotorSpeed));
-    // indexMotor.set(Constants.IntakeConstants.kIndexMotorSpeed);
-    indexMotor.setControl(indexMotor_voltageVelocity.withVelocity(Constants.IntakeConstants.kSlowIndexMotorSpeed));
-  }
-
-  public void startIntakeIndexerMotors(){
-    // WARNING!! 
-    // DO NOT USE THIS FUNCTION DIRECTLY!!
-    // INSTEAD USE: CommandOverrideIntakeStart & CommandOverrideIndexStart
-    startIndexMotor();
-    startIntakeMotor();
-  }
-
-  public void stopIntakeIndexerMotors(){
-    // WARNING!! 
-    // DO NOT USE THIS FUNCTION DIRECTLY!!
-    // INSTEAD USE: CommandOverrideIntakeStop & CommandOverrideIndexStop
-    stopIntakeMotor();
-    stopIndexMotor();
-  }
-
   public void stopIntakeMotor() {
     // WARNING!! 
     // DO NOT USE THIS FUNCTION DIRECTLY!!
     // INSTEAD USE: CommandOverrideIntakeStop
     intakeMotor.setControl(new NeutralOut());
-  }
-
-  public void stopIndexMotor() {
-    // WARNING!! 
-    // DO NOT USE THIS FUNCTION DIRECTLY!!
-    // INSTEAD USE: CommandOverrideIndexStop
-    indexMotor.setControl(new NeutralOut());
   }
 
   public double getIntakeMotorSpeed() {
@@ -226,34 +158,18 @@ public class Intake extends SubsystemBase {
     return indexMotorSpeed;
   }
 
-  public void resetMotors(){
-    stopIntakeIndexerMotors();
-  }
-
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run 
-
-    if (!simulationDebugMode) {
-      isUpperNotePresent = !intakeUpperSensor.get();
-      isLowerNotePresent1 = !intakeSensor1.get();
-      isLowerNotePresent2 = !intakeSensor2.get();
-      isLowerNotePresent3 = !intakeSensor3.get();
-    }
   
     intakeMotorPos = intakeMotor.getPosition().getValueAsDouble();
-    indexMotorPos = indexMotor.getPosition().getValueAsDouble();
     intakeMotorSpeed = intakeMotor.getDutyCycle().getValueAsDouble();
-    indexMotorSpeed = indexMotor.getDutyCycle().getValueAsDouble();
 
-    SmartDashboard.putBoolean("Upper Sensor state", isUpperNotePresent);
     SmartDashboard.putBoolean("Lower Sensor1 state", isLowerNotePresent1);
     SmartDashboard.putBoolean("Lower Sensor2 state", isLowerNotePresent2);
     SmartDashboard.putBoolean("Lower Sensor3 state", isLowerNotePresent3);
     SmartDashboard.putNumber("Intake Motor Speed", intakeMotorSpeed);
     SmartDashboard.putNumber("index motor speed", indexMotorSpeed);
     SmartDashboard.putNumber("Intake Motor Temperature", intakeMotor.getDeviceTemp().getValueAsDouble());
-    SmartDashboard.putNumber("Index Motor Temperature", indexMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("intake rpm", intakeMotor.getVelocity().getValueAsDouble());
   }
   
@@ -263,17 +179,17 @@ public class Intake extends SubsystemBase {
     PhysicsSim.getInstance().run();
   }
 
+  public void resetMotors(){
+    stopIntakeMotor();
+  }
+
   public void optimization_for_CAN() {
     StatusSignal<Double> m_IntakeMotor_canbus1signal1 = intakeMotor.getPosition();
-    StatusSignal<Double> m_IndexMotor_canbus1signal2 = indexMotor.getPosition();
     StatusSignal<Double> m_IntakeTemp_canbus1signal1 = intakeMotor.getDeviceTemp();
-    StatusSignal<Double> m_IndexTemp_canbus1signal2 = indexMotor.getDeviceTemp();
     StatusSignal<Double> m_IntakeDutyCycle_canbus1signal1 = intakeMotor.getDutyCycle();
-    StatusSignal<Double> m_IndexDutyCycle_canbus1signal2 = indexMotor.getDutyCycle();
     StatusSignal<Double> m_Shooter1Volt_canbus1signal3 = intakeMotor.getMotorVoltage();
-    StatusSignal<Double> m_Shooter2Volt_canbus1signal4 = indexMotor.getMotorVoltage();
-    BaseStatusSignal.setUpdateFrequencyForAll(60, m_IntakeMotor_canbus1signal1, m_IndexMotor_canbus1signal2, m_IntakeDutyCycle_canbus1signal1, m_IndexDutyCycle_canbus1signal2, m_Shooter1Volt_canbus1signal3, m_Shooter2Volt_canbus1signal4);
-    BaseStatusSignal.setUpdateFrequencyForAll(1, m_IntakeTemp_canbus1signal1, m_IndexTemp_canbus1signal2);
-    ParentDevice.optimizeBusUtilizationForAll(intakeMotor, indexMotor);
+    BaseStatusSignal.setUpdateFrequencyForAll(60, m_IntakeMotor_canbus1signal1, m_IntakeDutyCycle_canbus1signal1, m_Shooter1Volt_canbus1signal3);
+    BaseStatusSignal.setUpdateFrequencyForAll(1, m_IntakeTemp_canbus1signal1);
+    ParentDevice.optimizeBusUtilizationForAll(intakeMotor);
   }
 }

@@ -73,11 +73,11 @@ public class Shooter extends SubsystemBase {
         System.out.println("Could not apply configs, error code: " + status5.toString());
     }
 
-    /* PUT FOLLOW SYSTEMS HERE */
-    satShooter2Motor.setControl(Shooter2_Follower);
-    optimization_for_CAN();
-    PhysicsSim.getInstance().addTalonFX(satShooter1Motor, 0.001);
-    PhysicsSim.getInstance().addTalonFX(satShooter2Motor, 0.001);
+        /* PUT FOLLOW SYSTEMS HERE */
+        satShooter2Motor.setControl(Shooter2_Follower);
+        optimization_for_CAN();
+        PhysicsSim.getInstance().addTalonFX(satShooter1Motor, 0.001);
+        PhysicsSim.getInstance().addTalonFX(satShooter2Motor, 0.001);
     }
 
     @Override

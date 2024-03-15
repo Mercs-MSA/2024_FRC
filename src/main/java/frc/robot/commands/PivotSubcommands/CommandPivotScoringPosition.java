@@ -17,18 +17,18 @@ public class CommandPivotScoringPosition extends Command {
         addRequirements(m_SAT);
     }
 
-    public CommandPivotScoringPosition(SAT s, boolean override, double pos) {
-        m_SAT = s;
-        this.override = override;
-        this.pivotPos = pos;
-        addRequirements(m_SAT);
-    }
+    // public CommandPivotScoringPosition(SAT s, boolean override, double pos) {
+    //     m_SAT = s;
+    //     this.override = override;
+    //     this.pivotPos = pos;
+    //     addRequirements(m_SAT);
+    // }
 
 
     @Override
     public void initialize() { 
 
-    if (!override)    
+    // if (!override)    
         switch (ScoringConstants.currentScoringMode) {
             case PODIUM:
                 pivotPos = SATConstants.PODIUM.pivot;
@@ -41,6 +41,7 @@ public class CommandPivotScoringPosition extends Command {
                 break;
             case AMP2: 
                 pivotPos = SATConstants.AMP_STAGE_2.pivot;
+                break;
             case WING:
                 pivotPos = SATConstants.WING.pivot;
                 break;
@@ -50,12 +51,12 @@ public class CommandPivotScoringPosition extends Command {
         }
 
         m_SAT.movePivotMotor(pivotPos);
-        
+        SmartDashboard.putString("Pivot, I'm trying to go here: ", pivotPos + "");
     }
 
     @Override
     public void execute() { 
-SmartDashboard.putString("Pivot, I'm trying to go here: ", pivotPos + "");
+
     }
 
     @Override

@@ -17,19 +17,19 @@ public class CommandBaseScoringPosition extends Command {
         addRequirements(m_SAT);
     }
 
-    public CommandBaseScoringPosition(SAT s, boolean override, double pos) {
-        m_SAT = s;
-        this.override = override;
-        this.basePos = pos;
-        addRequirements(m_SAT);
-    }
+    // public CommandBaseScoringPosition(SAT s, boolean override, double pos) {
+    //     m_SAT = s;
+    //     this.override = override;
+    //     this.basePos = pos;
+    //     addRequirements(m_SAT);
+    // }
 
 
     @Override
     public void initialize() {
 
 
-    if (!override)    
+    // if (!override)    
         switch (ScoringConstants.currentScoringMode) {
             case AMP1:
                 basePos = SATConstants.AMP_STAGE_1.motor1_base;
@@ -44,18 +44,20 @@ public class CommandBaseScoringPosition extends Command {
                 basePos = SATConstants.SUBWOOFER.motor1_base;
                 break;
             case WING:
+                basePos = SATConstants.WING.motor1_base;
+                break;
             case PODIUM:
                 basePos = SATConstants.START.motor1_base;
                 break;
         }
 
         m_SAT.moveBaseMotors(basePos); 
-        
+        SmartDashboard.putString("base, I'm trying to go here: ", basePos + " ");
     }
 
     @Override
     public void execute() {
-SmartDashboard.putString("base, I'm trying to go here: ", basePos + " ");
+
     }
 
     @Override

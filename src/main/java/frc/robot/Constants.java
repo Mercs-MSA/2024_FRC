@@ -292,7 +292,7 @@ public final class Constants {
         public static class PODIUM{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = -18;
+            public static final double pivot = -16;
             public static final double shooterSpeed = -50;
         }
 
@@ -306,7 +306,7 @@ public final class Constants {
         public static class HANDOFF{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = -4.5;
+            public static final double pivot = -2.5;
             public static final double shooterSpeed = 0;
         }
 

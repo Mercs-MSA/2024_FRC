@@ -10,17 +10,32 @@ import frc.robot.subsystems.SAT.SAT;
 public class CommandBaseScoringPosition extends Command {
     double basePos;
     public SAT m_SAT;
+    private boolean override;
 
     public CommandBaseScoringPosition(SAT s) {
         m_SAT = s;
         addRequirements(m_SAT);
     }
 
+    public CommandBaseScoringPosition(SAT s, boolean override, double pos) {
+        m_SAT = s;
+        this.override = override;
+        this.basePos = pos;
+        addRequirements(m_SAT);
+    }
+
+
     @Override
     public void initialize() {
+
+
+    if (!override)    
         switch (ScoringConstants.currentScoringMode) {
-            case AMP:
+            case AMP1:
                 basePos = SATConstants.AMP_STAGE_1.motor1_base;
+                break;
+            case AMP2:
+                basePos = SATConstants.AMP_STAGE_2.motor1_base;
                 break;
             case TRAP:
                 basePos = SATConstants.TRAP.motor1_base;
@@ -35,12 +50,12 @@ public class CommandBaseScoringPosition extends Command {
         }
 
         m_SAT.moveBaseMotors(basePos); 
-        SmartDashboard.putString("base, I'm trying to go here: ", basePos + " ");
+        
     }
 
     @Override
     public void execute() {
-
+SmartDashboard.putString("base, I'm trying to go here: ", basePos + " ");
     }
 
     @Override

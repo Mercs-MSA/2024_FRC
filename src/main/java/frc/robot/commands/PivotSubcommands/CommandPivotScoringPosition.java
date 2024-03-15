@@ -10,14 +10,25 @@ import frc.robot.subsystems.SAT.SAT;
 public class CommandPivotScoringPosition extends Command {
     double pivotPos;
     public SAT m_SAT;
+    private boolean override;
 
     public CommandPivotScoringPosition(SAT s){
         m_SAT = s;
         addRequirements(m_SAT);
     }
 
+    public CommandPivotScoringPosition(SAT s, boolean override, double pos) {
+        m_SAT = s;
+        this.override = override;
+        this.pivotPos = pos;
+        addRequirements(m_SAT);
+    }
+
+
     @Override
     public void initialize() { 
+
+    if (!override)    
         switch (ScoringConstants.currentScoringMode) {
             case PODIUM:
                 pivotPos = SATConstants.PODIUM.pivot;
@@ -25,9 +36,11 @@ public class CommandPivotScoringPosition extends Command {
             case SUBWOOFER:
                 pivotPos = SATConstants.SUBWOOFER.pivot;
                 break;
-            case AMP:
+            case AMP1:
                 pivotPos = SATConstants.AMP_STAGE_1.pivot;
                 break;
+            case AMP2: 
+                pivotPos = SATConstants.AMP_STAGE_2.pivot;
             case WING:
                 pivotPos = SATConstants.WING.pivot;
                 break;
@@ -37,12 +50,12 @@ public class CommandPivotScoringPosition extends Command {
         }
 
         m_SAT.movePivotMotor(pivotPos);
-        SmartDashboard.putString("Pivot, I'm trying to go here: ", pivotPos + "");
+        
     }
 
     @Override
     public void execute() { 
-
+SmartDashboard.putString("Pivot, I'm trying to go here: ", pivotPos + "");
     }
 
     @Override

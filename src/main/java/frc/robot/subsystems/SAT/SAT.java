@@ -60,8 +60,8 @@ public class SAT extends SubsystemBase {
     satBase1MotorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
     // Peak output of 8 volts
-    satBase1MotorConfigs.Voltage.PeakForwardVoltage = 14;
-    satBase1MotorConfigs.Voltage.PeakReverseVoltage = -14;
+    satBase1MotorConfigs.Voltage.PeakForwardVoltage = 12;
+    satBase1MotorConfigs.Voltage.PeakReverseVoltage = -12;
     satBase1MotorConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.2;
     satBase1MotorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
 
@@ -84,8 +84,8 @@ public class SAT extends SubsystemBase {
     satPivotMotorConfigs.Slot0.kP = 2; // An error of 0.5 rotations results in 1.2 volts output
     satPivotMotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
     // Peak output of 8 volts
-    satPivotMotorConfigs.Voltage.PeakForwardVoltage = 14;
-    satPivotMotorConfigs.Voltage.PeakReverseVoltage = -14;
+    satPivotMotorConfigs.Voltage.PeakForwardVoltage = 16;
+    satPivotMotorConfigs.Voltage.PeakReverseVoltage = -16;
 
     TalonFXConfiguration satShooter1MotorConfigs = new TalonFXConfiguration();
     satShooter1MotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;

@@ -24,7 +24,7 @@ public class CommandShooterStart extends Command {
             case SUBWOOFER:
                 shooterSpeed = SATConstants.SUBWOOFER.shooterSpeed;
                 break;
-            case AMP:
+            case AMP2:
                 shooterSpeed = SATConstants.AMP_STAGE_2.shooterSpeed;
                 break;
             case WING:

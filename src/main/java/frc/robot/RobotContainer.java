@@ -85,7 +85,7 @@ public class RobotContainer {
             put("Test Scoring Mode Wing", new CommandChangeScoringMode(ScoringMode.WING));
             put("Test Scoring Mode Subwoofer", new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
             put("Test Scoring Mode Podium", new CommandChangeScoringMode(ScoringMode.PODIUM));
-            put("Test Scoring Mode Amp", new CommandChangeScoringMode(ScoringMode.AMP));
+            //put("Test Scoring Mode Amp", new CommandChangeScoringMode(ScoringMode.AMP));
 
             // Intake handoff commands
             put("pivot handoff position", new CommandPivotHandoffPosition(m_SAT));
@@ -244,34 +244,34 @@ public class RobotContainer {
                 //     new CommandPivotStartPosition(m_SAT)
                 // )
             ));
-            put("score wing note", new SequentialCommandGroup(
-                    new CommandChangeScoringMode(ScoringMode.WING),
-                    new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
-                    new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
-                    new ConditionalCommand( // IF WE NEED TO SCORE AMP...
-                        new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
-                        new InstantCommand(), // if we're not scoring amp, do nothing
-                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
-                    ),
-                    new CommandIndexMoveNoteToFiringPosition(m_intake),
-                    // new WaitCommand(0.1),
-                    new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
-                    new CommandIndexStart(m_intake),
-                    new WaitCommand(0.3), // waiting for the note to leave robot
-                    new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
-                        new CommandIndexStop(m_intake),
-                        new CommandShooterStop(m_SAT)
-                    ),
-                    new CommandChangeRobotHasNote(false),
-                    new ConditionalCommand( // IF WE JUST SCORED AMP...
-                        new CommandPivotScoringPosition(m_SAT),  // A 2nd pivot rotation is needed
-                        new InstantCommand(), // if we're not scoring amp, do nothing
-                        () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
-                    ),
+            // put("score wing note", new SequentialCommandGroup(
+            //         new CommandChangeScoringMode(ScoringMode.WING),
+            //         new CommandPivotScoringPosition(m_SAT), // pivot move to whatever current mode is
+            //         new CommandBaseScoringPosition(m_SAT), // base move to whatever current mode is
+            //         new ConditionalCommand( // IF WE NEED TO SCORE AMP...
+            //             new CommandPivotStageTwoPosition(m_SAT), // A 2nd pivot rotation is needed
+            //             new InstantCommand(), // if we're not scoring amp, do nothing
+            //             () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+            //         ),
+            //         new CommandIndexMoveNoteToFiringPosition(m_intake),
+            //         // new WaitCommand(0.1),
+            //         new CommandShooterStart(m_SAT), // shoot with speed of whatever current mode is
+            //         new CommandIndexStart(m_intake),
+            //         new WaitCommand(0.3), // waiting for the note to leave robot
+            //         new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
+            //             new CommandIndexStop(m_intake),
+            //             new CommandShooterStop(m_SAT)
+            //         ),
+            //         new CommandChangeRobotHasNote(false),
+            //         new ConditionalCommand( // IF WE JUST SCORED AMP...
+            //             new CommandPivotScoringPosition(m_SAT),  // A 2nd pivot rotation is needed
+            //             new InstantCommand(), // if we're not scoring amp, do nothing
+            //             () -> ScoringConstants.currentScoringMode == ScoringMode.AMP
+            //         ),
                     
-                    new CommandPivotStartPosition(m_SAT),
-                    new CommandBaseStartPosition(m_SAT)
-                ));
+            //         new CommandPivotStartPosition(m_SAT),
+            //         new CommandBaseStartPosition(m_SAT)
+            //     ));
             put("Intake Note", new SequentialCommandGroup(
                      new SequentialCommandGroup(
                                 new CommandBaseStartPosition(m_SAT),
@@ -335,9 +335,9 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        driverControls();
-        operatorControls();
-        // manualTesting();
+        //driverControls();
+        //operatorControls();
+        manualTesting();
     }
 
     public void driverControls(){
@@ -479,12 +479,13 @@ public class RobotContainer {
     }
 
     public void operatorControls(){
-        operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
+       // operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
         operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
         operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
         // operator.leftBumper().onTrue(new CommandIndexStart(m_intake)));
 
-        operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
+        operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.AMP1));
+        operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP2));
 
         
 
@@ -546,7 +547,7 @@ public class RobotContainer {
                 new CommandIntakeStop(m_intake)
         ));
 
-        operator.y().onTrue(                               
+        operator.start().onTrue(                               
             Commands.runOnce(() -> CommandScheduler.getInstance().cancelAll())
         );
         //     operator.b().onTrue(
@@ -563,6 +564,13 @@ public class RobotContainer {
         //             new CommandShooterStop(m_SAT)
         // )
         //     );
+
+        operator.y().onTrue(
+        new SequentialCommandGroup(
+            new InstantCommand(() -> m_SAT.moveBaseMotors(Constants.SATConstants.AMP_STAGE_1.motor1_base)),
+            new InstantCommand(() -> m_SAT.movePivotMotor(Constants.SATConstants.AMP_STAGE_1.pivot))   
+        )
+       );
 
         operator.a().whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesLeft(operator.getLeftY())))
         .whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesRight(operator.getRightY())));
@@ -643,27 +651,83 @@ public class RobotContainer {
     }
 
     public void manualTesting(){
-        operator.pov(0).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(0.25), m_SAT));
-        operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(-0.25), m_SAT));
-        operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
-        operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
+         operator.pov(0).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(0.25), m_SAT));
+         operator.pov(180).whileTrue(new RunCommand(() -> m_SAT.pivotGoToPositionIncrement(-0.25), m_SAT));
+         operator.pov(90).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(0.5), m_SAT));
+         operator.pov(270).whileTrue(new RunCommand(() -> m_SAT.baseGoToPositionIncrement(-0.5), m_SAT));
 
 
-        driver.pov(0).onTrue(new CommandIndexStart(m_intake));
-        driver.pov(180).onTrue(new CommandIndexStop(m_intake));
+        // driver.pov(0).onTrue(new CommandIndexStart(m_intake));
+        // driver.pov(180).onTrue(new CommandIndexStop(m_intake));
 
-        driver.pov(90).onTrue(new CommandIntakeStart(m_intake));
-        driver.pov(270).onTrue(new CommandIntakeStop(m_intake));
+        // driver.pov(90).onTrue(new CommandIntakeStart(m_intake));
+        // driver.pov(270).onTrue(new CommandIntakeStop(m_intake));
 
-        driver.leftBumper().onTrue(new CommandShooterStart(m_SAT));
-        driver.rightBumper().onTrue(new CommandShooterStop(m_SAT));
+        // driver.leftBumper().onTrue(new CommandShooterStart(m_SAT));
+        // driver.rightBumper().onTrue(new CommandShooterStop(m_SAT));
 
-        operator.b().whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesLeft(operator.getLeftY())))
-        .whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesRight(operator.getRightY())));
+        // operator.b().whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesLeft(operator.getLeftY())))
+        // .whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSidesRight(operator.getRightY())));
 
-        operator.a().whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSides(operator.getLeftY())));
+        // operator.a().whileTrue(new RunCommand(() -> m_climber.incrementalClimbBothSides(operator.getLeftY())));
 
-        // operator.start()
+
+        operator.y()
+        .onTrue(new SequentialCommandGroup(
+            new CommandBaseScoringPosition(m_SAT, true, Constants.SATConstants.AMP_STAGE_1.motor1_base),
+            new WaitCommand(1.0),
+            new PrintCommand("base stage 1"),
+            new CommandPivotScoringPosition(m_SAT, true, Constants.SATConstants.AMP_STAGE_1.pivot),
+            new WaitCommand(1.0),
+            new PrintCommand("pivot stage 1"),
+            new CommandBaseScoringPosition(m_SAT, true, Constants.SATConstants.AMP_STAGE_2.motor1_base),
+            new WaitCommand(1.0),
+            new PrintCommand("base stage 2"),
+            new CommandPivotScoringPosition(m_SAT, true, Constants.SATConstants.AMP_STAGE_2.pivot),
+            new WaitCommand(1.0),
+            new PrintCommand("pivot stage 2"),
+            new CommandBaseScoringPosition(m_SAT, true, Constants.SATConstants.AMP_STAGE_3.motor1_base),
+            new WaitCommand(1.0),
+            new PrintCommand("base stage 3"),
+            new CommandPivotScoringPosition(m_SAT, true, Constants.SATConstants.AMP_STAGE_3.pivot),
+            new PrintCommand("pivot stage 3")
+
+
+
+        ));
+
+
+        // operator.a()
+        // .onTrue(new SequentialCommandGroup(
+        //     new CommandBaseScoringPosition(m_SAT, true, Constants.SATConstants.AMP_STAGE_2.motor1_base),
+        //     new WaitCommand(1.0),
+        //     new CommandPivotScoringPosition(m_SAT, true, Constants.SATConstants.AMP_STAGE_2.pivot),
+        //     new WaitCommand(1.0),
+        //     new CommandBaseScoringPosition(m_SAT, true, Constants.SATConstants.AMP_STAGE_1.motor1_base),
+        //     new WaitCommand(1.0),
+        //     new CommandPivotScoringPosition(m_SAT, true, Constants.SATConstants.AMP_STAGE_1.pivot),
+        //     new WaitCommand(1.0),
+        //     new CommandBaseScoringPosition(m_SAT, true, Constants.SATConstants.START.motor1_base),
+        //     new WaitCommand(1.0),
+        //     new CommandPivotScoringPosition(m_SAT, true, Constants.SATConstants.START.pivot)
+
+
+
+        // ));
+
+        // operator.x()
+        // .onTrue(new SequentialCommandGroup(
+        //     new CommandIndexStart(m_intake),
+        //     new CommandShooterStart(m_SAT)
+        // ))
+        // .onFalse(new SequentialCommandGroup(
+        //     new CommandIndexStop(m_intake),
+        //     new CommandShooterStop(m_SAT)
+
+        // ));
+
+
+        // // operator.start()
         //     .onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
         // operator.a()
         //     .onTrue(new CommandPivotScoringPosition(m_SAT));

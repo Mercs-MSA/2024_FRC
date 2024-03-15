@@ -261,17 +261,25 @@ public final class Constants {
         }
 
         public static class AMP_STAGE_1{
-            public static final double motor1_base = START.motor1_base;
-            public static final double motor2_base = START.motor2_base;
-            public static final double pivot = 0.0;
+            public static final double motor1_base = -15;
+            public static final double motor2_base = -15;
+            public static final double pivot = -70;
             public static final double shooterSpeed = 0;
         }
 
+        public static class AMP_STAGE_3{
+            public static final double motor1_base = -35.9858;
+            public static final double motor2_base = 0;
+            public static final double pivot = -142.5815;
+            public static final double shooterSpeed = -10;
+        }
+
         public static class AMP_STAGE_2{
-            public static final double motor1_base = START.motor1_base;
-            public static final double motor2_base = START.motor2_base;
-            public static final double pivot = 0.0;
-            public static final double shooterSpeed = -20;
+            public static final double motor1_base = -25;
+            public static final double motor2_base = 0;
+            public static final double pivot = -100;
+            public static final double shooterSpeed = -10;
+
         }
 
         public static class TRAP{
@@ -535,7 +543,8 @@ public final class Constants {
         public static ScoringMode currentScoringMode = ScoringMode.SUBWOOFER;
         public enum ScoringMode {
             WING,
-            AMP,
+            AMP1,
+            AMP2,
             SUBWOOFER,
             PODIUM,
             TRAP

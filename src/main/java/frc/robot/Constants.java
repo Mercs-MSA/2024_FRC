@@ -77,7 +77,7 @@ public final class Constants {
         /* These values are used by the drive falcon to ramp in open loop and closed loop driving.
          * We found a small open loop ramp (0.25) helps with tread wear, tipping, etc */
         public static final double openLoopRamp = 0.3;
-        public static final double closedLoopRamp = 0.2;
+        public static final double closedLoopRamp = 0.1;
 
 
         /* Angle Motor PID Values */
@@ -87,16 +87,16 @@ public final class Constants {
 
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 0.25;
+        public static final double driveKP = 0.4;
         public static final double driveKI = 0.0;
-        public static final double driveKD = 0.0;
+        public static final double driveKD = 0.1;
         public static final double driveKF = 0.0;
 
 
         /* Drive Motor Characterization Values From SYSID */
-        public static final double driveKS = 0.32;
-        public static final double driveKV = 1.51;
-        public static final double driveKA = 0.27;
+        public static final double driveKS = 0.16;
+        public static final double driveKV = 5.647;
+        public static final double driveKA = 0.21;
 
 
         /* Swerve Profiling Values */
@@ -251,24 +251,32 @@ public final class Constants {
         public static final int SAT_OBJECTDETECTOR_SENSOR_ID = 1;
         
         public static class SUBWOOFER{
-            public static final double motor1_base = -14.507;
+            public static final double motor1_base = -9.571777;
             public static final double motor2_base = -7.906;
             public static final double pivot = 0.0;
             public static final double shooterSpeed = -35;
         }
 
         public static class AMP_STAGE_1{
-            public static final double motor1_base = START.motor1_base;
-            public static final double motor2_base = START.motor2_base;
-            public static final double pivot = 0.0;
+            public static final double motor1_base = -15;
+            public static final double motor2_base = -15;
+            public static final double pivot = -70;
             public static final double shooterSpeed = 0;
         }
 
+        public static class AMP_STAGE_3{
+            public static final double motor1_base = -35.9858;
+            public static final double motor2_base = 0;
+            public static final double pivot = -142.5815;
+            public static final double shooterSpeed = -10;
+        }
+
         public static class AMP_STAGE_2{
-            public static final double motor1_base = START.motor1_base;
-            public static final double motor2_base = START.motor2_base;
-            public static final double pivot = 0.0;
-            public static final double shooterSpeed = -20;
+            public static final double motor1_base = -25;
+            public static final double motor2_base = 0;
+            public static final double pivot = -100;
+            public static final double shooterSpeed = -10;
+
         }
 
         public static class TRAP{
@@ -281,8 +289,8 @@ public final class Constants {
         public static class PODIUM{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = -13.5;
-            public static final double shooterSpeed = -40;
+            public static final double pivot = -16;
+            public static final double shooterSpeed = -50;
         }
 
         public static class WING{
@@ -295,14 +303,14 @@ public final class Constants {
         public static class HANDOFF{
             public static final double motor1_base = START.motor1_base;
             public static final double motor2_base = START.motor2_base;
-            public static final double pivot = -2.25;
+            public static final double pivot = -2.5;
             public static final double shooterSpeed = 0;
         }
 
         public static class START{
             public static final double motor1_base = 0.334;
             public static final double motor2_base = -0.334;
-            public static final double pivot = -1.161;
+            public static final double pivot = -1.21;
             public static final double shooterSpeed = 0;
         }
 

@@ -3,12 +3,15 @@ package frc.robot;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoTrajectory;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,8 +30,11 @@ import frc.robot.commands.CommandShooterStop;
 import frc.robot.commands.CommandSwerveDriveToNote;
 import frc.robot.commands.CommandSwerveToPoseProxy;
 import frc.robot.commands.CommandSwerveTurnToNote;
+import frc.robot.commands.CustomTeleopSwerve;
+import frc.robot.commands.SwerveChoreoTrajectoryCommand;
 import frc.robot.commands.CommandChangeRobotHasNote;
 import frc.robot.commands.CommandChangeScoringMode;
+import frc.robot.commands.CommandDriveStraight;
 import frc.robot.commands.CommandDriveToPose;
 import frc.robot.commands.CommandShooterReverse;
 import frc.robot.commands.TeleopSwerve;
@@ -72,7 +78,12 @@ public class RobotContainer {
     public final Intake m_intake = new Intake();
     public final climber m_climber = new climber();
     public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_yaw", "note_dist");
+
     // public ApriltagVision m_ApriltagVision = new ApriltagVision();
+
+    private ChoreoTrajectory centerToNote;
+
+    public static double goodStraightGyro;
 
     /* AutoChooser */
     private final SendableChooser<Command> autoChooser;
@@ -217,6 +228,7 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
@@ -232,6 +244,8 @@ public class RobotContainer {
         //Auto chooser
         autoChooser = AutoBuilder.buildAutoChooser("DONOTHING"); // Default auto will be `Commands.none()`
         SmartDashboard.putData("Auto Mode", autoChooser);
+
+        centerToNote = Choreo.getTrajectory("CenterToNote");
     }
 
     public void configureButtonBindings() {
@@ -242,6 +256,43 @@ public class RobotContainer {
 
     public void driverControls(){
         driver.start().and(driver.back()).onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
+
+        // driver.pov(0).onTrue(
+        //     new InstantCommand(() -> s_Swerve.driveRobotRelative(
+        //         ChassisSpeeds.fromFieldRelativeSpeeds(
+        //             1, 0, 0, Swerve.poseEstimator.getEstimatedPosition().getRotation()))) 
+        // )
+        // .onFalse(
+        //     new InstantCommand(() -> s_Swerve.driveRobotRelative(
+        //         ChassisSpeeds.fromFieldRelativeSpeeds(
+        //             0, 0, 0, Swerve.poseEstimator.getEstimatedPosition().getRotation())))
+        // );
+        // driver.pov(180).onTrue(
+        //     new InstantCommand(() -> s_Swerve.driveRobotRelative(
+        //         ChassisSpeeds.fromFieldRelativeSpeeds(
+        //             -1, 0, 0, Swerve.poseEstimator.getEstimatedPosition().getRotation()))
+        // ))
+        // .onFalse(
+        //     new InstantCommand(() -> s_Swerve.driveRobotRelative(
+        //         ChassisSpeeds.fromFieldRelativeSpeeds(
+        //             0, 0, 0, Swerve.poseEstimator.getEstimatedPosition().getRotation()) 
+        // )));
+        // driver.pov(90).onTrue(
+        //     new InstantCommand(() -> s_Swerve.driveRobotRelative(ChassisSpeeds.fromFieldRelativeSpeeds(
+        //             0, 1, 0, Swerve.poseEstimator.getEstimatedPosition().getRotation())))
+        // )
+        // .onFalse(
+        //     new InstantCommand(() -> s_Swerve.driveRobotRelative(ChassisSpeeds.fromFieldRelativeSpeeds(
+        //             0, 0, 0, Swerve.poseEstimator.getEstimatedPosition().getRotation()))) 
+        // );  
+        // driver.pov(270).onTrue(
+        //     new InstantCommand(() -> s_Swerve.driveRobotRelative(ChassisSpeeds.fromFieldRelativeSpeeds(
+        //             1, -1, 0, Swerve.poseEstimator.getEstimatedPosition().getRotation())))
+        // )
+        // .onFalse(
+        //     new InstantCommand(() -> s_Swerve.driveRobotRelative(ChassisSpeeds.fromFieldRelativeSpeeds(
+        //             0, 0, 0, Swerve.poseEstimator.getEstimatedPosition().getRotation()))) 
+        // );
 
 
 
@@ -318,7 +369,11 @@ public class RobotContainer {
         //     )
         // );
 
-        driver.leftBumper().onTrue(new InstantCommand(() -> m_intake.reverseIntakeMotor())).onFalse(new InstantCommand(() -> m_intake.stopIntakeMotor()));
+        // driver.leftBumper().onTrue(new InstantCommand(() -> m_intake.reverseIntakeMotor())).onFalse(new InstantCommand(() -> m_intake.stopIntakeMotor()));
+        driver.leftBumper().onTrue(
+            new CommandDriveStraight()
+
+        );
 
         // driver.a()
         // .whileTrue(
@@ -720,6 +775,12 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
+        // return new SequentialCommandGroup(
+        //     new InstantCommand(() -> s_Swerve.resetOdometry(centerToNote.getInitialPose())),
+        //     new SwerveChoreoTrajectoryCommand(s_Swerve, centerToNote),
+        //     new PrintCommand("Done centerToNote!")
+        // );
+        
         return new SequentialCommandGroup(
             new InstantCommand(() -> s_Swerve.resetOdometry(AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))))),
 
@@ -735,7 +796,7 @@ public class RobotContainer {
             stopIntakeNote(),
             
             new ParallelCommandGroup(
-                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.48, 5.54, Rotation2d.fromDegrees(0)))), //sub
+                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
                 new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
                 moveStuffSub()
             ),
@@ -745,66 +806,31 @@ public class RobotContainer {
 
             new ParallelCommandGroup(
                 new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.67 + 0.3, 4.09 - 0.35, Rotation2d.fromDegrees(-30)))), 
-                new CommandChangeScoringMode(ScoringMode.PODIUM),
+                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
                 intakeBasePivot()
             ),  
-            
+
             stopIntakeNote(),
-            moveStuffPodium(),
-            shootNotePodium(),
-            new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
 
             
-            // new ParallelCommandGroup(
-            //     new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
-            //     new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
-            //     moveStuffSub()
-            // ),
+            new ParallelCommandGroup(
+                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
+                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+                moveStuffSub()
+            ),
 
-            // shootNoteSub(),
-            // intakeNote(),
+            shootNoteSub(),
+            intakeNote(),
 
             new ParallelCommandGroup(
-                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.77 + 0.35, 7.09 + 0.15, Rotation2d.fromDegrees(30)))), 
-                new CommandChangeScoringMode(ScoringMode.PODIUM),
+                new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.77 + 0.35, 7.09 - 0.35, Rotation2d.fromDegrees(30)))), 
+                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
                 intakeBasePivot()
             ),  
 
             stopIntakeNote(),
-            moveStuffPodium(),
+            moveStuffSub(),
             shootNotePodium());
-
-            // new ParallelCommandGroup(
-            //     new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
-            //     new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
-            //     moveStuffSub()
-            // ),
-
-            // intakeNote(),
-
-            // new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.67 + 0.3, 4.09 - 0.3, Rotation2d.fromDegrees(-30)))),
-
-            // stopIntakeNote(),
-
-            // new ParallelCommandGroup(
-            //     new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))), //sub
-            //     new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
-            //     moveStuffSub()
-            // ),
-            // shootNoteSub(),
-            // intakeNote(),
-
-            // new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.77 + 0.35, 7.09 - 0.35, Rotation2d.fromDegrees(30)))),
-
-            // new ParallelCommandGroup(
-            //     new CommandDriveToPose(s_Swerve, AllianceFlipUtil.apply(new Pose2d(2.25, 6.14, Rotation2d.fromDegrees(30)))),
-            //     moveStuffPodium()
-            // ),
-
-            // stopIntakeNote(),
-
-            // shootNotePodium(),
-            // new CommandIntakeStop(m_intake)
 
     }
 
@@ -944,5 +970,6 @@ public class RobotContainer {
             ),
             new CommandChangeRobotHasNote(false)
         );
+
     }
 }

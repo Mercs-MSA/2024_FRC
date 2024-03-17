@@ -55,7 +55,7 @@ public class SwerveModule {
         mDriveMotor.getConfigurator().setPosition(0.0);
 
         // expanded is there to support current data for troubleshooting
-        optimization_for_CAN();
+        // optimization_for_CAN();
         //expanded_diagnostic_data();
         
 

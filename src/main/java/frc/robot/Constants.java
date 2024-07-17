@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
-import frc.robot.subsystems.SAT.SAT;
+
 
 public final class Constants {
     public static final double stickDeadband = 0.1;

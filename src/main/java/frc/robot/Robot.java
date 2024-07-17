@@ -22,24 +22,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.State.robotState;
 import frc.robot.Constants.Vision.aprilTagBackLeft;
-import frc.robot.commands.CommandChangeRobotHasNote;
-import frc.robot.commands.CommandShooterReverse;
-import frc.robot.commands.CommandShooterStart;
-import frc.robot.commands.CommandShooterStop;
-import frc.robot.commands.CommandSwerveToPoseProxy;
-import frc.robot.commands.BaseSubcommands.CommandBaseScoringPosition;
-import frc.robot.commands.BaseSubcommands.CommandBaseStartPosition;
-import frc.robot.commands.IndexSubcommands.CommandIndexReverse;
-import frc.robot.commands.IndexSubcommands.CommandIndexStart;
-import frc.robot.commands.IndexSubcommands.CommandIndexStop;
-import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
-import frc.robot.commands.IntakeSubcommands.CommandIntakeStop;
-import frc.robot.commands.PivotSubcommands.CommandPivotHandoffPosition;
-import frc.robot.commands.PivotSubcommands.CommandPivotScoringPosition;
-import frc.robot.commands.PivotSubcommands.CommandPivotStartPosition;
-// import frc.robot.subsystems.vision.ApriltagVision;
-import frc.robot.subsystems.climber.climber;
-import frc.robot.subsystems.SAT.SAT;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -117,9 +99,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData(CommandScheduler.getInstance());
 
-    SmartDashboard.putNumber("Intake Speed", m_robotContainer.m_intake.getIntakeMotorSpeed());
-    SmartDashboard.putNumber("Indexer Speed", m_robotContainer.m_intake.getIndexMotorSpeed());
-
+    
     SmartDashboard.putString("Scoring Mode", Constants.ScoringConstants.currentScoringMode.toString());
   }
 
@@ -180,14 +160,8 @@ public class Robot extends TimedRobot {
    ** This should be run whenever you want to make sure that everything stops being controlled. */  
   public void resetAllMotorCommands() {
     CommandScheduler.getInstance().cancelAll();
-    m_robotContainer.m_SAT.resetMotors();
-    m_robotContainer.m_climber.resetMotors();
-    m_robotContainer.m_intake.resetMotors();
   }
 
-  public void goToHomePos(){
-    m_robotContainer.m_SAT.goToHomePos();
-    m_robotContainer.m_climber.goToHomePos();
-  }
+  public void goToHomePos(){}
 
 }

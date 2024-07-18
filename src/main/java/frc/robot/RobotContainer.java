@@ -27,6 +27,8 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ScoringConstants;
 import frc.robot.Constants.ScoringConstants.ScoringMode;
+import frc.robot.commands.intakeSubcommands.*;
+import frc.robot.subsystems.Intake;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -42,6 +44,7 @@ public class RobotContainer {
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
+    public static final Intake m_Intake = new Intake();
     // public ApriltagVision m_ApriltagVision = new ApriltagVision();
 
     /* AutoChooser */
@@ -82,6 +85,9 @@ public class RobotContainer {
         //Auto chooser
         autoChooser = AutoBuilder.buildAutoChooser("DONOTHING"); // Default auto will be `Commands.none()`
         SmartDashboard.putData("Auto Mode", autoChooser);
+        
+
+        
     }
 
     public void configureButtonBindings() {
@@ -218,12 +224,18 @@ public class RobotContainer {
         //     );
 
         operator.y().onTrue(
-        new SequentialCommandGroup(
-           
-        )
+        new CommandIntakeStart(m_Intake)
        );
 
-      
+       operator.b().onTrue(
+        new CommandIntakeStop(m_Intake)
+       );
+
+         operator.x().onTrue(
+        new CommandIntakeReverse(m_Intake)
+       );
+
+       
 
         // operator.b()
         //     .whileTrue(new InstantCommand(() -> m_intake.reverseIntakeMotor()))

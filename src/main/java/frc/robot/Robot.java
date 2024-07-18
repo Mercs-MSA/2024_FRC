@@ -7,6 +7,8 @@ package frc.robot;
 import java.io.IOException;
 import java.util.Optional;
 
+import com.ctre.phoenix6.signals.System_StateValue;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -77,6 +79,16 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Current Robot State", Constants.State.getState().toString());
     SmartDashboard.putString("Pose", RobotContainer.s_Swerve.getPose().toString());
     SmartDashboard.putBoolean("Robot Has Note", Constants.IntakeConstants.kRobotHasNote);
+
+    SmartDashboard.putNumber("LeftY", -m_robotContainer.driver.getLeftY());
+    SmartDashboard.putNumber("LeftX", -m_robotContainer.driver.getLeftX());
+    SmartDashboard.putNumber("RightX", -m_robotContainer.driver.getRightX());
+    if (m_robotContainer.s_Swerve.getCurrentCommand() != null) {
+      SmartDashboard.putString("SwerveCommand", m_robotContainer.s_Swerve.getCurrentCommand().getName());
+    }
+ 
+
+
 
     SmartDashboard.putNumber("gyro yaw", m_robotContainer.s_Swerve.gyro.getAngle());
 

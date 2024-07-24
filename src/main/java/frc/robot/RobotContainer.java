@@ -29,6 +29,9 @@ import frc.robot.Constants.ScoringConstants;
 import frc.robot.Constants.ScoringConstants.ScoringMode;
 import frc.robot.commands.intakeSubcommands.*;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.SAT;
+import frc.robot.commands.CommandShooterStart;
+import frc.robot.commands.CommandShooterStop;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -45,6 +48,7 @@ public class RobotContainer {
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
     public static final Intake m_Intake = new Intake();
+    public static final SAT m_SAT = new SAT();
     // public ApriltagVision m_ApriltagVision = new ApriltagVision();
 
     /* AutoChooser */
@@ -224,11 +228,11 @@ public class RobotContainer {
         //     );
 
         operator.y().onTrue(
-        new CommandIntakeStart(m_Intake)
+        new CommandShooterStart(m_SAT)
        );
 
        operator.b().onTrue(
-        new CommandIntakeStop(m_Intake)
+        new CommandShooterStop(m_SAT)
        );
 
          operator.x().onTrue(

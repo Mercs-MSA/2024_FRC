@@ -56,6 +56,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer.configureButtonBindings();
     Constants.State.setState("IDLE");
+
     // Optional<Alliance> alliance = DriverStation.getAlliance();
     // if (alliance.isPresent()) {
     //   Constants.Vision.isRedAlliance = (alliance.get() == DriverStation.Alliance.Red);

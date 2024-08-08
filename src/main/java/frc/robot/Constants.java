@@ -120,7 +120,7 @@ public final class Constants {
             public static final int driveMotorID = 39;
             public static final int angleMotorID = 40;
             public static final int canCoderID = 11;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(61.34765625);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(62.4);
             public static final SwerveModuleConstants constants =
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -141,7 +141,7 @@ public final class Constants {
             public static final int driveMotorID = 31;
             public static final int angleMotorID = 33;
             public static final int canCoderID = 13;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(47.373046875);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(48.5);
             public static final SwerveModuleConstants constants =
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -179,7 +179,7 @@ public final class Constants {
         public static final double kIntakeMotorSpeed = 100;
         public static final double kIntakeProcessRotations = 1.9;
         public static final double kIndexProcessRotations = -1.5;
-        public static final int kIndexMotorId = 24; 
+        public static final int kIndexMotorId = 27; 
         public static final int kIndexMotorSpeed = 90;
         public static final double kSlowIndexMotorSpeed = -5;
         public static final int kIntakeUpperSensorId = 0;
@@ -243,8 +243,8 @@ public final class Constants {
 
     public static class SATConstants {
         // Motor IDs
-        public static final int SAT_SHOOTER1_MOTOR_ID = 29;
-        public static final int SAT_SHOOTER2_MOTOR_ID = 27;
+        public static final int SAT_SHOOTER_LEFT_MOTOR_ID = 23;
+        public static final int SAT_SHOOTER_RIGHT_MOTOR_ID = 24;
 
         public static final int SAT_PIVOT_MOTOR_ID = 19;
         public static final int SAT_BASE1_MOTOR_ID = 55;

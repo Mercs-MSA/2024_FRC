@@ -29,6 +29,9 @@ import frc.robot.Constants.ScoringConstants;
 import frc.robot.Constants.ScoringConstants.ScoringMode;
 import frc.robot.commands.intakeSubcommands.*;
 import frc.robot.subsystems.Intake;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PS5Controller;
 import frc.robot.subsystems.SAT;
 import frc.robot.commands.CommandShooterStart;
 import frc.robot.commands.CommandShooterStop;
@@ -41,9 +44,11 @@ import frc.robot.commands.CommandShooterStop;
  */
 public class RobotContainer {
     /* Controllers */
-    public final CommandXboxController driver = new CommandXboxController(0);
-    public final CommandXboxController operator = new CommandXboxController(1);
-    public final CommandXboxController tester = new CommandXboxController(2);
+    // public final CommandXboxController driver = new CommandXboxController(0);
+    // public final CommandXboxController operator = new CommandXboxController(1);
+    // public final XboxController driver = new XboxController(0);
+     public final PS5Controller driver = new PS5Controller(0);
+
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -101,10 +106,12 @@ public class RobotContainer {
     }
 
     public void driverControls(){
-        driver.start().and(driver.back()).onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
+        //driver.start().and(driver.back()).onTrue(Commands.runOnce(() -> s_Swerve.zeroHeading(), s_Swerve));
 
-
-
+       
+      
+        
+        
         // driver.leftBumper().onTrue(new CommandBaseStartPosition(m_SAT));
         // driver.leftBumper().onTrue(new InstantCommand(() -> m_intake.reverseIntakeMotor()));
 
@@ -192,13 +199,13 @@ public class RobotContainer {
         // driver.b().onTrue(new CommandSwerveDriveToNote(s_Swerve, m_GamePieceVision));
 
 
-         driver.rightBumper()
-            .onTrue(
-                new SequentialCommandGroup(
-                )
-            ); 
+    //      driver.rightBumper()
+    //         .onTrue(
+    //             new SequentialCommandGroup(
+    //             )
+    //         ); 
+    // }
     }
-
     public void operatorControls(){
        // operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
      
@@ -209,9 +216,9 @@ public class RobotContainer {
 
      
 
-        operator.start().onTrue(                               
-            Commands.runOnce(() -> CommandScheduler.getInstance().cancelAll())
-        );
+        // operator.start().onTrue(                               
+        //     Commands.runOnce(() -> CommandScheduler.getInstance().cancelAll())
+        // );
         //     operator.b().onTrue(
         //         new SequentialCommandGroup(
         //             new CommandIntakeStop(m_intake),
@@ -227,17 +234,17 @@ public class RobotContainer {
         // )
         //     );
 
-        operator.y().onTrue(
-        new CommandShooterStart(m_SAT)
-       );
+    //     operator.y().onTrue(
+    //     new CommandShooterStart(m_SAT)
+    //    );
 
-       operator.b().onTrue(
-        new CommandShooterStop(m_SAT)
-       );
+    //    operator.b().onTrue(
+    //     new CommandShooterStop(m_SAT)
+    //    );
 
-         operator.x().onTrue(
-        new CommandIntakeReverse(m_Intake)
-       );
+    //      operator.x().onTrue(
+    //     new CommandIntakeReverse(m_Intake)
+    //    );
 
        
 
@@ -421,15 +428,15 @@ public class RobotContainer {
 
     public void pitTestControls(){
         //swerve
-        s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve, 
-                () -> -tester.getLeftY(), 
-                () -> -tester.getLeftX(), 
-                () -> -tester.getRightX(), 
-                () -> false // just hardcoded field centric... could make this a button if we want
-            )
-        );
+        // s_Swerve.setDefaultCommand(
+        //     new TeleopSwerve(
+        //         s_Swerve, 
+        //         () -> -tester.getLeftY(), 
+        //         () -> -tester.getLeftX(), 
+        //         () -> -tester.getRightX(), 
+        //         () -> false // just hardcoded field centric... could make this a button if we want
+        //     )
+        // );
 
       }
 

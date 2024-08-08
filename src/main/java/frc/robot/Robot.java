@@ -7,26 +7,29 @@ package frc.robot;
 import java.io.IOException;
 import java.util.Optional;
 
-import com.ctre.phoenix6.signals.System_StateValue;
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
+// import com.ctre.phoenix6.signals.System_StateValue;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
+// import edu.wpi.first.math.geometry.Rotation2d;
+// import edu.wpi.first.math.geometry.Transform3d;
+// import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
+// import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+// import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+// import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+// import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.State.robotState;
-import frc.robot.Constants.Vision.aprilTagBackLeft;
+// import frc.robot.Constants.Vision.aprilTagBackLeft;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+// import edu.wpi.first.wpilibj.DriverStation;
+// import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -37,6 +40,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
   private Command m_autonomousCommand;
+  
 
   private final RobotContainer m_robotContainer = new RobotContainer();
 
@@ -56,6 +60,9 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer.configureButtonBindings();
     Constants.State.setState("IDLE");
+      SmartDashboard.putString("STATUS CODE Description", "");
+      SmartDashboard.putBoolean("STATUS CODE IS WARNING?", false);
+      SmartDashboard.putString("STATUS CODE", "");
 
     // Optional<Alliance> alliance = DriverStation.getAlliance();
     // if (alliance.isPresent()) {
@@ -84,16 +91,48 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("LeftY", -m_robotContainer.driver.getLeftY());
     SmartDashboard.putNumber("LeftX", -m_robotContainer.driver.getLeftX());
     SmartDashboard.putNumber("RightX", -m_robotContainer.driver.getRightX());
+    SmartDashboard.putNumber("works?", m_robotContainer.m_SAT.works);
+
+    
+
     if (m_robotContainer.s_Swerve.getCurrentCommand() != null) {
       SmartDashboard.putString("SwerveCommand", m_robotContainer.s_Swerve.getCurrentCommand().getName());
     }
- 
+    SmartDashboard.putBoolean("Current A State", m_robotContainer.driver.getRawButton(2));
+    
+      
 
 
 
     SmartDashboard.putNumber("gyro yaw", m_robotContainer.s_Swerve.gyro.getAngle());
 
     SmartDashboard.putBoolean("Are we red alliance?", Constants.Vision.isRedAlliance);
+
+    // if (m_robotContainer.driver.getAButton()) {
+    if (m_robotContainer.driver.getCrossButton()) {
+      // Constants.State.setState("PIVOT");
+      StatusCode status = m_robotContainer.m_SAT.movePivot(-12.0);
+      SmartDashboard.putString("STATUS CODE Description", status.getDescription());
+      SmartDashboard.putBoolean("STATUS CODE IS WARNING?", status.isError());
+      SmartDashboard.putString("STATUS CODE", status.getName());
+    }
+    else if (m_robotContainer.driver.getTriangleButton()) {
+      m_robotContainer.m_SAT.movePivot(-8.0);
+    }
+    if (m_robotContainer.driver.getSquareButton()) {
+          m_robotContainer.m_Intake.stopIntakeMotor();
+    }
+
+    // if (m_robotContainer.driver.getRightTriggerAxis() > 0.10)
+    // {
+      
+    // }
+    if (m_robotContainer.driver.getR1Button()) {
+      m_robotContainer.m_SAT.startShooter(0.2);
+    } else if (m_robotContainer.driver.getL1Button()) {
+      m_robotContainer.m_SAT.stopShooter();
+    }
+    // SmartDashboard.putNumber("PIVOT POS", kDefaultPeriod)
 
     // SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());
     // SmartDashboard.putNumber("Climber Right motor Pos: ", m_robotContainer.m_climber.outputRightData());
@@ -119,6 +158,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    m_robotContainer.m_SAT.movePivot(-1.21);
     resetAllMotorCommands();
   }
 

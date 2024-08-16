@@ -18,6 +18,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -34,11 +35,10 @@ public class SAT extends SubsystemBase {
   
 
   private final PositionVoltage satPivotMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
-  private final PositionVoltage satShooterTopMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
 
-  
 
-  private double base1MotorPos, base2MotorPos, pivotMotorPos, shooterMotorTopSpeed, shooterMotorBottomSpeed, Base1StartPosition, Base2StartPosition, PivotStartPosition;
+  private double base1MotorPos, base2MotorPos, pivotMotorPos, shooterMotorBottomSpeed, Base1StartPosition, Base2StartPosition, PivotStartPosition;
+  public double shooterMotorLeftSpeed;
   private double baseTargetPose, pivotTargetPose = 0.0;
 
   private TalonFXConfiguration satBase1MotorConfigs, satBase2MotorConfigs;
@@ -56,7 +56,7 @@ public class SAT extends SubsystemBase {
      */
    
 
-
+    
     TalonFXConfiguration satPivotMotorConfigs = new TalonFXConfiguration();
     satPivotMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     satPivotMotorConfigs.Slot0.kP = 2; // An error of 0.5 rotations results in 1.2 volts output
@@ -144,9 +144,8 @@ public class SAT extends SubsystemBase {
   // This method will be called once per scheduler run
   @Override
   public void periodic() {
-   
     pivotMotorPos = satPivotMotor.getPosition().getValueAsDouble();
-    shooterMotorTopSpeed = satShooterLeftMotor.getVelocity().getValueAsDouble();
+    shooterMotorLeftSpeed = satShooterLeftMotor.getVelocity().getValueAsDouble();
     shooterMotorBottomSpeed = satShooterRightMotor.getVelocity().getValueAsDouble();
 
     SmartDashboard.putNumber("base1MotorPos", base1MotorPos);
@@ -164,7 +163,7 @@ public class SAT extends SubsystemBase {
     SmartDashboard.putNumber("Shooter Motor1 Temperature", satShooterLeftMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("Shooter Motor2 Temperature", satShooterRightMotor.getDeviceTemp().getValueAsDouble());
 
-    SmartDashboard.putNumber("shooterMotor1Speed", shooterMotorTopSpeed);
+    SmartDashboard.putNumber("shooterMotor1Speed", shooterMotorLeftSpeed);
     SmartDashboard.putNumber("shooterMotor2Speed", shooterMotorBottomSpeed);
 
     SmartDashboard.putNumber("shooter1MotorVoltage", satShooterLeftMotor.getMotorVoltage().getValueAsDouble());
@@ -201,7 +200,7 @@ public class SAT extends SubsystemBase {
    */
   
   public double getShooterSpeed() {
-    return shooterMotorTopSpeed;
+    return shooterMotorLeftSpeed;
   }
 
   public void resetMotors(){
@@ -236,6 +235,7 @@ public class SAT extends SubsystemBase {
 
   public void stopShooter() {
     satShooterLeftMotor.setControl(new NeutralOut());
+    satShooterRightMotor.setControl(LeftFollower);
   }
   
 

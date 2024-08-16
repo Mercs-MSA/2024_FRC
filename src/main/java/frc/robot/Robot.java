@@ -41,9 +41,10 @@ public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
   private Command m_autonomousCommand;
   
-
+  private final double shooterThreshold = 3.0;
+  private boolean hasShooterStarted = false;
   private final RobotContainer m_robotContainer = new RobotContainer();
-
+  private int stage = 0;
   robotState currentRobotState = robotState.IDLE;
 
   Field2d poseEstimateField2d = new Field2d();
@@ -100,26 +101,26 @@ public class Robot extends TimedRobot {
     }
     SmartDashboard.putBoolean("Current A State", m_robotContainer.driver.getRawButton(2));
     
-      
-
-
+    SmartDashboard.putBoolean("beamBreak:", m_robotContainer.m_Intake.beamBreak.get());
 
     SmartDashboard.putNumber("gyro yaw", m_robotContainer.s_Swerve.gyro.getAngle());
 
     SmartDashboard.putBoolean("Are we red alliance?", Constants.Vision.isRedAlliance);
 
-    // if (m_robotContainer.driver.getAButton()) {
-    if (m_robotContainer.driver.getCrossButton()) {
+    if (m_robotContainer.driver.getAButton()) {
+    // if (m_robotContainer.driver.getCrossButton()) {
       // Constants.State.setState("PIVOT");
       StatusCode status = m_robotContainer.m_SAT.movePivot(-12.0);
       SmartDashboard.putString("STATUS CODE Description", status.getDescription());
       SmartDashboard.putBoolean("STATUS CODE IS WARNING?", status.isError());
       SmartDashboard.putString("STATUS CODE", status.getName());
     }
-    else if (m_robotContainer.driver.getTriangleButton()) {
+    else if (m_robotContainer.driver.getYButton()) {
+    // else if (m_robotContainer.driver.getTriangleButton()) {
       m_robotContainer.m_SAT.movePivot(-8.0);
     }
-    if (m_robotContainer.driver.getSquareButton()) {
+    if (m_robotContainer.driver.getXButton()) {
+    // if (m_robotContainer.driver.getSquareButton()) {
           m_robotContainer.m_Intake.stopIntakeMotor();
     }
 
@@ -127,11 +128,45 @@ public class Robot extends TimedRobot {
     // {
       
     // }
-    if (m_robotContainer.driver.getR1Button()) {
-      m_robotContainer.m_SAT.startShooter(0.2);
-    } else if (m_robotContainer.driver.getL1Button()) {
-      m_robotContainer.m_SAT.stopShooter();
+    if (m_robotContainer.driver.getRightBumper()) {
+    // if (m_robotContainer.driver.getR1Button()) {
+      if (!hasShooterStarted)
+      {
+        m_robotContainer.m_SAT.startShooter(shooterThreshold);
+        stage = 3;
+        hasShooterStarted = true;
+      }
+      else
+      {
+        m_robotContainer.m_SAT.stopShooter();
+        hasShooterStarted = false;
+      }
     }
+    // } else if (m_robotContainer.driver.getLeftBumper()) {
+    // // } else if (m_robotContainer.driver.getL1Button()) {
+    //   m_robotContainer.m_SAT.stopShooter();
+    // }
+
+    if (m_robotContainer.driver.getBButtonPressed() && stage == 0)
+    {
+      m_robotContainer.m_Intake.runIntakeIndex(2);
+      stage = 1;
+    }
+    if (!m_robotContainer.m_Intake.beamBreak.get() && stage == 1)
+    {
+      m_robotContainer.m_Intake.resetMotors();
+      stage = 2;
+    }
+    if (m_robotContainer.m_SAT.shooterMotorLeftSpeed >= shooterThreshold)
+    {
+      m_robotContainer.m_Intake.startIndexMotor();
+      stage = 0;
+    }
+    if (m_robotContainer.driver.getLeftBumper())
+    {
+      m_robotContainer.m_Intake.resetMotors();
+    }
+    SmartDashboard.putNumber("Shooting Stage:", stage);
     // SmartDashboard.putNumber("PIVOT POS", kDefaultPeriod)
 
     // SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());

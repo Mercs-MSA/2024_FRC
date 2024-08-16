@@ -38,7 +38,8 @@ public class Intake extends SubsystemBase {
   private boolean isLowerNotePresent1;
   private boolean isLowerNotePresent2;
   private boolean isLowerNotePresent3;
-  
+  public final DigitalInput beamBreak = new DigitalInput(0);
+
   private final TalonFX intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorId); //carpet
   private final TalonFX indexMotor = new TalonFX(IntakeConstants.kIndexMotorId); //sat (feeder)
   private final DutyCycleOut intakeMotor_dutyCycleOut = new DutyCycleOut(0);
@@ -219,6 +220,11 @@ public class Intake extends SubsystemBase {
     stopIntakeIndexerMotors();
   }
 
+  public void runIntakeIndex(double speed)
+  {
+    intakeMotor.setControl(new VelocityVoltage(speed));
+    indexMotor.setControl(new VelocityVoltage(speed));
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run 

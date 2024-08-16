@@ -33,7 +33,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS5Controller;
 import frc.robot.subsystems.SAT;
-import frc.robot.commands.CommandShooterStart;
+// import frc.robot.commands.CommandShooterStart;
 import frc.robot.commands.CommandShooterStop;
 
 /**
@@ -46,8 +46,8 @@ public class RobotContainer {
     /* Controllers */
     // public final CommandXboxController driver = new CommandXboxController(0);
     // public final CommandXboxController operator = new CommandXboxController(1);
-    // public final XboxController driver = new XboxController(0);
-     public final PS5Controller driver = new PS5Controller(0);
+    public final XboxController driver = new XboxController(0);
+    //  public final PS5Controller driver = new PS5Controller(0);
 
 
     /* Subsystems */

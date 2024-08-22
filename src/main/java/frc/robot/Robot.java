@@ -30,6 +30,8 @@ import frc.robot.Constants.State.robotState;
 import edu.wpi.first.wpilibj.AnalogInput;
 // import edu.wpi.first.wpilibj.DriverStation;
 // import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.DigitalInput;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -41,7 +43,7 @@ public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
   private Command m_autonomousCommand;
   
-  private final double shooterThreshold = 3.0;
+  private final double shooterThreshold = 6.5;
   private boolean hasShooterStarted = false;
   private final RobotContainer m_robotContainer = new RobotContainer();
   private int stage = 0;
@@ -50,6 +52,7 @@ public class Robot extends TimedRobot {
   Field2d poseEstimateField2d = new Field2d();
   Pose2d apiltagPlusGyro = new Pose2d();
   private AnalogInput PSU_Volt_Monitor = new AnalogInput(0);
+  private DigitalInput beamDigitalInput = new DigitalInput(1);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -101,24 +104,26 @@ public class Robot extends TimedRobot {
     }
     SmartDashboard.putBoolean("Current A State", m_robotContainer.driver.getRawButton(2));
     
-    SmartDashboard.putBoolean("beamBreak:", m_robotContainer.m_Intake.beamBreak.get());
+   SmartDashboard.putBoolean("ROBOT CLASS BEAM BREAK: ", beamDigitalInput.get());
 
     SmartDashboard.putNumber("gyro yaw", m_robotContainer.s_Swerve.gyro.getAngle());
 
     SmartDashboard.putBoolean("Are we red alliance?", Constants.Vision.isRedAlliance);
 
-    if (m_robotContainer.driver.getAButton()) {
-    // if (m_robotContainer.driver.getCrossButton()) {
-      // Constants.State.setState("PIVOT");
-      StatusCode status = m_robotContainer.m_SAT.movePivot(-12.0);
-      SmartDashboard.putString("STATUS CODE Description", status.getDescription());
-      SmartDashboard.putBoolean("STATUS CODE IS WARNING?", status.isError());
-      SmartDashboard.putString("STATUS CODE", status.getName());
-    }
-    else if (m_robotContainer.driver.getYButton()) {
-    // else if (m_robotContainer.driver.getTriangleButton()) {
-      m_robotContainer.m_SAT.movePivot(-8.0);
-    }
+    SmartDashboard.putNumber("pivot pos:", m_robotContainer.m_SAT.getPivotPos());
+
+    // if (m_robotContainer.driver.getAButton()) {
+    // // if (m_robotContainer.driver.getCrossButton()) {
+    //   // Constants.State.setState("PIVOT");
+    //   // StatusCode status = m_robotContainer.m_SAT.movePivot(-12.0);
+    //   SmartDashboard.putString("STATUS CODE Description", status.getDescription());
+    //   SmartDashboard.putBoolean("STATUS CODE IS WARNING?", status.isError());
+    //   SmartDashboard.putString("STATUS CODE", status.getName());
+    // }
+    // else if (m_robotContainer.driver.getYButton()) {
+    // // else if (m_robotContainer.driver.getTriangleButton()) {
+    //   m_robotContainer.m_SAT.movePivot(-8.0);
+    // }
     if (m_robotContainer.driver.getXButton()) {
     // if (m_robotContainer.driver.getSquareButton()) {
           m_robotContainer.m_Intake.stopIntakeMotor();
@@ -128,7 +133,7 @@ public class Robot extends TimedRobot {
     // {
       
     // }
-    if (m_robotContainer.driver.getRightBumper()) {
+    if (m_robotContainer.driver.getRightTriggerAxis() > 0.5) {
     // if (m_robotContainer.driver.getR1Button()) {
       if (!hasShooterStarted)
       {
@@ -136,28 +141,28 @@ public class Robot extends TimedRobot {
         stage = 3;
         hasShooterStarted = true;
       }
-      else
-      {
-        m_robotContainer.m_SAT.stopShooter();
-        hasShooterStarted = false;
-      }
+      // else
+      // {
+      //   m_robotContainer.m_SAT.stopShooter();
+      //   hasShooterStarted = false;
+      // }
     }
     // } else if (m_robotContainer.driver.getLeftBumper()) {
     // // } else if (m_robotContainer.driver.getL1Button()) {
     //   m_robotContainer.m_SAT.stopShooter();
     // }
 
-    if (m_robotContainer.driver.getBButtonPressed() && stage == 0)
+    if (m_robotContainer.driver.getLeftTriggerAxis() > 0.5 && stage == 0)
     {
-      m_robotContainer.m_Intake.runIntakeIndex(2);
+      m_robotContainer.m_Intake.runIntakeIndex(8);
       stage = 1;
     }
-    if (!m_robotContainer.m_Intake.beamBreak.get() && stage == 1)
+    if (!beamDigitalInput.get() && stage == 1)
     {
       m_robotContainer.m_Intake.resetMotors();
       stage = 2;
     }
-    if (m_robotContainer.m_SAT.shooterMotorLeftSpeed >= shooterThreshold)
+    if (m_robotContainer.m_SAT.shooterMotorLeftSpeed >= shooterThreshold && stage == 3 && m_robotContainer.driver.getRightBumper())
     {
       m_robotContainer.m_Intake.startIndexMotor();
       stage = 0;
@@ -166,6 +171,15 @@ public class Robot extends TimedRobot {
     {
       m_robotContainer.m_Intake.resetMotors();
     }
+
+    if (m_robotContainer.driver.getStartButton())
+    {
+      m_robotContainer.m_SAT.stopShooter();
+      m_robotContainer.m_Intake.resetMotors();
+      hasShooterStarted = false;
+      stage = 0;
+    }
+
     SmartDashboard.putNumber("Shooting Stage:", stage);
     // SmartDashboard.putNumber("PIVOT POS", kDefaultPeriod)
 

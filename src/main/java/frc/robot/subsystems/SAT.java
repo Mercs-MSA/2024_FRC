@@ -58,7 +58,7 @@ public class SAT extends SubsystemBase {
 
     
     TalonFXConfiguration satPivotMotorConfigs = new TalonFXConfiguration();
-    satPivotMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    satPivotMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     satPivotMotorConfigs.Slot0.kP = 2; // An error of 0.5 rotations results in 1.2 volts output
     satPivotMotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
     // Peak output of 8 volts
@@ -193,6 +193,10 @@ public class SAT extends SubsystemBase {
    */
   public double getBase1Pos() {
     return base1MotorPos;
+  }
+
+  public double getPivotPos() {
+    return pivotMotorPos;
   }
 
   /**

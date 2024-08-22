@@ -15,6 +15,7 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -38,7 +39,8 @@ public class Intake extends SubsystemBase {
   private boolean isLowerNotePresent1;
   private boolean isLowerNotePresent2;
   private boolean isLowerNotePresent3;
-  public final DigitalInput beamBreak = new DigitalInput(0);
+  // public DigitalInput beamBreak = new DigitalInput(9);
+  public boolean beamIsFound = false;
 
   private final TalonFX intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorId); //carpet
   private final TalonFX indexMotor = new TalonFX(IntakeConstants.kIndexMotorId); //sat (feeder)
@@ -166,7 +168,9 @@ public class Intake extends SubsystemBase {
     // INSTEAD USE: CommandOverrideIndexStart
     // indexMotor.setControl(indexMotor_dutyCycleOut.withOutput(-IntakeConstants.kIndexMotorSpeed));
     // indexMotor.set(Constants.IntakeConstants.kIndexMotorSpeed);
-    indexMotor.setControl(indexMotor_voltageVelocity.withVelocity(Constants.IntakeConstants.kIndexMotorSpeed));
+    // indexMotor.setControl(indexMotor_voltageVelocity.withVelocity(Constants.IntakeConstants.kIndexMotorSpeed));
+    indexMotor.setControl(new VoltageOut(8));
+
   }
 
     public void reverseIndexMotor() {
@@ -222,15 +226,15 @@ public class Intake extends SubsystemBase {
 
   public void runIntakeIndex(double speed)
   {
-    intakeMotor.setControl(new VelocityVoltage(speed));
-    indexMotor.setControl(new VelocityVoltage(speed));
+    intakeMotor.setControl(new VoltageOut(speed));
+    indexMotor.setControl(new VoltageOut(speed));
   }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run 
 
 
-    
+    // SmartDashboard.putBoolean("beam Recieved?:", beamBreak.get());
     intakeMotorPos = intakeMotor.getPosition().getValueAsDouble();
     indexMotorPos = indexMotor.getPosition().getValueAsDouble();
     intakeMotorSpeed = intakeMotor.getDutyCycle().getValueAsDouble();
@@ -245,6 +249,8 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Intake Motor Temperature", intakeMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("Index Motor Temperature", indexMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("intake rpm", intakeMotor.getVelocity().getValueAsDouble());
+
+    
   }
   
   // USE FOR TESTING ALSO

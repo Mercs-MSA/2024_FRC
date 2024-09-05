@@ -179,7 +179,8 @@ public class Intake extends SubsystemBase {
     // INSTEAD USE: CommandOverrideIndexStart
     // indexMotor.setControl(indexMotor_dutyCycleOut.withOutput(-IntakeConstants.kIndexMotorSpeed));
     // indexMotor.set(Constants.IntakeConstants.kIndexMotorSpeed);
-    indexMotor.setControl(indexMotor_voltageVelocity.withVelocity(Constants.IntakeConstants.kSlowIndexMotorSpeed));
+    // indexMotor.setControl(indexMotor_voltageVelocity.withVelocity(Constants.IntakeConstants.kSlowIndexMotorSpeed));
+    indexMotor.setControl(new VoltageOut(-8));
   }
 
   public void startIntakeIndexerMotors(){

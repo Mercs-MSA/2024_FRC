@@ -8,6 +8,7 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -33,7 +34,7 @@ public class SAT extends SubsystemBase {
   private final TalonFX satShooterRightMotor = new TalonFX(SATConstants.SAT_SHOOTER_RIGHT_MOTOR_ID);
   private final Follower LeftFollower = new Follower(23, true);
   
-
+  // private final MotionMagicVoltage PivotDynamicControl = new MotionMagicVoltage(0, 0, 0, 0);
   private final PositionVoltage satPivotMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
 
 
@@ -42,6 +43,7 @@ public class SAT extends SubsystemBase {
   private double baseTargetPose, pivotTargetPose = 0.0;
 
   private TalonFXConfiguration satBase1MotorConfigs, satBase2MotorConfigs;
+  private TalonFXConfiguration satPivotMotorConfigs;
 
   public int works = 5;
 
@@ -57,10 +59,18 @@ public class SAT extends SubsystemBase {
    
 
     
-    TalonFXConfiguration satPivotMotorConfigs = new TalonFXConfiguration();
-    satPivotMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    satPivotMotorConfigs.Slot0.kP = 2; // An error of 0.5 rotations results in 1.2 volts output
+    satPivotMotorConfigs = new TalonFXConfiguration();
+    TalonFXConfiguration satShooterMotorRightConfigs = new TalonFXConfiguration();
+    TalonFXConfiguration satShooterMotorLeftConfigs = new TalonFXConfiguration();
+
+    satPivotMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    satShooterMotorLeftConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    satShooterMotorRightConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    satPivotMotorConfigs.Slot0.kP = 1.8; // An error of 0.5 rotations results in 1.2 volts output
     satPivotMotorConfigs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+    satPivotMotorConfigs.Slot1.kP = 0.4; // An error of 0.5 rotations results in 1.2 volts output
+    satPivotMotorConfigs.Slot1.kD = 0.01; // A change of 1 rotation per second results in 0.1 volts output
+
     // Peak output of 8 volts
     satPivotMotorConfigs.Voltage.PeakForwardVoltage = 16;
     satPivotMotorConfigs.Voltage.PeakReverseVoltage = -16;
@@ -172,6 +182,11 @@ public class SAT extends SubsystemBase {
     SmartDashboard.putNumber("shooter1MotorVoltage", satShooterLeftMotor.getStatorCurrent().getValue());
     SmartDashboard.putNumber("shooter2MotorVoltage", satShooterRightMotor.getStatorCurrent().getValue());
 
+    SmartDashboard.putNumber("pivot position", getPivotPos());
+    SmartDashboard.putNumber("pivot velocity", satPivotMotor.getVelocity().getValueAsDouble());
+    // SmartDashboard.putNumber("pivot voltage", satPivotMotor.getMotorVoltage().getValueAsDouble());
+    
+
 
 
   }
@@ -182,8 +197,6 @@ public class SAT extends SubsystemBase {
   }
   
   // This is for test purposes only
-
-
   public boolean isWithinTol(double targetPose, double currentPose, double tolerance) {
     return (Math.abs(targetPose - currentPose) <= tolerance);
   }
@@ -202,6 +215,9 @@ public class SAT extends SubsystemBase {
   /**
    * Returns the Base 2 Motor's position, as cached by the SAT subsystem.
    */
+  public void setStartPivotPos(double pos) {
+    satPivotMotor.setPosition(pos);
+  }
   
   public double getShooterSpeed() {
     return shooterMotorLeftSpeed;
@@ -211,6 +227,11 @@ public class SAT extends SubsystemBase {
     satPivotMotor.setControl(new NeutralOut());
     satShooterLeftMotor.setControl(new NeutralOut());
 
+  }
+
+  public boolean pivotInRange(double set)
+  {
+    return getPivotPos() >= set - 1.5 && getPivotPos() <= set + 1.5;
   }
 
   public void neturalPivot(){
@@ -224,12 +245,13 @@ public class SAT extends SubsystemBase {
   public void goToHomePos(){
     satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(Constants.SATConstants.START.pivot));
 
+
   }
 
-  public StatusCode movePivot(double pos){
-    works++;
-    return satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(pos));
+  public StatusCode movePivot(double pos, int slot){
+        return satPivotMotor.setControl(satPivotMotor_voltagePosition.withPosition(pos).withSlot(slot));
   }
+
 
   public void startShooter(double speed)
   {
@@ -259,5 +281,10 @@ public class SAT extends SubsystemBase {
     BaseStatusSignal.setUpdateFrequencyForAll(60, m_PivotMotor_canbus1signal1, m_Shooter1Motor_canbus1signal4, m_Shooter2Motor_canbus1signal5, m_Shooter1MotorClosed_canbus1signal15, m_Shooter1Volt_canbus1signal16, m_Shooter2Volt_canbus1signal17);
     BaseStatusSignal.setUpdateFrequencyForAll(1, m_PivotTemp_canbus1signal6, m_Shooter1Temp_canbus1signal9, m_Shooter2Temp_canbus1signal10);
     ParentDevice.optimizeBusUtilizationForAll(satPivotMotor, satShooterLeftMotor, satShooterRightMotor);
+  }
+
+  public void changeToCoast() {
+    satPivotMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    satPivotMotor.getConfigurator().apply(satPivotMotorConfigs);
   }
 }

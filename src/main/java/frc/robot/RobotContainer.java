@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -35,6 +37,7 @@ import edu.wpi.first.wpilibj.PS5Controller;
 import frc.robot.subsystems.SAT;
 // import frc.robot.commands.CommandShooterStart;
 import frc.robot.commands.CommandShooterStop;
+import frc.robot.generated.TunerConstants;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -43,16 +46,24 @@ import frc.robot.commands.CommandShooterStop;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+
+    //new constantrs
+    private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
+    private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
     /* Controllers */
     // public final CommandXboxController driver = new CommandXboxController(0);
     // public final CommandXboxController operator = new CommandXboxController(1);
+
+    private final SwerveRequest.RobotCentric driveRobotCentric = new SwerveRequest.RobotCentric()
+      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
     public final XboxController driver = new XboxController(0);
     
     //  public final PS5Controller driver = new PS5Controller(0);
 
 
     /* Subsystems */
-    public static final Swerve s_Swerve = new Swerve();
+    public static final CommandSwerveDrivetrain s_Swerve = TunerConstants.DriveTrain;
     public static final Intake m_Intake = new Intake();
     public static final SAT m_SAT = new SAT();
     // public ApriltagVision m_ApriltagVision = new ApriltagVision();
@@ -81,15 +92,22 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         
-        s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve, 
-                () -> -driver.getLeftY(), 
-                () -> -driver.getLeftX(), 
-                () -> -driver.getRightX(), 
-                () -> false // just hardcoded field centric... could make this a button if we want
-            )
-        );
+        // s_Swerve.setDefaultCommand(
+        //     new TeleopSwerve(
+        //         s_Swerve, 
+        //         () -> -driver.getLeftY(), 
+        //         () -> -driver.getLeftX(), 
+        //         () -> -driver.getRightX(), 
+        //         () -> false // just hardcoded field centric... could make this a button if we want
+        //     )
+        // );
+
+        s_Swerve.setDefaultCommand( // Drivetrain will execute this command periodically
+        s_Swerve.applyRequest(() -> driveRobotCentric.withVelocityX(1* -driver.getLeftY() * MaxSpeed) // Drive forward with
+                                                                                           // negative Y (forward)
+            .withVelocityY(1 * -driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+        ).ignoringDisable(false));
 
         NamedCommands.registerCommands(autonomousCommands);
 
